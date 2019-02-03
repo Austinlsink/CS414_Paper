@@ -3411,7 +3411,7 @@ a.hiddenanchor {
     margin: 0px auto;
     margin-top: 5%;
     max-width: 350px;
-    position: relative
+    position: relative;
 }
 .registration_form,
 .login_form {
@@ -3478,6 +3478,7 @@ form:after {
     visibility: hidden
 }
 .login_content {
+    font-family: 'Crimson Text', serif;
     margin: 0 auto;
     padding: 25px 0 0;
     position: relative;
