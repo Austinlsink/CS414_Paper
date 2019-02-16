@@ -4203,6 +4203,8 @@ ul.notifications {
 .antoo{color:lightgray;}
 .antoo:hover{color:white;}
 
+.login_heading{font-family: 'Crimson Text', serif;}
+
 /* CSS3 Checkbox */
 /*
 .checkbox-input { display:block;position:relative; }
