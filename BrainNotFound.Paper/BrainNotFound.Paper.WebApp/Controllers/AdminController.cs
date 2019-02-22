@@ -58,14 +58,52 @@ namespace BrainNotFound.Paper.WebApp.Controllers
         }
 
         [HttpPost, Route("Instructors/New")]
-        public IActionResult NewInstructor(CreateInstructorViewModel instructor)
+        public async Task<IActionResult> NewInstructor(CreateInstructorViewModel instructor)
         {
-            ViewData["message"] = instructor.Email + instructor.FirstName + instructor.LastName + instructor.Salutation;
+            //Create a Identity User
+            IdentityUser newIdentityUser = new IdentityUser()
+            {
+                Email = instructor.Email,
+                UserName = instructor.UserName,
+                PhoneNumber = instructor.PhoneNumber
+            };
 
+            //Add the User to the IdentityDbContext
+            var result = await _userManager.CreateAsync(newIdentityUser, instructor.Password);
 
+            //Check if user was created successfully
+            if (result.Succeeded)
+            {
+                //Get the user just created
+                var NewUserFetched = await _userManager.FindByEmailAsync(newIdentityUser.Email);
 
+                //Populate additional Information
+                var newUserInfo = new UserInfo()
+                {
+                    FirstName = instructor.FirstName,
+                    LastName = instructor.LastName,
+                    Salutation = instructor.Salutation,
+                    IdentityUserId = NewUserFetched.Id
+                };
 
-            return View();
+                //Add the additional Information to the PaperDbContext
+                _context.UserInfos.Add(newUserInfo);
+                _context.SaveChanges();
+
+                //Add the user Role to the created user
+                await _userManager.AddToRoleAsync(NewUserFetched, "Instructor");
+
+                return RedirectToAction("Instructors", "Admin");
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ViewData["Message"] += error.Description;
+                }
+            }
+
+            return View("TestView");
         }
 
         [HttpGet, Route("Instructors/{Id}")]
