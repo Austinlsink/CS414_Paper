@@ -11,4 +11,5 @@ namespace BrainNotFound.Paper.WebApp.Models
         public string DepartmentName { get; set; }
         //public List<Course> Courses { get; set; }
     }
+    Hello Everyone
 }
