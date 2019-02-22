@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using BrainNotFound.Paper.DataAccessLayer.Models;
 using BrainNotFound.Paper.DataAccessLayer;
 
-namespace BrainNotFound.Paper.WebApp.Controllers
+namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
 {
     public class BimaController : Controller
     {
@@ -19,19 +19,12 @@ namespace BrainNotFound.Paper.WebApp.Controllers
 
         private PaperDbContext _context;
 
-        public BimaController(
-            SignInManager<IdentityUser> signInManager, 
-            PaperDbContext context, 
-            UserManager<IdentityUser> userManager,
-            RoleManager<IdentityRole> roleManager)
-        {
-            _signInManager = signInManager;
-            _userManager = userManager;
-            _roleManager = roleManager;
-            _context = context;
-        }
 
-        [Route("RunCode")]
+        public IActionResult Run()
+        {
+            ViewData["Message"] = "Success!";
+            return View("TestView");
+        }
         public async Task<IActionResult> Index()
         {
             /*var d1 = new Department();
@@ -68,22 +61,17 @@ namespace BrainNotFound.Paper.WebApp.Controllers
             return View();
         }
 
-        [Route("/")]
-        public async Task<IActionResult> ForceLogin()
+        // Constructor
+        public BimaController(
+                    SignInManager<IdentityUser> signInManager,
+                    PaperDbContext context,
+                    UserManager<IdentityUser> userManager,
+                    RoleManager<IdentityRole> roleManager)
         {
-            var result = await _signInManager.PasswordSignInAsync("AbmaelSilva", "PaperBrain2019!", false, false);
-
-            if (result.Succeeded)
-            {
-                return RedirectToAction("Index", "Admin");
-            }
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            _signInManager = signInManager;
+            _userManager = userManager;
+            _roleManager = roleManager;
+            _context = context;
         }
     }
 }
