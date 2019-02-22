@@ -13,6 +13,7 @@ namespace BrainNotFound.Paper.DataAccessLayer
         public DbSet<Course> Courses { get; set; }
         public DbSet<Section> Sections { get; set; }
         public DbSet<SectionMeetingTime> SectionMeetingTimes { get; set; }
+        public DbSet<UserInfo> UserInfos { get; set; }
 
 
         // Constructor

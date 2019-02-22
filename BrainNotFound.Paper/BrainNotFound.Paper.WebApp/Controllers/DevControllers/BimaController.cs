@@ -20,12 +20,55 @@ namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
         private PaperDbContext _context;
 
 
-        public IActionResult Run()
+        public async Task<IActionResult> Run()
         {
-            ViewData["Message"] = "Success!";
+            //Create a Identity User
+            IdentityUser user = new IdentityUser()
+            {
+                Email = "isabela@icloud.com",
+                UserName = "IsabelaSilva",
+                PhoneNumber = "8502883660"
+            };
+
+            //Add the User to the IdentityDbContext
+            var result = await _userManager.CreateAsync(user, "PaperBrain2019!");
+
+            //Check if user was created successfully
+            if (result.Succeeded)
+            {
+                //Get the user just created
+                var NewUserFetched = await _userManager.FindByEmailAsync(user.Email);
+
+                //Populate additional Information
+                var newUserInfo = new UserInfo()
+                {
+                    FirstName = "Isabela",
+                    LastName = "Costa da Silva",
+                    Salutation = "Miss",
+                    IdentityUserId = NewUserFetched.Id
+                };
+
+                //Add the additional Information to the PaperDbContext
+                _context.UserInfos.Add(newUserInfo);
+                _context.SaveChanges();
+
+                //Add the user Role to the created user
+                await _userManager.AddToRoleAsync(NewUserFetched, "Admin");
+
+                return RedirectToAction("Instructors", "Admin");
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ViewData["Message"] += error.Description;
+                }
+            }
+            
             return View("TestView");
         }
-        public async Task<IActionResult> Index()
+
+        public IActionResult Index()
         {
             /*var d1 = new Department();
 
@@ -53,11 +96,9 @@ namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
                 }
             }
 
-            */
-
-            var user = await _userManager.GetUserAsync(User);
-
+            
             await _userManager.AddToRoleAsync(user, "Admin");
+*/
             return View();
         }
 
