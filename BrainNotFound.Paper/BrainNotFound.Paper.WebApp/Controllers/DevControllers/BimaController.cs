@@ -12,7 +12,7 @@ namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
 {
     public class BimaController : Controller
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
+        //private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
@@ -22,11 +22,14 @@ namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
         public async Task<IActionResult> Run()
         {
             //Create a Identity User
-            IdentityUser user = new IdentityUser()
+            ApplicationUser user = new ApplicationUser()
             {
-                Email = "isabela@icloud.com",
-                UserName = "IsabelaSilva",
-                PhoneNumber = "8502883660"
+                Email = "abmael.silva@me.com",
+                UserName = "AbmaelSilva",
+                PhoneNumber = "8502883660",
+                FirstName = "Abmael",
+                LastName = "Fernandes da Silva",
+                Salutation = "Mr"
             };
 
             //Add the User to the IdentityDbContext
@@ -91,12 +94,12 @@ namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
 
         // Constructor
         public BimaController(
-                    SignInManager<IdentityUser> signInManager,
+    //                SignInManager<IdentityUser> signInManager,
                     PaperDbContext context,
                     UserManager<IdentityUser> userManager,
                     RoleManager<IdentityRole> roleManager)
         {
-            _signInManager = signInManager;
+     //       _signInManager = signInManager;
             _userManager = userManager;
             _roleManager = roleManager;
             _context = context;
