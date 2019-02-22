@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using BrainNotFound.Paper.DataAccessLayer.Models;
 
-//TODO 
+//TODO There is a lot to do
 
 
 namespace BrainNotFound.Paper.WebApp.Controllers
