@@ -14,18 +14,27 @@ namespace BrainNotFound.Paper.WebApp.Controllers
     public class RootController : Controller
     {
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+
         private PaperDbContext _context;
 
-        public RootController(SignInManager<IdentityUser> signInManager, PaperDbContext context)
+        public RootController(
+            SignInManager<IdentityUser> signInManager, 
+            PaperDbContext context, 
+            UserManager<IdentityUser> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
             _signInManager = signInManager;
+            _userManager = userManager;
+            _roleManager = roleManager;
             _context = context;
         }
 
         [Route("RunCode")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var d1 = new Department();
+            /*var d1 = new Department();
 
             d1.DepartmentCode = "CS";
             d1.DepartmentName = "Computer Science";
@@ -35,7 +44,27 @@ namespace BrainNotFound.Paper.WebApp.Controllers
             _context.SaveChanges();
 
             ViewData["Message"] = "Success";
+            
 
+
+            // Created the Roles in the Database
+            string[] roleNames = { "Admin", "Instructor", "Student" };
+
+            foreach (var roleName in roleNames)
+            {
+                var roleExist = await _roleManager.RoleExistsAsync(roleName);
+                if (!roleExist)
+                {
+                    //create the roles and seed them to the database: Question 1
+                     await _roleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
+
+            */
+
+            var user = await _userManager.GetUserAsync(User);
+
+            await _userManager.AddToRoleAsync(user, "Admin");
             return View();
         }
 

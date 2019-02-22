@@ -11,7 +11,7 @@ using BrainNotFound.Paper.DataAccessLayer.Models;
 
 namespace BrainNotFound.Paper.WebApp.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [Route("Admin")]
     public class AdminController : Controller
     {
@@ -50,6 +50,7 @@ namespace BrainNotFound.Paper.WebApp.Controllers
                 Email = "matthewsnyder1234@gmail.com",
                 UserName = "MatthewSnyder"
             };
+            
 
             var result = await _userManager.CreateAsync(user, "PaperBrain2019!");
 

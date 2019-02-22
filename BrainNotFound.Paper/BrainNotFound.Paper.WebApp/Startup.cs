@@ -46,6 +46,7 @@ namespace BrainNotFound.Paper.WebApp
                 optionsBuilders => optionsBuilders.MigrationsAssembly("BrainNotFound.Paper.WebApp"));
             });
             services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<IdentityDbContext>()
                 .AddDefaultTokenProviders();
 
