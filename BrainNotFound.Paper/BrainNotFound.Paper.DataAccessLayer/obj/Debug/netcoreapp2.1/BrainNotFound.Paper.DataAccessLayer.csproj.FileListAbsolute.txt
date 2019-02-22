@@ -1,0 +1,9 @@
+C:\Users\130532\Desktop\v9 - Lacy\v9 - Lacy\v8\BrainNotFound.Paper.DataAccessLayer\bin\Debug\netcoreapp2.1\BrainNotFound.Paper.DataAccessLayer.deps.json
+C:\Users\130532\Desktop\v9 - Lacy\v9 - Lacy\v8\BrainNotFound.Paper.DataAccessLayer\bin\Debug\netcoreapp2.1\BrainNotFound.Paper.DataAccessLayer.dll
+C:\Users\130532\Desktop\v9 - Lacy\v9 - Lacy\v8\BrainNotFound.Paper.DataAccessLayer\bin\Debug\netcoreapp2.1\BrainNotFound.Paper.DataAccessLayer.pdb
+C:\Users\130532\Desktop\v9 - Lacy\v9 - Lacy\v8\BrainNotFound.Paper.DataAccessLayer\obj\Debug\netcoreapp2.1\BrainNotFound.Paper.DataAccessLayer.csproj.CoreCompileInputs.cache
+C:\Users\130532\Desktop\v9 - Lacy\v9 - Lacy\v8\BrainNotFound.Paper.DataAccessLayer\obj\Debug\netcoreapp2.1\BrainNotFound.Paper.DataAccessLayer.AssemblyInfoInputs.cache
+C:\Users\130532\Desktop\v9 - Lacy\v9 - Lacy\v8\BrainNotFound.Paper.DataAccessLayer\obj\Debug\netcoreapp2.1\BrainNotFound.Paper.DataAccessLayer.AssemblyInfo.cs
+C:\Users\130532\Desktop\v9 - Lacy\v9 - Lacy\v8\BrainNotFound.Paper.DataAccessLayer\obj\Debug\netcoreapp2.1\BrainNotFound.Paper.DataAccessLayer.dll
+C:\Users\130532\Desktop\v9 - Lacy\v9 - Lacy\v8\BrainNotFound.Paper.DataAccessLayer\obj\Debug\netcoreapp2.1\BrainNotFound.Paper.DataAccessLayer.pdb
+C:\Users\130532\Desktop\v9 - Lacy\v9 - Lacy\v8\BrainNotFound.Paper.DataAccessLayer\obj\Debug\netcoreapp2.1\BrainNotFound.Paper.DataAccessLayer.csprojAssemblyReference.cache
