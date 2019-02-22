@@ -11,7 +11,7 @@
     <h1>List of Deptartments</h1>
     <hr />
 
-    <button type="button" class="btn btn-dark">Create Department</button>
+    <a asp-action="NewDepartment" asp-controller="Admin" class="btn btn-dark">Create Department</a>
 
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel dept_table">
@@ -26,7 +26,6 @@
                                 <th>
                                     <input type="checkbox" id="check-all" class="flat">
                                 </th>
-                                <th class="column-title">Dept. ID </th>
                                 <th class="column-title">Dept. Name </th>
                                 <th class="column-title">Dept. Code </th>
                                 <th class="column-title no-link last"><span class="nobr">Action</span>
@@ -48,9 +47,8 @@
                                     <td class="a-center ">
                                         <input type="checkbox" class="flat" name="table_records">
                                     </td>
-                                    <td class=" ">@department.DepartmentId</td>
                                     <td class=" ">@department.DepartmentName </td>
-                                    <td class=" ">121000210 <i class="success fa fa-long-arrow-up"></i></td>
+                                    <td class=" ">@department.DepartmentCode </td>
                                     <td class=" last">
                                         <a href="#">Edit</a>
                                     </td>

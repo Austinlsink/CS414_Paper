@@ -8,6 +8,7 @@ using BrainNotFound.Paper.WebApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using BrainNotFound.Paper.DataAccessLayer.Models;
+using BrainNotFound.Paper.DataAccessLayer;
 
 //TODO There is a lot to do
 
@@ -19,12 +20,15 @@ namespace BrainNotFound.Paper.WebApp.Controllers
     public class AdminController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly PaperDbContext _context;
+
 
         // Constructor
         public AdminController(
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager, PaperDbContext context)
         {
             _userManager = userManager;
+            _context = context;
         }
 
         // Start of Routes
@@ -125,24 +129,9 @@ namespace BrainNotFound.Paper.WebApp.Controllers
         [HttpGet, Route("Departments")]
         public IActionResult Departments()
         {
-            var departments = new List<Department>();
+            var deparmtents = _context.Departments.ToList();
 
-            Department department1 = new Department()
-            {
-                DepartmentId = 123,
-                DepartmentName = "BI"
-            };
-
-            Department department2 = new Department()
-            {
-                DepartmentId = 152,
-                DepartmentName = "HI"
-            };
-
-            departments.Add(department1);
-            departments.Add(department2);
-
-            return View(departments);
+            return View(deparmtents);
         }
 
         [HttpGet, Route("Departments/New")]
@@ -154,8 +143,12 @@ namespace BrainNotFound.Paper.WebApp.Controllers
         [HttpPost, Route("Departments/New")]
         public IActionResult NewDepartment(Department model)
         {
-           
-           return View(model.DepartmentCode + model.DepartmentId + model.DepartmentName);
+            _context.Departments.Add(model);
+            _context.SaveChanges();
+
+            ViewData["message"] = "Department code: " + model.DepartmentCode + " " + model.DepartmentName;
+
+            return View();
         }
 
         [HttpGet, Route("Settings")]
