@@ -48,31 +48,22 @@ namespace BrainNotFound.Paper.WebApp.Controllers
         }
 
         [HttpGet, Route("Instructors/New")]
-        public async Task<IActionResult> NewInstructor()
+        public IActionResult NewInstructor()
         {
-            ViewData["Errors"] = string.Empty;
+            ViewData["message"] = "ello";
 
-            IdentityUser user = new IdentityUser()
-            {
-                Email = "matthewsnyder1234@gmail.com",
-                UserName = "MatthewSnyder"
-            };
-            
+           
 
-            var result = await _userManager.CreateAsync(user, "PaperBrain2019!");
+            return View();
+        }
+
+        [HttpPost, Route("Instructors/New")]
+        public IActionResult NewInstructor(CreateInstructorViewModel instructor)
+        {
+            ViewData["message"] = instructor.Email + instructor.FirstName + instructor.LastName + instructor.Salutation;
 
 
-            if (result.Succeeded)
-            {
-                return RedirectToAction("Dashboard", "Admin");
-            }
-            else
-            {
-                foreach (var error in result.Errors)
-                {
-                    ViewData["Errors"] += error.Description;
-                }
-            }
+
 
             return View();
         }

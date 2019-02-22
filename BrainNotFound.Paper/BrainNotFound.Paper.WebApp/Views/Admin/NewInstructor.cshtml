@@ -1,3 +1,5 @@
+@model BrainNotFound.Paper.WebApp.Models.CreateInstructorViewModel;
+
 @{
     ViewData["Title"] = "Add Instructor Info- Admin";
 }
@@ -18,15 +20,15 @@
                     </div>
                     <div class="x_content">
                         <br />
-                        <form id="new-department" data-parsley-validate class="form-horizontal form-label-left">
+                        <form asp-action="NewInstructor" asp-controller="Admin" id="new-department" data-parsley-validate class="form-horizontal form-label-left">
 
-                           
+
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
                                     First Name <span class="required">*</span>
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <input type="text" name="dept-code" required="required" class="form-control col-md-7 col-xs-12">
+                                    <input asp-for="FirstName" type="text" required="required" class="form-control col-md-7 col-xs-12">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -34,13 +36,13 @@
                                     Last Name <span class="required">*</span>
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <input type="text" id="dept-code" name="dept-code" required="required" class="form-control col-md-7 col-xs-12">
+                                    <input asp-for="LastName" type="text" id="dept-code" required="required" class="form-control col-md-7 col-xs-12">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Salutation</label>
                                 <div class="col-md-9 col-sm-9 col-xs-12">
-                                    <select class="select2_single form-control" tabindex="-1">
+                                    <select asp-for="Salutation" class="select2_single form-control" tabindex="-1">
                                         <option></option>
                                         <option value="mr">Mr.</option>
                                         <option value="mrs">Mrs.</option>
@@ -53,19 +55,19 @@
                             <div class="form-group">
                                 <label for="dept-name" class="control-label col-md-3 col-sm-3 col-xs-12">Email </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <input id="dept-name" class="form-control col-md-7 col-xs-12" type="text" name="dept-name">
+                                    <input asp-for="Email" id="dept-name" class="form-control col-md-7 col-xs-12" type="text">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Password</label>
                                 <div class="col-md-9 col-sm-9 col-xs-12">
-                                    <input type="password" class="form-control" value="passwordonetwo">
+                                    <input asp-for="Password" type="password" class="form-control" value="passwordonetwo">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-3">Phone Number</label>
                                 <div class="col-md-9 col-sm-9 col-xs-9">
-                                    <input type="text" class="form-control" data-inputmask="'mask' : '(999) 999-9999'">
+                                    <input asp-for="PhoneNumber" type="text" class="form-control" data-inputmask="'mask' : '(999) 999-9999'">
                                 </div>
                             </div>
                             <div class="ln_solid"></div>
@@ -76,6 +78,9 @@
                                 </div>
                             </div>
                         </form>
+
+                        <code>@ViewData["message"]</code>
+
                     </div>
                 </div>
             </div>
