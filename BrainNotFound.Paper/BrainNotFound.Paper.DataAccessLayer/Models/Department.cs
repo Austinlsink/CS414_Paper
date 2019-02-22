@@ -6,7 +6,7 @@ namespace BrainNotFound.Paper.DataAccessLayer.Models
     public class Department
     {
         [Key] // Primary key
-        //This is the first successful class
+        // Super New Comment 1
         public long DepartmentId { get; set; }
 
         

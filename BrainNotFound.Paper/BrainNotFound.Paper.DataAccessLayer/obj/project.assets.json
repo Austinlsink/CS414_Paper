@@ -2967,23 +2967,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\124906\\.nuget\\packages\\": {},
+    "C:\\Users\\130532\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\124906\\Desktop\\Team_Progject\\BrainNotFound.Paper\\BrainNotFound.Paper.DataAccessLayer\\BrainNotFound.Paper.DataAccessLayer.csproj",
+      "projectUniqueName": "C:\\Users\\130532\\Desktop\\PaperBrainProject\\BrainNotFound.Paper\\BrainNotFound.Paper.DataAccessLayer\\BrainNotFound.Paper.DataAccessLayer.csproj",
       "projectName": "BrainNotFound.Paper.DataAccessLayer",
-      "projectPath": "C:\\Users\\124906\\Desktop\\Team_Progject\\BrainNotFound.Paper\\BrainNotFound.Paper.DataAccessLayer\\BrainNotFound.Paper.DataAccessLayer.csproj",
-      "packagesPath": "C:\\Users\\124906\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\124906\\Desktop\\Team_Progject\\BrainNotFound.Paper\\BrainNotFound.Paper.DataAccessLayer\\obj\\",
+      "projectPath": "C:\\Users\\130532\\Desktop\\PaperBrainProject\\BrainNotFound.Paper\\BrainNotFound.Paper.DataAccessLayer\\BrainNotFound.Paper.DataAccessLayer.csproj",
+      "packagesPath": "C:\\Users\\130532\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\130532\\Desktop\\PaperBrainProject\\BrainNotFound.Paper\\BrainNotFound.Paper.DataAccessLayer\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\124906\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\130532\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

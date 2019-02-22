@@ -12552,23 +12552,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\124906\\.nuget\\packages\\": {},
+    "C:\\Users\\130532\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\124906\\Desktop\\Team_Progject\\BrainNotFound.Paper\\BrainNotFound.Paper.WebApp\\BrainNotFound.Paper.WebApp.csproj",
+      "projectUniqueName": "C:\\Users\\130532\\Desktop\\PaperBrainProject\\BrainNotFound.Paper\\BrainNotFound.Paper.WebApp\\BrainNotFound.Paper.WebApp.csproj",
       "projectName": "BrainNotFound.Paper.WebApp",
-      "projectPath": "C:\\Users\\124906\\Desktop\\Team_Progject\\BrainNotFound.Paper\\BrainNotFound.Paper.WebApp\\BrainNotFound.Paper.WebApp.csproj",
-      "packagesPath": "C:\\Users\\124906\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\124906\\Desktop\\Team_Progject\\BrainNotFound.Paper\\BrainNotFound.Paper.WebApp\\obj\\",
+      "projectPath": "C:\\Users\\130532\\Desktop\\PaperBrainProject\\BrainNotFound.Paper\\BrainNotFound.Paper.WebApp\\BrainNotFound.Paper.WebApp.csproj",
+      "packagesPath": "C:\\Users\\130532\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\130532\\Desktop\\PaperBrainProject\\BrainNotFound.Paper\\BrainNotFound.Paper.WebApp\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\124906\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\130532\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -12581,8 +12581,8 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "C:\\Users\\124906\\Desktop\\Team_Progject\\BrainNotFound.Paper\\BrainNotFound.Paper.DataAccessLayer\\BrainNotFound.Paper.DataAccessLayer.csproj": {
-              "projectPath": "C:\\Users\\124906\\Desktop\\Team_Progject\\BrainNotFound.Paper\\BrainNotFound.Paper.DataAccessLayer\\BrainNotFound.Paper.DataAccessLayer.csproj"
+            "C:\\Users\\130532\\Desktop\\PaperBrainProject\\BrainNotFound.Paper\\BrainNotFound.Paper.DataAccessLayer\\BrainNotFound.Paper.DataAccessLayer.csproj": {
+              "projectPath": "C:\\Users\\130532\\Desktop\\PaperBrainProject\\BrainNotFound.Paper\\BrainNotFound.Paper.DataAccessLayer\\BrainNotFound.Paper.DataAccessLayer.csproj"
             }
           }
         }
