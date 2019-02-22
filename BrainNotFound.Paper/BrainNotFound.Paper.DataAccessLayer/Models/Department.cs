@@ -6,7 +6,7 @@ namespace BrainNotFound.Paper.DataAccessLayer.Models
     public class Department
     {
         [Key] // Primary key
-        // Super New Comment 1023984029384029348902
+        // Super New Comment 10
         public long DepartmentId { get; set; }
 
         
