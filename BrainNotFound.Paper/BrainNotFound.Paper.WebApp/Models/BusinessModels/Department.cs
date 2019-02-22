@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 
-namespace BrainNotFound.Paper.DataAccessLayer.Models
+namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
 {
     public class Department
     {

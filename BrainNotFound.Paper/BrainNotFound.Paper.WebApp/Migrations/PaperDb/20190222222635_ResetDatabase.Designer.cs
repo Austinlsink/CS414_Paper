@@ -4,14 +4,16 @@ using BrainNotFound.Paper.WebApp;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
 {
     [DbContext(typeof(PaperDbContext))]
-    partial class PaperDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190222222635_ResetDatabase")]
+    partial class ResetDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -124,17 +126,15 @@ namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
 
                     b.Property<long>("CourseId");
 
-                    b.Property<string>("InstructorId");
-
                     b.Property<string>("Location");
 
                     b.Property<string>("SectionNumber");
 
+                    b.Property<long>("UserId");
+
                     b.HasKey("SectionId");
 
                     b.HasIndex("CourseId");
-
-                    b.HasIndex("InstructorId");
 
                     b.ToTable("Sections");
                 });
@@ -158,6 +158,25 @@ namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
                     b.HasIndex("SectionId");
 
                     b.ToTable("SectionMeetingTimes");
+                });
+
+            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.UserInfo", b =>
+                {
+                    b.Property<long>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("IdentityUserId");
+
+                    b.Property<string>("LastName");
+
+                    b.Property<string>("Salutation");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("UserInfos");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -284,10 +303,6 @@ namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
                         .WithMany()
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("BrainNotFound.Paper.WebApp.Models.BusinessModels.ApplicationUser", "ApplicationUser")
-                        .WithMany("SectionsTaught")
-                        .HasForeignKey("InstructorId");
                 });
 
             modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.SectionMeetingTime", b =>

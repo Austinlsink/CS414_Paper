@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BrainNotFound.Paper.DataAccessLayer;
+using BrainNotFound.Paper.WebApp.Models.BusinessModels;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -39,19 +39,12 @@ namespace BrainNotFound.Paper.WebApp
                 options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTest"),
                 optionsBuilders => optionsBuilders.MigrationsAssembly("BrainNotFound.Paper.WebApp"));
             });
-          
-            services.AddDbContext<IdentityDbContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTest"),
-                optionsBuilders => optionsBuilders.MigrationsAssembly("BrainNotFound.Paper.WebApp"));
-            });
-            services.AddIdentity<IdentityUser, IdentityRole>()
+         
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<IdentityDbContext>()
+                .AddEntityFrameworkStores<PaperDbContext>()
                 .AddDefaultTokenProviders();
-
-          
-
+            
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

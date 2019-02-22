@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BrainNotFound.Paper.WebApp.Models;
 using Microsoft.AspNetCore.Identity;
-using BrainNotFound.Paper.DataAccessLayer.Models;
-using BrainNotFound.Paper.DataAccessLayer;
+using BrainNotFound.Paper.WebApp.Models.BusinessModels;
 
 namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
 {
@@ -39,18 +38,6 @@ namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
                 //Get the user just created
                 var NewUserFetched = await _userManager.FindByEmailAsync(user.Email);
 
-                //Populate additional Information
-                var newUserInfo = new UserInfo()
-                {
-                    FirstName = "Isabela",
-                    LastName = "Costa da Silva",
-                    Salutation = "Miss",
-                    IdentityUserId = NewUserFetched.Id
-                };
-
-                //Add the additional Information to the PaperDbContext
-                _context.UserInfos.Add(newUserInfo);
-                _context.SaveChanges();
 
                 //Add the user Role to the created user
                 await _userManager.AddToRoleAsync(NewUserFetched, "Admin");

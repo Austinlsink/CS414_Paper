@@ -1,19 +1,21 @@
-﻿using BrainNotFound.Paper.DataAccessLayer.Models;
+﻿
+using BrainNotFound.Paper.WebApp.Models.BusinessModels;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BrainNotFound.Paper.DataAccessLayer
+namespace BrainNotFound.Paper.WebApp
 {
-    public class PaperDbContext : DbContext
+    public class PaperDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
     {
         public DbSet<Department> Departments { get; set; } // Example
         public DbSet<Course> Courses { get; set; }
         public DbSet<Section> Sections { get; set; }
         public DbSet<SectionMeetingTime> SectionMeetingTimes { get; set; }
-        public DbSet<UserInfo> UserInfos { get; set; }
 
 
         // Constructor

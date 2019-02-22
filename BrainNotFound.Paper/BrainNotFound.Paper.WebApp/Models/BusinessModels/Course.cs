@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace BrainNotFound.Paper.DataAccessLayer.Models
+namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
 {
 	public class Course
 	{

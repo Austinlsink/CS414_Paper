@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BrainNotFound.Paper.DataAccessLayer.Models
+namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
 {
 	public class Section
 	{
@@ -17,8 +18,12 @@ namespace BrainNotFound.Paper.DataAccessLayer.Models
 		// Foreign keys
 		public long CourseId {get; set;}
 		public Course Course {get; set;}
-		public long UserId {get; set;} // Instructor ID
-		//public UserInfo IdentityUser {get; set;}
+
+        [ForeignKey("InstructorId")]
+        public ApplicationUser ApplicationUser { get; set; }
+        public string InstructorId { get; set;} // Instructor ID
+
+        
 		//public List<Enrollment> Enrollments { get; set;}
 	}
 }

@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BrainNotFound.Paper.WebApp.Models;
 using Microsoft.AspNetCore.Identity;
-using BrainNotFound.Paper.DataAccessLayer.Models;
-using BrainNotFound.Paper.DataAccessLayer;
 
 namespace BrainNotFound.Paper.WebApp.Controllers
 {
