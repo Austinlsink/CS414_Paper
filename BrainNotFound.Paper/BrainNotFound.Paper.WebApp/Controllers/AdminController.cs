@@ -125,6 +125,12 @@ namespace BrainNotFound.Paper.WebApp.Controllers
             return View();
         }
 
+        [HttpGet, Route("Department/Edit/{Id}")]
+        public IActionResult EditDepartment(String Id)
+        {
+            return View();
+        }
+
         // Remove this comment after reading it - Removed Edit Departments - All can be done from this page since there is very little information to deal with
         [HttpGet, Route("Departments")]
         public IActionResult Departments()
