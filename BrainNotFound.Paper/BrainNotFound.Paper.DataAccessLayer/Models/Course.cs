@@ -15,6 +15,7 @@ namespace BrainNotFound.Paper.DataAccessLayer.Models
 		//public List<Section> Sections {get; set;}
 		
 		// Standard .NET Core foreign key relationship notation (many side)
+        //Matt's comment
 		public long DepartmentId {get; set;}
 		public Department Department {get; set;}
 	}
