@@ -1,0 +1,55 @@
+@model BrainNotFound.Paper.DataAccessLayer.Models.Department;
+@{
+    ViewData["Title"] = "Add Department Info- Admin";
+}
+
+<div class="right_col" role="main">
+
+    <h1>List of Deptartments</h1>
+    <hr />
+
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="dept_table">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>New Department</h2>
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <br />
+                        <form asp-action="NewDepartment" asp-controller="Admin" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">
+                                    Department Code <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" asp-for="DepartmentCode" id="department-code" required="required" class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Department Name</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="department-name" asp-for="DepartmentName" class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+                            <div class="ln_solid"></div>
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <button class="btn btn-primary" type="button">Cancel</button>
+                                    <button type="submit" class="btn btn-success">Add Department</button>
+                                </div>
+                            </div>
+
+                        </form>
+
+                        <code>@ViewData["message"]</code>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

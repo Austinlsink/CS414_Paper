@@ -1,0 +1,62 @@
+@{
+    ViewData["Title"] = "Manage Instructors - Admin";
+}
+
+<div class="right_col" role="main">
+
+    <h1>List of Instructors</h1>
+    <hr />
+
+    <button type="button" class="btn btn-dark">New Instructor</button>
+
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel dept_table">
+            <div class="x_content">
+
+                <p>Click checkbox to select multiple departments.</p>
+
+                <div class="table-responsive">
+                    <table class="table table-striped jambo_table bulk_action">
+                        <thead>
+                            <tr class="headings">
+                                <th>
+                                    <input type="checkbox" id="check-all" class="flat">
+                                </th>
+                                <th class="column-title">First Name </th>
+                                <th class="column-title">Last Name </th>
+                                <th class="column-title">Phone Number </th>
+                                <th class="column-title">Email </th>
+                                <th class="column-title no-link last"><span class="nobr">Action</span>
+                                <th class="column-title no-link last">
+                                    <span class="nobr">Action</span>
+                                </th>
+                                <th class="bulk-actions" colspan="7">
+                                    <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) </a>
+                                    <a class="antoo" style="font-weight:500;" href="#"> &nbsp;&nbsp; Remove</a>
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr class="even pointer">
+                                <td class="a-center ">
+                                    <input type="checkbox" class="flat" name="table_records">
+                                </td>
+                                <td class=" ">Banana</td>
+                                <td class=" ">Zorro </td>
+                                <td class=" ">4044044044</td>
+                                <td class=" ">bzorro@brain.com </td>
+                                <td class=" last">
+                                    <a href="#">Edit</a>
+                                </td>
+                                <td class=" last">
+                                    <a href="#">Remove</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
