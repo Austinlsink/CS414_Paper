@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BrainNotFound.Paper.WebApp.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Student")]
     [Route("Student")]
     public class StudentController : Controller
     {

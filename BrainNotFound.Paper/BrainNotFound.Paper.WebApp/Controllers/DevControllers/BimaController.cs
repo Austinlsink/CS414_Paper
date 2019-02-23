@@ -26,7 +26,7 @@ namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
             var NewUserFetched = await _userManager.FindByEmailAsync("abmael.silva@me.com");
             await _userManager.AddToRoleAsync(NewUserFetched, "Admin");
 
-            /*
+            
             //Create a Identity User
             ApplicationUser user = new ApplicationUser()
             {
@@ -45,11 +45,11 @@ namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
             if (result.Succeeded)
             {
                 //Get the user just created
-                var NewUserFetched = await _userManager.FindByEmailAsync(user.Email);
+                //var NewUserFetched = await _userManager.FindByEmailAsync(user.Email);
 
 
                 //Add the user Role to the created user
-                await _userManager.AddToRoleAsync(NewUserFetched, "Admin");
+                //await _userManager.AddToRoleAsync(NewUserFetched, "Admin");
 
                 return RedirectToAction("Instructors", "Admin");
             }
@@ -60,7 +60,7 @@ namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
                     ViewData["Message"] += error.Description;
                 }
             }
-            */
+            
             return View("TestView");
         }
 

@@ -41,41 +41,44 @@ namespace BrainNotFound.Paper.WebApp.Controllers
 
 
         [HttpGet, Route("Instructors")]
-        public IActionResult Instructors()
+        public async Task<IActionResult> Instructors()
         {
-            return View();
+            var allInstructors = (await _userManager.GetUsersInRoleAsync("Instructor")).ToList();
+
+            return View(allInstructors);
         }
 
         [HttpGet, Route("Instructors/New")]
         public IActionResult NewInstructor()
-        {
-            ViewData["message"] = "ello";
-
-           
-
+        {            
             return View();
         }
 
         [HttpPost, Route("Instructors/New")]
-        public IActionResult NewInstructor(CreateInstructorViewModel instructor)
+        public async Task<IActionResult> NewInstructor(CreateInstructorViewModel model)
         {
-            /*
+            var newInstructor = new ApplicationUser()
+            {
+                FirstName   = model.FirstName,
+                LastName    = model.LastName,
+                Salutation  = model.Salutation,
+                UserName    = model.UserName,
+                Email       = model.Email,
+                PhoneNumber = model.PhoneNumber,
 
-            //Add the User to the IdentityDbContext
-            var result = await _userManager.CreateAsync(newIdentityUser, instructor.Password);
+            };
 
-            //Check if user was created successfully
+            //Create a new Application User
+            var result = await _userManager.CreateAsync(newInstructor, model.Password);
+
+
             if (result.Succeeded)
             {
-                //Get the user just created
-                var NewUserFetched = await _userManager.FindByEmailAsync(newIdentityUser.Email);
+                //Fetch created user
+                var CreatedUser = await _userManager.FindByEmailAsync(model.Email);
 
-                //Populate additional Information
-               
-
-
-                //Add the user Role to the created user
-                await _userManager.AddToRoleAsync(NewUserFetched, "Instructor");
+                //Add instructor role to created Application User
+                await _userManager.AddToRoleAsync(CreatedUser, "Instructor");
 
                 return RedirectToAction("Instructors", "Admin");
             }
@@ -86,9 +89,8 @@ namespace BrainNotFound.Paper.WebApp.Controllers
                     ViewData["Message"] += error.Description;
                 }
             }
-*/
+
             return View("TestView");
-            
         }
 
         [HttpGet, Route("Instructors/{Id}")]
@@ -227,10 +229,5 @@ namespace BrainNotFound.Paper.WebApp.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }
