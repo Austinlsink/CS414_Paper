@@ -6,6 +6,7 @@ namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
 {
     public class TestSection
    {
+        //Ask about this model for attributes
 	   [Key]
 	   public long TestSectionId {get; set;}
 	

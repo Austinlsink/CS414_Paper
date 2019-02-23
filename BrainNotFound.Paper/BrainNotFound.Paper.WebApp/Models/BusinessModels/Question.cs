@@ -6,7 +6,8 @@ namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
 {
     public class Question
 	{
-		[Key]
+        // not sure if there should be required attributes in this one.
+        [Key]
 		public long QuestionId { get; set; } //private key
 		
 		public int Index      { get; set; }

@@ -10,9 +10,14 @@ namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
 		 [Key]
 		 public long TestScheduleId {get; set;}
 		 
+        // Ask about what is used for duration
 		 public int Duration {get; set;}
-		 public DateTime StartTime {get; set;}
-		 public DateTime EndTime {get; set;}
+        [Required]
+        [DataType(DataType.Date, ErrorMessage ="There must be a start time.")]
+        public DateTime StartTime {get; set;}
+        [Required]
+        [DataType(DataType.Date, ErrorMessage = "There must be an end time.")]
+        public DateTime EndTime {get; set;}
 		 
 		 // Foreign keys
 		 public long TestId {get; set;}
