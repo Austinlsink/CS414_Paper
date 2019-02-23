@@ -16,7 +16,7 @@ namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
         [ForeignKey("DepartmentId")]
 		public Department Department {get; set;}
 
-        public List<Student> StudentsMajoringIn { get; set; }
-        public List<Student> StudentsMinoringIn { get; set; }
+        public List<ApplicationUser> StudentsMajoringIn { get; set; }
+       public List<ApplicationUser> StudentsMinoringIn { get; set; }
 	}
 }

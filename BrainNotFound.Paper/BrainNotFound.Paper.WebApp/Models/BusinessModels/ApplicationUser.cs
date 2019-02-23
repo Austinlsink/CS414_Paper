@@ -13,9 +13,9 @@ namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Salutation { get; set; }
+        public string Classification { get; set; }
 
 
-        
         // Instructor relationships
         public List<Section> SectionsTaught { get; set; } // Sections an instructor teaches
 
@@ -25,5 +25,7 @@ namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
         //public List<StudentAnswer> StudentAnswers { get; set; } // A student's answers on a test 
         public List<Enrollment> Enrollments { get; set; }
         public List<StudentTestAssignment> StudentTestAssignments { get; set; }
+        //public List<StudentMajor> StudentMajors { get; set; }
+        //public List<StudentMinor> StudentMinors { get; set; }
     }
 }
