@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 
-namespace BrainNotFound.Paper.DataAccessLayer.Models
+namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
 {
     public class Department
     {
@@ -11,7 +11,7 @@ namespace BrainNotFound.Paper.DataAccessLayer.Models
         
         public string DepartmentName { get; set; }
         public List<Course> Courses { get; set; }
-        //public List<FieldOfStudy> FieldsOfStudy { get; set; }
+        public List<FieldOfStudy> FieldsOfStudy { get; set; }
 
         public string DepartmentCode { get; set; }
     }

@@ -7,8 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using BrainNotFound.Paper.WebApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using BrainNotFound.Paper.DataAccessLayer.Models;
-using BrainNotFound.Paper.DataAccessLayer;
+using BrainNotFound.Paper.WebApp.Models.BusinessModels;
 
 //TODO There is a lot to do
 
@@ -19,13 +18,13 @@ namespace BrainNotFound.Paper.WebApp.Controllers
     [Route("Admin")]
     public class AdminController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<Models.BusinessModels.ApplicationUser> _userManager;
         private readonly PaperDbContext _context;
 
 
         // Constructor
         public AdminController(
-            UserManager<IdentityUser> userManager, PaperDbContext context)
+            UserManager<Models.BusinessModels.ApplicationUser> userManager, PaperDbContext context)
         {
             _userManager = userManager;
             _context = context;
@@ -42,56 +41,44 @@ namespace BrainNotFound.Paper.WebApp.Controllers
 
 
         [HttpGet, Route("Instructors")]
-        public IActionResult Instructors()
+        public async Task<IActionResult> Instructors()
         {
-            return View();
+            var allInstructors = (await _userManager.GetUsersInRoleAsync("Instructor")).ToList();
+
+            return View(allInstructors);
         }
 
         [HttpGet, Route("Instructors/New")]
         public IActionResult NewInstructor()
-        {
-            ViewData["message"] = "ello";
-
-           
-
+        {            
             return View();
         }
 
         [HttpPost, Route("Instructors/New")]
-        public async Task<IActionResult> NewInstructor(CreateInstructorViewModel instructor)
+        public async Task<IActionResult> NewInstructor(CreateInstructorViewModel model)
         {
-            //Create a Identity User
-            IdentityUser newIdentityUser = new IdentityUser()
+            var newInstructor = new ApplicationUser()
             {
-                Email = instructor.Email,
-                UserName = instructor.UserName,
-                PhoneNumber = instructor.PhoneNumber
+                FirstName   = model.FirstName,
+                LastName    = model.LastName,
+                Salutation  = model.Salutation,
+                UserName    = model.UserName,
+                Email       = model.Email,
+                PhoneNumber = model.PhoneNumber,
+
             };
 
-            //Add the User to the IdentityDbContext
-            var result = await _userManager.CreateAsync(newIdentityUser, instructor.Password);
+            //Create a new Application User
+            var result = await _userManager.CreateAsync(newInstructor, model.Password);
 
-            //Check if user was created successfully
+
             if (result.Succeeded)
             {
-                //Get the user just created
-                var NewUserFetched = await _userManager.FindByEmailAsync(newIdentityUser.Email);
+                //Fetch created user
+                var CreatedUser = await _userManager.FindByEmailAsync(model.Email);
 
-                //Populate additional Information
-                var newUserInfo = new UserInfo()
-                {
-                    FirstName = instructor.FirstName,
-                    LastName = instructor.LastName,
-                    Salutation = instructor.Salutation,
-                    IdentityUserId = NewUserFetched.Id
-                };
-
-                //Add the additional Information to the PaperDbContext
-                _context.UserInfos.Add(newUserInfo);
-                _context.SaveChanges();
-
-                //Add the user Role to the created user
-                await _userManager.AddToRoleAsync(NewUserFetched, "Instructor");
+                //Add instructor role to created Application User
+                await _userManager.AddToRoleAsync(CreatedUser, "Instructor");
 
                 return RedirectToAction("Instructors", "Admin");
             }
@@ -242,10 +229,5 @@ namespace BrainNotFound.Paper.WebApp.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }

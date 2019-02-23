@@ -6,23 +6,22 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BrainNotFound.Paper.WebApp.Models;
 using Microsoft.AspNetCore.Identity;
-using BrainNotFound.Paper.DataAccessLayer.Models;
-using BrainNotFound.Paper.DataAccessLayer;
+using BrainNotFound.Paper.WebApp.Models.BusinessModels;
 
 namespace BrainNotFound.Paper.WebApp.Controllers
 {
-    public class BimaController : Controller
+    public class RootController : Controller
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
         private PaperDbContext _context;
 
-        public BimaController(
-            SignInManager<IdentityUser> signInManager, 
+        public RootController(
+            SignInManager<ApplicationUser> signInManager, 
             PaperDbContext context, 
-            UserManager<IdentityUser> userManager,
+            UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager)
         {
             _signInManager = signInManager;
@@ -80,10 +79,6 @@ namespace BrainNotFound.Paper.WebApp.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        
     }
 }

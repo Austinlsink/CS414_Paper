@@ -4072,8 +4072,4 @@
     <None Include="wwwroot\vendors\validator\validator.js" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\BrainNotFound.Paper.DataAccessLayer\BrainNotFound.Paper.DataAccessLayer.csproj" />
-  </ItemGroup>
-
 </Project>

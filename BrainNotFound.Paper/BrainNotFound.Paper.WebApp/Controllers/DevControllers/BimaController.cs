@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -6,15 +7,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BrainNotFound.Paper.WebApp.Models;
 using Microsoft.AspNetCore.Identity;
-using BrainNotFound.Paper.DataAccessLayer.Models;
-using BrainNotFound.Paper.DataAccessLayer;
+using BrainNotFound.Paper.WebApp.Models.BusinessModels;
 
 namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
 {
     public class BimaController : Controller
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
         private PaperDbContext _context;
@@ -22,12 +23,19 @@ namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
 
         public async Task<IActionResult> Run()
         {
+            var NewUserFetched = await _userManager.FindByEmailAsync("abmael.silva@me.com");
+            await _userManager.AddToRoleAsync(NewUserFetched, "Admin");
+
+            
             //Create a Identity User
-            IdentityUser user = new IdentityUser()
+            ApplicationUser user = new ApplicationUser()
             {
-                Email = "isabela@icloud.com",
-                UserName = "IsabelaSilva",
-                PhoneNumber = "8502883660"
+                Email = "abmael.silva@me.com",
+                UserName = "AbmaelSilva",
+                PhoneNumber = "8502883660",
+                FirstName = "Abmael",
+                LastName = "Fernandes da Silva",
+                Salutation = "Mr"
             };
 
             //Add the User to the IdentityDbContext
@@ -37,23 +45,11 @@ namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
             if (result.Succeeded)
             {
                 //Get the user just created
-                var NewUserFetched = await _userManager.FindByEmailAsync(user.Email);
+                //var NewUserFetched = await _userManager.FindByEmailAsync(user.Email);
 
-                //Populate additional Information
-                var newUserInfo = new UserInfo()
-                {
-                    FirstName = "Isabela",
-                    LastName = "Costa da Silva",
-                    Salutation = "Miss",
-                    IdentityUserId = NewUserFetched.Id
-                };
-
-                //Add the additional Information to the PaperDbContext
-                _context.UserInfos.Add(newUserInfo);
-                _context.SaveChanges();
 
                 //Add the user Role to the created user
-                await _userManager.AddToRoleAsync(NewUserFetched, "Admin");
+                //await _userManager.AddToRoleAsync(NewUserFetched, "Admin");
 
                 return RedirectToAction("Instructors", "Admin");
             }
@@ -98,15 +94,15 @@ namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
 
             
             await _userManager.AddToRoleAsync(user, "Admin");
-*/
+            */
             return View();
         }
 
         // Constructor
         public BimaController(
-                    SignInManager<IdentityUser> signInManager,
+                    SignInManager<ApplicationUser> signInManager,
                     PaperDbContext context,
-                    UserManager<IdentityUser> userManager,
+                    UserManager<ApplicationUser> userManager,
                     RoleManager<IdentityRole> roleManager)
         {
             _signInManager = signInManager;
@@ -114,5 +110,6 @@ namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
             _roleManager = roleManager;
             _context = context;
         }
+        
     }
 }

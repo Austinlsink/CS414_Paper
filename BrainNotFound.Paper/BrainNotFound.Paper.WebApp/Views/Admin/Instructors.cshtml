@@ -1,3 +1,6 @@
+@using BrainNotFound.Paper.WebApp.Models.BusinessModels;
+@model List<ApplicationUser>;
+
 @{
     ViewData["Title"] = "Manage Instructors - Admin";
 }
@@ -7,7 +10,7 @@
     <h1>List of Instructors</h1>
     <hr />
 
-    <button type="button" class="btn btn-dark">New Instructor</button>
+    <a asp-action="NewInstructor" asp-controller="Admin" type="button" class="btn btn-dark">New Instructor</a>
 
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel dept_table">
@@ -38,21 +41,25 @@
                         </thead>
 
                         <tbody>
-                            <tr class="even pointer">
-                                <td class="a-center ">
-                                    <input type="checkbox" class="flat" name="table_records">
-                                </td>
-                                <td class=" ">Banana</td>
-                                <td class=" ">Zorro </td>
-                                <td class=" ">4044044044</td>
-                                <td class=" ">bzorro@brain.com </td>
-                                <td class=" last">
-                                    <a href="#">Edit</a>
-                                </td>
-                                <td class=" last">
-                                    <a href="#">Remove</a>
-                                </td>
-                            </tr>
+                            @foreach (ApplicationUser instructor in Model)
+                            {
+                                <tr class="odd pointer">
+                                    <td class="a-center ">
+                                        <input type="checkbox" class="flat" name="table_records">
+                                    </td>
+                                    <td class=" ">@instructor.FirstName</td>
+                                    <td class=" ">@instructor.LastName</td>
+                                    <td class=" ">@instructor.PhoneNumber</td>
+                                    <td class=" ">@instructor.Email</td>
+                                    <td class=" last">
+                                        <a href="#">Edit</a>
+                                    </td>
+                                    <td class=" last">
+                                        <a href="#">Remove</a>
+                                    </td>
+                                </tr>
+                            }
+
                         </tbody>
                     </table>
                 </div>
