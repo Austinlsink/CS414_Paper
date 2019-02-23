@@ -4,14 +4,16 @@ using BrainNotFound.Paper.WebApp;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
 {
     [DbContext(typeof(PaperDbContext))]
-    partial class PaperDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190223012848_AddEnrollmentsTable")]
+    partial class AddEnrollmentsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -124,13 +126,9 @@ namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
 
                     b.Property<long>("SectionId");
 
-                    b.Property<string>("StudentId");
-
                     b.HasKey("EnrollmentId");
 
                     b.HasIndex("SectionId");
-
-                    b.HasIndex("StudentId");
 
                     b.ToTable("Enrollments");
                 });
@@ -302,13 +300,9 @@ namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
             modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.Enrollment", b =>
                 {
                     b.HasOne("BrainNotFound.Paper.WebApp.Models.BusinessModels.Section", "Section")
-                        .WithMany("Enrollments")
+                        .WithMany()
                         .HasForeignKey("SectionId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("BrainNotFound.Paper.WebApp.Models.BusinessModels.ApplicationUser", "ApplicationUser")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("StudentId");
                 });
 
             modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.Section", b =>

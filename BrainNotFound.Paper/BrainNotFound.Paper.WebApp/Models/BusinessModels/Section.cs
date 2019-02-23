@@ -12,18 +12,18 @@ namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
 		public int    Capacity {get; set;}
 		public string SectionNumber {get; set;}
 		public string Location {get; set;}
-		//public List<UserInfo> Students {get; set;}
 		public List<SectionMeetingTime> TimesMet {get; set;}
 		
 		// Foreign keys
 		public long CourseId {get; set;}
-		public Course Course {get; set;}
+        [ForeignKey("CourseId")]
+        public Course Course {get; set;}
 
         [ForeignKey("InstructorId")]
         public ApplicationUser ApplicationUser { get; set; }
         public string InstructorId { get; set;} // Instructor ID
 
         
-		//public List<Enrollment> Enrollments { get; set;}
+		public List<Enrollment> Enrollments { get; set;}
 	}
 }

@@ -16,6 +16,7 @@ namespace BrainNotFound.Paper.WebApp
         public DbSet<Course> Courses { get; set; }
         public DbSet<Section> Sections { get; set; }
         public DbSet<SectionMeetingTime> SectionMeetingTimes { get; set; }
+        public DbSet<Enrollment> Enrollments { get; set; }
 
 
         // Constructor
