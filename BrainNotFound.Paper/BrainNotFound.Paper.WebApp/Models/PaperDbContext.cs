@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BrainNotFound.Paper.WebApp
 {
-    public class PaperDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
+    public class PaperDbContext : IdentityDbContext<Models.BusinessModels.ApplicationUser, Microsoft.AspNetCore.Identity.IdentityRole, string>
     {
         public DbSet<Department> Departments { get; set; } // Example
         public DbSet<Course> Courses { get; set; }

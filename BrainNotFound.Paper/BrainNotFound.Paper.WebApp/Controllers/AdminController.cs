@@ -18,13 +18,13 @@ namespace BrainNotFound.Paper.WebApp.Controllers
     [Route("Admin")]
     public class AdminController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<Models.BusinessModels.ApplicationUser> _userManager;
         private readonly PaperDbContext _context;
 
 
         // Constructor
         public AdminController(
-            UserManager<IdentityUser> userManager, PaperDbContext context)
+            UserManager<Models.BusinessModels.ApplicationUser> userManager, PaperDbContext context)
         {
             _userManager = userManager;
             _context = context;

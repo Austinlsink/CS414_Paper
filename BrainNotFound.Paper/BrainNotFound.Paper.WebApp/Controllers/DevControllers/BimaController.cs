@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -12,8 +13,9 @@ namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
 {
     public class BimaController : Controller
     {
-        //private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
         private PaperDbContext _context;
@@ -21,6 +23,10 @@ namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
 
         public async Task<IActionResult> Run()
         {
+            var NewUserFetched = await _userManager.FindByEmailAsync("abmael.silva@me.com");
+            await _userManager.AddToRoleAsync(NewUserFetched, "Admin");
+
+            /*
             //Create a Identity User
             ApplicationUser user = new ApplicationUser()
             {
@@ -54,7 +60,7 @@ namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
                     ViewData["Message"] += error.Description;
                 }
             }
-            
+            */
             return View("TestView");
         }
 
@@ -88,21 +94,22 @@ namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
 
             
             await _userManager.AddToRoleAsync(user, "Admin");
-*/
+            */
             return View();
         }
 
         // Constructor
         public BimaController(
-    //                SignInManager<IdentityUser> signInManager,
+                    SignInManager<ApplicationUser> signInManager,
                     PaperDbContext context,
-                    UserManager<IdentityUser> userManager,
+                    UserManager<ApplicationUser> userManager,
                     RoleManager<IdentityRole> roleManager)
         {
-     //       _signInManager = signInManager;
+            _signInManager = signInManager;
             _userManager = userManager;
             _roleManager = roleManager;
             _context = context;
         }
+        
     }
 }
