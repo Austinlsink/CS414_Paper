@@ -8,9 +8,14 @@ namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
 	{
 		[Key] // Primary key
 		public long SectionId {get; set;}
-		
+		[Range(1,50)]
 		public int    Capacity {get; set;}
+
+        [Required]
+        [Range(1,20, ErrorMessage = "Enter a number from 1 to 20.")]
 		public string SectionNumber {get; set;}
+
+        [StringLength(7)] 
 		public string Location {get; set;}
 		public List<SectionMeetingTime> TimesMet {get; set;}
 		
