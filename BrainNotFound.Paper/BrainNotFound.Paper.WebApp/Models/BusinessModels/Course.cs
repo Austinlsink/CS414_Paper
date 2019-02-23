@@ -16,6 +16,7 @@ namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
 		public string CourseName {get; set;}
 		public string CourseDescription {get; set;}
 		public List<Section> Sections {get; set;}
+		public List<Test> Tests {get; set;}
 		// Standard .NET Core foreign key relationship notation (many side)
 		public long DepartmentId {get; set;}
 		public Department Department {get; set;}

@@ -4,14 +4,16 @@ using BrainNotFound.Paper.WebApp;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
 {
     [DbContext(typeof(PaperDbContext))]
-    partial class PaperDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190223021458_AddTestSectionTable")]
+    partial class AddTestSectionTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -136,44 +138,6 @@ namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
                     b.HasIndex("StudentId");
 
                     b.ToTable("Enrollments");
-                });
-
-            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.FieldOfStudy", b =>
-                {
-                    b.Property<long>("FieldOfStudyId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long>("DepartmentId");
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("FieldOfStudyId");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.ToTable("FieldsOfStudy");
-                });
-
-            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.Image", b =>
-                {
-                    b.Property<long>("ImageId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Comments");
-
-                    b.Property<string>("ImagePath");
-
-                    b.Property<int>("Index");
-
-                    b.Property<long>("TestSectionId");
-
-                    b.HasKey("ImageId");
-
-                    b.HasIndex("TestSectionId");
-
-                    b.ToTable("Image");
                 });
 
             modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.Section", b =>
@@ -417,22 +381,6 @@ namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
                     b.HasOne("BrainNotFound.Paper.WebApp.Models.BusinessModels.ApplicationUser", "ApplicationUser")
                         .WithMany("Enrollments")
                         .HasForeignKey("StudentId");
-                });
-
-            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.FieldOfStudy", b =>
-                {
-                    b.HasOne("BrainNotFound.Paper.WebApp.Models.BusinessModels.Department", "Department")
-                        .WithMany("FieldsOfStudy")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.Image", b =>
-                {
-                    b.HasOne("BrainNotFound.Paper.WebApp.Models.BusinessModels.TestSection", "TestSection")
-                        .WithMany("Images")
-                        .HasForeignKey("TestSectionId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.Section", b =>

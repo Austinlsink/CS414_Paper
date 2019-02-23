@@ -18,12 +18,12 @@ namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
         
         // Instructor relationships
         public List<Section> SectionsTaught { get; set; } // Sections an instructor teaches
-/*
+
         public List<Test> TestsWritten { get; set; } // Tests an instructor has written
 
         // Student relationships
-        public List<StudentAnswer> StudentAnswers { get; set; } // A student's answers on a test */
+        //public List<StudentAnswer> StudentAnswers { get; set; } // A student's answers on a test 
         public List<Enrollment> Enrollments { get; set; }
-//        public List<StudentTestAssignment> StudentTestAssignments { get; set; }
+        public List<StudentTestAssignment> StudentTestAssignments { get; set; }
     }
 }
