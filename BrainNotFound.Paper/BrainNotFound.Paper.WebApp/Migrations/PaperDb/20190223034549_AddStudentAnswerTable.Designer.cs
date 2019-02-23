@@ -4,14 +4,16 @@ using BrainNotFound.Paper.WebApp;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
 {
     [DbContext(typeof(PaperDbContext))]
-    partial class PaperDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190223034549_AddStudentAnswerTable")]
+    partial class AddStudentAnswerTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -287,15 +289,11 @@ namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
 
                     b.Property<string>("StudentId");
 
-                    b.Property<long>("TestScheduleId");
-
                     b.HasKey("AnswerId");
 
                     b.HasIndex("QuestionId");
 
                     b.HasIndex("StudentId");
-
-                    b.HasIndex("TestScheduleId");
 
                     b.ToTable("StudentAnswers");
                 });
@@ -397,27 +395,6 @@ namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
                     b.HasIndex("InstructorId");
 
                     b.ToTable("Tests");
-                });
-
-            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.TestSchedule", b =>
-                {
-                    b.Property<long>("TestScheduleId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Duration");
-
-                    b.Property<DateTime>("EndTime");
-
-                    b.Property<DateTime>("StartTime");
-
-                    b.Property<long>("TestId");
-
-                    b.HasKey("TestScheduleId");
-
-                    b.HasIndex("TestId");
-
-                    b.ToTable("TestSchedules");
                 });
 
             modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.TestSection", b =>
@@ -663,18 +640,13 @@ namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
             modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.StudentAnswer", b =>
                 {
                     b.HasOne("BrainNotFound.Paper.WebApp.Models.BusinessModels.Question", "Question")
-                        .WithMany("StudentAnswers")
+                        .WithMany()
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("BrainNotFound.Paper.WebApp.Models.BusinessModels.ApplicationUser", "ApplicationUser")
-                        .WithMany("StudentAnswers")
+                        .WithMany()
                         .HasForeignKey("StudentId");
-
-                    b.HasOne("BrainNotFound.Paper.WebApp.Models.BusinessModels.TestSchedule", "TestSchedule")
-                        .WithMany("StudentAnswers")
-                        .HasForeignKey("TestScheduleId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.StudentMajor", b =>
@@ -723,14 +695,6 @@ namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
                     b.HasOne("BrainNotFound.Paper.WebApp.Models.BusinessModels.ApplicationUser", "ApplicationUser")
                         .WithMany("TestsWritten")
                         .HasForeignKey("InstructorId");
-                });
-
-            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.TestSchedule", b =>
-                {
-                    b.HasOne("BrainNotFound.Paper.WebApp.Models.BusinessModels.Test", "Test")
-                        .WithMany("TestSchedules")
-                        .HasForeignKey("TestId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.TestSection", b =>

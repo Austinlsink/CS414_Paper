@@ -22,10 +22,10 @@ namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
         public List<Test> TestsWritten { get; set; } // Tests an instructor has written
 
         // Student relationships
-        //public List<StudentAnswer> StudentAnswers { get; set; } // A student's answers on a test 
+        public List<StudentAnswer> StudentAnswers { get; set; } // A student's answers on a test 
         public List<Enrollment> Enrollments { get; set; }
         public List<StudentTestAssignment> StudentTestAssignments { get; set; }
-        //public List<StudentMajor> StudentMajors { get; set; }
-        //public List<StudentMinor> StudentMinors { get; set; }
+        public List<StudentMajor> StudentMajors { get; set; }
+        public List<StudentMinor> StudentMinors { get; set; }
     }
 }

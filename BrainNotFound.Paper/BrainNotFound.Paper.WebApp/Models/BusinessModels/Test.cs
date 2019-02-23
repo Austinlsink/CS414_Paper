@@ -12,7 +12,7 @@ namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
 		public bool IsVisible {get; set;} // Whether the test is visible to students or not
 		public string TestName {get; set;}
 		public List<TestSection> TestSections {get; set;}
-		//public List<TestSchedule> TestSchedules {get; set;}
+		public List<TestSchedule> TestSchedules {get; set;}
 		
 		// Foreign keys
 		public long CourseId {get; set;}

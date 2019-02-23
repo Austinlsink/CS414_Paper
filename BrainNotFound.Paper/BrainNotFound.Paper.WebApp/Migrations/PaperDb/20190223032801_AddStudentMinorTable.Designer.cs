@@ -4,14 +4,16 @@ using BrainNotFound.Paper.WebApp;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
 {
     [DbContext(typeof(PaperDbContext))]
-    partial class PaperDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190223032801_AddStudentMinorTable")]
+    partial class AddStudentMinorTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -186,47 +188,6 @@ namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
                     b.ToTable("Image");
                 });
 
-            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.Question", b =>
-                {
-                    b.Property<long>("QuestionId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Content");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
-                    b.Property<int>("Index");
-
-                    b.Property<int>("PointValue");
-
-                    b.Property<long>("QuestionTypeId");
-
-                    b.Property<long>("TestSectionId");
-
-                    b.HasKey("QuestionId");
-
-                    b.HasIndex("QuestionTypeId");
-
-                    b.ToTable("Questions");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Question");
-                });
-
-            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.QuestionType", b =>
-                {
-                    b.Property<long>("QuestionTypeId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("QuestionTypeId");
-
-                    b.ToTable("QuestionTypes");
-                });
-
             modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.Section", b =>
                 {
                     b.Property<long>("SectionId")
@@ -275,29 +236,6 @@ namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
                     b.HasIndex("SectionId");
 
                     b.ToTable("SectionMeetingTimes");
-                });
-
-            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.StudentAnswer", b =>
-                {
-                    b.Property<long>("AnswerId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long>("QuestionId");
-
-                    b.Property<string>("StudentId");
-
-                    b.Property<long>("TestScheduleId");
-
-                    b.HasKey("AnswerId");
-
-                    b.HasIndex("QuestionId");
-
-                    b.HasIndex("StudentId");
-
-                    b.HasIndex("TestScheduleId");
-
-                    b.ToTable("StudentAnswers");
                 });
 
             modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.StudentMajor", b =>
@@ -361,21 +299,6 @@ namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
                     b.ToTable("StudentTestAssignments");
                 });
 
-            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.SystemInfo", b =>
-                {
-                    b.Property<long>("SystemInfoId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Attribute");
-
-                    b.Property<string>("Value");
-
-                    b.HasKey("SystemInfoId");
-
-                    b.ToTable("SystemInfos");
-                });
-
             modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.Test", b =>
                 {
                     b.Property<long>("TestId")
@@ -397,27 +320,6 @@ namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
                     b.HasIndex("InstructorId");
 
                     b.ToTable("Tests");
-                });
-
-            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.TestSchedule", b =>
-                {
-                    b.Property<long>("TestScheduleId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Duration");
-
-                    b.Property<DateTime>("EndTime");
-
-                    b.Property<DateTime>("StartTime");
-
-                    b.Property<long>("TestId");
-
-                    b.HasKey("TestScheduleId");
-
-                    b.HasIndex("TestId");
-
-                    b.ToTable("TestSchedules");
                 });
 
             modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.TestSection", b =>
@@ -551,40 +453,6 @@ namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.Essay", b =>
-                {
-                    b.HasBaseType("BrainNotFound.Paper.WebApp.Models.BusinessModels.Question");
-
-                    b.Property<string>("ExpectedAnswer");
-
-                    b.ToTable("Essay");
-
-                    b.HasDiscriminator().HasValue("Essay");
-                });
-
-            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.FillInTheBlank", b =>
-                {
-                    b.HasBaseType("BrainNotFound.Paper.WebApp.Models.BusinessModels.Question");
-
-                    b.Property<string>("Answer");
-
-                    b.ToTable("FillInTheBlank");
-
-                    b.HasDiscriminator().HasValue("FillInTheBlank");
-                });
-
-            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.TrueFalse", b =>
-                {
-                    b.HasBaseType("BrainNotFound.Paper.WebApp.Models.BusinessModels.Question");
-
-                    b.Property<bool>("Answer")
-                        .HasColumnName("TrueFalse_Answer");
-
-                    b.ToTable("TrueFalse");
-
-                    b.HasDiscriminator().HasValue("TrueFalse");
-                });
-
             modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.ApplicationUser", b =>
                 {
                     b.HasOne("BrainNotFound.Paper.WebApp.Models.BusinessModels.FieldOfStudy")
@@ -632,14 +500,6 @@ namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.Question", b =>
-                {
-                    b.HasOne("BrainNotFound.Paper.WebApp.Models.BusinessModels.QuestionType")
-                        .WithMany("Questions")
-                        .HasForeignKey("QuestionTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.Section", b =>
                 {
                     b.HasOne("BrainNotFound.Paper.WebApp.Models.BusinessModels.Course", "Course")
@@ -657,23 +517,6 @@ namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
                     b.HasOne("BrainNotFound.Paper.WebApp.Models.BusinessModels.Section", "Section")
                         .WithMany("TimesMet")
                         .HasForeignKey("SectionId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.StudentAnswer", b =>
-                {
-                    b.HasOne("BrainNotFound.Paper.WebApp.Models.BusinessModels.Question", "Question")
-                        .WithMany("StudentAnswers")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("BrainNotFound.Paper.WebApp.Models.BusinessModels.ApplicationUser", "ApplicationUser")
-                        .WithMany("StudentAnswers")
-                        .HasForeignKey("StudentId");
-
-                    b.HasOne("BrainNotFound.Paper.WebApp.Models.BusinessModels.TestSchedule", "TestSchedule")
-                        .WithMany("StudentAnswers")
-                        .HasForeignKey("TestScheduleId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -723,14 +566,6 @@ namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
                     b.HasOne("BrainNotFound.Paper.WebApp.Models.BusinessModels.ApplicationUser", "ApplicationUser")
                         .WithMany("TestsWritten")
                         .HasForeignKey("InstructorId");
-                });
-
-            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.TestSchedule", b =>
-                {
-                    b.HasOne("BrainNotFound.Paper.WebApp.Models.BusinessModels.Test", "Test")
-                        .WithMany("TestSchedules")
-                        .HasForeignKey("TestId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.TestSection", b =>

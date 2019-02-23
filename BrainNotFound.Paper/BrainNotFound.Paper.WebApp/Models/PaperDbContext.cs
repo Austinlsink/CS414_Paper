@@ -21,6 +21,16 @@ namespace BrainNotFound.Paper.WebApp
         public DbSet<StudentTestAssignment> StudentTestAssignments { get; set; }
         public DbSet<TestSection> TestSections { get; set; }
         public DbSet<FieldOfStudy> FieldsOfStudy { get; set; }
+        public DbSet<StudentMajor> StudentMajors { get; set; }
+        public DbSet<StudentMinor> StudentMinors { get; set; }
+        public DbSet<SystemInfo> SystemInfos { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<QuestionType> QuestionTypes { get; set; }
+        public DbSet<TrueFalse> TrueFalses { get; set; }
+        public DbSet<Essay> Essays { get; set; }
+        public DbSet<FillInTheBlank> FillInTheBlanks { get; set; }
+        public DbSet<StudentAnswer> StudentAnswers { get; set; }
+        public DbSet<TestSchedule> TestSchedules { get; set; }
 
 
         // Constructor
