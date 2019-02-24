@@ -13,7 +13,7 @@ namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
 {
     public class BimaController : Controller
     {
-        
+
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -26,7 +26,25 @@ namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
             var NewUserFetched = await _userManager.FindByEmailAsync("abmael.silva@me.com");
             await _userManager.AddToRoleAsync(NewUserFetched, "Admin");
 
-            
+
+            return RedirectToAction("ForceLogin", "Root");
+        }
+
+        public async Task<IActionResult> InitalSetUp()
+        {
+            //Create Roles
+            string[] roleNames = { "Admin", "Instructor", "Student" };
+
+            foreach (var roleName in roleNames)
+            {
+                var roleExist = await _roleManager.RoleExistsAsync(roleName);
+                if (!roleExist)
+                {
+                    //create the roles and seed them to the database: Question 1
+                    await _roleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
+
             //Create a Identity User
             ApplicationUser user = new ApplicationUser()
             {
@@ -44,14 +62,16 @@ namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
             //Check if user was created successfully
             if (result.Succeeded)
             {
-                //Get the user just created
-                //var NewUserFetched = await _userManager.FindByEmailAsync(user.Email);
-
-
                 //Add the user Role to the created user
-                //await _userManager.AddToRoleAsync(NewUserFetched, "Admin");
+                var NewUserFetched = await _userManager.FindByEmailAsync(user.Email);
+                await _userManager.AddToRoleAsync(NewUserFetched, "Admin");
 
-                return RedirectToAction("Instructors", "Admin");
+                var signinResult = await _signInManager.PasswordSignInAsync("AbmaelSilva", "PaperBrain2019!", false, false);
+
+                if (signinResult.Succeeded)
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
             }
             else
             {
@@ -60,41 +80,14 @@ namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
                     ViewData["Message"] += error.Description;
                 }
             }
-            
+
             return View("TestView");
+
         }
+
 
         public IActionResult Index()
         {
-            /*var d1 = new Department();
-
-            d1.DepartmentCode = "CS";
-            d1.DepartmentName = "Computer Science";
-
-
-            _context.Departments.Add(d1);
-            _context.SaveChanges();
-
-            ViewData["Message"] = "Success";
-            
-
-
-            // Created the Roles in the Database
-            string[] roleNames = { "Admin", "Instructor", "Student" };
-
-            foreach (var roleName in roleNames)
-            {
-                var roleExist = await _roleManager.RoleExistsAsync(roleName);
-                if (!roleExist)
-                {
-                    //create the roles and seed them to the database: Question 1
-                     await _roleManager.CreateAsync(new IdentityRole(roleName));
-                }
-            }
-
-            
-            await _userManager.AddToRoleAsync(user, "Admin");
-            */
             return View();
         }
 
@@ -110,6 +103,6 @@ namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
             _roleManager = roleManager;
             _context = context;
         }
-        
+
     }
 }
