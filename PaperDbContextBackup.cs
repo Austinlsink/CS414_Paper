@@ -1,4 +1,4 @@
-﻿
+
 using BrainNotFound.Paper.WebApp.Models.BusinessModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -32,27 +32,11 @@ namespace BrainNotFound.Paper.WebApp
         public DbSet<StudentAnswer> StudentAnswers { get; set; }
         public DbSet<TestSchedule> TestSchedules { get; set; }
         public DbSet<MultipleChoiceAnswer> MultipleChoiceAnswers { get; set; }
-        public DbSet<StudentTrueFalseAnswer> StudentTrueFalseAnswers { get; set; }
-        public DbSet<StudentEssayAnswer> StudentEssayAnswers { get; set; }
-        public DbSet<StudentMultipleChoiceAnswer> StudentMultipleChoiceAnswers { get; set; }
 
 
         // Constructor
-        public PaperDbContext(DbContextOptions<PaperDbContext> options)
+        public PaperDbContext(DbContextOptions<PaperDbContext> options) 
             : base(options)
-        { }
-
-        // Override OnModelCreate()
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
-            {
-                relationship.DeleteBehavior = DeleteBehavior.Restrict;
-            }
-
-            base.OnModelCreating(builder);
-
-        }
-        
+        {  }
     }
 }

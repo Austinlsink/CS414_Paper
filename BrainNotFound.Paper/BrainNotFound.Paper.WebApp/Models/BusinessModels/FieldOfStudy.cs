@@ -6,6 +6,7 @@ namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
 {
     public class FieldOfStudy
 	{
+        // Not sure if there is a required attribute in this file.
 		[Key] // Primary key
 		public long FieldOfStudyId {get; set;}
 		

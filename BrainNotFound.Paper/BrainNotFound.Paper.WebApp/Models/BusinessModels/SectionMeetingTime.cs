@@ -11,10 +11,10 @@ namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
 		[Required] 
         [StringLength(9, MinimumLength = 6, ErrorMessage = "Please enter a specified day of the week: Monday, Tuesday, Wednesday, Thursday, Friday.")]
         public string Day {get; set;}
-        [Required]
+ 
         [DataType(DataType.Date)]
         public DateTime StartTime {get; set;}
-        [Required]
+ 
         [DataType(DataType.Date)]
         public DateTime EndTime {get; set;}
 		

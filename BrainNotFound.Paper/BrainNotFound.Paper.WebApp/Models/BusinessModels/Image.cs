@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
 {
+    // Not sure if there needs to be attributes in this one
     public class Image
 	{
 		[Key]

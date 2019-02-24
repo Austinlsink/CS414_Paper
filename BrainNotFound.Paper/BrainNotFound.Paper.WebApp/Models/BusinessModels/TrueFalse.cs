@@ -5,6 +5,7 @@ namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
 {
     public class TrueFalse : Question
       {
-	    public bool Answer { get; set; }	
+        //ask about this for required attributes
+	    public bool TrueFalseAnswer { get; set; }	
       }
 }
