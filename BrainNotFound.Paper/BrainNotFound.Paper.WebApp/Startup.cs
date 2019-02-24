@@ -36,7 +36,7 @@ namespace BrainNotFound.Paper.WebApp
 
             services.AddDbContext<PaperDbContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTest"),
+                options.UseMySql(Configuration.GetConnectionString("BrainNotFoundMySQL"),
                 optionsBuilders => optionsBuilders.MigrationsAssembly("BrainNotFound.Paper.WebApp"));
             });
          
