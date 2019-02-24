@@ -26,8 +26,11 @@ namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
             using (var reader = new StreamReader("SampleData/Instructor_Sample_Data.csv"))
             using (var csv = new CsvReader(reader))
             {
+                
                 csv.Configuration.HeaderValidated = null;
                 csv.Configuration.MissingFieldFound = null;
+
+
                 var instructors = csv.GetRecords<CreateInstructorViewModel>();
                 foreach (CreateInstructorViewModel model in instructors)
                 {
@@ -37,7 +40,7 @@ namespace BrainNotFound.Paper.WebApp.Controllers.DevControllers
                         FirstName = model.FirstName,
                         LastName = model.LastName,
                         Salutation = model.Salutation,
-                        UserName = model.UserName,
+                        UserName = model.FirstName + model.LastName,
                         Email = model.Email,
                         PhoneNumber = model.PhoneNumber,
 
