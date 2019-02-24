@@ -18,8 +18,8 @@ namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
         [Required]
         [StringLength(4, MinimumLength = 1, ErrorMessage = "A salutation name was be entered (Example: Mr., Mrs., Dr., Miss).")]
         public string Salutation { get; set; }
-        [Required]
-        [StringLength(9, MinimumLength = 1, ErrorMessage = "A classification must be entered (Example: Freshman, Sophomore, Junior, Senior).")]
+        /*[Required]
+        [StringLength(9, MinimumLength = 1, ErrorMessage = "A classification must be entered (Example: Freshman, Sophomore, Junior, Senior).")]*/
         public string Classification { get; set; }
 
 

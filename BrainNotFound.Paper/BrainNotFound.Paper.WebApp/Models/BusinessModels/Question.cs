@@ -6,13 +6,13 @@ namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
 {
     public class Question
 	{
-        // not sure if there should be required attributes in this one.
         [Key]
-		public long QuestionId { get; set; } //private key
-		
+		public long QuestionId { get; set; } //primary key
+		[Required]
 		public int Index      { get; set; }
 		public int PointValue { get; set; }
-		public string Content { get; set; }
+        [Required]
+		public string Content { get; set; } 
 		
 		//foreign keys
 
@@ -24,7 +24,7 @@ namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
         public QuestionType QuestionType;
 
         public List<StudentAnswer> StudentAnswers { get; set; }
-        //public List<MultipleChoiceAnswer> MultipleChoiceAnswers { get; set; }
+        public List<MultipleChoiceAnswer> MultipleChoiceAnswers { get; set; }
         //public List<MatchingQuestionSide> MatchingQuestionSides { get; set; }
         //public List<MatchingAnswerSide>   MatchingAnswerSides   { get; set; }
     }
