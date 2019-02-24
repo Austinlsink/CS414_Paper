@@ -4,14 +4,16 @@ using BrainNotFound.Paper.WebApp;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
 {
     [DbContext(typeof(PaperDbContext))]
-    partial class PaperDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190224012502_AddMultipleChoiceAnswerTable")]
+    partial class AddMultipleChoiceAnswerTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,7 +28,9 @@ namespace BrainNotFound.Paper.WebApp.Migrations.PaperDb
 
                     b.Property<int>("AccessFailedCount");
 
-                    b.Property<string>("Classification");
+                    b.Property<string>("Classification")
+                        .IsRequired()
+                        .HasMaxLength(9);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();

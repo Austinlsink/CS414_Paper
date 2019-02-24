@@ -10,16 +10,16 @@ namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
     public class ApplicationUser : IdentityUser
     {
         [Required]
-        [StringLength(20, MinimumLength = 1, ErrorMessage = "The First Name must be entered.")]
+        [StringLength(20, MinimumLength = 1, ErrorMessage ="A first name was be entered.")]
         public string FirstName { get; set; }
         [Required]
-        [StringLength(30, MinimumLength = 1, ErrorMessage = "The Last name must be entered.")]
+        [StringLength(30, MinimumLength = 1, ErrorMessage = "A Last name was be entered.")]
         public string LastName { get; set; }
         [Required]
-        [StringLength(4, MinimumLength = 1, ErrorMessage = "A salutation must be entered (Example: Mr., Mrs., Dr., Miss).")]
+        [StringLength(4, MinimumLength = 1, ErrorMessage = "A salutation name was be entered (Example: Mr., Mrs., Dr., Miss).")]
         public string Salutation { get; set; }
-        [Required]
-        [StringLength(9, MinimumLength = 1, ErrorMessage = "The classification must be entered (Example: Freshman, Sophomore, Junior, Senior).")]
+        /*[Required]
+        [StringLength(9, MinimumLength = 1, ErrorMessage = "A classification must be entered (Example: Freshman, Sophomore, Junior, Senior).")]*/
         public string Classification { get; set; }
 
 

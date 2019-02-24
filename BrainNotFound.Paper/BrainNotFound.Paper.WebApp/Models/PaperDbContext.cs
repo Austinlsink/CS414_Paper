@@ -31,6 +31,7 @@ namespace BrainNotFound.Paper.WebApp
         public DbSet<FillInTheBlank> FillInTheBlanks { get; set; }
         public DbSet<StudentAnswer> StudentAnswers { get; set; }
         public DbSet<TestSchedule> TestSchedules { get; set; }
+        public DbSet<MultipleChoiceAnswer> MultipleChoiceAnswers { get; set; }
 
 
         // Constructor
