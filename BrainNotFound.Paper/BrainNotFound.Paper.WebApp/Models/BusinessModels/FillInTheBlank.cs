@@ -6,6 +6,6 @@ namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
     // Ask about if there needs to be an attribute in this one.
     public class FillInTheBlank : Question
 	{
-		public string Answer { get; set; }
+		public string FillInTheBlankAnswer { get; set; }
 	}
 }

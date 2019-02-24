@@ -22,5 +22,6 @@ namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
 		public ApplicationUser ApplicationUser {get; set;}
 
         //public List<StudentMatchingAnswer> StudentMatchingAnswers {get; set;}
+        public List<StudentMultipleChoiceAnswer> StudentMultipleChoiceAnswers { get; set; }
     }
 }
