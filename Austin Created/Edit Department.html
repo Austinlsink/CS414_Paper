@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="icon" href="images/favicon.ico" type="image/ico" />
 
-    <title>Paper | View Instructor - Admin</title>
+    <title>Paper | Edit Department - Admin</title>
 
     <!-- Bootstrap -->
     <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -86,29 +86,13 @@
                       <li><a href="general_elements.html">New Student</a></li>
                       <li><a href="media_gallery.html">View All</a></li>
                     </ul>
-                  </li>                 
+                  </li>
                 </ul>
               </div>
 
             </div>
             <!-- /sidebar menu -->
 
-            <!-- /menu footer buttons
-            <div class="sidebar-footer hidden-small">
-              <a data-toggle="tooltip" data-placement="top" title="Settings">
-                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="FullScreen">
-                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="Lock">
-                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
-                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-              </a>
-            </div>
-            /menu footer buttons -->
           </div>
         </div>
 
@@ -212,55 +196,54 @@
         <!-- page content -->
         <div class="right_col" role="main">
  
-           <h1>Joe Green's Information</h1>
-           <div class="separator">
-             
-              <div class="x_panel">
-                <div class="x_content">
-                  <table class="table table-hover">
-                    <tbody>
-                      <tr>
-                        <th scope="row">User ID:</th>
-                        <td>404404</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">First Name:</th>
-                        <td>Joe</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Last Name:</th>
-                        <td>Green</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Salutation:</th>
-                        <td>Mr.</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Email:</th>
-                        <td>jgreen@instructor.brainnotfound.com</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Password:</th>
-                        <td><code>FloridaIsNotSunny:(</code></td>
-                      </tr>
-                        <tr>
-                        <th scope="row">Phone Number:</th>
-                        <td>(850) 404-0987</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">User Type:</th>
-                        <td>Instructor</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Sections:</th>
-                        <td>1001, 1003</td>
-                      </tr>                    
-                    </tbody>
-                  </table>
-                  <hr/>
-                  <button type="button" class="btn btn-success">Edit</button>
+           <div class="col-md-12 col-sm-12 col-xs-12">
+             <div class="dept_table">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Edit Department</h2>
+                    
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <br />
+                    <form id="new-department" data-parsley-validate class="form-horizontal form-label-left">
+
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-id">Department ID
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <h4 class="col-md-7 col-xs-12">test</h4>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">Department Code <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="text" id="dept-code" name="dept-code" required="required" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="dept-name" class="control-label col-md-3 col-sm-3 col-xs-12">Department Name</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input id="dept-name" class="form-control col-md-7 col-xs-12" type="text" name="dept-name">
+                        </div>
+                      </div>
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                          <button class="btn btn-primary" type="button">Cancel</button>
+                          <button type="submit" class="btn btn-success">Save Changes</button>
+                        </div>
+                      </div>
+
+                    </form>
+                  </div>
                 </div>
-             </div>
+              </div>
+            </div>
+
+              </div>
         </div>
         <!-- /page content -->
 
