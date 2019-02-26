@@ -3,21 +3,23 @@ using System;
 using BrainNotFound.Paper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BrainNotFound.Paper.Migrations
 {
     [DbContext(typeof(PaperDbContext))]
-    [Migration("20190226052105_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20190226193254_AddStudentMatchingAnswerTable")]
+    partial class AddStudentMatchingAnswerTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.2-servicing-10034")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.ApplicationUser", b =>
                 {
@@ -82,7 +84,8 @@ namespace BrainNotFound.Paper.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex");
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -90,7 +93,8 @@ namespace BrainNotFound.Paper.Migrations
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.Course", b =>
                 {
                     b.Property<long>("CourseId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CourseCode")
                         .IsRequired();
@@ -117,7 +121,8 @@ namespace BrainNotFound.Paper.Migrations
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.Department", b =>
                 {
                     b.Property<long>("DepartmentId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("DepartmentCode");
 
@@ -133,7 +138,8 @@ namespace BrainNotFound.Paper.Migrations
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.Enrollment", b =>
                 {
                     b.Property<long>("EnrollmentId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<float>("Grade");
 
@@ -153,7 +159,8 @@ namespace BrainNotFound.Paper.Migrations
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.FieldOfStudy", b =>
                 {
                     b.Property<long>("FieldOfStudyId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<long>("DepartmentId");
 
@@ -169,7 +176,8 @@ namespace BrainNotFound.Paper.Migrations
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.Image", b =>
                 {
                     b.Property<long>("ImageId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Comments");
 
@@ -189,7 +197,8 @@ namespace BrainNotFound.Paper.Migrations
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.MultipleChoiceAnswer", b =>
                 {
                     b.Property<long>("MultipleChoiceAnswerId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CorrectMultipleChoiceAnswer");
 
@@ -201,13 +210,14 @@ namespace BrainNotFound.Paper.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("MultipleChoiceAnswer");
+                    b.ToTable("MultipleChoiceAnswers");
                 });
 
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.Question", b =>
                 {
                     b.Property<long>("QuestionId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Content")
                         .IsRequired();
@@ -235,7 +245,8 @@ namespace BrainNotFound.Paper.Migrations
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.QuestionType", b =>
                 {
                     b.Property<long>("QuestionTypeId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name");
 
@@ -247,7 +258,8 @@ namespace BrainNotFound.Paper.Migrations
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.Section", b =>
                 {
                     b.Property<long>("SectionId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("Capacity");
 
@@ -273,7 +285,8 @@ namespace BrainNotFound.Paper.Migrations
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.SectionMeetingTime", b =>
                 {
                     b.Property<long>("SectionMeetingTimeId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Day")
                         .IsRequired();
@@ -294,7 +307,8 @@ namespace BrainNotFound.Paper.Migrations
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.StudentAnswer", b =>
                 {
                     b.Property<long>("AnswerId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Discriminator")
                         .IsRequired();
@@ -321,7 +335,8 @@ namespace BrainNotFound.Paper.Migrations
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.StudentMajor", b =>
                 {
                     b.Property<long>("StudentMajorId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<long>("FieldOfStudyId");
 
@@ -336,10 +351,26 @@ namespace BrainNotFound.Paper.Migrations
                     b.ToTable("StudentMajors");
                 });
 
+            modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.StudentMatchingAnswer", b =>
+                {
+                    b.Property<long>("StudentMatchingAnswerId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("AnswerId");
+
+                    b.HasKey("StudentMatchingAnswerId");
+
+                    b.HasIndex("AnswerId");
+
+                    b.ToTable("StudentMatchingAnswers");
+                });
+
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.StudentMultipleChoiceAnswer", b =>
                 {
                     b.Property<long>("StudentMultipleChoiceId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<long>("AnswerId");
 
@@ -351,13 +382,14 @@ namespace BrainNotFound.Paper.Migrations
 
                     b.HasIndex("MultipleChoiceAnswerId");
 
-                    b.ToTable("StudentMultipleChoiceAnswer");
+                    b.ToTable("StudentMultipleChoiceAnswers");
                 });
 
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.StudentTestAssignment", b =>
                 {
                     b.Property<long>("StudentTestAssignmentId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<float>("Grade");
 
@@ -379,7 +411,8 @@ namespace BrainNotFound.Paper.Migrations
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.SystemInfo", b =>
                 {
                     b.Property<long>("SystemInfoId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Attribute");
 
@@ -393,7 +426,8 @@ namespace BrainNotFound.Paper.Migrations
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.Test", b =>
                 {
                     b.Property<long>("TestId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<long>("CourseId");
 
@@ -417,7 +451,8 @@ namespace BrainNotFound.Paper.Migrations
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.TestSchedule", b =>
                 {
                     b.Property<long>("TestScheduleId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("Duration");
 
@@ -437,7 +472,8 @@ namespace BrainNotFound.Paper.Migrations
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.TestSection", b =>
                 {
                     b.Property<long>("TestSectionId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("Index");
 
@@ -472,7 +508,8 @@ namespace BrainNotFound.Paper.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex");
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
                 });
@@ -480,7 +517,8 @@ namespace BrainNotFound.Paper.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType");
 
@@ -499,7 +537,8 @@ namespace BrainNotFound.Paper.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType");
 
@@ -652,7 +691,7 @@ namespace BrainNotFound.Paper.Migrations
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.MultipleChoiceAnswer", b =>
                 {
                     b.HasOne("BrainNotFound.Paper.Models.BusinessModels.Question", "Question")
-                        .WithMany()
+                        .WithMany("MultipleChoiceAnswers")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -712,6 +751,14 @@ namespace BrainNotFound.Paper.Migrations
                     b.HasOne("BrainNotFound.Paper.Models.BusinessModels.ApplicationUser", "ApplicationUser")
                         .WithMany("StudentMajors")
                         .HasForeignKey("StudentId");
+                });
+
+            modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.StudentMatchingAnswer", b =>
+                {
+                    b.HasOne("BrainNotFound.Paper.Models.BusinessModels.StudentAnswer", "StudentAnswer")
+                        .WithMany("StudentMatchingAnswers")
+                        .HasForeignKey("AnswerId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.StudentMultipleChoiceAnswer", b =>

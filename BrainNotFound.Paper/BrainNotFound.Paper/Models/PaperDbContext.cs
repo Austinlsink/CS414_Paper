@@ -31,14 +31,15 @@ namespace BrainNotFound.Paper
         public DbSet<FillInTheBlank> FillInTheBlanks { get; set; }
         public DbSet<StudentAnswer> StudentAnswers { get; set; }
         public DbSet<TestSchedule> TestSchedules { get; set; }
-        //public DbSet<MultipleChoiceAnswer> MultipleChoiceAnswers { get; set; }
+        public DbSet<MultipleChoiceAnswer> MultipleChoiceAnswers { get; set; }
         public DbSet<StudentTrueFalseAnswer> StudentTrueFalseAnswers { get; set; }
         public DbSet<StudentEssayAnswer> StudentEssayAnswers { get; set; }
-        //public DbSet<StudentMultipleChoiceAnswer> StudentMultipleChoiceAnswers { get; set; }
+        public DbSet<StudentMultipleChoiceAnswer> StudentMultipleChoiceAnswers { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-       // public DbSet<StudentMatchingAnswer> StudentMatchingAnswers { get; set; }
-       // public DbSet<MatchingAnswerSide> MatchingAnswerSides { get; set; }
+        public DbSet<StudentMatchingAnswer> StudentMatchingAnswers { get; set; }
+        public DbSet<MatchingAnswerSide> MatchingAnswerSides { get; set; }
+        public DbSet<MatchingQuestionSide> MatchingQuestionSides { get; set; }
 
 
         // Constructor

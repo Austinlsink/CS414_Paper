@@ -4,14 +4,16 @@ using BrainNotFound.Paper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BrainNotFound.Paper.Migrations
 {
     [DbContext(typeof(PaperDbContext))]
-    partial class PaperDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190226193500_AddMatchingAnswerSideTable")]
+    partial class AddMatchingAnswerSideTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -209,27 +211,6 @@ namespace BrainNotFound.Paper.Migrations
                     b.ToTable("MatchingAnswerSides");
                 });
 
-            modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.MatchingQuestionSide", b =>
-                {
-                    b.Property<long>("MatchingQuestionSideId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Content");
-
-                    b.Property<long>("MatchingAnswerSideId");
-
-                    b.Property<long>("QuestionId");
-
-                    b.HasKey("MatchingQuestionSideId");
-
-                    b.HasIndex("MatchingAnswerSideId");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("MatchingQuestionSides");
-                });
-
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.MultipleChoiceAnswer", b =>
                 {
                     b.Property<long>("MultipleChoiceAnswerId")
@@ -397,15 +378,11 @@ namespace BrainNotFound.Paper.Migrations
 
                     b.Property<long>("MatchingAnswerSideId");
 
-                    b.Property<long>("MatchingQuestionSideId");
-
                     b.HasKey("StudentMatchingAnswerId");
 
                     b.HasIndex("AnswerId");
 
                     b.HasIndex("MatchingAnswerSideId");
-
-                    b.HasIndex("MatchingQuestionSideId");
 
                     b.ToTable("StudentMatchingAnswers");
                 });
@@ -735,20 +712,7 @@ namespace BrainNotFound.Paper.Migrations
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.MatchingAnswerSide", b =>
                 {
                     b.HasOne("BrainNotFound.Paper.Models.BusinessModels.Question", "Question")
-                        .WithMany("MatchingAnswerSides")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.MatchingQuestionSide", b =>
-                {
-                    b.HasOne("BrainNotFound.Paper.Models.BusinessModels.MatchingAnswerSide", "MatchingAnswerSide")
                         .WithMany()
-                        .HasForeignKey("MatchingAnswerSideId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("BrainNotFound.Paper.Models.BusinessModels.Question", "Question")
-                        .WithMany("MatchingQuestionSides")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -828,11 +792,6 @@ namespace BrainNotFound.Paper.Migrations
                     b.HasOne("BrainNotFound.Paper.Models.BusinessModels.MatchingAnswerSide", "MatchingAnswerSide")
                         .WithMany("StudentMatchingAnswers")
                         .HasForeignKey("MatchingAnswerSideId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("BrainNotFound.Paper.Models.BusinessModels.MatchingQuestionSide", "MatchingQuestionSide")
-                        .WithMany("StudentMatchingAnswers")
-                        .HasForeignKey("MatchingQuestionSideId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

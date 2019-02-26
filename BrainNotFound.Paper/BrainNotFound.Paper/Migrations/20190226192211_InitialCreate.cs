@@ -27,7 +27,7 @@ namespace BrainNotFound.Paper.Migrations
                 columns: table => new
                 {
                     DepartmentId = table.Column<long>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     DepartmentName = table.Column<string>(maxLength: 25, nullable: false),
                     DepartmentCode = table.Column<string>(nullable: true)
                 },
@@ -41,7 +41,7 @@ namespace BrainNotFound.Paper.Migrations
                 columns: table => new
                 {
                     QuestionTypeId = table.Column<long>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -54,7 +54,7 @@ namespace BrainNotFound.Paper.Migrations
                 columns: table => new
                 {
                     SystemInfoId = table.Column<long>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Attribute = table.Column<string>(nullable: true),
                     Value = table.Column<string>(nullable: true)
                 },
@@ -68,7 +68,7 @@ namespace BrainNotFound.Paper.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -89,7 +89,7 @@ namespace BrainNotFound.Paper.Migrations
                 columns: table => new
                 {
                     CourseId = table.Column<long>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CreditHours = table.Column<int>(nullable: false),
                     CourseCode = table.Column<string>(nullable: false),
                     CourseName = table.Column<string>(maxLength: 30, nullable: false),
@@ -112,7 +112,7 @@ namespace BrainNotFound.Paper.Migrations
                 columns: table => new
                 {
                     FieldOfStudyId = table.Column<long>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
                     DepartmentId = table.Column<long>(nullable: false)
                 },
@@ -132,7 +132,7 @@ namespace BrainNotFound.Paper.Migrations
                 columns: table => new
                 {
                     QuestionId = table.Column<long>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Index = table.Column<int>(nullable: false),
                     PointValue = table.Column<int>(nullable: false),
                     Content = table.Column<string>(nullable: false),
@@ -191,20 +191,20 @@ namespace BrainNotFound.Paper.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MultipleChoiceAnswer",
+                name: "MultipleChoiceAnswers",
                 columns: table => new
                 {
                     MultipleChoiceAnswerId = table.Column<long>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     QuestionId = table.Column<long>(nullable: false),
                     CorrectMultipleChoiceAnswer = table.Column<string>(nullable: true),
                     IsCorrect = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MultipleChoiceAnswer", x => x.MultipleChoiceAnswerId);
+                    table.PrimaryKey("PK_MultipleChoiceAnswers", x => x.MultipleChoiceAnswerId);
                     table.ForeignKey(
-                        name: "FK_MultipleChoiceAnswer_Questions_QuestionId",
+                        name: "FK_MultipleChoiceAnswers_Questions_QuestionId",
                         column: x => x.QuestionId,
                         principalTable: "Questions",
                         principalColumn: "QuestionId",
@@ -216,7 +216,7 @@ namespace BrainNotFound.Paper.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -301,7 +301,7 @@ namespace BrainNotFound.Paper.Migrations
                 columns: table => new
                 {
                     SectionId = table.Column<long>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Capacity = table.Column<int>(nullable: false),
                     SectionNumber = table.Column<string>(nullable: false),
                     Location = table.Column<string>(maxLength: 7, nullable: true),
@@ -330,7 +330,7 @@ namespace BrainNotFound.Paper.Migrations
                 columns: table => new
                 {
                     StudentMajorId = table.Column<long>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     StudentId = table.Column<string>(nullable: true),
                     FieldOfStudyId = table.Column<long>(nullable: false)
                 },
@@ -356,7 +356,7 @@ namespace BrainNotFound.Paper.Migrations
                 columns: table => new
                 {
                     TestId = table.Column<long>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsVisible = table.Column<bool>(nullable: false),
                     TestName = table.Column<string>(maxLength: 25, nullable: false),
                     CourseId = table.Column<long>(nullable: false),
@@ -384,7 +384,7 @@ namespace BrainNotFound.Paper.Migrations
                 columns: table => new
                 {
                     EnrollmentId = table.Column<long>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     StudentId = table.Column<string>(nullable: true),
                     SectionId = table.Column<long>(nullable: false),
                     Grade = table.Column<float>(nullable: false)
@@ -411,7 +411,7 @@ namespace BrainNotFound.Paper.Migrations
                 columns: table => new
                 {
                     SectionMeetingTimeId = table.Column<long>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Day = table.Column<string>(nullable: false),
                     StartTime = table.Column<DateTime>(nullable: false),
                     EndTime = table.Column<DateTime>(nullable: false),
@@ -433,7 +433,7 @@ namespace BrainNotFound.Paper.Migrations
                 columns: table => new
                 {
                     StudentTestAssignmentId = table.Column<long>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     TestId = table.Column<long>(nullable: false),
                     StudentId = table.Column<string>(nullable: true),
                     Submitted = table.Column<bool>(nullable: false),
@@ -461,7 +461,7 @@ namespace BrainNotFound.Paper.Migrations
                 columns: table => new
                 {
                     TestScheduleId = table.Column<long>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Duration = table.Column<int>(nullable: false),
                     StartTime = table.Column<DateTime>(nullable: false),
                     EndTime = table.Column<DateTime>(nullable: false),
@@ -483,7 +483,7 @@ namespace BrainNotFound.Paper.Migrations
                 columns: table => new
                 {
                     TestSectionId = table.Column<long>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsQuestionSection = table.Column<bool>(nullable: false),
                     Index = table.Column<int>(nullable: false),
                     SectionInstructions = table.Column<string>(nullable: true),
@@ -505,7 +505,7 @@ namespace BrainNotFound.Paper.Migrations
                 columns: table => new
                 {
                     AnswerId = table.Column<long>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     QuestionId = table.Column<long>(nullable: false),
                     TestScheduleId = table.Column<long>(nullable: false),
                     StudentId = table.Column<string>(nullable: true),
@@ -541,7 +541,7 @@ namespace BrainNotFound.Paper.Migrations
                 columns: table => new
                 {
                     ImageId = table.Column<long>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Index = table.Column<int>(nullable: false),
                     Comments = table.Column<string>(nullable: true),
                     ImagePath = table.Column<string>(nullable: true),
@@ -559,29 +559,29 @@ namespace BrainNotFound.Paper.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "StudentMultipleChoiceAnswer",
+                name: "StudentMultipleChoiceAnswers",
                 columns: table => new
                 {
                     StudentMultipleChoiceId = table.Column<long>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AnswerId = table.Column<long>(nullable: false),
                     MultipleChoiceAnswerId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StudentMultipleChoiceAnswer", x => x.StudentMultipleChoiceId);
+                    table.PrimaryKey("PK_StudentMultipleChoiceAnswers", x => x.StudentMultipleChoiceId);
                     table.ForeignKey(
-                        name: "FK_StudentMultipleChoiceAnswer_StudentAnswers_AnswerId",
+                        name: "FK_StudentMultipleChoiceAnswers_StudentAnswers_AnswerId",
                         column: x => x.AnswerId,
                         principalTable: "StudentAnswers",
                         principalColumn: "AnswerId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_StudentMultipleChoiceAnswer_MultipleChoiceAnswer_MultipleCho~",
+                        name: "FK_StudentMultipleChoiceAnswers_MultipleChoiceAnswers_MultipleChoiceAnswerId",
                         column: x => x.MultipleChoiceAnswerId,
-                        principalTable: "MultipleChoiceAnswer",
+                        principalTable: "MultipleChoiceAnswers",
                         principalColumn: "MultipleChoiceAnswerId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(
@@ -593,7 +593,8 @@ namespace BrainNotFound.Paper.Migrations
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -624,7 +625,8 @@ namespace BrainNotFound.Paper.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Courses_DepartmentId",
@@ -652,8 +654,8 @@ namespace BrainNotFound.Paper.Migrations
                 column: "TestSectionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MultipleChoiceAnswer_QuestionId",
-                table: "MultipleChoiceAnswer",
+                name: "IX_MultipleChoiceAnswers_QuestionId",
+                table: "MultipleChoiceAnswers",
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
@@ -702,13 +704,13 @@ namespace BrainNotFound.Paper.Migrations
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudentMultipleChoiceAnswer_AnswerId",
-                table: "StudentMultipleChoiceAnswer",
+                name: "IX_StudentMultipleChoiceAnswers_AnswerId",
+                table: "StudentMultipleChoiceAnswers",
                 column: "AnswerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudentMultipleChoiceAnswer_MultipleChoiceAnswerId",
-                table: "StudentMultipleChoiceAnswer",
+                name: "IX_StudentMultipleChoiceAnswers_MultipleChoiceAnswerId",
+                table: "StudentMultipleChoiceAnswers",
                 column: "MultipleChoiceAnswerId");
 
             migrationBuilder.CreateIndex(
@@ -772,7 +774,7 @@ namespace BrainNotFound.Paper.Migrations
                 name: "StudentMajors");
 
             migrationBuilder.DropTable(
-                name: "StudentMultipleChoiceAnswer");
+                name: "StudentMultipleChoiceAnswers");
 
             migrationBuilder.DropTable(
                 name: "StudentTestAssignments");
@@ -793,7 +795,7 @@ namespace BrainNotFound.Paper.Migrations
                 name: "StudentAnswers");
 
             migrationBuilder.DropTable(
-                name: "MultipleChoiceAnswer");
+                name: "MultipleChoiceAnswers");
 
             migrationBuilder.DropTable(
                 name: "TestSchedules");
