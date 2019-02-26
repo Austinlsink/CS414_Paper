@@ -192,21 +192,23 @@ namespace BrainNotFound.Paper.WebApp.Migrations
                     b.ToTable("Images");
                 });
 
-            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.MatchingAnswerSide", b =>
+            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.MultipleChoiceAnswer", b =>
                 {
-                    b.Property<long>("MatchingAnswerSideId")
+                    b.Property<long>("MultipleChoiceAnswerId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("MatchingAnswer");
+                    b.Property<string>("CorrectMultipleChoiceAnswer");
+
+                    b.Property<bool>("IsCorrect");
 
                     b.Property<long>("QuestionId");
 
-                    b.HasKey("MatchingAnswerSideId");
+                    b.HasKey("MultipleChoiceAnswerId");
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("MatchingAnswerSides");
+                    b.ToTable("MultipleChoiceAnswer");
                 });
 
             modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.Question", b =>
@@ -285,8 +287,7 @@ namespace BrainNotFound.Paper.WebApp.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Day")
-                        .IsRequired()
-                        .HasMaxLength(9);
+                        .IsRequired();
 
                     b.Property<DateTime>("EndTime");
 
@@ -348,23 +349,23 @@ namespace BrainNotFound.Paper.WebApp.Migrations
                     b.ToTable("StudentMajors");
                 });
 
-            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.StudentMatchingAnswer", b =>
+            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.StudentMultipleChoiceAnswer", b =>
                 {
-                    b.Property<long>("StudentMatchingAnswerId")
+                    b.Property<long>("StudentMultipleChoiceId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<long>("AnswerId");
 
-                    b.Property<long>("MatchingAnswerSideId");
+                    b.Property<long?>("MultipleChoiceAnswerId");
 
-                    b.HasKey("StudentMatchingAnswerId");
+                    b.HasKey("StudentMultipleChoiceId");
 
                     b.HasIndex("AnswerId");
 
-                    b.HasIndex("MatchingAnswerSideId");
+                    b.HasIndex("MultipleChoiceAnswerId");
 
-                    b.ToTable("StudentMatchingAnswers");
+                    b.ToTable("StudentMultipleChoiceAnswer");
                 });
 
             modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.StudentTestAssignment", b =>
@@ -680,10 +681,10 @@ namespace BrainNotFound.Paper.WebApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.MatchingAnswerSide", b =>
+            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.MultipleChoiceAnswer", b =>
                 {
                     b.HasOne("BrainNotFound.Paper.WebApp.Models.BusinessModels.Question", "Question")
-                        .WithMany("MatchingAnswerSides")
+                        .WithMany()
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -745,16 +746,16 @@ namespace BrainNotFound.Paper.WebApp.Migrations
                         .HasForeignKey("StudentId");
                 });
 
-            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.StudentMatchingAnswer", b =>
+            modelBuilder.Entity("BrainNotFound.Paper.WebApp.Models.BusinessModels.StudentMultipleChoiceAnswer", b =>
                 {
                     b.HasOne("BrainNotFound.Paper.WebApp.Models.BusinessModels.StudentAnswer", "StudentAnswer")
-                        .WithMany("StudentMatchingAnswers")
+                        .WithMany("StudentMultipleChoiceAnswers")
                         .HasForeignKey("AnswerId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("BrainNotFound.Paper.WebApp.Models.BusinessModels.MatchingAnswerSide", "MatchingAnswerSide")
-                        .WithMany("StudentMatchingAnswers")
-                        .HasForeignKey("MatchingAnswerSideId")
+                    b.HasOne("BrainNotFound.Paper.WebApp.Models.BusinessModels.MultipleChoiceAnswer", "MultipleChoiceAnswer")
+                        .WithMany("StudentMultipleChoiceAnswers")
+                        .HasForeignKey("MultipleChoiceAnswerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

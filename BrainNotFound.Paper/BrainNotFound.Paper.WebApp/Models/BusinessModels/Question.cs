@@ -26,6 +26,6 @@ namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
         public List<StudentAnswer> StudentAnswers { get; set; }
         //public List<MultipleChoiceAnswer> MultipleChoiceAnswers { get; set; }
         //public List<MatchingQuestionSide> MatchingQuestionSides { get; set; }
-        public List<MatchingAnswerSide>   MatchingAnswerSides   { get; set; }
+       // public List<MatchingAnswerSide>   MatchingAnswerSides   { get; set; }
     }
 }

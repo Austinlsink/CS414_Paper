@@ -37,8 +37,8 @@ namespace BrainNotFound.Paper.WebApp
         //public DbSet<StudentMultipleChoiceAnswer> StudentMultipleChoiceAnswers { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-        public DbSet<StudentMatchingAnswer> StudentMatchingAnswers { get; set; }
-        public DbSet<MatchingAnswerSide> MatchingAnswerSides { get; set; }
+       // public DbSet<StudentMatchingAnswer> StudentMatchingAnswers { get; set; }
+       // public DbSet<MatchingAnswerSide> MatchingAnswerSides { get; set; }
 
 
         // Constructor
@@ -47,16 +47,17 @@ namespace BrainNotFound.Paper.WebApp
         { }
 
         // Override OnModelCreate()
-        /*protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            //foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
-            //{
-            //    relationship.DeleteBehavior = DeleteBehavior.Restrict;
-            //}
+            builder.Entity<StudentMultipleChoiceAnswer>()
+                .HasOne<MultipleChoiceAnswer>(mca => mca.MultipleChoiceAnswer)
+                .WithMany(g => g.StudentMultipleChoiceAnswers)
+                .HasForeignKey(p => p.MultipleChoiceAnswerId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            //base.OnModelCreating(builder);
+            base.OnModelCreating(builder);
 
-        }*/
+        }
         
     }
 }

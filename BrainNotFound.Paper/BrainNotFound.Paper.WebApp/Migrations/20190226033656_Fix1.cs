@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BrainNotFound.Paper.WebApp.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Fix1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -188,6 +188,27 @@ namespace BrainNotFound.Paper.WebApp.Migrations
                         principalTable: "FieldsOfStudy",
                         principalColumn: "FieldOfStudyId",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MultipleChoiceAnswer",
+                columns: table => new
+                {
+                    MultipleChoiceAnswerId = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    QuestionId = table.Column<long>(nullable: false),
+                    CorrectMultipleChoiceAnswer = table.Column<string>(nullable: true),
+                    IsCorrect = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MultipleChoiceAnswer", x => x.MultipleChoiceAnswerId);
+                    table.ForeignKey(
+                        name: "FK_MultipleChoiceAnswer_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
+                        principalColumn: "QuestionId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -391,7 +412,7 @@ namespace BrainNotFound.Paper.WebApp.Migrations
                 {
                     SectionMeetingTimeId = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Day = table.Column<string>(maxLength: 9, nullable: false),
+                    Day = table.Column<string>(nullable: false),
                     StartTime = table.Column<DateTime>(nullable: false),
                     EndTime = table.Column<DateTime>(nullable: false),
                     SectionId = table.Column<long>(nullable: false)
@@ -537,6 +558,32 @@ namespace BrainNotFound.Paper.WebApp.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "StudentMultipleChoiceAnswer",
+                columns: table => new
+                {
+                    StudentMultipleChoiceId = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AnswerId = table.Column<long>(nullable: false),
+                    MultipleChoiceAnswerId = table.Column<long>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentMultipleChoiceAnswer", x => x.StudentMultipleChoiceId);
+                    table.ForeignKey(
+                        name: "FK_StudentMultipleChoiceAnswer_StudentAnswers_AnswerId",
+                        column: x => x.AnswerId,
+                        principalTable: "StudentAnswers",
+                        principalColumn: "AnswerId",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_StudentMultipleChoiceAnswer_MultipleChoiceAnswer_MultipleChoiceAnswerId",
+                        column: x => x.MultipleChoiceAnswerId,
+                        principalTable: "MultipleChoiceAnswer",
+                        principalColumn: "MultipleChoiceAnswerId",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -607,6 +654,11 @@ namespace BrainNotFound.Paper.WebApp.Migrations
                 column: "TestSectionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MultipleChoiceAnswer_QuestionId",
+                table: "MultipleChoiceAnswer",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Questions_QuestionTypeId",
                 table: "Questions",
                 column: "QuestionTypeId");
@@ -650,6 +702,16 @@ namespace BrainNotFound.Paper.WebApp.Migrations
                 name: "IX_StudentMajors_StudentId",
                 table: "StudentMajors",
                 column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentMultipleChoiceAnswer_AnswerId",
+                table: "StudentMultipleChoiceAnswer",
+                column: "AnswerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentMultipleChoiceAnswer_MultipleChoiceAnswerId",
+                table: "StudentMultipleChoiceAnswer",
+                column: "MultipleChoiceAnswerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StudentTestAssignments_StudentId",
@@ -709,10 +771,10 @@ namespace BrainNotFound.Paper.WebApp.Migrations
                 name: "SectionMeetingTimes");
 
             migrationBuilder.DropTable(
-                name: "StudentAnswers");
+                name: "StudentMajors");
 
             migrationBuilder.DropTable(
-                name: "StudentMajors");
+                name: "StudentMultipleChoiceAnswer");
 
             migrationBuilder.DropTable(
                 name: "StudentTestAssignments");
@@ -730,16 +792,22 @@ namespace BrainNotFound.Paper.WebApp.Migrations
                 name: "Sections");
 
             migrationBuilder.DropTable(
-                name: "Questions");
+                name: "StudentAnswers");
+
+            migrationBuilder.DropTable(
+                name: "MultipleChoiceAnswer");
 
             migrationBuilder.DropTable(
                 name: "TestSchedules");
 
             migrationBuilder.DropTable(
-                name: "QuestionTypes");
+                name: "Questions");
 
             migrationBuilder.DropTable(
                 name: "Tests");
+
+            migrationBuilder.DropTable(
+                name: "QuestionTypes");
 
             migrationBuilder.DropTable(
                 name: "Courses");
