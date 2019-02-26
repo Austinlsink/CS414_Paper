@@ -14,6 +14,8 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         public List<Course> Courses { get; set; }
         public List<FieldOfStudy> FieldsOfStudy { get; set; }
 
+        [Required]
+        [StringLength(2, MinimumLength = 2, ErrorMessage = "Department code must contain 2 characters")]
         public string DepartmentCode { get; set; }
     }
 }

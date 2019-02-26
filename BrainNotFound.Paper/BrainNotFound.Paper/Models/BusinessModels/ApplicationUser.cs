@@ -11,13 +11,17 @@ namespace BrainNotFound.Paper.Models.BusinessModels
     {
         [Required]
         [StringLength(20, MinimumLength = 1, ErrorMessage ="Please enter a first name.")]
+        [PersonalData]
         public string FirstName { get; set; }
         [Required]
         [StringLength(30, MinimumLength = 1, ErrorMessage = "Please enter a last name.")]
+        [PersonalData]
         public string LastName { get; set; }
         [Required]
         [StringLength(4, MinimumLength = 1, ErrorMessage = "Please enter a salutation (Example: Mr., Mrs., Dr., Miss).")]
+        [PersonalData]
         public string Salutation { get; set; }
+        [PersonalData]
         public string Classification { get; set; }
 
 
