@@ -140,11 +140,15 @@
                                             <tbody>
                                                @foreach(var s in ViewBag.sections)
                                                {
-                                                <tr>
-                                                    <th>@s.SectionNumber</th>
-                                                    <td>@s.Capacity</td>
-                                                    <td> <a href="#" class="btn btn-primary btn-xs">View </a> </td>
-                                                </tr>
+                                                   @if (s.CourseId == course.CourseId)
+                                                   {
+                                                    <tr>
+                                                        <th>@s.SectionNumber</th>
+                                                        <td>@s.Capacity</td>
+                                                        <td> <a href="#" class="btn btn-primary btn-xs">View </a> </td>
+                                                    </tr>
+                                                   }
+                                                
                                                }
                                             </tbody>
                                         </table>
