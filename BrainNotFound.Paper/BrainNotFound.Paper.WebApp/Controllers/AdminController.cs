@@ -14,7 +14,7 @@ using BrainNotFound.Paper.WebApp.Models.BusinessModels;
 
 namespace BrainNotFound.Paper.WebApp.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [Route("Admin")]
     public class AdminController : Controller
     {
