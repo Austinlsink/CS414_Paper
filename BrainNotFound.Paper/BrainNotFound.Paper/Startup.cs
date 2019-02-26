@@ -82,7 +82,7 @@ namespace BrainNotFound.Paper
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Admin}/{action=Dashboard}/{id?}");
+                    template: "{controller=Account}/{action=ForceLogin}/{id?}");
             });
         }
     }

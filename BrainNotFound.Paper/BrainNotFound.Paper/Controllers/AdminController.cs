@@ -112,18 +112,20 @@ namespace BrainNotFound.Paper.Controllers
                 new Course()
                 {
                     CourseCode = "CS 306",
-                    CreditHours = 3,
                     CourseName = "Database II",
+                    CourseId = 1
                 },
                 new Course()
                 {
                     CourseCode = "BI 101",
-                    CourseName = "Old Testament Survey"
+                    CourseName = "Old Testament Survey",
+                    CourseId = 2
                 },
                 new Course()
                 {
                     CourseCode = "EN 126",
-                    CourseName = "English Grammar and Composition"
+                    CourseName = "English Grammar and Composition",
+                    CourseId = 3
                 }
             };
 
@@ -131,18 +133,39 @@ namespace BrainNotFound.Paper.Controllers
             {
                 new Section()
                 {
+                    CourseId = 1,
                     Capacity = 12,
                     SectionNumber = "1"
                 },
                 new Section()
                 {
-                    Capacity = 45,
+                    CourseId = 1,
+                    Capacity = 15,
                     SectionNumber = "2"
                 },
                 new Section()
                 {
-                    Capacity = 32,
+                    CourseId = 2,
+                    Capacity = 30,
+                    SectionNumber = "1"
+                },
+                new Section()
+                {
+                    CourseId = 2,
+                    Capacity = 33,
+                    SectionNumber = "2"
+                },
+                new Section()
+                {
+                    CourseId = 2,
+                    Capacity = 45,
                     SectionNumber = "3"
+                },
+                new Section()
+                {
+                    CourseId = 3,
+                    Capacity = 32,
+                    SectionNumber = "1"
                 }
 
             };
