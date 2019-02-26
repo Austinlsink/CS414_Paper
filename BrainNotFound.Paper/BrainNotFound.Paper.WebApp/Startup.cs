@@ -81,7 +81,7 @@ namespace BrainNotFound.Paper.WebApp
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Root}/{action=ForceLogin}/{id?}");
+                    template: "{controller=Admin}/{action=ViewInstructor}/{id?}");
             });
         }
     }

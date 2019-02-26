@@ -94,9 +94,63 @@ namespace BrainNotFound.Paper.WebApp.Controllers
         }
 
         [HttpGet, Route("Instructors/{Id}")]
-        public IActionResult Instructor(String Id)
+        public IActionResult ViewInstructor(String Id)
         {
-            return View("ViewInstructor");
+            ApplicationUser profile = new ApplicationUser()
+            {
+                Email = "ltesdall@me.com",
+                UserName = "LTesdall",
+                PhoneNumber = "404897123",
+                FirstName = "Lacy",
+                LastName = "Tesdall",
+                Salutation = "Mrs"
+            };
+
+            List<Course> courses = new List<Course>()
+            {
+                new Course()
+                {
+                    CourseCode = "CS 306",
+                    CreditHours = 3,
+                    CourseName = "Database II",
+                },
+                new Course()
+                {
+                    CourseCode = "BI 101",
+                    CourseName = "Old Testament Survey"
+                },
+                new Course()
+                {
+                    CourseCode = "EN 126",
+                    CourseName = "English Grammar and Composition"
+                }
+            };
+
+            List<Section> sections = new List<Section>()
+            {
+                new Section()
+                {
+                    Capacity = 12,
+                    SectionNumber = "1"
+                },
+                new Section()
+                {
+                    Capacity = 45,
+                    SectionNumber = "2"
+                },
+                new Section()
+                {
+                    Capacity = 32,
+                    SectionNumber = "3"
+                }
+
+            };
+
+            ViewBag.profile = profile;
+            ViewBag.courses = courses;
+            ViewBag.sections = sections;
+
+            return View(ViewBag);
         }
 
         [HttpGet, Route("Instructors/Edit/{Id}")]
