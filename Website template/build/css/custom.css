@@ -2021,7 +2021,7 @@ button,
 .buttons,
 .btn,
 .modal-footer .btn+.btn {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     margin-right: 5px
 }
 .btn-group-vertical .btn,
