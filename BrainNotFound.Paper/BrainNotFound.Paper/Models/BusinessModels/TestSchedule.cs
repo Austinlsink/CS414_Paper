@@ -13,10 +13,10 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         // Ask about what is used for duration
 		 public int Duration {get; set;}
         [Required]
-        [DataType(DataType.Date, ErrorMessage ="There must be a start time.")]
+        [DataType(DataType.Date, ErrorMessage ="Please enter a start time.")]
         public DateTime StartTime {get; set;}
         [Required]
-        [DataType(DataType.Date, ErrorMessage = "There must be an end time.")]
+        [DataType(DataType.Date, ErrorMessage = "Please enter an end time.")]
         public DateTime EndTime {get; set;}
 		 
 		 // Foreign keys

@@ -8,8 +8,8 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 	{
 		[Key]
 		public long SectionMeetingTimeId {get; set;}
-		[Required(ErrorMessage = "Please enter a specified day of the week: Monday, Tuesday, Wednesday, Thursday, Friday.")]
-        [RegularExpression(@"^(Sun|Mon|(T(ues|hurs))|Fri)(day|\.)?$|Wed(\.|nesday)?$|Sat(\.|urday)?$|T((ue?)|(hu?r?))\.?$", ErrorMessage = "Must be a specified day of the week: Monday, Tuesday, Wednesday, Thursday, Friday.")]
+		[Required(ErrorMessage = "Please enter a day of the week: Monday, Tuesday, Wednesday, Thursday, Friday.")]
+        [RegularExpression(@"^(Sun|Mon|(T(ues|hurs))|Fri)(day|\.)?$|Wed(\.|nesday)?$|Sat(\.|urday)?$|T((ue?)|(hu?r?))\.?$", ErrorMessage = "Please enter a day of the week: Monday, Tuesday, Wednesday, Thursday, Friday.")]
         public string Day {get; set;}
  
         [DataType(DataType.Date)]

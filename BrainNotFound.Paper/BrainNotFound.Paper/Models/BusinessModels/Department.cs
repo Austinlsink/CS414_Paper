@@ -9,7 +9,7 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         public long DepartmentId { get; set; }
 
         [Required]
-        [StringLength(25, MinimumLength = 1, ErrorMessage ="There must be a Department name entered.")]
+        [StringLength(25, MinimumLength = 1, ErrorMessage ="Please enter a Department name.")]
         public string DepartmentName { get; set; }
         public List<Course> Courses { get; set; }
         public List<FieldOfStudy> FieldsOfStudy { get; set; }
