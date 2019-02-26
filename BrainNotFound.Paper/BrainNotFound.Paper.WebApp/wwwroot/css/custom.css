@@ -894,7 +894,7 @@ a:focus {
     min-width: 70px
 }
 .panel_toolbox>li {
-    float: left;
+    float: right;
     cursor: pointer
 }
 .panel_toolbox>li>a {
@@ -1058,9 +1058,11 @@ h2 {
     width: 100%;
     display: block
 }
+/*
 .accordion .panel:hover {
     background: #F2F5F7
 }
+*/
 .x_panel {
     position: relative;
     width: 100%;

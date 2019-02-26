@@ -36,8 +36,8 @@ namespace BrainNotFound.Paper.WebApp
 
             services.AddDbContext<PaperDbContext>(options =>
             {
-                //options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTest"),
-                options.UseMySql(Configuration.GetConnectionString("PaperBrainTestMySql"),
+                options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTest"),
+                //options.UseMySql(Configuration.GetConnectionString("PaperBrainTestMySql"),
                 optionsBuilders => optionsBuilders.MigrationsAssembly("BrainNotFound.Paper.WebApp"));
             });
          
@@ -81,7 +81,7 @@ namespace BrainNotFound.Paper.WebApp
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Root}/{action=ForceLogin}/{id?}");
+                    template: "{controller=Admin}/{action=ViewInstructor}/{id?}");
             });
         }
     }
