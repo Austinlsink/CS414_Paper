@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrainNotFound.Paper", "BrainNotFound.Paper\BrainNotFound.Paper.csproj", "{7179A711-0AA0-4F81-BFAC-7ECC82BC1ADC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrainNotFound.Paper", "BrainNotFound.Paper\BrainNotFound.Paper.csproj", "{7179A711-0AA0-4F81-BFAC-7ECC82BC1ADC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

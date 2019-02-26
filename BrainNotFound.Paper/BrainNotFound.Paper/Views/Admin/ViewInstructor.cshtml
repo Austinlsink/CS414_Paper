@@ -1,4 +1,3 @@
-
 @{
     ViewData["Title"] = "View Instructor - Admin";
 }
@@ -112,23 +111,23 @@
                         <li>
                             <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                         </li>
-
-                        </li>
                     </ul>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
 
                     <!-- start accordion -->
-                    
+                    @{ 
+                        int count = 1;
+                        
                     <div class="accordion" id="accordion1" role="tablist" aria-multiselectable="true">
                         @foreach (var course in ViewBag.courses)
                         {
                             <div class="panel">
-                                <a class="panel-heading collapsed" role="tab" id="headingOne1" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne1" aria-expanded="false" aria-controls="collapseOne">
+                                <a class="panel-heading collapsed" role="tab" id="@NumberToWords.HEADING@NumberToWords.IntegerToWritten(count)@count" data-toggle="collapse" data-parent="#@NumberToWords.ACCORDIAN@count" href="#@NumberToWords.COLLAPSE@NumberToWords.IntegerToWritten(count)@count" aria-expanded="false" aria-controls="@NumberToWords.COLLAPSE@NumberToWords.IntegerToWritten(count)">
                                     <h4 class="panel-title"><i class="fa fa-book"></i>@course.CourseCode @course.CourseName</h4>
                                 </a>
-                                <div id="collapseOne1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                <div id="@NumberToWords.COLLAPSE@NumberToWords.IntegerToWritten(count)@count" class="panel-collapse collapse" role="tabpanel" aria-labelledby="@NumberToWords.HEADING@NumberToWords.IntegerToWritten(count)">
                                     <div class="panel-body">
                                         <table class="table table-hover">
                                             <thead>
@@ -139,24 +138,25 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-
+                                               @foreach(var s in ViewBag.sections)
+                                               {
                                                 <tr>
-                                                    <th>12</th>
-                                                    <td>1</td>
-                                                    <td> <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-info-circle"></i> View </a> </td>
+                                                    <th>@s.SectionNumber</th>
+                                                    <td>@s.Capacity</td>
+                                                    <td> <a href="#" class="btn btn-primary btn-xs">View </a> </td>
                                                 </tr>
-
+                                               }
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
 
-                          
+                            count++;
                         }
                         </div>
                         <!-- end of accordion -->
-                    
+                    }
                     </div>
             </div>
         </div>

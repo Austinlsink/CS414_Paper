@@ -151,7 +151,7 @@ namespace BrainNotFound.Paper.Controllers
             ViewBag.courses = courses;
             ViewBag.sections = sections;
 
-            return View(ViewBag);
+            return View();
         }
 
         [HttpGet, Route("Instructors/Edit/{Id}")]
