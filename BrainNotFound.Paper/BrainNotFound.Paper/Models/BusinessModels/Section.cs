@@ -12,7 +12,7 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 		public int    Capacity {get; set;}
 
         [Required]
-        [Range(1,20, ErrorMessage = "Enter a number from 1 to 20.")]
+        [Range(1,20, ErrorMessage = "Please enter a number from 1 to 20.")]
 		public string SectionNumber {get; set;}
 
         [StringLength(7)] 

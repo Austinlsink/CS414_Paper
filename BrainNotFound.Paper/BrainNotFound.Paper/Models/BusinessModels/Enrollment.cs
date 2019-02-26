@@ -6,7 +6,6 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 {
 	public class Enrollment
 	{
-        // Not sure if there should be required attributes in this one
 		[Key]
 		public long EnrollmentId {get; set;}
 		
