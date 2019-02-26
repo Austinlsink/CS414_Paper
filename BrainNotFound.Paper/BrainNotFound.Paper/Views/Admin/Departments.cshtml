@@ -1,0 +1,68 @@
+@using BrainNotFound.Paper.Models.BusinessModels
+@model List<Department>
+
+@{
+    ViewData["Title"] = "Department Info - Admin";
+    int rowIndex = 0;
+}
+
+
+
+    <h1>Deptartments</h1>
+    <hr />
+
+    <a asp-action="NewDepartment" asp-controller="Admin" class="btn btn-dark">Create Department</a>
+
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel dept_table">
+            <div class="x_content">
+
+                <p>Click checkbox to select multiple departments.</p>
+
+                <div class="table-responsive">
+                    <table class="table table-striped jambo_table bulk_action">
+                        <thead>
+                            <tr class="headings">
+                                <th>
+                                    <input type="checkbox" id="check-all" class="flat">
+                                </th>
+                                <th class="column-title">Dept. Name </th>
+                                <th class="column-title">Dept. Code </th>
+                                <th class="column-title no-link last"><span class="nobr">Action</span>
+                                <th class="column-title no-link last">
+                                    <span class="nobr">Action</span>
+                                </th>
+                                <th class="bulk-actions" colspan="7">
+                                    <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (Department department in Model)
+                            {
+
+                                <tr class="odd pointer">
+                                    <td class="a-center ">
+                                        <input type="checkbox" class="flat" name="table_records">
+                                    </td>
+                                    <td class=" ">@department.DepartmentName </td>
+                                    <td class=" ">@department.DepartmentCode </td>
+                                    <td class=" last">
+                                        <a asp-action="EditDepartment" asp-controller="Admin">Edit</a>
+                                    </td>
+                                    <td class=" last">
+                                        <a href="#">Remove</a>
+                                    </td>
+                                </tr>
+
+                                rowIndex++;
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
