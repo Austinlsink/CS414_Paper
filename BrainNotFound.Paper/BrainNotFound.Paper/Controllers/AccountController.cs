@@ -12,16 +12,13 @@ namespace BrainNotFound.Paper.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly SignInManager<Models.BusinessModels.ApplicationUser> _signInManager;
+        //Dependencies for Managing users
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AccountController(SignInManager<Models.BusinessModels.ApplicationUser> signInManager)
-        {
-            _signInManager = signInManager;
-        }
-        public IActionResult Index()
-        {
-            return View();
-        }
+        
+        // Routes Start
 
         //[HttpGet, Route("/")]
         [HttpGet, Route("Login")]
@@ -49,12 +46,39 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        [Route("/")]
+        public async Task<IActionResult> ForceLogin()
+        {
+            var result = await _signInManager.PasswordSignInAsync("AbmaelSilva", "PaperBrain2019!", false, false);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+            return View();
+        }
+
+
+        // Web have to change this to a Post verb, but the template must be updated send a post request
         [HttpGet, Route("Logout")]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
 
             return RedirectToAction("Login", "Account");
+        }
+
+        // Routes End
+
+        // Constructor
+        public AccountController(
+           SignInManager<ApplicationUser> signInManager,
+           UserManager<ApplicationUser> userManager,
+           RoleManager<IdentityRole> roleManager)
+        {
+            _signInManager = signInManager;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
     }

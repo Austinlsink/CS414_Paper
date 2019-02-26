@@ -128,12 +128,6 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
 
         }
 
-
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         // Constructor
         public BimaController(
                     SignInManager<ApplicationUser> signInManager,
