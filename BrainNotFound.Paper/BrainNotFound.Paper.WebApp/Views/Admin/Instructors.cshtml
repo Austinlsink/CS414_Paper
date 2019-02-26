@@ -30,9 +30,7 @@
                                 <th class="column-title">Last Name </th>
                                 <th class="column-title">Phone Number </th>
                                 <th class="column-title">Email </th>
-                                <th class="column-title no-link last"><span class="nobr">Action</span>
-                                <th class="column-title no-link last">
-                                    <span class="nobr">Action</span>
+                                <th class="column-title no-link last"><span class="nobr">Actions</span>
                                 </th>
                                 <th class="bulk-actions" colspan="7">
                                     <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) </a>
@@ -44,21 +42,19 @@
                         <tbody>
                             @foreach (ApplicationUser instructor in Model)
                             {
-                                <tr class="odd pointer">
-                                    <td class="a-center ">
-                                        <input type="checkbox" class="flat" name="table_records">
-                                    </td>
-                                    <td class=" ">@instructor.FirstName</td>
-                                    <td class=" ">@instructor.LastName</td>
-                                    <td class=" ">@instructor.PhoneNumber</td>
-                                    <td class=" ">@instructor.Email</td>
-                                    <td class=" last">
-                                        <a href="#">Edit</a>
-                                    </td>
-                                    <td class=" last">
-                                        <a href="#">Remove</a>
-                                    </td>
-                                </tr>
+                            <tr class="odd pointer">
+                                <td class="a-center ">
+                                    <input type="checkbox" class="flat" name="table_records">
+                                </td>
+                                <td class=" ">@instructor.FirstName</td>
+                                <td class=" ">@instructor.LastName</td>
+                                <td class=" ">@instructor.PhoneNumber</td>
+                                <td class=" ">@instructor.Email</td>
+                                <td>
+                                    <a href="#" class="btn btn-info btn-s"><i class="fa fa-pencil"></i> Edit </a>
+                                    <a href="#" class="btn btn-danger btn-s"><i class="fa fa-trash-o"></i> Delete </a>
+                                </td>
+                            </tr>
                             }
 
                         </tbody>
