@@ -18,6 +18,6 @@ namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
 		public Department Department {get; set;}
 
         public List<ApplicationUser> StudentsMajoringIn { get; set; }
-       public List<ApplicationUser> StudentsMinoringIn { get; set; }
+       //public List<ApplicationUser> StudentsMinoringIn { get; set; }
 	}
 }

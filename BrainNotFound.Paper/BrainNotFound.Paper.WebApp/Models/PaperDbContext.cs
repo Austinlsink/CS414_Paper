@@ -22,7 +22,7 @@ namespace BrainNotFound.Paper.WebApp
         public DbSet<TestSection> TestSections { get; set; }
         public DbSet<FieldOfStudy> FieldsOfStudy { get; set; }
         public DbSet<StudentMajor> StudentMajors { get; set; }
-        public DbSet<StudentMinor> StudentMinors { get; set; }
+        //public DbSet<StudentMinor> StudentMinors { get; set; }
         public DbSet<SystemInfo> SystemInfos { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuestionType> QuestionTypes { get; set; }
@@ -31,10 +31,14 @@ namespace BrainNotFound.Paper.WebApp
         public DbSet<FillInTheBlank> FillInTheBlanks { get; set; }
         public DbSet<StudentAnswer> StudentAnswers { get; set; }
         public DbSet<TestSchedule> TestSchedules { get; set; }
-        public DbSet<MultipleChoiceAnswer> MultipleChoiceAnswers { get; set; }
+        //public DbSet<MultipleChoiceAnswer> MultipleChoiceAnswers { get; set; }
         public DbSet<StudentTrueFalseAnswer> StudentTrueFalseAnswers { get; set; }
         public DbSet<StudentEssayAnswer> StudentEssayAnswers { get; set; }
-        public DbSet<StudentMultipleChoiceAnswer> StudentMultipleChoiceAnswers { get; set; }
+        //public DbSet<StudentMultipleChoiceAnswer> StudentMultipleChoiceAnswers { get; set; }
+        public DbSet<Image> Images { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<StudentMatchingAnswer> StudentMatchingAnswers { get; set; }
+        public DbSet<MatchingAnswerSide> MatchingAnswerSides { get; set; }
 
 
         // Constructor
@@ -43,16 +47,16 @@ namespace BrainNotFound.Paper.WebApp
         { }
 
         // Override OnModelCreate()
-        protected override void OnModelCreating(ModelBuilder builder)
+        /*protected override void OnModelCreating(ModelBuilder builder)
         {
-            foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
-            {
-                relationship.DeleteBehavior = DeleteBehavior.Restrict;
-            }
+            //foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            //{
+            //    relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            //}
 
-            base.OnModelCreating(builder);
+            //base.OnModelCreating(builder);
 
-        }
+        }*/
         
     }
 }

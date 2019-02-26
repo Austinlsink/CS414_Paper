@@ -4,18 +4,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BrainNotFound.Paper.WebApp.Models.BusinessModels
 {
-    public class MultipleChoiceAnswer
+    public class MatchingAnswerSide
 	{
 		[Key]
-		public long MultipleChoiceAnswerId { get; set; } // private key
+		public long MatchingAnswerSideId { get; set; } //primary key
 		
 		public long QuestionId { get; set; } //foreign key
         [ForeignKey("QuestionId")]
         public Question Question { get; set; }
-		
-		public string CorrectMultipleChoiceAnswer  { get; set; }
-		public bool IsCorrect { get; set; }
 
-        public List<StudentMultipleChoiceAnswer> StudentMultipleChoiceAnswers { get; set; }
+		public string MatchingAnswer  { get; set; }
+		
+		public List<StudentMatchingAnswer>  StudentMatchingAnswers  { get; set; }
 	}
 }
