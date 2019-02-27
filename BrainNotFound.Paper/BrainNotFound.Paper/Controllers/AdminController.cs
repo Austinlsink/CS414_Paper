@@ -177,12 +177,15 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        [HttpGet, Route("Instructors/Edit/{Id}")]
-        public IActionResult EditInstructor(String Id)
+        [HttpGet, Route("Instructors/Edit/{email}")]
+        public async Task<IActionResult> EditInstructor(String email)
         {
-            return View();
+            var instructor = await _userManager.FindByEmailAsync(email);
+       
+            return View(instructor);
         }
 
+        #region admin profile controllers
         [HttpGet, Route("Profile")]
         public IActionResult Profile()
         {
@@ -194,7 +197,9 @@ namespace BrainNotFound.Paper.Controllers
         {
             return View();
         }
+        #endregion admin profile controllers
 
+        #region student controllers 
         [HttpGet, Route("Students")]
         public IActionResult Students()
         {
@@ -218,6 +223,7 @@ namespace BrainNotFound.Paper.Controllers
         {
             return View();
         }
+        #endregion student controllers 
 
         [HttpGet, Route("Department/Edit/{Id}")]
         public IActionResult EditDepartment(long Id)
