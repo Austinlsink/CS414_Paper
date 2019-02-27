@@ -224,26 +224,22 @@ namespace BrainNotFound.Paper.Controllers
         {
             var department = _context.Departments.Find(Id);
 
-           // ViewData["message"] = "hello" + department.DepartmentId;
-
-            return View(department);
+            ViewBag.department = department;
+            return View();
         }
 
         [HttpPost, Route("Department/Edit/{Id}")]
         public IActionResult EditDepartment(Department dept)
         {
-            ViewData["message"] = "hello" + dept.DepartmentId;
-    
-            /*
-                       var depart = _context.Departments.Find(dept.DepartmentId);
+            
+            var depart = _context.Departments.Find(dept.DepartmentId);
             depart.DepartmentCode = dept.DepartmentCode;
             depart.DepartmentName = dept.DepartmentName;
 
-            _context.SaveChanges();            
+            _context.SaveChanges();
+            
 
-            */
-
-            return View();
+            return RedirectToAction("Departments", "Admin");
         }
 
         // Controllers: EditDepartment Post, Delete Post

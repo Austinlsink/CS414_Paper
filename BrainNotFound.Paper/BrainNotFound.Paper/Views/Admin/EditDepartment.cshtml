@@ -21,7 +21,7 @@
                     <form asp-controller="Admin" asp-action="EditDepartment" id="new-department" class="form-horizontal form-label-left">
                        <!-- Html.HiddenFor(m => m.DepartmentId, Model.DepartmentId -->
                         
-                        <input type="hidden" value="Model.DepartmentId" name="DepartmentId" />
+                        <input type="hidden" value="@ViewBag.department.DepartmentId" asp-for="DepartmentId"/>
 
 
                         <div class="form-group">
@@ -29,13 +29,13 @@
                                 Department Code <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input value="@Model.DepartmentCode" asp-for="DepartmentCode" type="text" id="dept-code" required="required" class="form-control col-md-7 col-xs-12">
+                                <input value="@ViewBag.department.DepartmentCode" asp-for="DepartmentCode" type="text" id="dept-code" required="required" class="form-control col-md-7 col-xs-12">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="dept-name" class="control-label col-md-3 col-sm-3 col-xs-12">Department Name</label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input value="@Model.DepartmentName" asp-for="DepartmentName" id="dept-name" class="form-control col-md-7 col-xs-12" type="text">
+                                <input value="@ViewBag.department.DepartmentName" asp-for="DepartmentName" id="dept-name" class="form-control col-md-7 col-xs-12" type="text">
                             </div>
                         </div>
                         <div class="ln_solid"></div>
@@ -48,7 +48,7 @@
 
                     </form>
 
-                    <code>@Model.DepartmentId</code>
+                    <code>@ViewBag.department.DepartmentId</code>
                 </div>
             </div>
         </div>
