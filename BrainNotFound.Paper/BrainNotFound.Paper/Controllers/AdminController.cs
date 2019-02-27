@@ -238,14 +238,10 @@ namespace BrainNotFound.Paper.Controllers
 
             _context.SaveChanges();
 
-
             return RedirectToAction("Departments", "Admin");
         }
 
-        // Controllers: EditDepartment Post, Delete Post
-
-
-        // Remove this comment after reading it - Removed Edit Departments - All can be done from this page since there is very little information to deal with
+        // Display the list of departments
         [HttpGet, Route("Departments")]
         public IActionResult Departments()
         {
@@ -254,6 +250,7 @@ namespace BrainNotFound.Paper.Controllers
             return View(deparmtents);
         }
 
+        // Delete a department
         [HttpPost]
         public IActionResult Delete(long id)
         {
@@ -280,7 +277,7 @@ namespace BrainNotFound.Paper.Controllers
 
             ViewData["message"] = "Department code: " + model.DepartmentCode + " " + model.DepartmentName;
 
-            return View();
+            return RedirectToAction("Departments", "Admin");
         }
 
         [HttpGet, Route("Settings")]

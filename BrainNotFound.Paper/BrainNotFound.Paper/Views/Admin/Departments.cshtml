@@ -43,7 +43,6 @@
 
                                         @foreach (Department department in Model)
                                         {
-
                                         <tr class="odd pointer">
                                             <td class="a-center ">
                                                 <input type="checkbox" class="flat" name="table_records">
@@ -54,7 +53,7 @@
                                                 <a asp-controller="Admin" asp-action="EditDepartment" asp-route-id="@department.DepartmentId" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
                                                 <!--<a asp-controller="Admin" asp-action="Delete" asp-route-id="department.DepartmentId" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>-->
 
-                                                <form asp-controller="Admin" asp-action="Delete" asp-route-id="@department.DepartmentId">
+                                                <form asp-controller="Admin" asp-action="Delete" asp-route-id="@department.DepartmentId" class="btn btn-danger btn-xs">
                                                     <button type="submit" class="btn btn-danger btn-xs">
                                                         <i class="fa fa-trash-o"></i>
                                                         Delete
