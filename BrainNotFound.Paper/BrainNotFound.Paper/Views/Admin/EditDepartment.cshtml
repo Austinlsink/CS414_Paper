@@ -1,61 +1,57 @@
+@model BrainNotFound.Paper.Models.BusinessModels.Department;
+
 @{
     ViewData["Title"] = "Edit Department - Admin";
 }
 
+<h1>Edit Department Information</h1>
+<hr />
 
-<div class="right_col" role="main">
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="dept_table">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Edit Department</h2>
 
-    <h1>Edit Department Information</h1>
-    <hr />
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <br />
+                    <form asp-controller="Admin" asp-action="EditDepartment" id="new-department" class="form-horizontal form-label-left">
+                       <!-- Html.HiddenFor(m => m.DepartmentId, Model.DepartmentId -->
+                        
+                        <input type="hidden" value="Model.DepartmentId" name="DepartmentId" />
 
-    <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="dept_table">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Edit Department</h2>
 
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="x_content">
-                        <br />
-                        <form id="new-department" data-parsley-validate class="form-horizontal form-label-left">
-
-                            <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-id">
-                                    Department ID
-                                </label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <h4 class="col-md-7 col-xs-12">test</h4>
-                                </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
+                                Department Code <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input value="@Model.DepartmentCode" asp-for="DepartmentCode" type="text" id="dept-code" required="required" class="form-control col-md-7 col-xs-12">
                             </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
-                                    Department Code <span class="required">*</span>
-                                </label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <input type="text" id="dept-code" name="dept-code" required="required" class="form-control col-md-7 col-xs-12">
-                                </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="dept-name" class="control-label col-md-3 col-sm-3 col-xs-12">Department Name</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input value="@Model.DepartmentName" asp-for="DepartmentName" id="dept-name" class="form-control col-md-7 col-xs-12" type="text">
                             </div>
-                            <div class="form-group">
-                                <label for="dept-name" class="control-label col-md-3 col-sm-3 col-xs-12">Department Name</label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <input id="dept-name" class="form-control col-md-7 col-xs-12" type="text" name="dept-name">
-                                </div>
+                        </div>
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                <button class="btn btn-primary" type="button">Cancel</button>
+                                <button type="submit" class="btn btn-success">Save Changes</button>
                             </div>
-                            <div class="ln_solid"></div>
-                            <div class="form-group">
-                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                    <button class="btn btn-primary" type="button">Cancel</button>
-                                    <button type="submit" class="btn btn-success">Save Changes</button>
-                                </div>
-                            </div>
+                        </div>
 
-                        </form>
-                    </div>
+                    </form>
+
+                    <code>@Model.DepartmentId</code>
                 </div>
             </div>
         </div>
-
     </div>
+
 </div>
