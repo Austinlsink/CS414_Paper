@@ -185,6 +185,20 @@ namespace BrainNotFound.Paper.Controllers
             return View(instructor);
         }
 
+        [HttpPost, Route("Instructors/Edit/{email}")]
+        public async Task<IActionResult> EditInstructor(ApplicationUser user)
+        {
+            var instructor = await _userManager.FindByEmailAsync(user.Email);
+            instructor.FirstName   = user.FirstName;
+            instructor.LastName    = user.LastName;
+            instructor.PhoneNumber = user.PhoneNumber;
+            instructor.Salutation  = user.Salutation;
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Instructors", "Admin");
+        }
+
         #region admin profile controllers
         [HttpGet, Route("Profile")]
         public IActionResult Profile()
@@ -258,7 +272,7 @@ namespace BrainNotFound.Paper.Controllers
 
         // Delete a department
         [HttpPost]
-        public IActionResult Delete(long id)
+        public IActionResult DeleteDepartment(long id)
         {
 
             var department = _context.Departments.Find(id);
@@ -292,6 +306,8 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        #region Course controllers
+
         [HttpGet, Route("Courses")]
         public IActionResult Courses()
         {
@@ -316,8 +332,11 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        #endregion course controllers
+
         // Why do we have a page that lists all sections?, could that be in the courses page?
 
+        #region Section controllers
         [HttpGet, Route("Sections")]
         public IActionResult Sections()
         {
@@ -341,6 +360,6 @@ namespace BrainNotFound.Paper.Controllers
         {
             return View();
         }
-
+        #endregion section controllers
     }
 }
