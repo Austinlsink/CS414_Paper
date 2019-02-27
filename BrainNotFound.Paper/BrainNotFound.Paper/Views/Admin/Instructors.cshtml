@@ -5,16 +5,17 @@
     ViewData["Title"] = "Manage Instructors - Admin";
 }
 
-
-    <h1>List of Instructors</h1>
-    <hr />
-<div class="row">
-    <a asp-action="NewInstructor" asp-controller="Admin" type="button" class="btn btn-dark">New Instructor</a>
-</div>
-    
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="x_panel dept_table">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2><i class="fa fa-users"></i> Instructors</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a asp-controller="Admin" asp-action="NewInstructor"><i class="fa fa-plus"></i> New Instructor</a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
             <div class="x_content">
 
                 <p>Click to select all Instructors</p>
@@ -51,8 +52,8 @@
                                 <td class=" ">@instructor.PhoneNumber</td>
                                 <td class=" ">@instructor.Email</td>
                                 <td>
-                                    <a href="#" class="btn btn-info btn-s"><i class="fa fa-pencil"></i> Edit </a>
-                                    <a href="#" class="btn btn-danger btn-s"><i class="fa fa-trash-o"></i> Delete </a>
+                                    <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                    <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
                                 </td>
                             </tr>
                             }
@@ -62,5 +63,5 @@
                 </div>
             </div>
         </div>
-    </div>
+        </div>
 </div>
