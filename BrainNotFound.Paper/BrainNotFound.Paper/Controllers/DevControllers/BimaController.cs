@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using BrainNotFound.Paper.Models.BusinessModels;
 using System.IO;
 using CsvHelper;
+using System.Security.Claims;
 
 namespace BrainNotFound.Paper.Controllers.DevControllers
 {
@@ -57,6 +58,10 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
 
                         //Add instructor role to created Application User
                         await _userManager.AddToRoleAsync(CreatedUser, "Instructor");
+
+                        await _userManager.AddClaimAsync(CreatedUser, new Claim("FullName", CreatedUser.FirstName + " " + CreatedUser.LastName));
+                        var CreatedUser2 = await _userManager.FindByEmailAsync("abmael.silva@me.com");
+                        
                     }
                     else
                     {
@@ -108,7 +113,7 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
                 //Add the user Role to the created user
                 var NewUserFetched = await _userManager.FindByEmailAsync(user.Email);
                 await _userManager.AddToRoleAsync(NewUserFetched, "Admin");
-
+                await _userManager.AddClaimAsync(NewUserFetched, new Claim("FullName", NewUserFetched.FirstName + " " + NewUserFetched.LastName));
                 var signinResult = await _signInManager.PasswordSignInAsync("AbmaelSilva", "PaperBrain2019!", false, false);
 
                 if (signinResult.Succeeded)
