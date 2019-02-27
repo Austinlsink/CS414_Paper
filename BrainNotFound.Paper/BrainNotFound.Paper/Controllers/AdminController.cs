@@ -51,7 +51,7 @@ namespace BrainNotFound.Paper.Controllers
 
         [HttpGet, Route("Instructors/New")]
         public IActionResult NewInstructor()
-        {            
+        {
             return View();
         }
 
@@ -60,11 +60,11 @@ namespace BrainNotFound.Paper.Controllers
         {
             var newInstructor = new ApplicationUser()
             {
-                FirstName   = model.FirstName,
-                LastName    = model.LastName,
-                Salutation  = model.Salutation,
-                UserName    = model.UserName,
-                Email       = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Salutation = model.Salutation,
+                UserName = model.UserName,
+                Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
 
             };
@@ -231,13 +231,13 @@ namespace BrainNotFound.Paper.Controllers
         [HttpPost, Route("Department/Edit/{Id}")]
         public IActionResult EditDepartment(Department dept)
         {
-            
+
             var depart = _context.Departments.Find(dept.DepartmentId);
             depart.DepartmentCode = dept.DepartmentCode;
             depart.DepartmentName = dept.DepartmentName;
 
             _context.SaveChanges();
-            
+
 
             return RedirectToAction("Departments", "Admin");
         }
@@ -253,6 +253,18 @@ namespace BrainNotFound.Paper.Controllers
 
             return View(deparmtents);
         }
+
+        [HttpPost]
+        public IActionResult Delete(long id)
+        {
+
+            var department = _context.Departments.Find(id);
+            _context.Departments.Remove(department);
+            _context.SaveChanges();
+
+           return RedirectToAction("Departments", "Admin");
+        }
+
 
         [HttpGet, Route("Departments/New")]
         public IActionResult NewDepartment()
