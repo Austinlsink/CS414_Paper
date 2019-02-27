@@ -1,4 +1,5 @@
 @model BrainNotFound.Paper.Models.BusinessModels.ApplicationUser;
+
 @{
     ViewData["Title"] = "Edit Instructor - Admin";
 }
@@ -23,7 +24,7 @@
                                 First Name <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input value="@Model.FirstName" type="text" id="dept-code" required="required" class="form-control col-md-7 col-xs-12">
+                                <input value="@ViewBag.instructor.FirstName" type="text" required="required" class="form-control col-md-7 col-xs-12">
                             </div>
                         </div>
                         <div class="form-group">
@@ -31,14 +32,14 @@
                                 Last Name <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input value="@Model.LastName" type="text" id="dept-code" name="dept-code" required="required" class="form-control col-md-7 col-xs-12">
+                                <input value="@ViewBag.instructor.LastName" type="text" id="dept-code" name="dept-code" required="required" class="form-control col-md-7 col-xs-12">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Salutation</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
                                 <select class="select2_single form-control" tabindex="-1">
-                                    <option>@Model.Salutation</option>
+                                    <option>@ViewBag.instructor.Salutation</option>
                                     <option value="mr">Mr.</option>
                                     <option value="mrs">Mrs.</option>
                                     <option value="ms">Ms.</option>
@@ -50,7 +51,7 @@
                         <div class="form-group">
                             <label for="dept-name" class="control-label col-md-3 col-sm-3 col-xs-12">Email </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input value="@Model.Email" id="dept-name" class="form-control col-md-7 col-xs-12" type="text" name="dept-name">
+                                <input value="@ViewBag.instructor.Email" id="dept-name" class="form-control col-md-7 col-xs-12" type="text" name="dept-name">
                             </div>
                         </div>
                         <div class="form-group">
@@ -62,7 +63,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-3">Phone Number</label>
                             <div class="col-md-9 col-sm-9 col-xs-9">
-                                <input value="@Model.PhoneNumber" type="text" class="form-control" data-inputmask="'mask' : '(999) 999-9999'">
+                                <input value="@ViewBag.instructor.PhoneNumber" type="text" class="form-control" data-inputmask="'mask' : '(999) 999-9999'">
                             </div>
                         </div>
                         <div class="ln_solid"></div>

@@ -181,20 +181,15 @@ namespace BrainNotFound.Paper.Controllers
         public async Task<IActionResult> EditInstructor(String email)
         {
             var instructor = await _userManager.FindByEmailAsync(email);
-       
-            return View(instructor);
+            ViewBag.instructor = instructor;
+            return View();
         }
 
         [HttpPost, Route("Instructors/Edit/{email}")]
         public async Task<IActionResult> EditInstructor(ApplicationUser user)
         {
-            var instructor = await _userManager.FindByEmailAsync(user.Email);
-            instructor.FirstName   = user.FirstName;
-            instructor.LastName    = user.LastName;
-            instructor.PhoneNumber = user.PhoneNumber;
-            instructor.Salutation  = user.Salutation;
-
-            _context.SaveChanges();
+            if (!ModelState.IsValid)
+                return View();
 
             return RedirectToAction("Instructors", "Admin");
         }
@@ -239,6 +234,7 @@ namespace BrainNotFound.Paper.Controllers
         }
         #endregion student controllers 
 
+        #region Department controllers
         [HttpGet, Route("Department/Edit/{Id}")]
         public IActionResult EditDepartment(long Id)
         {
@@ -271,7 +267,7 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         // Delete a department
-        [HttpPost]
+        [HttpDelete("{Id:long}"), Route("DeleteDepartment")]
         public IActionResult DeleteDepartment(long id)
         {
 
@@ -282,23 +278,26 @@ namespace BrainNotFound.Paper.Controllers
            return RedirectToAction("Departments", "Admin");
         }
 
-
+        // Add the details for a new Department
         [HttpGet, Route("Departments/New")]
         public IActionResult NewDepartment()
         {
             return View();
         }
 
+        // Creates the new Department and re-routes to the Department View
         [HttpPost, Route("Departments/New")]
         public IActionResult NewDepartment(Department model)
         {
+            if (!ModelState.IsValid)
+                return View();
+
             _context.Departments.Add(model);
             _context.SaveChanges();
 
-            ViewData["message"] = "Department code: " + model.DepartmentCode + " " + model.DepartmentName;
-
             return RedirectToAction("Departments", "Admin");
         }
+        #endregion Department controllers
 
         [HttpGet, Route("Settings")]
         public IActionResult Settings()
