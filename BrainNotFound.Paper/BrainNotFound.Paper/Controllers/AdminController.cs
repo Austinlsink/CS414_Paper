@@ -220,10 +220,34 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         [HttpGet, Route("Department/Edit/{Id}")]
-        public IActionResult EditDepartment(String Id)
+        public IActionResult EditDepartment(long Id)
         {
+            var department = _context.Departments.Find(Id);
+
+           // ViewData["message"] = "hello" + department.DepartmentId;
+
+            return View(department);
+        }
+
+        [HttpPost, Route("Department/Edit/{Id}")]
+        public IActionResult EditDepartment(Department dept)
+        {
+            ViewData["message"] = "hello" + dept.DepartmentId;
+    
+            /*
+                       var depart = _context.Departments.Find(dept.DepartmentId);
+            depart.DepartmentCode = dept.DepartmentCode;
+            depart.DepartmentName = dept.DepartmentName;
+
+            _context.SaveChanges();            
+
+            */
+
             return View();
         }
+
+        // Controllers: EditDepartment Post, Delete Post
+
 
         // Remove this comment after reading it - Removed Edit Departments - All can be done from this page since there is very little information to deal with
         [HttpGet, Route("Departments")]
