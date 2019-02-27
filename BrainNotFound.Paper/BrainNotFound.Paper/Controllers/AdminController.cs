@@ -40,7 +40,6 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-
         [HttpGet, Route("Instructors")]
         public async Task<IActionResult> Instructors()
         {
@@ -180,18 +179,25 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("Instructors/Edit/{email}")]
         public async Task<IActionResult> EditInstructor(String email)
         {
-            var instructor = await _userManager.FindByEmailAsync(email);
-            ViewBag.instructor = instructor;
+            ApplicationUser instructor = await _userManager.FindByEmailAsync(email);
+            ViewBag.fname = instructor.FirstName;
+            ViewBag.lname = instructor.LastName;
+            ViewBag.sal = instructor.Salutation;
+            ViewBag.phone = instructor.PhoneNumber;
+            ViewBag.email = instructor.Email;
+
             return View();
         }
 
-        [HttpPost, Route("Instructors/Edit/{email}")]
-        public async Task<IActionResult> EditInstructor(ApplicationUser user)
+        [HttpPost, Route("Instructors/Edit/")]
+        public IActionResult EditInstructor(ApplicationUser user)
         {
             if (!ModelState.IsValid)
                 return View();
 
-            return RedirectToAction("Instructors", "Admin");
+           //var instructor = await _userManager.FindByEmailAsync(user.Email);
+
+            return RedirectToAction("Index", "Admin");
         }
 
         #region admin profile controllers

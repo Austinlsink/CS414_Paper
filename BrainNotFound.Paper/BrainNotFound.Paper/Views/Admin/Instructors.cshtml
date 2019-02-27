@@ -43,19 +43,19 @@
                         <tbody>
                             @foreach (ApplicationUser instructor in Model)
                             {
-                            <tr class="odd pointer">
-                                <td class="a-center ">
-                                    <input type="checkbox" class="flat" name="table_records">
-                                </td>
-                                <td class=" ">@instructor.FirstName</td>
-                                <td class=" ">@instructor.LastName</td>
-                                <td class=" ">@instructor.PhoneNumber</td>
-                                <td class=" ">@instructor.Email</td>
-                                <td>
-                                    <a asp-controller="Admin" asp-action="EditInstructor" asp-route-email="@instructor.Email" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                    <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
-                                </td>
-                            </tr>
+                                <tr class="odd pointer">
+                                    <td class="a-center ">
+                                        <input type="checkbox" class="flat" name="table_records">
+                                    </td>
+                                    <td class=" ">@instructor.FirstName</td>
+                                    <td class=" ">@instructor.LastName</td>
+                                    <td class=" ">@instructor.PhoneNumber</td>
+                                    <td class=" ">@instructor.Email</td>
+                                    <td>
+                                        <a asp-controller="Admin" asp-action="EditInstructor" asp-route-email="@instructor.Email" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                        <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
+                                    </td>
+                                </tr>
                             }
 
                         </tbody>
