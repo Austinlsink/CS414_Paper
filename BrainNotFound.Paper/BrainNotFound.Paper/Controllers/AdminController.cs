@@ -61,10 +61,14 @@ namespace BrainNotFound.Paper.Controllers
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Salutation = model.Salutation,
-                UserName = model.UserName,
+                UserName = model.FirstName + model.LastName,
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
-
+                Address = "250 Brent Lane",
+                City = "Pensacola",
+                State = "FL",
+                DOB = DateTime.Now
+           
             };
 
             //Create a new Application User
@@ -88,7 +92,7 @@ namespace BrainNotFound.Paper.Controllers
                     ViewData["Message"] += error.Description;
                 }
             }
-
+            ViewData["message"] += model.Email;
             return View("TestView");
         }
 
