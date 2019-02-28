@@ -17,7 +17,6 @@ namespace BrainNotFound.Paper.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        
         // Routes Start
 
         //[HttpGet, Route("/")]
@@ -80,6 +79,5 @@ namespace BrainNotFound.Paper.Controllers
             _userManager = userManager;
             _roleManager = roleManager;
         }
-
     }
 }

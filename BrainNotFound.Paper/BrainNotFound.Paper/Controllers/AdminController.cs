@@ -12,7 +12,6 @@ using BrainNotFound.Paper;
 
 //TODO There is a lot to do
 
-
 namespace BrainNotFound.Paper.Controllers
 {
     [Authorize(Roles = "Admin")]
