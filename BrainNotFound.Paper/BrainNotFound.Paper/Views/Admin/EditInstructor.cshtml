@@ -51,7 +51,7 @@
                         <div class="form-group">
                             <label for="dept-name" class="control-label col-md-3 col-sm-3 col-xs-12">Email </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input value="@ViewBag.email" class="form-control col-md-7 col-xs-12" type="text">
+                                <input value="@ViewBag.email" asp-for="Email" class="form-control col-md-7 col-xs-12" type="text">
                             </div>
                         </div>
                         <div class="form-group">
@@ -63,7 +63,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-3">Phone Number</label>
                             <div class="col-md-9 col-sm-9 col-xs-9">
-                                <input value="@ViewBag.phone" type="text" class="form-control" data-inputmask="'mask' : '(999) 999-9999'">
+                                <input value="@ViewBag.phone" asp-for="PhoneNumber" type="text" class="form-control" data-inputmask="'mask' : '(999) 999-9999'">
                             </div>
                         </div>
                         <div class="ln_solid"></div>

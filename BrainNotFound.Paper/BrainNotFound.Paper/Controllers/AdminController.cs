@@ -42,7 +42,7 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("Instructors")]
         public async Task<IActionResult> Instructors()
         {
-            var allInstructors = (await _userManager.GetUsersInRoleAsync("Instructor")).ToList();
+            var allInstructors = (await _userManager.GetUsersInRoleAsync("Instructor")).OrderBy(o => o.FirstName).ToList();
 
             return View(allInstructors);
         }
@@ -73,7 +73,6 @@ namespace BrainNotFound.Paper.Controllers
 
             //Create a new Application User
             var result = await _userManager.CreateAsync(newInstructor, model.Password);
-
 
             if (result.Succeeded)
             {
@@ -185,7 +184,7 @@ namespace BrainNotFound.Paper.Controllers
             ApplicationUser instructor = await _userManager.FindByEmailAsync(email);
             ViewBag.fname = instructor.FirstName;
             ViewBag.lname = instructor.LastName;
-            ViewBag.sal = instructor.Salutation;
+            ViewBag.sal   = instructor.Salutation;
             ViewBag.phone = instructor.PhoneNumber;
             ViewBag.email = instructor.Email;
 
@@ -195,13 +194,27 @@ namespace BrainNotFound.Paper.Controllers
         [HttpPost, Route("Instructors/Edit/")]
         public IActionResult EditInstructor(ApplicationUser user)
         {
-            if (!ModelState.IsValid)
-                return View();
+   
 
            //var instructor = await _userManager.FindByEmailAsync(user.Email);
 
-            return RedirectToAction("Index", "Admin");
+
+            ViewData["message"] = user.FirstName;
+
+            return RedirectToAction("TestView");
         }
+
+        // Delete an Instructor - it does work!
+        /*
+        [HttpDelete("email:{String}"), Route("DeleteInstructor")]
+        public async Task<IActionResult> DeleteInstructor(String email)
+        {
+            var instructor = await _userManager.FindByEmailAsync(email);
+            await _userManager.DeleteAsync(instructor);
+
+            return RedirectToAction("Instructors", "Admin");
+        }
+        */
 
         #region admin profile controllers
         [HttpGet, Route("Profile")]
