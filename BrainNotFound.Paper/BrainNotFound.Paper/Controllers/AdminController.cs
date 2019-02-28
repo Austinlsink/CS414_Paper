@@ -267,9 +267,9 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("Departments")]
         public IActionResult Departments()
         {
-            var deparmtents = _context.Departments.ToList();
+            var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
 
-            return View(deparmtents);
+            return View(departments);
         }
 
         // Delete a department
