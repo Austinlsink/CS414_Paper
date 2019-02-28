@@ -23,6 +23,11 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         public string Salutation { get; set; }
         [PersonalData]
         public string Classification { get; set; }
+        public string Address { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public DateTime DOB { get; set; }
+
 
 
         // Instructor relationships
