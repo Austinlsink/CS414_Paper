@@ -58,16 +58,16 @@ namespace BrainNotFound.Paper.Controllers
         {
             var newInstructor = new ApplicationUser()
             {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Salutation = model.Salutation,
-                UserName = model.FirstName + model.LastName,
-                Email = model.Email,
+                FirstName   = model.FirstName,
+                LastName    = model.LastName,
+                Salutation  = model.Salutation,
+                UserName    = model.FirstName + model.LastName,
+                Email       = model.Email,
                 PhoneNumber = model.PhoneNumber,
-                Address = "250 Brent Lane",
-                City = "Pensacola",
-                State = "FL",
-                DOB = DateTime.Now
+                Address     = "250 Brent Lane",
+                City        = "Pensacola",
+                State       = "FL",
+                DOB         = DateTime.Now
            
             };
 
@@ -95,18 +95,20 @@ namespace BrainNotFound.Paper.Controllers
             return View("TestView");
         }
 
-        [HttpGet, Route("Instructors/{Id}")]
-        public IActionResult ViewInstructor(String Id)
+        [HttpGet, Route("Instructors/{Email}")]
+        public async Task<IActionResult> ViewInstructor(String email)
         {
-            ApplicationUser profile = new ApplicationUser()
-            {
-                Email = "ltesdall@me.com",
-                UserName = "LTesdall",
-                PhoneNumber = "404897123",
-                FirstName = "Lacy",
-                LastName = "Tesdall",
-                Salutation = "Mrs"
-            };
+
+            var instructor = await _userManager.FindByEmailAsync(email);
+            //ApplicationUser profile = new ApplicationUser()
+            //{
+            //    Email = "ltesdall@me.com",
+            //    UserName = "LTesdall",
+            //    PhoneNumber = "404897123",
+            //    FirstName = "Lacy",
+            //    LastName = "Tesdall",
+            //    Salutation = "Mrs"
+            //};
 
             List<Course> courses = new List<Course>()
             {
@@ -171,9 +173,10 @@ namespace BrainNotFound.Paper.Controllers
 
             };
 
-            ViewBag.profile = profile;
             ViewBag.courses = courses;
             ViewBag.sections = sections;
+
+            ViewBag.profile = instructor;
 
             return View();
         }
@@ -204,7 +207,10 @@ namespace BrainNotFound.Paper.Controllers
             return RedirectToAction("TestView");
         }
 
-        // Delete an Instructor - it does work!
+        ///<summary>
+        /// Finds a specified instructor and deletes him from the _userManager - It does work!
+        ///</summary>
+        ///<param name="email">Selected instructor's email</param>
         /*
         [HttpDelete("email:{String}"), Route("DeleteInstructor")]
         public async Task<IActionResult> DeleteInstructor(String email)
