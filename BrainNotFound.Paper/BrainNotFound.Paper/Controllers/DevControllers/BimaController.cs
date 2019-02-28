@@ -59,9 +59,7 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
                         //Add instructor role to created Application User
                         await _userManager.AddToRoleAsync(CreatedUser, "Instructor");
 
-                        await _userManager.AddClaimAsync(CreatedUser, new Claim("FullName", CreatedUser.FirstName + " " + CreatedUser.LastName));
-                        var CreatedUser2 = await _userManager.FindByEmailAsync("abmael.silva@me.com");
-                        
+                        await _userManager.AddClaimAsync(CreatedUser, new Claim("FullName", CreatedUser.FirstName + " " + CreatedUser.LastName));                        
                     }
                     else
                     {
