@@ -16,7 +16,7 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <form asp-controller="Admin" asp-action="NewInstructor" class="form-horizontal form-label-left input_mask">
+                    <form asp-controller="Admin" asp-action="NewInstructor" class="form-horizontal form-label-left">
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Salutation</label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
@@ -24,7 +24,7 @@
                                     <option value="mr">Mr.</option>
                                     <option value="mrs">Mrs.</option>
                                     <option value="ms">Ms.</option>
-                                    <option value="miss">Miss</option>
+                                    <option value="miss">Miss.</option>
                                     <option value="dr">Dr.</option>
                                 </select>
                             </div>
@@ -35,7 +35,7 @@
                                 First Name <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input asp-for="FirstName" type="text" class="form-control has-feedback-left  parsley-error" placeholder="First Name">
+                                <input asp-for="FirstName" type="text" class="form-control has-feedback-left parsley-errorparsley-error" placeholder="First Name">
                                 <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                                 <ul class="parsley-errors-list filled">
                                     <li class="parsley-required">This value is required.</li>
@@ -124,7 +124,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-3">Date of Birth</label>
                             <div class="col-md-69 col-sm-6 col-xs-9">
-                                <input asp-for="DOB" type="text" class="form-control has-feedback-left" data-inputmask="'mask': '99/99/9999'">
+                                <input asp-for="DOB" type="text" class="form-control has-feedback-left"  placeholder="MM-DD-YYYY" data-inputmask="'mask': '99/99/9999'">
                                 <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                                 <ul class="parsley-errors-list filled">
                                     <li class="parsley-required">This value is required.</li>

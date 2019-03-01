@@ -1,24 +1,52 @@
+@using BrainNotFound.Paper.Services;
 @model BrainNotFound.Paper.Models.BusinessModels.ApplicationUser;
 
 @{
     ViewData["Title"] = "Edit Instructor - Admin";
 }
 
-<h1>Edit Instructor</h1>
-<hr />
-
-<div class="col-md-12 col-sm-12 col-xs-12">
-    <div class="dept_table">
-        <div class="col-md-12 col-sm-12 col-xs-12">
+<div class="">
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>Edit Instructor</h2>
-
+                    <h2><i class="fa fa-user"></i> Edit Instructor</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    </ul>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <br />
                     <form asp-controller="Admin" asp-action="EditInstructor" class="form-horizontal form-label-left">
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Salutation</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <select asp-for="Salutation" class="select2_single form-control" tabindex="1">
+
+                                    @foreach (string salutation in SalutationType.All)
+                                    {
+                                        @if (salutation == Model.Salutation)
+                                        {
+                                            <option selected value="@salutation">@salutation.</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@salutation">@salutation.</option>
+                                        }
+
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
                                 First Name <span class="required">*</span>
@@ -70,10 +98,11 @@
                         <div class="form-group">
                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                                 <button class="btn btn-primary" type="button">Cancel</button>
-                                <button type ="submit" class="btn btn-success">Save Changes</button>
+                                <button type="submit" class="btn btn-success">Save Changes</button>
                             </div>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>
