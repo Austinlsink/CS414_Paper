@@ -35,11 +35,9 @@
                                 First Name <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input asp-for="FirstName" type="text" class="form-control has-feedback-left  parsley-error" placeholder="First Name">
+                                <input data-val- asp-for="FirstName" type="text" class="form-control has-feedback-left  parsley-error" placeholder="First Name">
+                                @Html.ValidationMessageFor(x => x.FirstName)
                                 <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
-                                <ul class="parsley-errors-list filled">
-                                    <li class="parsley-required">This value is required.</li>
-                                </ul>
                             </div>
                         </div>
                         <div class="form-group">
@@ -49,9 +47,7 @@
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <input asp-for="LastName" type="text" class="form-control has-feedback-left" placeholder="Last Name">
                                 <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
-                                <ul class="parsley-errors-list filled">
-                                    <li class="parsley-required">This value is required.</li>
-                                </ul>
+                                @Html.ValidationMessageFor(x => x.LastName)
                             </div>
                         </div>
 
@@ -60,9 +56,6 @@
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <input asp-for="Email" type="text" class="form-control has-feedback-left" placeholder="Email">
                                 <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
-                                <ul class="parsley-errors-list filled">
-                                    <li class="parsley-required">This value is required.</li>
-                                </ul>
                             </div>
                         </div>
 
@@ -71,9 +64,6 @@
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <input asp-for="PhoneNumber" type="text" class="form-control has-feedback-left" placeholder="Phone">
                                 <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
-                                <ul class="parsley-errors-list filled">
-                                    <li class="parsley-required">This value is required.</li>
-                                </ul>
                             </div>
                         </div>
 
@@ -82,9 +72,6 @@
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <input asp-for="Address" type="text" class="form-control has-feedback-left" placeholder="Address">
                                 <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
-                                <ul class="parsley-errors-list filled">
-                                    <li class="parsley-required">This value is required.</li>
-                                </ul>
                             </div>
                         </div>
 
@@ -93,9 +80,6 @@
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <input asp-for="City" type="text" class="form-control has-feedback-left" placeholder="City">
                                 <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
-                                <ul class="parsley-errors-list filled">
-                                    <li class="parsley-required">This value is required.</li>
-                                </ul>
                             </div>
                         </div>
 
@@ -104,9 +88,6 @@
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <input asp-for="State" type="text" class="form-control has-feedback-left" placeholder="State">
                                 <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
-                                <ul class="parsley-errors-list filled">
-                                    <li class="parsley-required">This value is required.</li>
-                                </ul>
                             </div>
                         </div>
 
@@ -115,9 +96,6 @@
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <input asp-for="ZipCode" type="text" class="form-control has-feedback-left" placeholder="ZipCode">
                                 <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
-                                <ul class="parsley-errors-list filled">
-                                    <li class="parsley-required">This value is required.</li>
-                                </ul>
                             </div>
                         </div>
 
@@ -126,19 +104,14 @@
                             <div class="col-md-69 col-sm-6 col-xs-9">
                                 <input asp-for="DOB" type="text" class="form-control has-feedback-left" data-inputmask="'mask': '99/99/9999'">
                                 <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
-                                <ul class="parsley-errors-list filled">
-                                    <li class="parsley-required">This value is required.</li>
-                                </ul>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Password</label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <input asp-for="Password" type="password" class="form-control" placeholder="Password">
-                                <ul class="parsley-errors-list filled">
-                                    <li class="parsley-required">This value is required.</li>
-                                </ul>
                             </div>
+                            @Html.ValidationMessageFor(x => x.Password)
                         </div>
 
                         <div class="ln_solid"></div>
