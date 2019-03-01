@@ -36,8 +36,8 @@ namespace BrainNotFound.Paper
 
             services.AddDbContext<PaperDbContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTestLocal"),                 // PCC Server
-               // options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTest"),                 // PCC Server
+                //options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTestLocal"),                 // Local Server
+                options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTest"),                     // PCC Server
                 // options.UseMySql(Configuration.GetConnectionString("PaperBrainTestMySql"),                  // Brazil Server
                 optionsBuilders => optionsBuilders.MigrationsAssembly("BrainNotFound.Paper"));
             });

@@ -35,6 +35,8 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         public string ZipCode { get; set; }
 
         //Atributes no Maped to the Database
+        [NotMapped]
+        public string DateOfBirth { get; set; }
 
         [NotMapped]
         public string FullName
