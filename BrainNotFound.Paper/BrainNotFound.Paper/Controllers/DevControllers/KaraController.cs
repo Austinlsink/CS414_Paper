@@ -14,7 +14,7 @@ using System.Security.Claims;
 
 namespace BrainNotFound.Paper.Controllers.DevControllers
 {
-    public class BimaController : Controller
+    public class KaraController : Controller
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -28,7 +28,13 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
         //public IActionResult Run()
         public async Task<IActionResult> Run()
         {
-            return View();
+            
+            var user = await _userManager.GetUserAsync(User);
+            ViewData["Message"] = user.FullName;
+
+            
+
+            return View("TestView");
         }
 
         public async Task<IActionResult> AddInstructorsToDatabase()
@@ -84,7 +90,7 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
             return View("TestView");
         }
 
-        public async Task<IActionResult> AddDepartmentToDatabase()
+        public async Task<IActionResult> AddDepartmentsToDatabase()
         {
 
             using (var reader = new StreamReader("SampleData/Department_Sample_Data.csv"))
@@ -104,6 +110,36 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
             }
 
             return RedirectToAction("Departments", "Admin");
+        }
+        //public IActionResult AddCoursesToDatabase()
+        public  async Task< IActionResult> AddCoursesToDatabase()
+        {
+
+            using (var reader = new StreamReader("SampleData/Course_Sample_Data.csv"))
+            using (var csv = new CsvReader(reader))
+            {
+
+                csv.Configuration.HeaderValidated = null;
+                csv.Configuration.MissingFieldFound = null;
+                
+                var courses = csv.GetRecords<Course>();
+                foreach (Course model in courses)
+                {
+
+                    
+                    var department = _context.Departments
+                                        .Where(d => d.DepartmentCode == model.DepartmentCode)
+                                        .FirstOrDefault();
+                    
+                    model.Department = department;
+                    //model.DepartmentId = department.DepartmentId;
+
+                    await _context.Courses.AddAsync(model);
+                }
+                _context.SaveChanges();
+            }
+            //return View();
+            return RedirectToAction("Courses", "Admin");
         }
 
 
@@ -163,7 +199,7 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
         }
 
         // Constructor
-        public BimaController(
+        public KaraController(
                     SignInManager<ApplicationUser> signInManager,
                     PaperDbContext context,
                     UserManager<ApplicationUser> userManager,

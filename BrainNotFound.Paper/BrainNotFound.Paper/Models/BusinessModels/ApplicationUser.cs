@@ -10,24 +10,28 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 {
     public class ApplicationUser : IdentityUser
     {
-        [Required]
-        [StringLength(20, MinimumLength = 1, ErrorMessage ="Please enter a first name.")]
+        [Required(ErrorMessage = "Please enter a first name.")]
+        [StringLength(30, MinimumLength = 1)]
         [PersonalData]
         public string FirstName { get; set; }
-        [Required]
-        [StringLength(30, MinimumLength = 1, ErrorMessage = "Please enter a last name.")]
+        [Required(ErrorMessage = "Please enter a last name.")]
+        [StringLength(30, MinimumLength = 1)]
         [PersonalData]
         public string LastName { get; set; }
-        [Required]
-        [StringLength(4, MinimumLength = 1, ErrorMessage = "Please enter a salutation (Example: Mr., Mrs., Dr., Miss).")]
+        [StringLength(4, MinimumLength = 1)]
         [PersonalData]
         public string Salutation { get; set; }
         [PersonalData]
         public string Classification { get; set; }
+        [PersonalData]
         public string Address { get; set; }
+        [PersonalData]
         public string City { get; set; }
+        [PersonalData]
         public string State { get; set; }
+        [PersonalData]
         public DateTime DOB { get; set; }
+        [PersonalData]
         public string ZipCode { get; set; }
 
         //Atributes no Maped to the Database
@@ -41,7 +45,9 @@ namespace BrainNotFound.Paper.Models.BusinessModels
             }
         }
 
+        //Property added for transferring data from the View to the Controller
         [NotMapped]
+        [Required(ErrorMessage = "Please enter a password")]
         public string Password { get; set; }
 
 

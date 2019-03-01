@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BrainNotFound.Paper.Models.BusinessModels
 {
@@ -18,7 +19,12 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 		public string CourseName {get; set;}
         [Required]
         [StringLength(200, MinimumLength = 1, ErrorMessage = "Please enter a course description.")]
-        public string CourseDescription {get; set;}
+        public string Description {get; set;}
+
+        // Properties not mapped
+        [NotMapped]
+        public string DepartmentCode { get; set; }
+
 		public List<Section> Sections {get; set;}
 		public List<Test> Tests {get; set;}
 		// Standard .NET Core foreign key relationship notation (many side)

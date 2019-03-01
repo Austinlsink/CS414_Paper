@@ -49,6 +49,14 @@
 
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
+                                UserName <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input value="@Model.UserName" asp-for="UserName" type="text" required="required" class="form-control col-md-7 col-xs-12">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
                                 First Name <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
@@ -66,7 +74,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Salutation</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                <select class="select2_single form-control" tabindex="-1">
+                                <select asp-for="Salutation" class="select2_single form-control" tabindex="-1">
                                     <option>@Model.Salutation</option>
                                     <option value="mr">Mr.</option>
                                     <option value="mrs">Mrs.</option>
@@ -80,12 +88,6 @@
                             <label for="dept-name" class="control-label col-md-3 col-sm-3 col-xs-12">Email </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <input value="@Model.Email" asp-for="Email" class="form-control col-md-7 col-xs-12" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Password</label>
-                            <div class="col-md-9 col-sm-9 col-xs-12">
-                                <input type="password" class="form-control" value="passwordonetwo">
                             </div>
                         </div>
                         <div class="form-group">

@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="icon" href="images/favicon.ico" type="image/ico" />
+  <link rel="icon" href="images/favicon.ico" type="image/ico" />
 
     <title>Paper | Manage Courses – Admin</title>
 
@@ -20,7 +20,7 @@
     <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
     <!-- iCheck -->
     <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
-	
+
     <!-- bootstrap-progressbar -->
     <link href="../vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
     <!-- JQVMap -->
@@ -194,53 +194,61 @@
         <!-- /top navigation -->
 
         <!-- page content -->
-        <div class="right_col" role="main">
-             <div class="col-md-12 col-sm-12 col-xs-12">
-               <div class="x_panel">
-                 <div class="x_title">
-                   <h2><i class="fa fa-book"></i> Courses</h2>
-                   <ul class="nav navbar-right panel_toolbox">
-                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                     </li>
-                     <li><a class=""><i class="fa fa-plus"></i></a>
-                     </li>
-                   </ul>
-                   <div class="clearfix"></div>
-                 </div>
-                 <div class="x_content">
-                   <table class="table table-hover">
-                     <thead>
-                       <tr>
-                         <th>Code</th>
-                         <th>Name</th>
-                         <th># of Sctions</th>
-                         <th>Action</th>
-                       </tr>
-                     </thead>
-                     <tbody>
-                       <tr>
-                         <td>CS303</td>
-                         <td>Databse I</td>
-                         <td>3</td>
-                         <td> <a href="#" class="btn btn-primary btn-s">View </a> </td>
-                       </tr>
-                       <tr>
-                         <td>CS246</td>
-                         <td>Object Oriented Programming</td>
-                         <td>2</td>
-                         <td><a href="#" class="btn btn-primary btn-s">View </a></td>
-                       </tr>
-                       <tr>
-                         <td>CS414</td>
-                         <td>Systems Design</td>
-                         <td>1</td>
-                         <td><a href="#" class="btn btn-primary btn-s"> View </a></td>
-                       </tr>
-                     </tbody>
-                   </table>
-                 </div>
-               </div>
-             </div>
+        <div class="">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2><i class="fa fa-book"></i> Courses</h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                                <li><a asp-controller="Admin" asp-action="NewCourse"><i class="fa fa-plus"></i> New Course</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content"
+                              <p>Click checkbox to select multiple departments.</p>
+                              <div class="table-responsive">
+                                  <table class="table table-striped jambo_table bulk_action ">
+                                      <thead>
+                                          <tr class="headings">
+                                              <th>
+                                                  <input type="checkbox" id="check-all" class="flat">
+                                              </th>
+                                              <th class="column-title">ID </th>
+                                              <th class="column-title">Name </th>
+                                              <th class="column-title">Description </th>
+                                              <th class="column-title">Credit Hours </th>
+                                              <th class="column-title no-link last"><span class="nobr">Action</span>
+                                              </th>
+                                              <th class="bulk-actions" colspan="7">
+                                                  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                                              </th>
+                                          </tr>
+                                      </thead>
+
+                                      <tbody>
+                                          <tr class="odd pointer">
+                                              <td class="a-center ">
+                                                  <input type="checkbox" class="flat" name="table_records">
+                                              </td>
+                                              <td class=" ">@department.DepartmentName </td>
+                                              <td class=" ">@department.DepartmentCode </td>\
+                                              <td class=" ">@department.DepartmentName </td>
+                                              <td class=" ">@department.DepartmentCode </td>
+                                              <td class=" last">
+                                                  <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                                  <a asp-controller="Admin" asp-action="EditDepartment" asp-route-id="@department.DepartmentId" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                                  <a asp-controller="Admin" asp-action="DeleteDepartment" asp-route-id="@department.DepartmentId" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
+                                              </td>
+                                          </tr>
+                                      </tbody>
+                                  </table>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- /page content -->
 
@@ -295,6 +303,6 @@
 
     <!-- Custom Theme Scripts -->
     <script src="../build/js/custom.min.js"></script>
-	
+
   </body>
 </html>
