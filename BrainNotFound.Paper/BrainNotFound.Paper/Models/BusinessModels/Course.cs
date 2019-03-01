@@ -9,16 +9,16 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 		[Key] // Primary key
 		public long CourseId {get; set;}
 		[Required]
-        [Range(1, 4, ErrorMessage ="Please enter a credit hour.")]
+        [Range(1, 8, ErrorMessage ="Please enter a credit hour.")]
 		public int CreditHours {get; set;}
         [Required]
         [Range(100, 999,  ErrorMessage ="Please enter a course number (example: 101, 202).")]
         public string CourseCode {get; set;} //should this be an int?
         [Required]
-        [StringLength(30, MinimumLength = 1, ErrorMessage ="Please enter a course name (example: Intro To Biology, New Testament Survey).")]
+        [StringLength(128, MinimumLength = 1, ErrorMessage ="Please enter a course name (example: Intro To Biology, New Testament Survey).")]
 		public string CourseName {get; set;}
         [Required]
-        [StringLength(200, MinimumLength = 1, ErrorMessage = "Please enter a course description.")]
+        [StringLength(1024, MinimumLength = 1, ErrorMessage = "Please enter a course description.")]
         public string Description {get; set;}
 
         // Properties not mapped
