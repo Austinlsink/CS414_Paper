@@ -181,17 +181,13 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        [HttpGet, Route("Instructors/Edit/{email}")]
-        public async Task<IActionResult> EditInstructor(String email)
+        [HttpGet, Route("Instructors/Edit/{UserName}")]
+        public async Task<IActionResult> EditInstructor(String UserName)
         {
-            ApplicationUser instructor = await _userManager.FindByEmailAsync(email);
-            ViewBag.fname = instructor.FirstName;
-            ViewBag.lname = instructor.LastName;
-            ViewBag.sal   = instructor.Salutation;
-            ViewBag.phone = instructor.PhoneNumber;
-            ViewBag.email = instructor.Email;
+            ApplicationUser instructor = await _userManager.FindByNameAsync(UserName);
+           
 
-            return View();
+            return View(instructor);
         }
 
         [HttpPost, Route("Instructors/Edit/")]
@@ -199,7 +195,7 @@ namespace BrainNotFound.Paper.Controllers
         {
    
 
-           //var instructor = await _userManager.FindByEmailAsync(user.Email);
+          // var instructor = await _userManager.FindByNameAsync(user.UserName);
 
 
             ViewData["message"] = user.FirstName;

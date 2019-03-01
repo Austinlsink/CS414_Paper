@@ -52,8 +52,8 @@
                                     <td class=" ">@instructor.PhoneNumber</td>
                                     <td class=" ">@instructor.Email</td>
                                     <td>
-                                        <a asp-controller="Admin" asp-action="ViewInstructor" asp-route-email="@instructor.Email" ><i class="fa fa-trash-o"></i> View </a>
-                                        <a asp-controller="Admin" asp-action="EditInstructor" asp-route-email="@instructor.Email" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                       <!-- <a asp-controller="Admin" asp-action="ViewInstructor" asp-route-email="@instructor.UserName" ><i class="fa fa-trash-o"></i> View </a> -->
+                                        <a asp-controller="Admin" asp-action="EditInstructor" asp-route-UserName="@instructor.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
                                         <a asp-controller="Admin" asp-action="DeleteInstructor" asp-route-email="@instructor.Email" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
                                     </td>
                                 </tr>
