@@ -28,13 +28,7 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
         //public IActionResult Run()
         public async Task<IActionResult> Run()
         {
-            
-            var user = await _userManager.GetUserAsync(User);
-            ViewData["Message"] = user.FullName;
-
-            
-
-            return View("TestView");
+            return View();
         }
 
         public async Task<IActionResult> AddInstructorsToDatabase()

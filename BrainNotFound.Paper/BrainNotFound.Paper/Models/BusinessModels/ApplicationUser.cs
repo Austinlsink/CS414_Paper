@@ -45,6 +45,7 @@ namespace BrainNotFound.Paper.Models.BusinessModels
             }
         }
 
+        //Property added for transferring data from the View to the Controller
         [NotMapped]
         [Required(ErrorMessage = "Please enter a password")]
         public string Password { get; set; }
