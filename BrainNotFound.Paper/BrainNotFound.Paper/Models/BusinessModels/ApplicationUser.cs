@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,7 +30,16 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         public DateTime DOB { get; set; }
 
 
+        //Atributes no Maped to the Database
 
+        [NotMapped]
+        public string FullName
+        {
+            get
+            {
+                return FirstName + " " + LastName;
+            }
+        }
         // Instructor relationships
         public List<Section> SectionsTaught { get; set; } // Sections an instructor teaches
 

@@ -22,12 +22,28 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
 
         private PaperDbContext _context;
 
+
+
+
+        //public IActionResult Run()
         public async Task<IActionResult> Run()
         {
+            
+            var user = await _userManager.GetUserAsync(User);
+            ViewData["Message"] = user.FullName;
+
+            
+
+            return View("TestView");
+        }
+
+        public async Task<IActionResult> AddInstructorsToDatabase()
+        {
+
             using (var reader = new StreamReader("SampleData/Instructor_Sample_Data.csv"))
             using (var csv = new CsvReader(reader))
             {
-                
+
                 csv.Configuration.HeaderValidated = null;
                 csv.Configuration.MissingFieldFound = null;
 
@@ -59,7 +75,7 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
                         //Add instructor role to created Application User
                         await _userManager.AddToRoleAsync(CreatedUser, "Instructor");
 
-                        await _userManager.AddClaimAsync(CreatedUser, new Claim("FullName", CreatedUser.FirstName + " " + CreatedUser.LastName));                        
+                        await _userManager.AddClaimAsync(CreatedUser, new Claim("FullName", CreatedUser.FirstName + " " + CreatedUser.LastName));
                     }
                     else
                     {
@@ -71,8 +87,6 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
                 }
             }
 
-            //path 'C:\Users\Abmael Silva\GitHub\CS414_Paper\SampleData\Instructor_Sample_Data.csv'.
-            //     'C:\Users\Abmael Silva\GitHub\CS414_Paper\BrainNotFound.Paper\BrainNotFound.Paper\SampleData\Instructor_Sample_Data.csv
             return View("TestView");
         }
 
