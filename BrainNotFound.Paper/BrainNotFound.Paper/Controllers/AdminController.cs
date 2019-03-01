@@ -178,15 +178,15 @@ namespace BrainNotFound.Paper.Controllers
             return View(instructor);
         }
 
-        [HttpPost, Route("Instructors/Edit/")]
-        public IActionResult EditInstructor(ApplicationUser user)
+        [HttpPost, Route("Instructors/Edit/{UserName}")]
+        public async Task<IActionResult> EditInstructor(ApplicationUser user)
         {
    
 
-          // var instructor = await _userManager.FindByNameAsync(user.UserName);
+          var instructor = await _userManager.FindByNameAsync(user.UserName);
 
 
-            ViewData["message"] = user.FirstName;
+            ViewData["message"] = instructor.FirstName;
 
             return RedirectToAction("TestView");
         }
@@ -195,7 +195,7 @@ namespace BrainNotFound.Paper.Controllers
         /// Finds a specified instructor and deletes him from the _userManager - It does work!
         ///</summary>
         ///<param name="email">Selected instructor's email</param>
-        /*
+        
         [HttpDelete("email:{String}"), Route("DeleteInstructor")]
         public async Task<IActionResult> DeleteInstructor(String email)
         {
@@ -204,7 +204,7 @@ namespace BrainNotFound.Paper.Controllers
 
             return RedirectToAction("Instructors", "Admin");
         }
-        */
+        
 
         #region admin profile controllers
         [HttpGet, Route("Profile")]
