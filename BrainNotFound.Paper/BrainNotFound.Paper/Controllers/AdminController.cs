@@ -246,7 +246,7 @@ namespace BrainNotFound.Paper.Controllers
         public async Task<IActionResult> Students()
         {
             var allStudents = (await _userManager.GetUsersInRoleAsync("Student")).OrderBy(o => o.FirstName).ToList();
-            return View();
+            return View(allStudents);
         }
 
         [HttpGet, Route("Students/New")]
