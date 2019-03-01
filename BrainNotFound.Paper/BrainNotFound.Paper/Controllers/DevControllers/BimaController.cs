@@ -27,27 +27,6 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
         //public IActionResult Run()
         public async Task<IActionResult> Run()
         {
-            using (var reader = new StreamReader("SampleData/Course_Sample_Data.csv"))
-            using (var csv = new CsvReader(reader))
-            {
-
-                csv.Configuration.HeaderValidated = null;
-                csv.Configuration.MissingFieldFound = null;
-
-                var courses = csv.GetRecords<Course>();
-                
-
-                foreach(Course c in courses)
-                {
-                    var d = _context.Departments.Where(dd => dd.DepartmentCode == c.DepartmentCode).First();
-                    c.Department = d;
-                    _context.Courses.Add(c);
-
-                    
-                }
-                _context.SaveChanges();
-                
-            }
 
             return View("TestView");
         }
@@ -175,6 +154,91 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
                 _context.SaveChanges();
             }
 
+            return RedirectToAction("AddStudentsToDb", "Bima");
+        }
+
+        // Populates the Database with the Sample Instructors account
+        public async Task<IActionResult> AddStudentsToDb()
+        {
+            Random num = new Random();
+            int randomPassword;
+
+
+
+            using (var reader = new StreamReader("SampleData/students.csv"))
+            using (var csv = new CsvReader(reader))
+            {
+
+                csv.Configuration.HeaderValidated = null;
+                csv.Configuration.MissingFieldFound = null;
+
+
+                var students = csv.GetRecords<ApplicationUser>();
+                foreach (ApplicationUser student in students)
+                {
+                    string[] dob = student.DateOfBirth.Split('/');
+                    int year = Int32.Parse(dob[2]);
+                    int day = Int32.Parse(dob[1]);
+                    int month = Int32.Parse(dob[0]);
+
+                    var date = new DateTime(year, month, day);
+
+                    student.DOB = date;
+
+                    randomPassword = num.Next(100, 1000);
+                    student.UserName = student.FirstName + student.LastName;
+                    student.Password = student.FirstName + student.LastName + randomPassword.ToString();
+
+
+
+                    //Create a new Application User
+                    var result = await _userManager.CreateAsync(student, student.Password);
+
+
+                    if (result.Succeeded)
+                    {
+                        //Fetch created user
+                        var CreatedUser = await _userManager.FindByEmailAsync(student.Email);
+
+                        //Add instructor role to created Application User
+                        await _userManager.AddToRoleAsync(CreatedUser, "Student");
+
+                    }
+                    else
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            ViewData["Message"] += error.Description;
+                        }
+                    }
+                }
+            }
+
+            return RedirectToAction("AddDepartmentsToDb", "Bima");
+        }
+
+        public async Task<IActionResult> AddCoursesToDb()
+        {
+
+            using (var reader = new StreamReader("SampleData/Course_Sample_Data.csv"))
+            using (var csv = new CsvReader(reader))
+            {
+
+                csv.Configuration.HeaderValidated = null;
+                csv.Configuration.MissingFieldFound = null;
+
+                var courses = csv.GetRecords<Course>();
+
+
+                foreach (Course c in courses)
+                {
+                    var d = _context.Departments.Where(dd => dd.DepartmentCode == c.DepartmentCode).First();
+                    c.Department = d;
+                    _context.Courses.Add(c);
+                }
+                _context.SaveChanges();
+
+            }
             return RedirectToAction("ForceLogin", "Account");
         }
 
