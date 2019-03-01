@@ -20,7 +20,7 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        private PaperDbContext _context;
+        private readonly PaperDbContext _context;
 
 
 
@@ -28,7 +28,57 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
         //public IActionResult Run()
         public async Task<IActionResult> Run()
         {
-            return View();
+
+            var newCourse = new Course
+            {
+                CreditHours = 3,
+                CourseName = "Introduction to Literature",
+                CourseCode = "303",
+                Description = "Some biggggggggggggggggggggg ol text"
+
+            };
+
+
+            Department department = _context.Departments
+                                        .Where(d => d.DepartmentCode == "BI")
+                                        .First();
+            
+            department.Courses.Add(newCourse);
+
+             _context.SaveChanges();
+
+
+
+            //using (var reader = new StreamReader("SampleData/Course_Sample_Data.csv"))
+            //using (var csv = new CsvReader(reader))
+            //{
+
+            //    csv.Configuration.HeaderValidated = null;
+            //    csv.Configuration.MissingFieldFound = null;
+
+            //    var courses = csv.GetRecords<Course>();
+            //    foreach (Course model in courses)
+            //    {
+
+
+            //        Department department = _context.Departments
+            //                            .Where(d => d.DepartmentCode == model.DepartmentCode)
+            //                            .FirstOrDefault();
+
+            //        //department
+            //        model.DepartmentId = department.DepartmentId;
+
+            //        department.Courses.
+
+            //        await _context.Courses.AddAsync(model);
+
+
+            //    }
+            //    _context.SaveChanges();
+            //}
+            //return View();
+            //return RedirectToAction("Courses", "Admin");
+            return View("TestView");
         }
 
         public async Task<IActionResult> AddInstructorsToDatabase()

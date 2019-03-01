@@ -135,6 +135,8 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
                     //model.DepartmentId = department.DepartmentId;
 
                     await _context.Courses.AddAsync(model);
+
+
                 }
                 _context.SaveChanges();
             }
