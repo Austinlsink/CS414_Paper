@@ -339,13 +339,25 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("Courses")]
         public IActionResult Courses()
         {
-            return View();
+            var courses = _context.Courses.OrderBy(o => o.CourseCode).ToList();
+            return View(courses);
         }
 
         [HttpGet, Route("Courses/New")]
         public IActionResult NewCourse()
         {
             return View();
+        }
+
+        [HttpPost, Route("Courses/New")]
+        public IActionResult NewCourse(Course model)
+        {
+            if (!ModelState.IsValid)
+                return View();
+
+            _context.Courses.Add(model);
+            _context.SaveChanges();
+            return RedirectToAction("Courses", "Admin");
         }
 
         [HttpGet, Route("Courses/{CourseCode}")]
