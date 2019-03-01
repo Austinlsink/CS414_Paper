@@ -87,20 +87,15 @@ namespace BrainNotFound.Paper.Controllers
             return View(model);
         }
 
-        [HttpGet, Route("Instructors/{Email}")]
-        public async Task<IActionResult> ViewInstructor(String email)
+        [HttpGet, Route("Instructors/{UserName}")]
+        public async Task<IActionResult> ViewInstructor(String username)
         {
 
-            var instructor = await _userManager.FindByEmailAsync(email);
-            //ApplicationUser profile = new ApplicationUser()
-            //{
-            //    Email = "ltesdall@me.com",
-            //    UserName = "LTesdall",
-            //    PhoneNumber = "404897123",
-            //    FirstName = "Lacy",
-            //    LastName = "Tesdall",
-            //    Salutation = "Mrs"
-            //};
+            var instructor = await _userManager.FindByNameAsync(username);
+            instructor.Address = "250 Brent Lane";
+            instructor.City = "Pensacola";
+            instructor.State = "FL";
+            instructor.ZipCode = "32503";
 
             List<Course> courses = new List<Course>()
             {
@@ -167,7 +162,6 @@ namespace BrainNotFound.Paper.Controllers
 
             ViewBag.courses = courses;
             ViewBag.sections = sections;
-
             ViewBag.profile = instructor;
 
             return View();

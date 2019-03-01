@@ -1,3 +1,4 @@
+@model BrainNotFound.Paper.Models.BusinessModels.ApplicationUser;
 @{
     ViewData["Title"] = "View Instructor - Admin";
 }
@@ -11,7 +12,7 @@
                     <ul class="nav navbar-right panel_toolbox">
 
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                        
+
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
                             <ul class="dropdown-menu" role="menu">
@@ -41,7 +42,7 @@
 
                         <ul class="list-unstyled user_data">
                             <li>
-                                <i class="fa fa-map-marker user-profile-icon"></i> San Francisco, California, USA
+                                <i class="fa fa-map-marker user-profile-icon"></i> @ViewBag.profile.Address @ViewBag.profile.City @ViewBag.profile.State @ViewBag.profile.ZipCode
                             </li>
 
                             <li>
@@ -88,14 +89,14 @@
                         <tbody>
                             @foreach (var course in ViewBag.courses)
                             {
-                            <tr>
-                                <td>@course.CourseCode</td>
-                                <td>@course.CourseName</td>
-                                <td>3</td>
-                                <td> <a href="#" class="btn btn-primary btn-xs"> View </a> </td>
-                            </tr>
+                                <tr>
+                                    <td>@course.CourseCode</td>
+                                    <td>@course.CourseName</td>
+                                    <td>3</td>
+                                    <td> <a href="#" class="btn btn-primary btn-xs"> View </a> </td>
+                                </tr>
                             }
-                           
+
                         </tbody>
                     </table>
 
@@ -117,51 +118,51 @@
                 <div class="x_content">
 
                     <!-- start accordion -->
-                    @{ 
+                    @{
                         int count = 1;
-                        
-                    <div class="accordion" id="accordion1" role="tablist" aria-multiselectable="true">
-                        @foreach (var course in ViewBag.courses)
-                        {
-                            <div class="panel">
-                                <a class="panel-heading collapsed" role="tab" id="@NumberToWords.HEADING@NumberToWords.IntegerToWritten(count)@count" data-toggle="collapse" data-parent="#@NumberToWords.ACCORDIAN@count" href="#@NumberToWords.COLLAPSE@NumberToWords.IntegerToWritten(count)@count" aria-expanded="false" aria-controls="@NumberToWords.COLLAPSE@NumberToWords.IntegerToWritten(count)">
-                                    <h4 class="panel-title"><i class="fa fa-book"></i>@course.CourseCode @course.CourseName</h4>
-                                </a>
-                                <div id="@NumberToWords.COLLAPSE@NumberToWords.IntegerToWritten(count)@count" class="panel-collapse collapse" role="tabpanel" aria-labelledby="@NumberToWords.HEADING@NumberToWords.IntegerToWritten(count)">
-                                    <div class="panel-body">
-                                        <table class="table table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>Section #</th>
-                                                    <th># of Students</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                               @foreach(var s in ViewBag.sections)
-                                               {
-                                                   @if (s.CourseId == course.CourseId)
-                                                   {
+
+                        <div class="accordion" id="accordion1" role="tablist" aria-multiselectable="true">
+                            @foreach (var course in ViewBag.courses)
+                            {
+                                <div class="panel">
+                                    <a class="panel-heading collapsed" role="tab" id="@NumberToWords.HEADING@NumberToWords.IntegerToWritten(count)@count" data-toggle="collapse" data-parent="#@NumberToWords.ACCORDIAN@count" href="#@NumberToWords.COLLAPSE@NumberToWords.IntegerToWritten(count)@count" aria-expanded="false" aria-controls="@NumberToWords.COLLAPSE@NumberToWords.IntegerToWritten(count)">
+                                        <h4 class="panel-title"><i class="fa fa-book"></i>@course.CourseCode @course.CourseName</h4>
+                                    </a>
+                                    <div id="@NumberToWords.COLLAPSE@NumberToWords.IntegerToWritten(count)@count" class="panel-collapse collapse" role="tabpanel" aria-labelledby="@NumberToWords.HEADING@NumberToWords.IntegerToWritten(count)">
+                                        <div class="panel-body">
+                                            <table class="table table-hover">
+                                                <thead>
                                                     <tr>
-                                                        <th>@s.SectionNumber</th>
-                                                        <td>@s.Capacity</td>
-                                                        <td> <a href="#" class="btn btn-primary btn-xs">View </a> </td>
+                                                        <th>Section #</th>
+                                                        <th># of Students</th>
+                                                        <th>Action</th>
                                                     </tr>
-                                                   }
-                                                
-                                               }
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var s in ViewBag.sections)
+                                                    {
+                                                        @if (s.CourseId == course.CourseId)
+                                                        {
+                                                            <tr>
+                                                                <th>@s.SectionNumber</th>
+                                                                <td>@s.Capacity</td>
+                                                                <td> <a href="#" class="btn btn-primary btn-xs">View </a> </td>
+                                                            </tr>
+                                                        }
+
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            count++;
-                        }
+                                count++;
+                            }
                         </div>
                         <!-- end of accordion -->
                     }
-                    </div>
+                </div>
             </div>
         </div>
 
