@@ -35,22 +35,18 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
                 csv.Configuration.MissingFieldFound = null;
 
                 var courses = csv.GetRecords<Course>();
-                int counter = 0;
-                foreach (Course course in courses)
+                
+
+                foreach(Course c in courses)
                 {
-                    var department = _context.Departments.Where(d => d.DepartmentCode == course.DepartmentCode).First();
-                    if(department == null)
-                    {
-                        ViewData["Message"] = "There was a Null Value";
-                    }
+                    var d = _context.Departments.Where(dd => dd.DepartmentCode == c.DepartmentCode).First();
+                    c.Department = d;
+                    _context.Courses.Add(c);
 
-
-                    _context.Courses.Add(course);
-                    course.Department = department;
-                    counter++;
+                    
                 }
-
-               //_context.SaveChanges();
+                _context.SaveChanges();
+                
             }
 
             return View("TestView");
