@@ -14,7 +14,7 @@ using System.Security.Claims;
 
 namespace BrainNotFound.Paper.Controllers.DevControllers
 {
-    public class BimaController : Controller
+    public class KaraController : Controller
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -169,7 +169,7 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
         }
 
         // Constructor
-        public BimaController(
+        public KaraController(
                     SignInManager<ApplicationUser> signInManager,
                     PaperDbContext context,
                     UserManager<ApplicationUser> userManager,

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using BrainNotFound.Paper.Models.BusinessModels;
 using BrainNotFound.Paper;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 
 //TODO There is a lot to do
 
@@ -56,31 +57,34 @@ namespace BrainNotFound.Paper.Controllers
         [HttpPost, Route("Instructors/New")]
         public async Task<IActionResult> NewInstructor(ApplicationUser model)
         {
-
-            model.UserName = model.FirstName + model.LastName;
-
-            //Create a new Application User
-            var result = await _userManager.CreateAsync(model, model.Password);
-
-            if (result.Succeeded)
+            if (ModelState.IsValid)
             {
-                //Fetch created user
-                var CreatedUser = await _userManager.FindByEmailAsync(model.Email);
+                model.UserName = model.FirstName + model.LastName;
 
-                //Add instructor role to created Application User
-                await _userManager.AddToRoleAsync(CreatedUser, "Instructor");
+                //Create a new Application User
+                var result = await _userManager.CreateAsync(model, model.Password);
 
-                return RedirectToAction("Instructors", "Admin");
-            }
-            else
-            {
-                foreach (var error in result.Errors)
+                if (result.Succeeded)
                 {
-                    ViewData["Message"] += error.Description;
+                    //Fetch created user
+                    var CreatedUser = await _userManager.FindByNameAsync(model.UserName);
+
+                    //Add instructor role to created Application User
+                    await _userManager.AddToRoleAsync(CreatedUser, "Instructor");
+
+                    return RedirectToAction("Instructors", "Admin");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ViewData["Message"] += error.Description;
+                    }
                 }
             }
+            
             ViewData["message"] += model.Email;
-            return View("TestView");
+            return View(model);
         }
 
         [HttpGet, Route("Instructors/{Email}")]
@@ -194,12 +198,11 @@ namespace BrainNotFound.Paper.Controllers
         ///<summary>
         /// Finds a specified instructor and deletes him from the _userManager - It does work!
         ///</summary>
-        ///<param name="email">Selected instructor's email</param>
-        
-        [HttpDelete("email:{String}"), Route("DeleteInstructor")]
-        public async Task<IActionResult> DeleteInstructor(String email)
+        ///<param name="UserName">Selected instructor's email</param>
+        [HttpDelete("{UserName}"), Route("DeleteInstructor")]
+        public async Task<IActionResult> DeleteInstructor(String UserName)
         {
-            var instructor = await _userManager.FindByEmailAsync(email);
+            var instructor = await _userManager.FindByNameAsync(UserName);
             await _userManager.DeleteAsync(instructor);
 
             return RedirectToAction("Instructors", "Admin");
