@@ -22,7 +22,7 @@ namespace BrainNotFound.Paper.Controllers
         private readonly UserManager<Models.BusinessModels.ApplicationUser> _userManager;
         private readonly PaperDbContext _context;
 
-
+        #region admin controllers
         // Constructor
         public AdminController(
             UserManager<Models.BusinessModels.ApplicationUser> userManager, PaperDbContext context)
@@ -40,6 +40,14 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        [HttpGet, Route("Settings")]
+        public IActionResult Settings()
+        {
+            return View();
+        }
+        #endregion admin controllers
+
+        #region instructor controllers
         [HttpGet, Route("Instructors")]
         public async Task<IActionResult> Instructors()
         {
@@ -201,7 +209,7 @@ namespace BrainNotFound.Paper.Controllers
 
             return RedirectToAction("Instructors", "Admin");
         }
-        
+        #endregion instructor controllers
 
         #region admin profile controllers
         [HttpGet, Route("Profile")]
@@ -308,11 +316,6 @@ namespace BrainNotFound.Paper.Controllers
         }
         #endregion Department controllers
 
-        [HttpGet, Route("Settings")]
-        public IActionResult Settings()
-        {
-            return View();
-        }
 
         #region Course controllers
 
