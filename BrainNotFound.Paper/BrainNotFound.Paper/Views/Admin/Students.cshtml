@@ -1,3 +1,5 @@
+@using BrainNotFound.Paper.Models.BusinessModels;
+@model List<ApplicationUser>;
 @{
     ViewData["Title"] = "Manage Students - Admin";
 }
@@ -48,9 +50,9 @@
                                 <td class=" ">test</td>
                                 <td class=" ">test</td>
                                 <td>
-                                    <a asp-controller="Admin" asp-action="ViewInstructor" asp-route-email="" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                    <a asp-controller="Admin" asp-action="ViewInstructor" asp-route-UserName="" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                     <a asp-controller="Admin" asp-action="EditInstructor" asp-route-UserName="" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                    <a asp-controller="Admin" asp-action="DeleteInstructor" asp-route-email="" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
+                                    <a asp-controller="Admin" asp-action="DeleteInstructor" asp-route-UserName="" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
                                 </td>
                             </tr>
                         </tbody>

@@ -26,7 +26,7 @@
 
                                     @foreach (string salutation in SalutationType.All)
                                     {
-                                        @if (salutation == Model.Salutation)
+                                        @if (salutation == ViewBag.instructor.Salutation)
                                         {
                                             <option selected value="@salutation">@salutation.</option>
                                         }
@@ -41,18 +41,12 @@
                         </div>
 
 
-
-
-
-
-
-
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
                                 UserName <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input value="@Model.UserName" asp-for="UserName" type="text" required="required" class="form-control col-md-7 col-xs-12">
+                                <input value="@ViewBag.instructor.UserName" asp-for="UserName" type="text" required="required" class="form-control col-md-7 col-xs-12">
                             </div>
                         </div>
                         <div class="form-group">
@@ -60,7 +54,7 @@
                                 First Name <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input value="@Model.FirstName" asp-for="FirstName" type="text" required="required" class="form-control col-md-7 col-xs-12">
+                                <input value="@ViewBag.instructor.FirstName" asp-for="FirstName" type="text" required="required" class="form-control col-md-7 col-xs-12">
                             </div>
                         </div>
                         <div class="form-group">
@@ -68,14 +62,14 @@
                                 Last Name <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input value="@Model.LastName" asp-for="LastName" type="text" required="required" class="form-control col-md-7 col-xs-12">
+                                <input value="@ViewBag.instructor.LastName" asp-for="LastName" type="text" required="required" class="form-control col-md-7 col-xs-12">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Salutation</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
                                 <select asp-for="Salutation" class="select2_single form-control" tabindex="-1">
-                                    <option>@Model.Salutation</option>
+                                    <option>@ViewBag.instructor.Salutation</option>
                                     <option value="mr">Mr.</option>
                                     <option value="mrs">Mrs.</option>
                                     <option value="ms">Ms.</option>
@@ -87,13 +81,13 @@
                         <div class="form-group">
                             <label for="dept-name" class="control-label col-md-3 col-sm-3 col-xs-12">Email </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input value="@Model.Email" asp-for="Email" class="form-control col-md-7 col-xs-12" type="text">
+                                <input value="@ViewBag.instructor.Email" asp-for="Email" class="form-control col-md-7 col-xs-12" type="text">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-3">Phone Number</label>
                             <div class="col-md-9 col-sm-9 col-xs-9">
-                                <input value="@Model.PhoneNumber" asp-for="PhoneNumber" type="text" class="form-control" data-inputmask="'mask' : '(999) 999-9999'">
+                                <input value="@ViewBag.instructor.PhoneNumber" asp-for="PhoneNumber" type="text" class="form-control" data-inputmask="'mask' : '(999) 999-9999'">
                             </div>
                         </div>
                         <div class="ln_solid"></div>

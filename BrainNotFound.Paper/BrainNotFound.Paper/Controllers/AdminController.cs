@@ -22,7 +22,7 @@ namespace BrainNotFound.Paper.Controllers
         private readonly UserManager<Models.BusinessModels.ApplicationUser> _userManager;
         private readonly PaperDbContext _context;
 
-
+        #region admin controllers
         // Constructor
         public AdminController(
             UserManager<Models.BusinessModels.ApplicationUser> userManager, PaperDbContext context)
@@ -40,6 +40,14 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        [HttpGet, Route("Settings")]
+        public IActionResult Settings()
+        {
+            return View();
+        }
+        #endregion admin controllers
+
+        #region instructor controllers
         [HttpGet, Route("Instructors")]
         public async Task<IActionResult> Instructors()
         {
@@ -57,10 +65,15 @@ namespace BrainNotFound.Paper.Controllers
         [HttpPost, Route("Instructors/New")]
         public async Task<IActionResult> NewInstructor(ApplicationUser model)
         {
-            if (ModelState.IsValid)
+            if (model.FirstName == null || model.LastName == null || model.Password == null)
             {
-                model.UserName = model.FirstName + model.LastName;
+                return View(model);
+            }
 
+            model.UserName = model.FirstName + model.LastName;
+
+            if (await _userManager.FindByNameAsync(model.UserName) == null)
+            {
                 //Create a new Application User
                 var result = await _userManager.CreateAsync(model, model.Password);
 
@@ -82,25 +95,24 @@ namespace BrainNotFound.Paper.Controllers
                     }
                 }
             }
+            else
+            {
+                ViewBag.UserError = "That user already exists.";
+            }
             
             ViewData["message"] += model.Email;
             return View(model);
         }
 
-        [HttpGet, Route("Instructors/{Email}")]
-        public async Task<IActionResult> ViewInstructor(String email)
+        [HttpGet, Route("Instructors/{UserName}")]
+        public async Task<IActionResult> ViewInstructor(String username)
         {
 
-            var instructor = await _userManager.FindByEmailAsync(email);
-            //ApplicationUser profile = new ApplicationUser()
-            //{
-            //    Email = "ltesdall@me.com",
-            //    UserName = "LTesdall",
-            //    PhoneNumber = "404897123",
-            //    FirstName = "Lacy",
-            //    LastName = "Tesdall",
-            //    Salutation = "Mrs"
-            //};
+            var instructor = await _userManager.FindByNameAsync(username);
+            instructor.Address = "250 Brent Lane";
+            instructor.City = "Pensacola";
+            instructor.State = "FL";
+            instructor.ZipCode = "32503";
 
             List<Course> courses = new List<Course>()
             {
@@ -167,7 +179,6 @@ namespace BrainNotFound.Paper.Controllers
 
             ViewBag.courses = courses;
             ViewBag.sections = sections;
-
             ViewBag.profile = instructor;
 
             return View();
@@ -177,22 +188,29 @@ namespace BrainNotFound.Paper.Controllers
         public async Task<IActionResult> EditInstructor(String UserName)
         {
             ApplicationUser instructor = await _userManager.FindByNameAsync(UserName);
-           
-
-            return View(instructor);
+            ViewBag.instructor = instructor;
+            return View();
         }
 
         [HttpPost, Route("Instructors/Edit/{UserName}")]
         public async Task<IActionResult> EditInstructor(ApplicationUser user)
         {
-   
+            var instructor = await _userManager.FindByNameAsync(user.UserName);
+            instructor.Salutation  = user.Salutation;
+            instructor.FirstName   = user.FirstName;
+            instructor.LastName    = user.LastName;
+            instructor.PhoneNumber = user.PhoneNumber;
+            instructor.Email       = user.Email;
+            instructor.Address     = user.Address;
+            instructor.City        = user.City;
+            instructor.State       = user.State;
+            instructor.ZipCode     = user.ZipCode;
 
-          var instructor = await _userManager.FindByNameAsync(user.UserName);
+            await _userManager.UpdateAsync(instructor);
 
+            ViewData["message"] = user.FirstName;
 
-            ViewData["message"] = instructor.FirstName;
-
-            return RedirectToAction("TestView");
+            return RedirectToAction("Instructors", "Admin");
         }
 
         ///<summary>
@@ -207,7 +225,7 @@ namespace BrainNotFound.Paper.Controllers
 
             return RedirectToAction("Instructors", "Admin");
         }
-        
+        #endregion instructor controllers
 
         #region admin profile controllers
         [HttpGet, Route("Profile")]
@@ -225,8 +243,9 @@ namespace BrainNotFound.Paper.Controllers
 
         #region student controllers 
         [HttpGet, Route("Students")]
-        public IActionResult Students()
+        public async Task<IActionResult> Students()
         {
+            var allStudents = (await _userManager.GetUsersInRoleAsync("Student")).OrderBy(o => o.FirstName).ToList();
             return View();
         }
 
@@ -314,11 +333,6 @@ namespace BrainNotFound.Paper.Controllers
         }
         #endregion Department controllers
 
-        [HttpGet, Route("Settings")]
-        public IActionResult Settings()
-        {
-            return View();
-        }
 
         #region Course controllers
 
