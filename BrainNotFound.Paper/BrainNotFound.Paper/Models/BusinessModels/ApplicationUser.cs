@@ -28,7 +28,7 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         public string City { get; set; }
         public string State { get; set; }
         public DateTime DOB { get; set; }
-
+        public string ZipCode { get; set; }
 
         //Atributes no Maped to the Database
 
@@ -40,6 +40,11 @@ namespace BrainNotFound.Paper.Models.BusinessModels
                 return FirstName + " " + LastName;
             }
         }
+
+        [NotMapped]
+        public string Password { get; set; }
+
+
         // Instructor relationships
         public List<Section> SectionsTaught { get; set; } // Sections an instructor teaches
 

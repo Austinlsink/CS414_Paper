@@ -1,4 +1,4 @@
-@model BrainNotFound.Paper.Models.CreateInstructorViewModel;
+@model BrainNotFound.Paper.Models.BusinessModels.ApplicationUser;
 
 @{
     ViewData["Title"] = "New Instructor - Admin";
@@ -77,6 +77,15 @@
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Password</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input asp-for="Address" type="password" class="form-control" placeholder="Password">
+                                <ul class="parsley-errors-list filled">
+                                    <li class="parsley-required">This value is required.</li>
+                                </ul>
+                            </div>
+                        </div>
 
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Password</label>

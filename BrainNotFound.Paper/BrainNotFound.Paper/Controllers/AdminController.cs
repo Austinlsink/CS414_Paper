@@ -54,25 +54,13 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         [HttpPost, Route("Instructors/New")]
-        public async Task<IActionResult> NewInstructor(CreateInstructorViewModel model)
+        public async Task<IActionResult> NewInstructor(ApplicationUser model)
         {
-            var newInstructor = new ApplicationUser()
-            {
-                FirstName   = model.FirstName,
-                LastName    = model.LastName,
-                Salutation  = model.Salutation,
-                UserName    = model.FirstName + model.LastName,
-                Email       = model.Email,
-                PhoneNumber = model.PhoneNumber,
-                Address     = "250 Brent Lane",
-                City        = "Pensacola",
-                State       = "FL",
-                DOB         = DateTime.Now
-           
-            };
+
+            model.UserName = model.FirstName + model.LastName;
 
             //Create a new Application User
-            var result = await _userManager.CreateAsync(newInstructor, model.Password);
+            var result = await _userManager.CreateAsync(model, model.Password);
 
             if (result.Succeeded)
             {
