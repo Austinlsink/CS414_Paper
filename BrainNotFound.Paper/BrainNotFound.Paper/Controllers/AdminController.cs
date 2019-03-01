@@ -84,7 +84,7 @@ namespace BrainNotFound.Paper.Controllers
             }
             
             ViewData["message"] += model.Email;
-            return View("TestView");
+            return View(model);
         }
 
         [HttpGet, Route("Instructors/{Email}")]

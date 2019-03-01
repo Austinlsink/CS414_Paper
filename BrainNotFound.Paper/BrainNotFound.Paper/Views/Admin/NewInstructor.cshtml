@@ -36,8 +36,10 @@
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <input data-val- asp-for="FirstName" type="text" class="form-control has-feedback-left  parsley-error" placeholder="First Name">
-                                @Html.ValidationMessageFor(x => x.FirstName)
                                 <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                                <ul class="parsley-errors-list filled" id="parsley-id-5">
+                                    <li class="parsley-required">@Html.ValidationMessageFor(x => x.FirstName)</li>
+                                </ul>
                             </div>
                         </div>
                         <div class="form-group">
@@ -47,7 +49,9 @@
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <input asp-for="LastName" type="text" class="form-control has-feedback-left" placeholder="Last Name">
                                 <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
-                                @Html.ValidationMessageFor(x => x.LastName)
+                                <ul class="parsley-errors-list filled" id="parsley-id-5">
+                                    <li class="parsley-required">@Html.ValidationMessageFor(x => x.LastName)</li>
+                                </ul>
                             </div>
                         </div>
 
@@ -107,11 +111,16 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Password</label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                Password <span class="required">*</span>
+                            </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <input asp-for="Password" type="password" class="form-control" placeholder="Password">
                             </div>
-                            @Html.ValidationMessageFor(x => x.Password)
+                            <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                            <ul class="parsley-errors-list filled" id="parsley-id-5">
+                                <li class="parsley-required">@Html.ValidationMessageFor(x => x.Password)</li>
+                            </ul>
                         </div>
 
                         <div class="ln_solid"></div>
