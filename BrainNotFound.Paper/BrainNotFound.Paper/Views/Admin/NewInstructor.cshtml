@@ -15,9 +15,17 @@
                     </ul>
                     <div class="clearfix"></div>
                 </div>
-                <div class="x_content">
 
-                    <p>@Html.ValidationSummary(true, "UserError", new { @class = "text-danger" })</p>
+                <div class="x_content">
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <span  aria-hidden="true"></span>
+                        <ul class="parsley-errors-list filled" id="parsley-id-5">
+                            <li class="parsley-required">@ViewBag.UserError</li>
+                        </ul>
+                    </div>
+                    <br />
+                    <br />
+
                     <form asp-controller="Admin" asp-action="NewInstructor" class="form-horizontal form-label-left input_mask">
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Salutation</label>
@@ -37,7 +45,7 @@
                                 First Name <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input data-val- asp-for="FirstName" type="text" class="form-control has-feedback-left  parsley-error" placeholder="First Name">
+                                <input asp-for="FirstName" type="text" class="form-control has-feedback-left  parsley-error" placeholder="First Name">
                                 <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                                 <ul class="parsley-errors-list filled" id="parsley-id-5">
                                     <li class="parsley-required">@Html.ValidationMessageFor(x => x.FirstName)</li>

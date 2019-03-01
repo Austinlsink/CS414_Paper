@@ -65,10 +65,15 @@ namespace BrainNotFound.Paper.Controllers
         [HttpPost, Route("Instructors/New")]
         public async Task<IActionResult> NewInstructor(ApplicationUser model)
         {
-            if (ModelState.IsValid)
+            if (model.FirstName == null || model.LastName == null || model.Password == null)
             {
-                model.UserName = model.FirstName + model.LastName;
+                return View(model);
+            }
 
+            model.UserName = model.FirstName + model.LastName;
+
+            if (await _userManager.FindByNameAsync(model.UserName) == null)
+            {
                 //Create a new Application User
                 var result = await _userManager.CreateAsync(model, model.Password);
 
@@ -89,6 +94,10 @@ namespace BrainNotFound.Paper.Controllers
                         ViewData["Message"] += error.Description;
                     }
                 }
+            }
+            else
+            {
+                ViewBag.UserError = "That user already exists.";
             }
             
             ViewData["message"] += model.Email;
