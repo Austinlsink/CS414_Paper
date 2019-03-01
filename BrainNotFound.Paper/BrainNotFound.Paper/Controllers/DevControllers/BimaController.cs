@@ -19,7 +19,6 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-
         private readonly PaperDbContext _context;
 
 
@@ -28,138 +27,46 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
         //public IActionResult Run()
         public async Task<IActionResult> Run()
         {
-
-            var newCourse = new Course
+            using (var reader = new StreamReader("SampleData/Course_Sample_Data.csv"))
+            using (var csv = new CsvReader(reader))
             {
-                CreditHours = 3,
-                CourseName = "Introduction to Literature",
-                CourseCode = "303",
-                Description = "Some biggggggggggggggggggggg ol text"
 
-            };
+                csv.Configuration.HeaderValidated = null;
+                csv.Configuration.MissingFieldFound = null;
+
+                var courses = csv.GetRecords<Course>();
+                int counter = 0;
+                foreach (Course course in courses)
+                {
+                    var department = _context.Departments.Where(d => d.DepartmentCode == course.DepartmentCode).First();
+                    if(department == null)
+                    {
+                        ViewData["Message"] = "There was a Null Value";
+                    }
 
 
-            Department department = _context.Departments
-                                        .Where(d => d.DepartmentCode == "BI")
-                                        .First();
+                    _context.Courses.Add(course);
+                    course.Department = department;
+                    counter++;
+                }
+
+               //_context.SaveChanges();
+            }
+
+            return View("TestView");
+        }
+
+        [HttpGet, Route("Initialize")]
+        public async Task<IActionResult> Initialize()
+        {
             
-            department.Courses.Add(newCourse);
 
-             _context.SaveChanges();
-
-
-
-            //using (var reader = new StreamReader("SampleData/Course_Sample_Data.csv"))
-            //using (var csv = new CsvReader(reader))
-            //{
-
-            //    csv.Configuration.HeaderValidated = null;
-            //    csv.Configuration.MissingFieldFound = null;
-
-            //    var courses = csv.GetRecords<Course>();
-            //    foreach (Course model in courses)
-            //    {
-
-
-            //        Department department = _context.Departments
-            //                            .Where(d => d.DepartmentCode == model.DepartmentCode)
-            //                            .FirstOrDefault();
-
-            //        //department
-            //        model.DepartmentId = department.DepartmentId;
-
-            //        department.Courses.
-
-            //        await _context.Courses.AddAsync(model);
-
-
-            //    }
-            //    _context.SaveChanges();
-            //}
-            //return View();
-            //return RedirectToAction("Courses", "Admin");
-            return View("TestView");
+            return RedirectToAction("AddRolesToDb", "Bima");
         }
-
-        public async Task<IActionResult> AddInstructorsToDatabase()
+    
+        // Populates the database with the User Roles
+        public async Task<IActionResult> AddRolesToDb()
         {
-
-            using (var reader = new StreamReader("SampleData/Instructor_Sample_Data.csv"))
-            using (var csv = new CsvReader(reader))
-            {
-
-                csv.Configuration.HeaderValidated = null;
-                csv.Configuration.MissingFieldFound = null;
-
-
-                var instructors = csv.GetRecords<ApplicationUser>();
-                foreach (ApplicationUser model in instructors)
-                {
-
-                    var newInstructor = new ApplicationUser()
-                    {
-                        FirstName = model.FirstName,
-                        LastName = model.LastName,
-                        Salutation = model.Salutation,
-                        UserName = model.FirstName + model.LastName,
-                        Email = model.Email,
-                        PhoneNumber = model.PhoneNumber,
-
-                    };
-
-                    //Create a new Application User
-                    var result = await _userManager.CreateAsync(newInstructor, model.Password);
-
-
-                    if (result.Succeeded)
-                    {
-                        //Fetch created user
-                        var CreatedUser = await _userManager.FindByEmailAsync(model.Email);
-
-                        //Add instructor role to created Application User
-                        await _userManager.AddToRoleAsync(CreatedUser, "Instructor");
-
-                        await _userManager.AddClaimAsync(CreatedUser, new Claim("FullName", CreatedUser.FirstName + " " + CreatedUser.LastName));
-                    }
-                    else
-                    {
-                        foreach (var error in result.Errors)
-                        {
-                            ViewData["Message"] += error.Description;
-                        }
-                    }
-                }
-            }
-
-            return View("TestView");
-        }
-
-        public async Task<IActionResult> AddDepartmentToDatabase()
-        {
-
-            using (var reader = new StreamReader("SampleData/Department_Sample_Data.csv"))
-            using (var csv = new CsvReader(reader))
-            {
-
-                csv.Configuration.HeaderValidated = null;
-                csv.Configuration.MissingFieldFound = null;
-
-
-                var departments = csv.GetRecords<Department>();
-                foreach (Department model in departments)
-                {
-                    await _context.Departments.AddAsync(model);
-                }
-                _context.SaveChanges();
-            }
-
-            return RedirectToAction("Departments", "Admin");
-        }
-
-
-        public async Task<IActionResult> InitialSetup()
-        {
-            //Create Roles
             string[] roleNames = { "Admin", "Instructor", "Student" };
 
             foreach (var roleName in roleNames)
@@ -172,6 +79,12 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
                 }
             }
 
+            return RedirectToAction("AddAdministratorsToDb", "Bima");
+        }
+
+        // Populates the database with the Admistrators Data
+        public async Task<IActionResult> AddAdministratorsToDb()
+        {
             //Create a Identity User
             ApplicationUser user = new ApplicationUser()
             {
@@ -192,13 +105,6 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
                 //Add the user Role to the created user
                 var NewUserFetched = await _userManager.FindByEmailAsync(user.Email);
                 await _userManager.AddToRoleAsync(NewUserFetched, "Admin");
-                await _userManager.AddClaimAsync(NewUserFetched, new Claim("FullName", NewUserFetched.FirstName + " " + NewUserFetched.LastName));
-                var signinResult = await _signInManager.PasswordSignInAsync("AbmaelSilva", "PaperBrain2019!", false, false);
-
-                if (signinResult.Succeeded)
-                {
-                    return RedirectToAction("Index", "Admin");
-                }
             }
             else
             {
@@ -208,8 +114,72 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
                 }
             }
 
-            return View("TestView");
+            return RedirectToAction("AddInstructorsToDb", "Bima");
+        }
 
+        // Populates the Database with the Sample Instructors account
+        public async Task<IActionResult> AddInstructorsToDb()
+        {
+            using (var reader = new StreamReader("SampleData/Instructor_Sample_Data.csv"))
+            using (var csv = new CsvReader(reader))
+            {
+
+                csv.Configuration.HeaderValidated = null;
+                csv.Configuration.MissingFieldFound = null;
+
+
+                var instructors = csv.GetRecords<ApplicationUser>();
+                foreach (ApplicationUser instructor in instructors)
+                {
+
+                    instructor.UserName = instructor.FirstName + instructor.LastName;
+
+                    //Create a new Application User
+                    var result = await _userManager.CreateAsync(instructor, instructor.Password);
+
+
+                    if (result.Succeeded)
+                    {
+                        //Fetch created user
+                        var CreatedUser = await _userManager.FindByEmailAsync(instructor.Email);
+
+                        //Add instructor role to created Application User
+                        await _userManager.AddToRoleAsync(CreatedUser, "Instructor");
+
+                    }
+                    else
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            ViewData["Message"] += error.Description;
+                        }
+                    }
+                }
+            }
+
+            return RedirectToAction("AddDepartmentsToDb", "Bima");
+        }
+
+        // Populates the database with the sample Departments info
+        public async Task<IActionResult> AddDepartmentsToDb()
+        {
+            using (var reader = new StreamReader("SampleData/Department_Sample_Data.csv"))
+            using (var csv = new CsvReader(reader))
+            {
+
+                csv.Configuration.HeaderValidated = null;
+                csv.Configuration.MissingFieldFound = null;
+
+
+                var departments = csv.GetRecords<Department>();
+                foreach (Department model in departments)
+                {
+                    await _context.Departments.AddAsync(model);
+                }
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("ForceLogin", "Account");
         }
 
         // Constructor
