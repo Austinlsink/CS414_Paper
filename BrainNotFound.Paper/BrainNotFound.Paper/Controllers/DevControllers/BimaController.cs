@@ -48,8 +48,8 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
                 csv.Configuration.MissingFieldFound = null;
 
 
-                var instructors = csv.GetRecords<CreateInstructorViewModel>();
-                foreach (CreateInstructorViewModel model in instructors)
+                var instructors = csv.GetRecords<ApplicationUser>();
+                foreach (ApplicationUser model in instructors)
                 {
 
                     var newInstructor = new ApplicationUser()
