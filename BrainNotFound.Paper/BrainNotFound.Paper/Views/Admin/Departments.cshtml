@@ -50,6 +50,7 @@
                                             <td class=" ">@department.DepartmentName </td>
                                             <td class=" ">@department.DepartmentCode </td>
                                             <td class=" last">
+                                                <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                                 <a asp-controller="Admin" asp-action="EditDepartment" asp-route-id="@department.DepartmentId" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
                                                 <a asp-controller="Admin" asp-action="DeleteDepartment" asp-route-id="@department.DepartmentId" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
                                             </td>
