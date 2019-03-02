@@ -20,9 +20,7 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly PaperDbContext _context;
-
-
-
+        
 
         //public IActionResult Run()
         public async Task<IActionResult> Run()
@@ -33,14 +31,9 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
         [HttpGet, Route("Initialize")]
         public async Task<IActionResult> Initialize()
         {
-            
-
             return RedirectToAction("AddRolesToDb", "Bima");
         }
     
-
-
-
 
         // Constructor
         public LacyController(

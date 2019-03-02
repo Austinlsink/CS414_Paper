@@ -11,6 +11,7 @@ using BrainNotFound.Paper.Models.BusinessModels;
 using System.IO;
 using CsvHelper;
 using System.Security.Claims;
+using BrainNotFound.Paper.Models.ViewModels;
 
 namespace BrainNotFound.Paper.Controllers.DevControllers
 {
@@ -27,6 +28,25 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
         //public IActionResult Run()
         public async Task<IActionResult> Run()
         {
+            string daysMet = "Monday 1200 - 1250; Wednesday 1200 - 1250; Friday 1200 - 1250";
+
+            string[] times = daysMet.Split("; ");
+
+            string current = times[0];
+            string weekday = string.Empty;
+            string startTime = string.Empty;
+            string endTime = string.Empty;
+
+            weekday = current.Substring(0, current.IndexOf(" "));
+            current = current.Substring(current.IndexOf(" "));
+
+            startTime = (current.Split(" - "))[0];
+
+            endTime = (current.Split(" - "))[1];
+
+            ViewData["Message"] += "Weekday: " + weekday + "<br />";
+            ViewData["Message"] += "StartTime: " + startTime + "<br />";
+            ViewData["Message"] += "EndTime: " + endTime + "<br />";
 
             return View("TestView");
         }

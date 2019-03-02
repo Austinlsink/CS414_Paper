@@ -18,9 +18,9 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         [StringLength(7)] 
 		public string Location {get; set;}
 		public List<SectionMeetingTime> TimesMet {get; set;}
-		
-		// Foreign keys
-		public long CourseId {get; set;}
+
+        // Foreign keys
+        public long CourseId {get; set;}
         [ForeignKey("CourseId")]
         public Course Course {get; set;}
 
