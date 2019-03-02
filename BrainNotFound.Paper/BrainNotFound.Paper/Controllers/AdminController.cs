@@ -109,10 +109,6 @@ namespace BrainNotFound.Paper.Controllers
         {
 
             var instructor = await _userManager.FindByNameAsync(username);
-            instructor.Address = "250 Brent Lane";
-            instructor.City = "Pensacola";
-            instructor.State = "FL";
-            instructor.ZipCode = "32503";
 
             List<Course> courses = new List<Course>()
             {
@@ -246,7 +242,7 @@ namespace BrainNotFound.Paper.Controllers
         public async Task<IActionResult> Students()
         {
             var allStudents = (await _userManager.GetUsersInRoleAsync("Student")).OrderBy(o => o.FirstName).ToList();
-            return View();
+            return View(allStudents);
         }
 
         [HttpGet, Route("Students/New")]
@@ -255,17 +251,111 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        [HttpGet, Route("Students/{Id}")]
-        public IActionResult ViewStudent(String Id)
+        [HttpPost, Route("Students/New")]
+        public async Task<IActionResult> NewStudent(ApplicationUser model)
         {
+            if (model.FirstName == null || model.LastName == null || model.Password == null)
+            {
+                return View(model);
+            }
+
+            model.UserName = model.FirstName + model.LastName;
+
+            if (await _userManager.FindByNameAsync(model.UserName) == null)
+            {
+                //Create a new Application User
+                var result = await _userManager.CreateAsync(model, model.Password);
+
+                if (result.Succeeded)
+                {
+                    //Fetch created user
+                    var CreatedUser = await _userManager.FindByNameAsync(model.UserName);
+
+                    //Add instructor role to created Application User
+                    await _userManager.AddToRoleAsync(CreatedUser, "Student");
+
+                    return RedirectToAction("Students", "Admin");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ViewData["Message"] += error.Description;
+                    }
+                }
+            }
+            else
+            {
+                ViewBag.UserError = "That user already exists.";
+            }
+
+            ViewData["message"] += model.Email;
+            return View(model);
+        }
+
+        [HttpGet, Route("Students/{UserName}")]
+        public async Task<IActionResult> ViewStudent(String username)
+        {
+
+            var student = await _userManager.FindByNameAsync(username);
+
+            List<Course> courses = new List<Course>()
+            {
+                new Course()
+                {
+                    CourseCode = "CS 306",
+                    CourseName = "Database II",
+                    CourseId = 1
+                },
+                new Course()
+                {
+                    CourseCode = "BI 101",
+                    CourseName = "Old Testament Survey",
+                    CourseId = 2
+                },
+                new Course()
+                {
+                    CourseCode = "EN 126",
+                    CourseName = "English Grammar and Composition",
+                    CourseId = 3
+                }
+            };
+
+            ViewBag.courses = courses;
+            ViewBag.profile = student;
+
             return View();
         }
 
-        [HttpGet, Route("Students/Edit/{Id}")]
-        public IActionResult EditStudent(String Id)
+        [HttpGet, Route("Students/Edit/{UserName}")]
+        public async Task<IActionResult> EditStudent(String UserName)
         {
+            ApplicationUser student = await _userManager.FindByNameAsync(UserName);
+            ViewBag.student = student;
             return View();
         }
+
+        [HttpPost, Route("Students/Edit/{UserName}")]
+        public async Task<IActionResult> EditStudent(ApplicationUser user)
+        {
+            var student = await _userManager.FindByNameAsync(user.UserName);
+            student.Salutation  = user.Salutation;
+            student.FirstName   = user.FirstName;
+            student.LastName    = user.LastName;
+            student.PhoneNumber = user.PhoneNumber;
+            student.Email       = user.Email;
+            student.Address     = user.Address;
+            student.City        = user.City;
+            student.State       = user.State;
+            student.ZipCode     = user.ZipCode;
+
+            await _userManager.UpdateAsync(student);
+
+            ViewData["message"] = user.FirstName;
+
+            return RedirectToAction("Students", "Admin");
+        }
+
         #endregion student controllers 
 
         #region Department controllers

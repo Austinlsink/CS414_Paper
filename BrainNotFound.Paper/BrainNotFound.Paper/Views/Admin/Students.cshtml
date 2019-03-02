@@ -23,7 +23,6 @@
                                 <th>
                                     <input type="checkbox" id="check-all" class="flat">
                                 </th>
-                                <th class="column-title">ID </th>
                                 <th class="column-title">Salutation </th>
                                 <th class="column-title">First Name </th>
                                 <th class="column-title">Last Name </th>
@@ -39,23 +38,25 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="odd pointer">
-                                <td class="a-center ">
-                                    <input type="checkbox" class="flat" name="table_records">
-                                </td>
-                                <td class=" ">test</td>
-                                <td class=" ">test</td>
-                                <td class=" ">test</td>
-                                <td class=" ">test</td>
-                                <td class=" ">test</td>
-                                <td class=" ">test</td>
-                                <td>
-                                    <a asp-controller="Admin" asp-action="ViewInstructor" asp-route-UserName="" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                    <a asp-controller="Admin" asp-action="EditInstructor" asp-route-UserName="" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                    <a asp-controller="Admin" asp-action="DeleteInstructor" asp-route-UserName="" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
-                                </td>
-                            </tr>
-                        </tbody>
+                            @foreach (ApplicationUser student in Model)
+                            {
+                                <tr class="odd pointer">
+                                    <td class="a-center ">
+                                        <input type="checkbox" class="flat" name="table_records">
+                                    </td>
+                                    <td class=" ">@student.Salutation</td>
+                                    <td class=" ">@student.FirstName</td>
+                                    <td class=" ">@student.LastName</td>
+                                    <td class=" ">@student.PhoneNumber</td>
+                                    <td class=" ">@student.Email</td>
+                                    <td>
+                                        <a asp-controller="Admin" asp-action="ViewStudent" asp-route-UserName="@student.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                        <a asp-controller="Admin" asp-action="EditStudent" asp-route-UserName="@student.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                        <a asp-controller="Admin" asp-action="DeleteStudent" asp-route-UserName="@student.UserName" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
+                                    </td>
+                                </tr>
+                            }
+                            </tbody>
                     </table>
                 </div>
             </div>
