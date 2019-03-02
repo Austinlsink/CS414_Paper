@@ -1,3 +1,5 @@
+@model BrainNotFound.Paper.Models.BusinessModels.ApplicationUser;
+
 @{
     ViewData["Title"] = "Add Student Info - Admin";
 }
@@ -13,20 +15,18 @@
                     </ul>
                     <div class="clearfix"></div>
                 </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <span aria-hidden="true"></span>
+                    <ul class="parsley-errors-list filled" id="parsley-id-5">
+                        <li class="parsley-required">@ViewBag.UserError</li>
+                    </ul>
+                </div>
                 <div class="x_content">
                     <form asp-controller="Admin" asp-action="NewStudent" class="form-horizontal form-label-left input_mask">
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
-                                User ID <span class="required">*</span>
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                123456
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label class="control-label pull-left col-md-3 col-sm-3 col-xs-12">Salutation</label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <select class="select2_single form-control" tabindex="1">
+                                <select asp-for="Salutation" class="select2_single form-control" tabindex="1">
                                     <option value="mr">Mr.</option>
                                     <option value="mrs">Mrs.</option>
                                     <option value="ms">Ms.</option>
@@ -39,11 +39,15 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
                                 First Name <span class="required">*</span>
                             </label>
+                            @{
+                                bool isFirstNameValid = !(ViewData.ModelState["FirstName"] != null && ViewData.ModelState["FirstName"].Errors.Any());
+
+                            }
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" class="form-control has-feedback-left  parsley-error" placeholder="First Name">
+                                <input asp-for="FirstName" type="text" class="form-control has-feedback-left  @(isFirstNameValid ? String.Empty : "parsley-error")" placeholder="First Name">
                                 <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                                 <ul class="parsley-errors-list filled">
-                                    <li class="parsley-required">This value is required.</li>
+                                    <li class="parsley-required"> @(isFirstNameValid ? String.Empty : ViewData.ModelState["FirstName"].Errors.First().ErrorMessage)</li>
                                 </ul>
                             </div>
                         </div>
@@ -51,90 +55,101 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
                                 Last Name <span class="required">*</span>
                             </label>
+                            @{
+                                bool isLastNameValid = !(ViewData.ModelState["LastName"] != null && ViewData.ModelState["LastName"].Errors.Any());
+
+                            }
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" class="form-control has-feedback-left" placeholder="Last Name">
+                                <input asp-for="LastName" type="text" class="form-control has-feedback-left  @(isLastNameValid ? String.Empty : "parsley-error")" placeholder="Last Name">
                                 <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                                 <ul class="parsley-errors-list filled">
-                                    <li class="parsley-required">This value is required.</li>
+                                    <li class="parsley-required">@(isLastNameValid ? String.Empty : ViewData.ModelState["LastName"].Errors.First().ErrorMessage)</li>
                                 </ul>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="dept-name" class="control-label col-md-3 col-sm-3 col-xs-12">Email </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" class="form-control has-feedback-left" placeholder="Email">
+                                <input asp-for="Email" type="text" class="form-control has-feedback-left" placeholder="Email">
                                 <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
                                 <ul class="parsley-errors-list filled">
-                                    <li class="parsley-required">This value is required.</li>
+                                    <li class="parsley-required">@Html.ValidationMessageFor(x => x.Email)</li>
                                 </ul>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-3">Phone Number</label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" class="form-control has-feedback-left" placeholder="Phone">
+                                <input asp-for="PhoneNumber" type="text" class="form-control has-feedback-left" placeholder="Phone">
                                 <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
                                 <ul class="parsley-errors-list filled">
-                                    <li class="parsley-required">This value is required.</li>
+                                    <li class="parsley-required">@Html.ValidationMessageFor(x => x.PhoneNumber)</li>
                                 </ul>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-3">Address</label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" class="form-control has-feedback-left" placeholder="Address">
+                                <input asp-for="Address" type="text" class="form-control has-feedback-left" placeholder="Address">
                                 <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
                                 <ul class="parsley-errors-list filled">
-                                    <li class="parsley-required">This value is required.</li>
+                                    <li class="parsley-required">@Html.ValidationMessageFor(x => x.Address)</li>
                                 </ul>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-3">City</label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" class="form-control has-feedback-left" placeholder="City">
+                                <input asp-for="City" type="text" class="form-control has-feedback-left" placeholder="City">
                                 <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
                                 <ul class="parsley-errors-list filled">
-                                    <li class="parsley-required">This value is required.</li>
+                                    <li class="parsley-required">@Html.ValidationMessageFor(x => x.City)</li>
                                 </ul>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-3">State</label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" class="form-control has-feedback-left" placeholder="State">
+                                <input asp-for="State" type="text" class="form-control has-feedback-left" placeholder="State">
                                 <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
                                 <ul class="parsley-errors-list filled">
-                                    <li class="parsley-required">This value is required.</li>
+                                    <li class="parsley-required">@Html.ValidationMessageFor(x => x.State)</li>
                                 </ul>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-3">ZipCode</label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" class="form-control has-feedback-left" placeholder="ZipCode">
+                                <input asp-for="ZipCode" type="text" class="form-control has-feedback-left" placeholder="ZipCode">
                                 <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
                                 <ul class="parsley-errors-list filled">
-                                    <li class="parsley-required">This value is required.</li>
+                                    <li class="parsley-required">@Html.ValidationMessageFor(x => x.ZipCode)</li>
                                 </ul>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-3">Date of Birth</label>
                             <div class="col-md-69 col-sm-6 col-xs-9">
-                                <input type="text" class="form-control has-feedback-left" data-inputmask="'mask': '99/99/9999'">
+                                <input asp-for="DateOfBirth" type="text" class="form-control has-feedback-left" data-inputmask="'mask': '99/99/9999'">
                                 <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                                 <ul class="parsley-errors-list filled">
-                                    <li class="parsley-required">This value is required.</li>
+                                    <li class="parsley-required">@Html.ValidationMessageFor(x => x.DateOfBirth)</li>
                                 </ul>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Password</label>
+                            @{
+                                bool isPasswordValid = !(ViewData.ModelState["Password"] != null && ViewData.ModelState["Password"].Errors.Any());
+
+                            }
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="password" class="form-control" placeholder="Password">
-                                <ul class="parsley-errors-list filled">
-                                    <li class="parsley-required">This value is required.</li>
+                                <input asp-for="Password" type="password" class="form-control has-feedback-left @(isPasswordValid ? String.Empty : "parsley-error")" placeholder="Password">
+                                <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                                <ul class="parsley-errors-list filled" id="parsley-id-5">
+                                    <li class="parsley-required">
+                                        @(isPasswordValid ? String.Empty : ViewData.ModelState["Password"].Errors.First().ErrorMessage)
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -142,7 +157,7 @@
                         <div class="form-group">
                             <div class="col-md-12 col-sm-12 col-xs-12 col-md-offset-3">
                                 <a href="##" onClick="history.go(-1); return false;" class="btn btn-primary" type="button">Cancel</a>
-                                <button type="submit" class="btn btn-success">Add Instructor</button>
+                                <button type="submit" class="btn btn-success">Add Student</button>
                             </div>
                         </div>
                     </form>

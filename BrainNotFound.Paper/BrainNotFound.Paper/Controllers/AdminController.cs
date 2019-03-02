@@ -255,6 +255,49 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        [HttpPost, Route("Students/New")]
+        public async Task<IActionResult> NewStudent(ApplicationUser model)
+        {
+            if (model.FirstName == null || model.LastName == null || model.Password == null)
+            {
+                return View(model);
+            }
+
+            model.UserName = model.FirstName + model.LastName;
+
+            if (await _userManager.FindByNameAsync(model.UserName) == null)
+            {
+                //Create a new Application User
+                var result = await _userManager.CreateAsync(model, model.Password);
+
+                if (result.Succeeded)
+                {
+                    //Fetch created user
+                    var CreatedUser = await _userManager.FindByNameAsync(model.UserName);
+
+                    //Add instructor role to created Application User
+                    await _userManager.AddToRoleAsync(CreatedUser, "Student");
+
+                    return RedirectToAction("Students", "Admin");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ViewData["Message"] += error.Description;
+                    }
+                }
+            }
+            else
+            {
+                ViewBag.UserError = "That user already exists.";
+            }
+
+            ViewData["message"] += model.Email;
+            return View(model);
+        }
+
+
         [HttpGet, Route("Students/{Id}")]
         public IActionResult ViewStudent(String Id)
         {
