@@ -109,10 +109,6 @@ namespace BrainNotFound.Paper.Controllers
         {
 
             var instructor = await _userManager.FindByNameAsync(username);
-            instructor.Address = "250 Brent Lane";
-            instructor.City = "Pensacola";
-            instructor.State = "FL";
-            instructor.ZipCode = "32503";
 
             List<Course> courses = new List<Course>()
             {
@@ -297,18 +293,69 @@ namespace BrainNotFound.Paper.Controllers
             return View(model);
         }
 
-
-        [HttpGet, Route("Students/{Id}")]
-        public IActionResult ViewStudent(String Id)
+        [HttpGet, Route("Students/{UserName}")]
+        public async Task<IActionResult> ViewStudent(String username)
         {
+
+            var student = await _userManager.FindByNameAsync(username);
+
+            List<Course> courses = new List<Course>()
+            {
+                new Course()
+                {
+                    CourseCode = "CS 306",
+                    CourseName = "Database II",
+                    CourseId = 1
+                },
+                new Course()
+                {
+                    CourseCode = "BI 101",
+                    CourseName = "Old Testament Survey",
+                    CourseId = 2
+                },
+                new Course()
+                {
+                    CourseCode = "EN 126",
+                    CourseName = "English Grammar and Composition",
+                    CourseId = 3
+                }
+            };
+
+            ViewBag.courses = courses;
+            ViewBag.profile = student;
+
             return View();
         }
 
-        [HttpGet, Route("Students/Edit/{Id}")]
-        public IActionResult EditStudent(String Id)
+        [HttpGet, Route("Students/Edit/{UserName}")]
+        public async Task<IActionResult> EditStudent(String UserName)
         {
+            ApplicationUser student = await _userManager.FindByNameAsync(UserName);
+            ViewBag.student = student;
             return View();
         }
+
+        [HttpPost, Route("Students/Edit/{UserName}")]
+        public async Task<IActionResult> EditStudent(ApplicationUser user)
+        {
+            var student = await _userManager.FindByNameAsync(user.UserName);
+            student.Salutation  = user.Salutation;
+            student.FirstName   = user.FirstName;
+            student.LastName    = user.LastName;
+            student.PhoneNumber = user.PhoneNumber;
+            student.Email       = user.Email;
+            student.Address     = user.Address;
+            student.City        = user.City;
+            student.State       = user.State;
+            student.ZipCode     = user.ZipCode;
+
+            await _userManager.UpdateAsync(student);
+
+            ViewData["message"] = user.FirstName;
+
+            return RedirectToAction("Students", "Admin");
+        }
+
         #endregion student controllers 
 
         #region Department controllers
