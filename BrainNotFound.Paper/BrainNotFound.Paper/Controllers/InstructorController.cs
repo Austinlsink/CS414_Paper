@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BrainNotFound.Paper.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using BrainNotFound.Paper.Models.BusinessModels;
 
 namespace BrainNotFound.Paper.Controllers
 {
@@ -13,6 +15,22 @@ namespace BrainNotFound.Paper.Controllers
     [Route("Instructor")]
     public class InstructorController : Controller
     {
+        // Start March 02 2019
+        /*
+        private readonly UserManager<Models.BusinessModels.ApplicationUser> _userManager;
+        private readonly PaperDbContext _context;
+
+        #region instructor controllers
+
+        public InstructorController(
+            UserManager<Models.BusinessModels.ApplicationUser> userManager, PaperDbContext context)
+        {
+            _userManager = userManager;
+            _context = context;
+        }
+        */
+        // End March 02 2019
+
         [HttpGet, Route("")]
         [HttpGet, Route("Index")]
         [HttpGet, Route("Dashboard")]
@@ -32,6 +50,7 @@ namespace BrainNotFound.Paper.Controllers
         {
             return View();
         }
+        #endregion Instructor controllers
 
         [HttpGet, Route("Students")]
         public IActionResult Students()
