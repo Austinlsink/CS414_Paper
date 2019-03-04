@@ -20,8 +20,6 @@ namespace BrainNotFound.Paper.Controllers
         private readonly UserManager<Models.BusinessModels.ApplicationUser> _userManager;
         private readonly PaperDbContext _context;
 
-        #region instructor controllers
-
         public InstructorController(
             UserManager<Models.BusinessModels.ApplicationUser> userManager, PaperDbContext context)
         {
@@ -50,7 +48,6 @@ namespace BrainNotFound.Paper.Controllers
         {
             return View();
         }
-        #endregion Instructor controllers
 
         [HttpGet, Route("Students")]
         public IActionResult Students()
