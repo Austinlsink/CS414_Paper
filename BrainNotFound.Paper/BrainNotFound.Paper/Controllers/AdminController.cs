@@ -435,14 +435,24 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("Courses/New")]
         public IActionResult NewCourse()
         {
+            var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
+            ViewBag.departmentList = departments;
+
             return View();
         }
 
         [HttpPost, Route("Courses/New")]
         public IActionResult NewCourse(Course model)
         {
-            if (!ModelState.IsValid)
-                return View();
+            //if (!ModelState.IsValid)
+            //    return View();
+
+            //ViewData["message"] = model.DepartmentId.ToString();
+            //return View("testview");
+
+            var department = _context.Departments.Find(model.DepartmentId);
+            model.DepartmentId = department.DepartmentId;
+            model.DepartmentCode = department.DepartmentCode;
 
             _context.Courses.Add(model);
             _context.SaveChanges();
@@ -459,8 +469,9 @@ namespace BrainNotFound.Paper.Controllers
         public IActionResult EditCourse(long Id)
         {
             var course = _context.Courses.Find(Id);
-
+            var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
             ViewBag.course = course;
+            ViewBag.departments = departments;
             return View();
         }
 

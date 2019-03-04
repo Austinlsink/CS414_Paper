@@ -1,3 +1,4 @@
+
 @model BrainNotFound.Paper.Models.BusinessModels.Course;
 
 @{
@@ -49,6 +50,18 @@
                                 <span class="text-danger"></span>
                             </div>
                             <span asp-validation-for="CreditHours" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label pull-left col-md-3 col-sm-3 col-xs-12">Department</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <select asp-for="DepartmentId" class="select2_single form-control" tabindex="1">
+                                    <option disabled selected value=""> -- select a department -- </option>
+                                    @foreach (var d in ViewBag.departmentList)
+                                    {
+                                        <option value="departmentName">@d.DepartmentName</option>
+                                    }
+                                </select>
+                            </div>
                         </div>
                         <div class="ln_solid"></div>
                         <div class="form-group">
