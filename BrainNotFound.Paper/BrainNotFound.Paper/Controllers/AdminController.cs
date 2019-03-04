@@ -391,10 +391,9 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         // Delete a department
-        [HttpDelete("{Id:long}"), Route("DeleteDepartment")]
+        [HttpDelete("{id:long}"), Route("DeleteDepartment")]
         public IActionResult DeleteDepartment(long id)
         {
-
             var department = _context.Departments.Find(id);
             _context.Departments.Remove(department);
             _context.SaveChanges();
@@ -456,15 +455,42 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        [HttpGet, Route("Courses/Edit/{CourseCode}")]
-        public IActionResult EditCourse(String CourseCode)
+       [HttpGet, Route("Courses/Edit/{id}")]
+        public IActionResult EditCourse(long Id)
         {
+            var course = _context.Courses.Find(Id);
+
+            ViewBag.course = course;
             return View();
         }
 
-        #endregion course controllers
+        [HttpPost, Route("Courses/Edit/{id}")]
+        public IActionResult EditCourse(Course c)
+        {
 
-        // Why do we have a page that lists all sections?, could that be in the courses page?
+            var course = _context.Courses.Find(c.CourseId);
+            course.CourseCode  = c.CourseCode;
+            course.CourseName  = c.CourseName;
+            course.Description = c.Description;
+            course.CreditHours = c.CreditHours;
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Courses", "Admin");
+        }
+
+        // Delete a Course
+        [HttpDelete("{id:long}"), Route("DeleteCourse")]
+        public IActionResult DeleteCourse(long id)
+        {
+            var course = _context.Courses.Find(id);
+            _context.Courses.Remove(course);
+            _context.SaveChanges();
+
+            return RedirectToAction("Courses", "Admin");
+        }
+
+        #endregion course controllers
 
         #region Section controllers
         [HttpGet, Route("Sections")]
