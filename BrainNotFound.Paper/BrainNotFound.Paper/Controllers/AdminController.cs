@@ -497,7 +497,6 @@ namespace BrainNotFound.Paper.Controllers
         public IActionResult Departments()
         {
             var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
-
             return View(departments);
         }
 
@@ -506,10 +505,20 @@ namespace BrainNotFound.Paper.Controllers
         public IActionResult DeleteDepartment(long id)
         {
             var department = _context.Departments.Find(id);
-            _context.Departments.Remove(department);
-            _context.SaveChanges();
 
-           return RedirectToAction("Departments", "Admin");
+            if(_context.Courses.Where(ac => ac.DepartmentId == department.DepartmentId).Any())
+            {
+                ModelState.AddModelError("Error", "Please delete all associated courses before deleting the department");
+                ViewData["message"] = "Please delete all associated courses before deleting the departmentt";
+                return View("TestView");
+            }
+            else
+            {
+                _context.Departments.Remove(department);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Departments", "Admin", new { name = "Error", Description = "Errors!"});
         }
 
         // Add the details for a new Department
@@ -572,15 +581,25 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("Courses/{id}")]
         public async Task<IActionResult> ViewCourse(long id)
         {
+            // Find the specified course and add it to the ViewBag
             var course = _context.Courses.Find(id);
-            var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
-            var sections = _context.Sections.Where(s => s.CourseId == course.CourseId);
-            var allInstructors = (await _userManager.GetUsersInRoleAsync("Instructor")).OrderBy(o => o.FirstName).ToList();
-
-            ViewBag.departmentList = departments;
-            ViewBag.sectionsList = sections;
-            ViewBag.instructorList = allInstructors;
             ViewBag.course = course;
+
+            // Find the list of departments and add it to the ViewBag
+            var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
+            ViewBag.departmentList = departments;
+
+            // Find the sections with the same ID as the course and add it to the ViewBag
+            var sections = _context.Sections.Where(s => s.CourseId == course.CourseId);
+            ViewBag.sectionsList = sections;
+
+            // Get all of the instructors and add them to the ViewBag
+            var allInstructors = (await _userManager.GetUsersInRoleAsync("Instructor")).OrderBy(o => o.FirstName).ToList();
+            ViewBag.instructorList = allInstructors;
+
+            // Get all of the SectionMeetingTimes and add them to the ViewBag
+            var allSectionMeetingTimes = _context.SectionMeetingTimes.ToList();
+            ViewBag.sectionMeetingTimeList = allSectionMeetingTimes;
 
             return View();
         }

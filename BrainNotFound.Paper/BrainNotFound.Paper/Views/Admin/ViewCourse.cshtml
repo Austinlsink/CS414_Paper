@@ -63,22 +63,41 @@
                                         <thead>
                                             <tr>
                                                 <th>Section Number</th>
+                                                <th>Instructor</th>
                                                 <th>Location</th>
                                                 <th>Capcity</th>
-                                                <th>Instructor</th>
-                                                <th>Meeting Times</th>
+                                                <th>Day</th>
+                                                <th>Start Time</th>
+                                                <th>End Time</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach (var s in ViewBag.sectionsList)
                                             {
-                                                <tr>
-                                                    <td>@s.SectionNumber</td>
-                                                    <td>@s.Location</td>
-                                                    <td>@s.Capacity</td>
-                                                    <td>@s.InstructorId</td>
-                                                    <td>Need to connect this</td>
-                                                </tr>
+                                                // Find the instructor name for each section
+                                                String instructorName;
+                                                List<ApplicationUser> instructors = ViewBag.instructorList;
+                                                var instructor = instructors.Where(i => i.Id == s.InstructorId).First();
+                                                instructorName = instructor.FirstName + " " + instructor.LastName;
+
+                                                // Find the meeting times for each section
+                                                String startTime;
+                                                String endTime;
+                                                String day;
+                                                List<SectionMeetingTime> sectionMeetingTimes = ViewBag.sectionMeetingTimeList;
+                                                var sectionMeetingTime = sectionMeetingTimes.Where(smt => smt.SectionId == s.SectionId).First();
+                                                startTime = sectionMeetingTime.StartTime.ToString("h:mm tt");
+                                                endTime = sectionMeetingTime.EndTime.ToString("h:mm tt");
+                                                day = sectionMeetingTime.Day;
+                                            <tr>
+                                                <td>@s.SectionNumber</td>
+                                                <td>@instructorName</td>
+                                                <td>@s.Location</td>
+                                                <td>@s.Capacity</td>
+                                                <td>@day</td>
+                                                <td>@startTime</td>
+                                                <td>@endTime</td>
+                                            </tr>
                                             }
 
                                         </tbody>

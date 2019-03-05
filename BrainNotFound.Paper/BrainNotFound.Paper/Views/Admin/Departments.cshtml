@@ -12,6 +12,13 @@
                 <div class="x_panel">
                     <div class="x_title">
                         <h2><i class="fa fa-mortar-board"></i> Departments</h2>
+                        @if (!ViewData.ModelState.IsValid && ViewData.ModelState["Error"].Errors.Count > 0)
+                        {
+                            <div class="alert alert-danger">
+                                >
+                                <strong>Error!</strong> danger">@ViewData.ModelState["Error"].Errors.First().ErrorMessage
+                            </div>
+                        }
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                             <li><a asp-controller="Admin" asp-action="NewDepartment"><i class="fa fa-plus"></i> New Department</a></li>
@@ -52,7 +59,9 @@
                                             <td class=" last">
                                                 <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                                 <a asp-controller="Admin" asp-action="EditDepartment" asp-route-id="@department.DepartmentId" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                                <a asp-controller="Admin" asp-action="DeleteDepartment" asp-route-id="@department.DepartmentId" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
+                                                
+                                                <a asp-controller="Admin" asp-action="DeleteDepartment" asp-route-id="@department.DepartmentId"  class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
+                                               
                                             </td>
                                         </tr>
 
@@ -74,3 +83,6 @@
             </div>
         </div>
     </div>
+
+
+
