@@ -570,12 +570,16 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         [HttpGet, Route("Courses/{id}")]
-        public IActionResult ViewCourse(long id)
+        public async Task<IActionResult> ViewCourse(long id)
         {
             var course = _context.Courses.Find(id);
             var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
-            ViewBag.departmentList = departments;
+            var sections = _context.Sections.Where(s => s.CourseId == course.CourseId);
+            var allInstructors = (await _userManager.GetUsersInRoleAsync("Instructor")).OrderBy(o => o.FirstName).ToList();
 
+            ViewBag.departmentList = departments;
+            ViewBag.sectionsList = sections;
+            ViewBag.instructorList = allInstructors;
             ViewBag.course = course;
 
             return View();
