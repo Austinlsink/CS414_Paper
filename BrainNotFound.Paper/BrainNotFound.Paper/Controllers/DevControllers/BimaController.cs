@@ -22,15 +22,10 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly PaperDbContext _context;
 
-
-
-
         //public IActionResult Run()
-        public async Task<IActionResult> Run()
+        public  IActionResult Run()
         {
-           
-
-            return View("TestView");
+            return RedirectToAction("AddSectionsToDb", "Bima");
         }
 
         [HttpGet, Route("Initialize")]
@@ -132,27 +127,19 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
                 }
             }
 
-            return RedirectToAction("AddDepartmentsToDb", "Bima");
+            return RedirectToAction("AddStudentsToDb", "Bima");
         }
 
         // Populates the database with the sample Departments info
         public async Task<IActionResult> AddDepartmentsToDb()
         {
-            using (var reader = new StreamReader("SampleData/Department_Sample_Data.csv"))
-            using (var csv = new CsvReader(reader))
+            var departments = Department.ParseCsv("SampleData/Department_Sample_Data.csv");
+           
+            foreach (Department department in departments)
             {
-
-                csv.Configuration.HeaderValidated = null;
-                csv.Configuration.MissingFieldFound = null;
-
-
-                var departments = csv.GetRecords<Department>();
-                foreach (Department model in departments)
-                {
-                    await _context.Departments.AddAsync(model);
-                }
-                _context.SaveChanges();
+                await _context.Departments.AddAsync(department);
             }
+            _context.SaveChanges();
 
             return RedirectToAction("AddStudentsToDb", "Bima");
         }
@@ -165,7 +152,7 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
 
 
 
-            using (var reader = new StreamReader("SampleData/students.csv"))
+            using (var reader = new StreamReader("SampleData/Students_Sample_Data.csv"))
             using (var csv = new CsvReader(reader))
             {
 
@@ -214,10 +201,10 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
                 }
             }
 
-            return RedirectToAction("AddDepartmentsToDb", "Bima");
+            return RedirectToAction("ForceLogin", "Account");
         }
 
-        public async Task<IActionResult> AddCoursesToDb()
+        public IActionResult AddCoursesToDb()
         {
 
             using (var reader = new StreamReader("SampleData/Course_Sample_Data.csv"))
@@ -240,6 +227,68 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
 
             }
             return RedirectToAction("ForceLogin", "Account");
+        }
+
+
+        // Populates the database with the sample Departments info
+        public  IActionResult AddSectionsToDb()
+        {
+            using (var reader = new StreamReader("SampleData/Sections_Sample_Data.csv"))
+            using (var csv = new CsvReader(reader))
+            {
+
+                csv.Configuration.HeaderValidated = null;
+                csv.Configuration.MissingFieldFound = null;
+
+
+                var sections = csv.GetRecords<SampleSection>();
+                foreach (var SampleSection in sections)
+                {
+                    var section = new Section();
+                    var sectionMeetingTimes = new List<SectionMeetingTime>();
+
+                    // Finds the course that the section belongs too
+                    var courseName = SampleSection.CourseName.Substring(7);
+                    var course = _context.Courses.Where(c => c.CourseName == courseName).First();
+
+
+                    // Assembles the days that the course meets
+
+                    section.TimesMet = SectionMeetingTime.Parse(SampleSection.DaysMet);
+
+                    // Finds the Instructor that teaches this section
+                    var instructor = _context.ApplicationUsers.Where(i => i.FirstName == SampleSection.FirstName).First();
+                    section.ApplicationUser = instructor;
+
+                    // Sets the Location and capacity of the Section
+                    section.Location = SampleSection.Location;
+                    section.Capacity = SampleSection.Capacity;
+
+                    // Sets the Section Number
+                    var allSectionForCourse = _context.Sections.Where(s => s.CourseId == course.CourseId);
+                    int sectionNumber = 0;
+                    IQueryable<Section> SectionswithId;
+
+                    bool SectionNumberFound = false;
+                    do
+                    {
+                        sectionNumber += 1;
+
+                         SectionswithId = allSectionForCourse.Where(asfc => asfc.SectionId == sectionNumber);
+
+                        SectionNumberFound = SectionswithId.Any();
+                    } while (SectionNumberFound);
+
+                    section.SectionNumber = sectionNumber;
+                    section.Course = course;
+
+                    _context.Sections.Add(section);
+                        
+                }
+                _context.SaveChanges();
+            }
+
+            return View("TestView");
         }
 
         // Constructor

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,7 +14,7 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 
         [Required]
         [Range(1,20, ErrorMessage = "Please enter a number from 1 to 20.")]
-		public string SectionNumber {get; set;}
+		public int SectionNumber {get; set;}
 
         [StringLength(7)] 
 		public string Location {get; set;}
@@ -30,5 +31,7 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 
         
 		public List<Enrollment> Enrollments { get; set;}
+
+        
 	}
 }
