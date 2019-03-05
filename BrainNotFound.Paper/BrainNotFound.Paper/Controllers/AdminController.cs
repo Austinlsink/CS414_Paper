@@ -497,6 +497,8 @@ namespace BrainNotFound.Paper.Controllers
         public IActionResult Departments()
         {
             var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
+            var courses = _context.Courses.ToList();
+            ViewBag.courses = courses;
             return View(departments);
         }
 
@@ -506,7 +508,7 @@ namespace BrainNotFound.Paper.Controllers
         {
             var department = _context.Departments.Find(id);
 
-            if(_context.Courses.Where(ac => ac.DepartmentId == department.DepartmentId).Any())
+            if (_context.Courses.Where(ac => ac.DepartmentId == department.DepartmentId).Any())
             {
                 ModelState.AddModelError("Error", "Please delete all associated courses before deleting the department");
                 ViewData["message"] = "Please delete all associated courses before deleting the departmentt";
@@ -518,7 +520,7 @@ namespace BrainNotFound.Paper.Controllers
                 _context.SaveChanges();
             }
 
-            return RedirectToAction("Departments", "Admin", new { name = "Error", Description = "Errors!"});
+            return RedirectToAction("Departments", "Admin");
         }
 
         // Add the details for a new Department
