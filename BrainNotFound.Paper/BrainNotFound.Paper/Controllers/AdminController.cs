@@ -47,7 +47,118 @@ namespace BrainNotFound.Paper.Controllers
         }
         #endregion admin controllers
 
-        #region instructor controllers
+        #region create administrator controllers
+        [HttpGet, Route("Administrators")]
+        public async Task<IActionResult> Administrators()
+        {
+            var allAdministrators = (await _userManager.GetUsersInRoleAsync("Admin")).OrderBy(o => o.FirstName).ToList();
+
+            return View(allAdministrators);
+        }
+
+        [HttpGet, Route("Administrators/New")]
+        public IActionResult NewAdministrator()
+        {
+            return View();
+        }
+
+        [HttpPost, Route("Administrators/New")]
+        public async Task<IActionResult> NewAdministrator(ApplicationUser model)
+        {
+            if (model.FirstName == null || model.LastName == null || model.Password == null)
+            {
+                return View(model);
+            }
+
+            model.UserName = model.FirstName + model.LastName;
+
+            if (await _userManager.FindByNameAsync(model.UserName) == null)
+            {
+                //Create a new Application User
+                var result = await _userManager.CreateAsync(model, model.Password);
+
+                if (result.Succeeded)
+                {
+                    //Fetch created user
+                    var CreatedUser = await _userManager.FindByNameAsync(model.UserName);
+
+                    //Add instructor role to created Application User
+                    await _userManager.AddToRoleAsync(CreatedUser, "Admin");
+
+                    return RedirectToAction("Administrators", "Admin");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ViewData["Message"] += error.Description;
+                    }
+                }
+            }
+            else
+            {
+                ViewBag.UserError = "That user already exists.";
+            }
+
+            ViewData["message"] += model.Email;
+            return View(model);
+        }
+
+        [HttpGet, Route("Administrators/{UserName}")]
+        public async Task<IActionResult> ViewAdministrator(String username)
+        {
+
+            var admin = await _userManager.FindByNameAsync(username);
+
+            ViewBag.profile = admin;
+
+            return View();
+        }
+
+        [HttpGet, Route("Administrators/Edit/{UserName}")]
+        public async Task<IActionResult> EditAdministrator(String UserName)
+        {
+            ApplicationUser admin = await _userManager.FindByNameAsync(UserName);
+            ViewBag.admin = admin;
+            return View();
+        }
+
+        [HttpPost, Route("Administrators/Edit/{UserName}")]
+        public async Task<IActionResult> EditAdministrator(ApplicationUser user)
+        {
+            var admin = await _userManager.FindByNameAsync(user.UserName);
+            admin.Salutation = user.Salutation;
+            admin.FirstName = user.FirstName;
+            admin.LastName = user.LastName;
+            admin.PhoneNumber = user.PhoneNumber;
+            admin.Email = user.Email;
+            admin.Address = user.Address;
+            admin.City = user.City;
+            admin.State = user.State;
+            admin.ZipCode = user.ZipCode;
+
+            await _userManager.UpdateAsync(admin);
+
+            ViewData["message"] = user.FirstName;
+
+            return RedirectToAction("Administrators", "Admin");
+        }
+
+        ///<summary>
+        /// Finds a specified instructor and deletes him from the _userManager - It does work!
+        ///</summary>
+        ///<param name="UserName">Selected instructor's email</param>
+        [HttpDelete("{UserName}"), Route("DeleteAdministrator")]
+        public async Task<IActionResult> DeleteAdministrator(String UserName)
+        {
+            var admin = await _userManager.FindByNameAsync(UserName);
+            await _userManager.DeleteAsync(admin);
+
+            return RedirectToAction("Administrators", "Admin");
+        }
+        #endregion create administrator controllers
+
+        #region create instructor controllers
         [HttpGet, Route("Instructors")]
         public async Task<IActionResult> Instructors()
         {
@@ -429,6 +540,8 @@ namespace BrainNotFound.Paper.Controllers
         public IActionResult Courses()
         {
             var courses = _context.Courses.OrderBy(o => o.CourseCode).ToList();
+            var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
+            ViewBag.departmentList = departments;
             return View(courses);
         }
 
@@ -444,11 +557,8 @@ namespace BrainNotFound.Paper.Controllers
         [HttpPost, Route("Courses/New")]
         public IActionResult NewCourse(Course model)
         {
-            //if (!ModelState.IsValid)
-            //    return View();
-
-            //ViewData["message"] = model.DepartmentId.ToString();
-            //return View("testview");
+            if (!ModelState.IsValid)
+                return View();
 
             var department = _context.Departments.Find(model.DepartmentId);
             model.DepartmentId = department.DepartmentId;
@@ -460,10 +570,16 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         [HttpGet, Route("Courses/{id}")]
-        public IActionResult ViewCourse(long id)
+        public async Task<IActionResult> ViewCourse(long id)
         {
             var course = _context.Courses.Find(id);
+            var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
+            var sections = _context.Sections.Where(s => s.CourseId == course.CourseId);
+            var allInstructors = (await _userManager.GetUsersInRoleAsync("Instructor")).OrderBy(o => o.FirstName).ToList();
 
+            ViewBag.departmentList = departments;
+            ViewBag.sectionsList = sections;
+            ViewBag.instructorList = allInstructors;
             ViewBag.course = course;
 
             return View();

@@ -58,7 +58,7 @@
                                     <option disabled selected value=""> -- select a department -- </option>
                                     @foreach (var d in ViewBag.departmentList)
                                     {
-                                        <option value="departmentName">@d.DepartmentName</option>
+                                        <option value="@d.DepartmentId">@d.DepartmentName</option>
                                     }
                                 </select>
                             </div>

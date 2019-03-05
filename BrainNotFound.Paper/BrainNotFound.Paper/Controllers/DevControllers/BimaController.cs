@@ -90,39 +90,31 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
         // Populates the Database with the Sample Instructors account
         public async Task<IActionResult> AddInstructorsToDb()
         {
-            using (var reader = new StreamReader("SampleData/Instructor_Sample_Data.csv"))
-            using (var csv = new CsvReader(reader))
+            var instructors = ApplicationUser.ParseCsv("SampleData/Instructor_Sample_Data.csv");
+
+            foreach (ApplicationUser instructor in instructors)
             {
 
-                csv.Configuration.HeaderValidated = null;
-                csv.Configuration.MissingFieldFound = null;
+                instructor.UserName = instructor.FirstName + instructor.LastName;
+
+                //Create a new Application User
+                var result = await _userManager.CreateAsync(instructor, instructor.Password);
 
 
-                var instructors = csv.GetRecords<ApplicationUser>();
-                foreach (ApplicationUser instructor in instructors)
+                if (result.Succeeded)
                 {
+                    //Fetch created user
+                    var CreatedUser = await _userManager.FindByEmailAsync(instructor.Email);
 
-                    instructor.UserName = instructor.FirstName + instructor.LastName;
+                    //Add instructor role to created Application User
+                    await _userManager.AddToRoleAsync(CreatedUser, "Instructor");
 
-                    //Create a new Application User
-                    var result = await _userManager.CreateAsync(instructor, instructor.Password);
-
-
-                    if (result.Succeeded)
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
                     {
-                        //Fetch created user
-                        var CreatedUser = await _userManager.FindByEmailAsync(instructor.Email);
-
-                        //Add instructor role to created Application User
-                        await _userManager.AddToRoleAsync(CreatedUser, "Instructor");
-
-                    }
-                    else
-                    {
-                        foreach (var error in result.Errors)
-                        {
-                            ViewData["Message"] += error.Description;
-                        }
+                        ViewData["Message"] += error.Description;
                     }
                 }
             }
@@ -134,10 +126,31 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
         public async Task<IActionResult> AddDepartmentsToDb()
         {
             var departments = Department.ParseCsv("SampleData/Department_Sample_Data.csv");
-           
+            var existingDepartments = _context.Departments;
             foreach (Department department in departments)
             {
-                await _context.Departments.AddAsync(department);
+                
+                if ((existingDepartments.Where(d => d.DepartmentCode == department.DepartmentCode)).Any())
+                {
+                    var existingDepartment = existingDepartments.Where(d => d.DepartmentCode == department.DepartmentCode).First();
+
+                    // Check if all information inside the object is the same as in the Database
+                    // [TODO: Create as Equals() f(x)]
+                    if (existingDepartment.DepartmentName == department.DepartmentName)
+                    {
+                        // Will Notify user that department already exists
+                    }
+                    else
+                    {
+                        // Update Record
+                    }
+                }
+                else
+                {
+                    await _context.Departments.AddAsync(department);
+                }
+                // if department is in _context.Departments
+                
             }
             _context.SaveChanges();
 
@@ -149,84 +162,61 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
         {
             Random num = new Random();
             int randomPassword;
+            var students = ApplicationUser.ParseCsv("SampleData/Students_Sample_Data.csv");           
 
-
-
-            using (var reader = new StreamReader("SampleData/Students_Sample_Data.csv"))
-            using (var csv = new CsvReader(reader))
+            foreach (ApplicationUser student in students)
             {
+                string[] dob = student.DateOfBirth.Split('/');
+                int year = Int32.Parse(dob[2]);
+                int day = Int32.Parse(dob[1]);
+                int month = Int32.Parse(dob[0]);
 
-                csv.Configuration.HeaderValidated = null;
-                csv.Configuration.MissingFieldFound = null;
+                var date = new DateTime(year, month, day);
 
+                student.DOB = date;
 
-                var students = csv.GetRecords<ApplicationUser>();
-                foreach (ApplicationUser student in students)
+                randomPassword = num.Next(100, 1000);
+                student.UserName = student.FirstName + student.LastName;
+                student.Password = student.FirstName + student.LastName + randomPassword.ToString();
+
+                //Create a new Application User
+                var result = await _userManager.CreateAsync(student, student.Password);
+
+                if (result.Succeeded)
                 {
-                    string[] dob = student.DateOfBirth.Split('/');
-                    int year = Int32.Parse(dob[2]);
-                    int day = Int32.Parse(dob[1]);
-                    int month = Int32.Parse(dob[0]);
+                    //Fetch created user
+                    var CreatedUser = await _userManager.FindByEmailAsync(student.Email);
 
-                    var date = new DateTime(year, month, day);
+                    //Add instructor role to created Application User
+                    await _userManager.AddToRoleAsync(CreatedUser, "Student");
 
-                    student.DOB = date;
-
-                    randomPassword = num.Next(100, 1000);
-                    student.UserName = student.FirstName + student.LastName;
-                    student.Password = student.FirstName + student.LastName + randomPassword.ToString();
-
-
-
-                    //Create a new Application User
-                    var result = await _userManager.CreateAsync(student, student.Password);
-
-
-                    if (result.Succeeded)
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
                     {
-                        //Fetch created user
-                        var CreatedUser = await _userManager.FindByEmailAsync(student.Email);
-
-                        //Add instructor role to created Application User
-                        await _userManager.AddToRoleAsync(CreatedUser, "Student");
-
-                    }
-                    else
-                    {
-                        foreach (var error in result.Errors)
-                        {
-                            ViewData["Message"] += error.Description;
-                        }
+                        ViewData["Message"] += error.Description;
                     }
                 }
             }
 
-            return RedirectToAction("ForceLogin", "Account");
+            return RedirectToAction("ForceLogin", "Account"); //(f(x), controller)
         }
 
-        public IActionResult AddCoursesToDb()
+        public async Task<IActionResult> AddCoursesToDb()
         {
+            var courses = Course.ParseCsv("SampleData/Course_Sample_Data.csv");
 
-            using (var reader = new StreamReader("SampleData/Course_Sample_Data.csv"))
-            using (var csv = new CsvReader(reader))
+            foreach (Course c in courses)
             {
-
-                csv.Configuration.HeaderValidated = null;
-                csv.Configuration.MissingFieldFound = null;
-
-                var courses = csv.GetRecords<Course>();
-
-
-                foreach (Course c in courses)
-                {
-                    var d = _context.Departments.Where(dd => dd.DepartmentCode == c.DepartmentCode).First();
-                    c.Department = d;
-                    _context.Courses.Add(c);
-                }
-                _context.SaveChanges();
-
+                var d = _context.Departments.Where(dd => dd.DepartmentCode == c.DepartmentCode).First();
+                c.Department = d;
+                _context.Courses.Add(c);
+                await _context.Courses.AddAsync(c);
             }
-            return RedirectToAction("ForceLogin", "Account");
+            _context.SaveChanges();
+
+            return RedirectToAction("AddStudentsToDb", "Bima");
         }
 
 

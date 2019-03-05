@@ -27,10 +27,8 @@ namespace BrainNotFound.Paper.Models.BusinessModels
             using (var reader = new StreamReader(CsvFilePath))
             using (var csv = new CsvReader(reader))
             {
-
                 csv.Configuration.HeaderValidated = null;
                 csv.Configuration.MissingFieldFound = null;
-
 
                 departments = csv.GetRecords<Department>();
             }

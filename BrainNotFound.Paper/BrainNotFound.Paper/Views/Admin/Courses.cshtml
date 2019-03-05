@@ -1,5 +1,6 @@
 @using BrainNotFound.Paper.Models.BusinessModels
 @model List<Course>
+
 @{
     ViewData["Title"] = "Manage Courses - Admin";
 }
@@ -45,7 +46,14 @@
                                             <td class="a-center ">
                                                 <input type="checkbox" class="flat" name="table_records">
                                             </td>
-                                            <td class=" ">@course.DepartmentCode</td>
+                                            @{ 
+                                                String name;
+                                                List<Department> departments = ViewBag.DepartmentList;
+                                                var dept = departments.Where(x => x.DepartmentId == course.DepartmentId).First();
+                                                name = dept.DepartmentCode + " " + course.CourseCode;
+
+                                            }
+                                            <td class=" ">@name</td>
                                             <td class=" ">@course.CourseName</td>
                                             <td class=" ">@course.CreditHours</td>
                                             <td class=" last">
