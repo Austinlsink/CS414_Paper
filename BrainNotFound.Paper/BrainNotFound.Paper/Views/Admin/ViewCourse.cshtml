@@ -1,3 +1,4 @@
+@using BrainNotFound.Paper.Models.BusinessModels
 @model BrainNotFound.Paper.Models.BusinessModels.Course;
 @{
     ViewData["Title"] = "View Instructor - Admin";
@@ -26,7 +27,14 @@
                 </div>
                 <div class="x_content">
                     <div class="col-md-10 col-sm-10 col-xs-12">
-                        <h3>@ViewBag.course.CourseCode @ViewBag.course.CourseName</h3>
+                        @{
+                            String name;
+                            List<Department> departments = ViewBag.DepartmentList;
+                            var dept = departments.Where(x => x.DepartmentId == ViewBag.course.DepartmentId).First();
+                            name = dept.DepartmentCode + " " + ViewBag.course.CourseCode;
+
+                        }
+                        <h3>@name @ViewBag.course.CourseName</h3>
 
                         <ul class="list-unstyled user_data">
                             <li>
@@ -36,6 +44,11 @@
                             <li>
                                 <b> Description:</b> @ViewBag.course.Description
                             </li>
+
+                            <li>
+                                <b> Sections:</b>
+                            </li>
+
                         </ul>
                         <br />
                     </div>
