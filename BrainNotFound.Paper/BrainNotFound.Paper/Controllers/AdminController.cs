@@ -138,37 +138,37 @@ namespace BrainNotFound.Paper.Controllers
                 {
                     CourseId = 1,
                     Capacity = 12,
-                    SectionNumber = "1"
+                    SectionNumber = 1
                 },
                 new Section()
                 {
                     CourseId = 1,
                     Capacity = 15,
-                    SectionNumber = "2"
+                    SectionNumber = 2
                 },
                 new Section()
                 {
                     CourseId = 2,
                     Capacity = 30,
-                    SectionNumber = "1"
+                    SectionNumber = 1
                 },
                 new Section()
                 {
                     CourseId = 2,
                     Capacity = 33,
-                    SectionNumber = "2"
+                    SectionNumber = 2
                 },
                 new Section()
                 {
                     CourseId = 2,
                     Capacity = 45,
-                    SectionNumber = "3"
+                    SectionNumber = 3
                 },
                 new Section()
                 {
                     CourseId = 3,
                     Capacity = 32,
-                    SectionNumber = "1"
+                    SectionNumber = 1
                 }
 
             };
