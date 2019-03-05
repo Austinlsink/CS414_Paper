@@ -35,5 +35,68 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 
             return departments;
         }
+
+        public bool Equals(Department inputDepartment)
+        {
+            return DepartmentId == inputDepartment.DepartmentId // Id comparison needed?
+                && DepartmentName == inputDepartment.DepartmentName
+                && DepartmentCode == inputDepartment.DepartmentName;
+        }
+
+        // Alternatively...
+        //public bool Equals(Department inputDepartment)
+        //{
+        //    return DepartmentId == inputDepartment.DepartmentId;
+        //}
+        
+        // Alternatively...
+        //public bool Equals(Department inputDepartment)
+        //{
+        //    return DepartmentName == inputDepartment.DepartmentName
+        //        && DepartmentCode == inputDepartment.DepartmentCode;
+        //}
+            // And other combinations of the attributes being compared
+
+        // IMPORTANT! inputDepartment is the one being inserted; this f(x)
+        // would be called using the Department IN THE DATABASE!
+        public void Update(Department inputDepartment)
+        {
+            // code for updating the related lists?
+            foreach (Course c in Courses)
+            {
+                if (c.DepartmentId == DepartmentId) // && DepartmentCode condition?
+                {
+                    c.DepartmentId = inputDepartment.DepartmentId; // id being updated at all?
+                    c.DepartmentCode = inputDepartment.DepartmentCode;
+                }
+            }
+
+            foreach (FieldOfStudy f in FieldsOfStudy)
+            {
+                if (f.DepartmentId == DepartmentId) // && DepartmentCode condition?
+                {
+                    f.DepartmentId = inputDepartment.DepartmentId; // Id being updated at all?
+                }
+            }
+
+
+            // This specific if statement might not actually end up being used since it's the Id...
+            if (DepartmentId != inputDepartment.DepartmentId)
+            {
+                DepartmentId = inputDepartment.DepartmentId;
+            }
+
+            if (DepartmentName != inputDepartment.DepartmentName)
+            {
+                DepartmentName = inputDepartment.DepartmentName;
+            }
+
+            if (DepartmentCode != inputDepartment.DepartmentCode)
+            {
+                DepartmentCode = inputDepartment.DepartmentCode;
+            }
+
+            return;
+        }
     }
 }
