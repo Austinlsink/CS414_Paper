@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using CsvHelper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -64,5 +67,23 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         public List<StudentTestAssignment> StudentTestAssignments { get; set; }
         public List<StudentMajor> StudentMajors { get; set; }
         //public List<StudentMinor> StudentMinors { get; set; }
+
+        public static IEnumerable<ApplicationUser> ParseCsv(string CsvFilePath)
+        {
+            IEnumerable<ApplicationUser> applicationUsers;
+
+            using (var reader = new StreamReader(CsvFilePath))
+            using (var csv = new CsvReader(reader))
+            {
+
+                csv.Configuration.HeaderValidated = null;
+                csv.Configuration.MissingFieldFound = null;
+
+
+                applicationUsers = csv.GetRecords<ApplicationUser>();
+            }
+
+            return applicationUsers;
+        }
     }
 }
