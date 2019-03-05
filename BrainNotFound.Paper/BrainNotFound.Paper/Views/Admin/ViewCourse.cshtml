@@ -1,7 +1,96 @@
+@using BrainNotFound.Paper.Models.BusinessModels
+@model BrainNotFound.Paper.Models.BusinessModels.Course;
 @{
-    ViewData["Title"] = "View Course Info - Admin";
+    ViewData["Title"] = "View Instructor - Admin";
 }
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
 
-<p>This page displays a course’s information.</p> 
+<div class="">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-user"></i>Course Information</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a asp-controller="Admin" asp-action="EditCourse" asp-route-id="@ViewBag.course.CourseId">Edit information</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="col-md-10 col-sm-10 col-xs-12">
+                        @{
+                            String name;
+                            List<Department> departments = ViewBag.DepartmentList;
+                            var dept = departments.Where(x => x.DepartmentId == ViewBag.course.DepartmentId).First();
+                            name = dept.DepartmentCode + " " + ViewBag.course.CourseCode;
+
+                        }
+                        <h3>@name @ViewBag.course.CourseName</h3>
+
+                        <ul class="list-unstyled user_data">
+                            <li>
+                                <b>Credit Hours:</b> @ViewBag.course.CreditHours
+                            </li>
+
+                            <li>
+                                <b> Description:</b> @ViewBag.course.Description
+                            </li>
+                        </ul>
+                        <br />
+
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2><i class="fa fa-book"></i> Sections</h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Section Number</th>
+                                                <th>Location</th>
+                                                <th>Capcity</th>
+                                                <th>Instructor</th>
+                                                <th>Meeting Times</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var s in ViewBag.sectionsList)
+                                            {
+                                                <tr>
+                                                    <td>@s.SectionNumber</td>
+                                                    <td>@s.Location</td>
+                                                    <td>@s.Capacity</td>
+                                                    <td>@s.InstructorId</td>
+                                                    <td>Need to connect this</td>
+                                                </tr>
+                                            }
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
