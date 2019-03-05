@@ -28,7 +28,7 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
             return RedirectToAction("AddStudentsToDb", "Lacy");
         }
 
-        [HttpGet, Route("Initialize")]
+       // [HttpGet, Route("Initialize")]
         public async Task<IActionResult> Initialize()
         {
             return RedirectToAction("AddRolesToDb", "Bima");

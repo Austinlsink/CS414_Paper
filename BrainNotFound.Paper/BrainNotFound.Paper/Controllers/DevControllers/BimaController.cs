@@ -25,7 +25,7 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
         //public IActionResult Run()
         public  IActionResult Run()
         {
-            return RedirectToAction("AddSectionsToDb", "Bima");
+            return RedirectToAction("AddAdministratorsToDb", "Bima");
         }
 
         [HttpGet, Route("Initialize")]
@@ -266,6 +266,7 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
 
                     // Sets the Section Number
                     var allSectionForCourse = _context.Sections.Where(s => s.CourseId == course.CourseId);
+
                     int sectionNumber = 0;
                     IQueryable<Section> SectionswithId;
 
@@ -273,11 +274,10 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
                     do
                     {
                         sectionNumber += 1;
-
-                         SectionswithId = allSectionForCourse.Where(asfc => asfc.SectionId == sectionNumber);
-
+                        SectionswithId = allSectionForCourse.Where(asfc => asfc.SectionNumber == sectionNumber);
                         SectionNumberFound = SectionswithId.Any();
-                    } while (SectionNumberFound);
+
+                    } while (!SectionNumberFound);
 
                     section.SectionNumber = sectionNumber;
                     section.Course = course;
