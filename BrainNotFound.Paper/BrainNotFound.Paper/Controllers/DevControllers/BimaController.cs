@@ -136,13 +136,16 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
 
                     // Check if all information inside the object is the same as in the Database
                     // [TODO: Create as Equals() f(x)]
-                    if (existingDepartment.DepartmentName == department.DepartmentName)
+                    //if (existingDepartment.DepartmentName == department.DepartmentName) // On ID instead?
+                    if (existingDepartment.Equals(department))
                     {
                         // Will Notify user that department already exists
                     }
                     else
                     {
                         // Update Record
+                        // Kara: Now has a function to do so.
+                        existingDepartment.Update(department);
                     }
                 }
                 else
