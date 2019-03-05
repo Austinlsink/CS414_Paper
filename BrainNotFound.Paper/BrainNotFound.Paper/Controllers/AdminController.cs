@@ -391,10 +391,9 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         // Delete a department
-        [HttpDelete("{Id:long}"), Route("DeleteDepartment")]
+        [HttpDelete("{id:long}"), Route("DeleteDepartment")]
         public IActionResult DeleteDepartment(long id)
         {
-
             var department = _context.Departments.Find(id);
             _context.Departments.Remove(department);
             _context.SaveChanges();
@@ -436,14 +435,24 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("Courses/New")]
         public IActionResult NewCourse()
         {
+            var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
+            ViewBag.departmentList = departments;
+
             return View();
         }
 
         [HttpPost, Route("Courses/New")]
         public IActionResult NewCourse(Course model)
         {
-            if (!ModelState.IsValid)
-                return View();
+            //if (!ModelState.IsValid)
+            //    return View();
+
+            //ViewData["message"] = model.DepartmentId.ToString();
+            //return View("testview");
+
+            var department = _context.Departments.Find(model.DepartmentId);
+            model.DepartmentId = department.DepartmentId;
+            model.DepartmentCode = department.DepartmentCode;
 
             _context.Courses.Add(model);
             _context.SaveChanges();
@@ -456,15 +465,43 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        [HttpGet, Route("Courses/Edit/{CourseCode}")]
-        public IActionResult EditCourse(String CourseCode)
+       [HttpGet, Route("Courses/Edit/{id}")]
+        public IActionResult EditCourse(long Id)
         {
+            var course = _context.Courses.Find(Id);
+            var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
+            ViewBag.course = course;
+            ViewBag.departments = departments;
             return View();
         }
 
-        #endregion course controllers
+        [HttpPost, Route("Courses/Edit/{id}")]
+        public IActionResult EditCourse(Course c)
+        {
 
-        // Why do we have a page that lists all sections?, could that be in the courses page?
+            var course = _context.Courses.Find(c.CourseId);
+            course.CourseCode  = c.CourseCode;
+            course.CourseName  = c.CourseName;
+            course.Description = c.Description;
+            course.CreditHours = c.CreditHours;
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Courses", "Admin");
+        }
+
+        // Delete a Course
+        [HttpDelete("{id:long}"), Route("DeleteCourse")]
+        public IActionResult DeleteCourse(long id)
+        {
+            var course = _context.Courses.Find(id);
+            _context.Courses.Remove(course);
+            _context.SaveChanges();
+
+            return RedirectToAction("Courses", "Admin");
+        }
+
+        #endregion course controllers
 
         #region Section controllers
         [HttpGet, Route("Sections")]
