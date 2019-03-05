@@ -459,13 +459,17 @@ namespace BrainNotFound.Paper.Controllers
             return RedirectToAction("Courses", "Admin");
         }
 
-        [HttpGet, Route("Courses/{CourseCode}")]
-        public IActionResult ViewCourse(String CourseCode)
+        [HttpGet, Route("Courses/{id}")]
+        public IActionResult ViewCourse(long id)
         {
+            var course = _context.Courses.Find(id);
+
+            ViewBag.course = course;
+
             return View();
         }
 
-       [HttpGet, Route("Courses/Edit/{id}")]
+        [HttpGet, Route("Courses/Edit/{id}")]
         public IActionResult EditCourse(long Id)
         {
             var course = _context.Courses.Find(Id);
