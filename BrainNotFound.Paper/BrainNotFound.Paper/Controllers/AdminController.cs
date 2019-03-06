@@ -659,12 +659,35 @@ namespace BrainNotFound.Paper.Controllers
             var section = _context.Sections.Where(s => s.Course.CourseCode == courseCode && s.SectionNumber == sectionNumber).First();
             var course = _context.Courses.Find(section.CourseId);
             var students = await _userManager.GetUsersInRoleAsync("Student");
+            var enrollment = _context.Enrollments.ToList();
 
-            ViewBag.section = section;
-            ViewBag.course = course;
-            ViewBag.students = students;
+            ViewBag.section    = section;
+            ViewBag.course     = course;
+            ViewBag.students   = students;
+            ViewBag.enrollment = enrollment;
             return View();
         }
+
+        // Delete a Course
+        [HttpPost, Route("AssignStudent")]
+        public async Task<IActionResult> AssignStudent(ApplicationUser user, Section section)
+        {
+            var student = await _userManager.FindByNameAsync(user.UserName);
+          
+            Enrollment enroll = new Enrollment();
+            enroll.SectionId = section.SectionId;
+            enroll.StudentId = student.Id;
+
+            _context.Enrollments.Add(enroll);
+            _context.SaveChanges();
+
+
+
+            //ViewData["message"] = student.FirstName + section.SectionId;
+            //return View("TestView");
+            return RedirectToAction("ViewSection", "Admin", new {courseCode = section.Course.CourseCode, sectionNumber = section.SectionNumber });
+        }
+
 
         [HttpGet, Route("Sections/Edit/{CourseCode}/{SectionNumber}")]
         public IActionResult EditSection(String CourseCode, int SectionNumber)

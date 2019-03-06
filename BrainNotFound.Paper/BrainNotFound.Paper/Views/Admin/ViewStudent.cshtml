@@ -100,7 +100,7 @@
                                 }
                                 String day = string.Join(", ", days);
                                 <tr>
-                                    <td>@s.CourseCode @s.CourseName</td>
+                                    <td>@s.Course.CourseCode @s.CourseName</td>
                                     <td>@s.Location</td>
                                     <td>@day</td>
                                     <td> <a asp-controller="Admin" asp-action="ViewSection" asp-route-id="@s.SectionId" class="btn btn-primary btn-xs"> View </a> </td>

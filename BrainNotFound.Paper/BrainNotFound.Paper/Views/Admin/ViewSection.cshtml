@@ -42,51 +42,118 @@
                         <br />
                     </div>
                 </div>
+                <!--Students who are in this section-->
+                <h2>Students enrolled</h2>
                 <div class="x_content">
-                    
-                        <p>Click checkbox to select multiple Students.</p>
-                        <div class="table-responsive">
-                            <table class="table table-striped jambo_table bulk_action ">
-                                <thead>
-                                    <tr class="headings">
-                                        <th>
-                                            <input type="checkbox" id="check-all" class="flat">
-                                        </th>
-                                        <th class="column-title">First Name </th>
-                                        <th class="column-title">Last name </th>
-                                        <th class="column-title no-link last">
-                                            <span class="nobr">Action</span>
-                                        </th>
-                                        <th class="bulk-actions" colspan="7">
-                                            <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-                                        </th>
-                                    </tr>
-                                </thead>
 
-                                <tbody>
+                    <p>Click checkbox to select multiple Students.</p>
+                    <div class="table-responsive">
+                        <table class="table table-striped jambo_table bulk_action ">
+                            <thead>
+                                <tr class="headings">
+                                    <th>
+                                        <input type="checkbox" id="check-all" class="flat">
+                                    </th>
+                                    <th class="column-title">First Name </th>
+                                    <th class="column-title">Last name </th>
+                                    <th class="column-title">Classification </th>
+                                    <th class="column-title no-link last">
+                                        <span class="nobr">Action</span>
+                                    </th>
+                                    <th class="bulk-actions" colspan="7">
+                                        <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                                    </th>
+                                </tr>
+                            </thead>
 
-                                    @foreach (var s in ViewBag.students)
+                            <tbody>
+
+                                @foreach (var s in ViewBag.students)
+                                {
+                                    foreach (var e in ViewBag.enrollment)
                                     {
-                                        <tr class="odd pointer">
-                                            <td class="a-center ">
-                                                <input type="checkbox" class="flat" name="table_records">
-                                            </td>
-                                            <td class=" ">@s.FirstName </td>
-                                            <td class=" ">@s.LastName </td>
-                                            <td class=" last">
-                                                <a asp-controller="Admin" asp-action="ViewStudent" asp-route-UserName="@s.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                                <a asp-controller="Admin" asp-action="EditStudent" asp-route-UserName="@s.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                            </td>
-
-                                        </tr>
+                                        if (s.Id == e.StudentId)
+                                        {
+                                            <tr class="odd pointer">
+                                                <td class="a-center ">
+                                                    <input type="checkbox" class="flat" name="table_records">
+                                                </td>
+                                                <td class=" ">@s.FirstName </td>
+                                                <td class=" ">@s.LastName </td>
+                                                <td class=" ">@s.Classification </td>
+                                                <td class=" last">
+                                                    <a asp-controller="Admin" asp-action="ViewStudent" asp-route-UserName="@s.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                                    <a asp-controller="Admin" asp-action="EditStudent" asp-route-UserName="@s.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                                 </td>
+                                            </tr>
+                                        }
                                     }
+                                }
 
-                                </tbody>
-                            </table>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
 
-                        </div>
-               
+                <!--Students who are NOT in this section-->
+                <h2>Students not enrolled</h2>
+                <div class="x_content">
+                    <p>Click checkbox to select multiple Students.</p>
+                    <div class="table-responsive">
+                        <table class="table table-striped jambo_table bulk_action ">
+                            <thead>
+                                <tr class="headings">
+                                    <th>
+                                        <input type="checkbox" id="check-all" class="flat">
+                                    </th>
+                                    <th class="column-title">First Name </th>
+                                    <th class="column-title">Last name </th>
+                                    <th class="column-title">Classification </th>
+                                    <th class="column-title no-link last">
+                                        <span class="nobr">Action</span>
+                                    </th>
+                                    <th class="bulk-actions" colspan="7">
+                                        <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var s in ViewBag.students)
+                                {
+                                    foreach (var e in ViewBag.enrollment)
+                                    {
+                                        if((s.Id != e.StudentId) && (e.SectionId != ViewBag.sectionSectionId))
+                                        {
+                                            <tr class="odd pointer">
+                                                <td class="a-center ">
+                                                    <input type="checkbox" class="flat" name="table_records">
+                                                </td>
+                                                <td class=" ">@s.FirstName </td>
+                                                <td class=" ">@s.LastName </td>
+                                                <td class=" ">@s.Classification </td>
+                                                <td class=" last">
+                                                    <form asp-controller="Admin" asp-action="AssignStudent">
+                                                        <a asp-controller="Admin" asp-action="ViewStudent" asp-route-UserName="@s.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                                        <a asp-controller="Admin" asp-action="EditStudent" asp-route-UserName="@s.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                                        <input type="hidden" name="UserName" value="@s.UserName" />
+                                                        <input type="hidden" name="SectionId" value="@ViewBag.section.SectionId" />
+                                                        <input type="hidden" name="CourseCode" value="@ViewBag.course.CourseCode" />
+                                                        <button type="submit" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Assign </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+
+
+                    </div>
+
 
                 </div>
 
