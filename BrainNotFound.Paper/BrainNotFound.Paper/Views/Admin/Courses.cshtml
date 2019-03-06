@@ -11,6 +11,7 @@
             <div class="x_panel">
                 <div class="x_title">
                     <h2><i class="fa fa-book"></i> Courses</h2>
+                    <p>@ViewBag.Message</p>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                         <li><a asp-controller="Admin" asp-action="NewCourse"><i class="fa fa-plus"></i> New Course</a></li>
@@ -57,9 +58,13 @@
                                             <td class=" ">@course.CourseName</td>
                                             <td class=" ">@course.CreditHours</td>
                                             <td class=" last">
-                                                <a asp-controller="Admin" asp-action="ViewCourse" asp-route-id="@course.CourseId" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                                <a asp-controller="Admin" asp-action="EditCourse" asp-route-id="@course.CourseId" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                                <a asp-controller="Admin" asp-action="DeleteCourse" asp-route-id="@course.CourseId" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
+                                                <form asp-controller="Admin" asp-action="DeleteCourse">
+                                                    <a asp-controller="Admin" asp-action="ViewCourse" asp-route-id="@course.CourseId" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                                    <a asp-controller="Admin" asp-action="EditCourse" asp-route-id="@course.CourseId" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                                    <input type="hidden" name="CourseId" value="@course.CourseId" />
+                                                    <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
+                                                </form>
+                                               
                                             </td>
                                         </tr>
                                     }

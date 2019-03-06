@@ -526,11 +526,12 @@ namespace BrainNotFound.Paper.Controllers
         #region Course controllers
 
         [HttpGet, Route("Courses")]
-        public IActionResult Courses()
+        public IActionResult Courses(String message = "")
         {
             var courses = _context.Courses.OrderBy(o => o.CourseCode).ToList();
             var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
             ViewBag.departmentList = departments;
+            ViewBag.Message = message;
             return View(courses);
         }
 
@@ -610,13 +611,21 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         // Delete a Course
-        [HttpDelete("{id:long}"), Route("DeleteCourse")]
-        public IActionResult DeleteCourse(long id)
+        [HttpPost, Route("DeleteCourse")]
+        public IActionResult DeleteCourse(Delete deleteCourse)
         {
-            var course = _context.Courses.Find(id);
-            _context.Courses.Remove(course);
-            _context.SaveChanges();
+            var course = _context.Courses.Find(deleteCourse.CourseId);
 
+            if (_context.Sections.Where(ac => ac.CourseId == course.CourseId).Any())
+            {
+                return RedirectToAction("Courses", "Admin", new { message = "Error: Please delete all associated sections before deleting " + course.DepartmentCode });
+            }
+            else
+            {
+                _context.Courses.Remove(course);
+                _context.SaveChanges();
+            }
+            
             return RedirectToAction("Courses", "Admin");
         }
 

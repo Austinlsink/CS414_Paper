@@ -10,5 +10,7 @@ namespace BrainNotFound.Paper.Models.ViewModels
         public long DepartmentId { get; set; }
 
         public String UserName { get; set; }
+
+        public long CourseId { get; set; }
     }
 }
