@@ -1,3 +1,4 @@
+@using BrainNotFound.Paper.Models.BusinessModels
 @model BrainNotFound.Paper.Models.BusinessModels.ApplicationUser;
 @{
     ViewData["Title"] = "View Student - Admin";
@@ -38,7 +39,7 @@
                         </div>
                     </div>
                     <div class="col-md-10 col-sm-10 col-xs-12">
-                        <h3>@ViewBag.profile.FirstName @ViewBag.profile.LastName</h3>
+                        <h3> @ViewBag.profile.FirstName @ViewBag.profile.LastName</h3>
 
                         <ul class="list-unstyled user_data">
                             <li>
@@ -46,14 +47,14 @@
                             </li>
 
                             <li>
-                                <i class="fa fa-at user-profile-icon">@ViewBag.profile.Email</i>
+                                <i class="fa fa-at user-profile-icon"> @ViewBag.profile.Email</i>
                             </li>
 
                             <li>
-                                <i class="fa fa-user user-profile-icon">@ViewBag.profile.UserName</i>
+                                <i class="fa fa-user user-profile-icon"> @ViewBag.profile.UserName</i>
 
                             <li>
-                                <i class="fa fa-phone user-profile-icon">@ViewBag.profile.PhoneNumber</i>
+                                <i class="fa fa-phone user-profile-icon"> @ViewBag.profile.PhoneNumber</i>
                             </li>
 
                         </ul>
@@ -80,20 +81,29 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Code</th>
                                 <th>Name</th>
-                                <th># of Sctions</th>
+                                <th>Location</th>
+                                <th>Day</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var course in ViewBag.courses)
+                            @foreach (var s in ViewBag.sections)
                             {
+                                // Find the meeting times for each section
+                                List<String> days = new List<string>();
+                                List<SectionMeetingTime> sectionMeetingTimes = ViewBag.sectionMeetingTimesList;
+                                var sectionMeetingTime = sectionMeetingTimes.Where(smt => smt.SectionId == s.SectionId).ToList();
+                                foreach (SectionMeetingTime smt in sectionMeetingTime)
+                                {
+                                    days.Add(smt.Day);
+                                }
+                                String day = string.Join(", ", days);
                                 <tr>
-                                    <td>@course.CourseCode</td>
-                                    <td>@course.CourseName</td>
-                                    <td>3</td>
-                                    <td> <a href="#" class="btn btn-primary btn-xs"> View </a> </td>
+                                    <td>@s.CourseCode @s.CourseName</td>
+                                    <td>@s.Location</td>
+                                    <td>@day</td>
+                                    <td> <a asp-controller="Admin" asp-action="ViewSection" asp-route-id="@s.SectionId" class="btn btn-primary btn-xs"> View </a> </td>
                                 </tr>
                             }
 

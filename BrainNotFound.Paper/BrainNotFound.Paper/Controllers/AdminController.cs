@@ -296,16 +296,42 @@ namespace BrainNotFound.Paper.Controllers
 
         #region admin profile controllers
         [HttpGet, Route("Profile")]
-        public IActionResult Profile()
+        public async Task<IActionResult> Profile()
         {
+            var admin = await _userManager.GetUserAsync(HttpContext.User);
+            
+
+            ViewBag.profile = admin;
             return View();
         }
 
         [HttpGet, Route("Profile/Edit")]
-        public IActionResult EditProfile()
+        public async Task<IActionResult> EditProfile()
         {
+            ApplicationUser admin = await _userManager.GetUserAsync(HttpContext.User);
+            ViewBag.admin = admin;
+
             return View();
         }
+
+        [HttpPost, Route("Profile/Edit")]
+        public async Task<IActionResult> EditProfile(ApplicationUser user)
+        {
+            ApplicationUser admin = await _userManager.GetUserAsync(HttpContext.User);
+            admin.Salutation  = user.Salutation;
+            admin.FirstName   = user.FirstName;
+            admin.LastName    = user.LastName;
+            admin.PhoneNumber = user.PhoneNumber;
+            admin.Email       = user.Email;
+            admin.Address     = user.Address;
+            admin.City        = user.City;
+            admin.State       = user.State;
+            admin.ZipCode     = user.ZipCode;
+
+            await _userManager.UpdateAsync(admin);
+            return RedirectToAction("Profile", "Admin");
+        }
+
         #endregion admin profile controllers
 
         #region student controllers 
@@ -367,33 +393,26 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("Students/{UserName}")]
         public async Task<IActionResult> ViewStudent(String username)
         {
-
             var student = await _userManager.FindByNameAsync(username);
+            var enrollment = _context.Enrollments.Where(e => e.StudentId == student.Id).ToList();
+            var allSections = _context.Sections.ToList();
+            var allMeetingTimes = _context.SectionMeetingTimes.ToList();
+            List<Section> sections = new List<Section>();
 
-            List<Course> courses = new List<Course>()
+            foreach(Enrollment e in enrollment)
             {
-                new Course()
+                foreach(Section s in allSections)
                 {
-                    CourseCode = "CS 306",
-                    CourseName = "Database II",
-                    CourseId = 1
-                },
-                new Course()
-                {
-                    CourseCode = "BI 101",
-                    CourseName = "Old Testament Survey",
-                    CourseId = 2
-                },
-                new Course()
-                {
-                    CourseCode = "EN 126",
-                    CourseName = "English Grammar and Composition",
-                    CourseId = 3
+                    if (e.SectionId == s.SectionId)
+                    {
+                        sections.Add(s);
+                    }
                 }
-            };
+            }
 
-            ViewBag.courses = courses;
             ViewBag.profile = student;
+            ViewBag.sections = sections;
+            ViewBag.sectionMeetingTimesList = allMeetingTimes;
 
             return View();
         }
