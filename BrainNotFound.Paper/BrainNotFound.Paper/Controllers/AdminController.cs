@@ -21,13 +21,13 @@ namespace BrainNotFound.Paper.Controllers
     [Route("Admin")]
     public class AdminController : Controller
     {
-        private readonly UserManager<Models.BusinessModels.ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly PaperDbContext _context;
 
         #region admin controllers
         // Constructor
         public AdminController(
-            UserManager<Models.BusinessModels.ApplicationUser> userManager, PaperDbContext context)
+            UserManager<ApplicationUser> userManager, PaperDbContext context)
         {
             _userManager = userManager;
             _context = context;
@@ -523,16 +523,16 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         [HttpPost, Route("Courses/New")]
-        public IActionResult NewCourse(Course model)
+        public IActionResult NewCourse(Course course)
         {
             if (!ModelState.IsValid)
                 return View();
 
-            var department = _context.Departments.Find(model.DepartmentId);
-            model.DepartmentId = department.DepartmentId;
-            model.DepartmentCode = department.DepartmentCode;
+            Department department = _context.Departments.Find(course.DepartmentId);
+            course.Department = department;
 
-            _context.Courses.Add(model);
+
+            _context.Courses.Add(course);
             _context.SaveChanges();
             return RedirectToAction("Courses", "Admin");
         }
