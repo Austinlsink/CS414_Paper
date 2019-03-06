@@ -121,11 +121,11 @@
 
                             <tbody>
 
-                                @foreach (var s in ViewBag.students)
+                                @foreach (var e in ViewBag.enrollment)
                                 {
-                                    foreach (var e in ViewBag.enrollment)
+                                    foreach (var s in ViewBag.students)
                                     {
-                                        if((s.Id != e.StudentId) && (e.SectionId != ViewBag.sectionSectionId))
+                                        if((s.Id != e.StudentId) && (e.SectionId != ViewBag.section.SectionId))
                                         {
                                             <tr class="odd pointer">
                                                 <td class="a-center ">
