@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BrainNotFound.Paper.Models.ViewModels
 {
-    public class DeleteDepartment
+    public class Delete
     {
         public long DepartmentId { get; set; }
 

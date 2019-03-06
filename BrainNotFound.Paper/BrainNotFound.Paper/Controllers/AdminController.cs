@@ -325,11 +325,11 @@ namespace BrainNotFound.Paper.Controllers
         ///<summary>
         /// Finds a specified instructor and deletes him from the _userManager - It does work!
         ///</summary>
-        ///<param name="UserName">Selected instructor's email</param>
+        ///<param name="user">Selected instructor's email</param>
         [HttpPost, Route("DeleteInstructor")]
-        public async Task<IActionResult> DeleteInstructor(DeleteDepartment user)
+        public async Task<IActionResult> DeleteInstructor(Delete deleteUser)
         {
-            var instructor = await _userManager.FindByNameAsync(user.UserName);
+            var instructor = await _userManager.FindByNameAsync(deleteUser.UserName);
             if(_context.Sections.Where(s => s.InstructorId == instructor.Id).Any())
             {
                 return RedirectToAction("Instructors", "Admin", new { message = "Error: Please delete all associated sections before deleting " + instructor.FirstName + " " + instructor.LastName });
@@ -515,7 +515,7 @@ namespace BrainNotFound.Paper.Controllers
 
         // Delete a department
         [HttpPost, Route("DeleteDepartment")]
-        public IActionResult DeleteDepartment(DeleteDepartment deleteDepartment)
+        public IActionResult DeleteDepartment(Delete deleteDepartment)
         {
             var department = _context.Departments.Find(deleteDepartment.DepartmentId);
 
