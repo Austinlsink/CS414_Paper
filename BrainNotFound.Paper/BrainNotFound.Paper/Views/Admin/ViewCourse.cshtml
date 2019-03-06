@@ -67,6 +67,7 @@
                                                 <th>Location</th>
                                                 <th>Capcity</th>
                                                 <th>Day</th>
+                                                <th class="column-title no-link last"><span class="nobr">Actions</span>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -82,20 +83,22 @@
                                                 List<String> days = new List<string>();
                                                 List<SectionMeetingTime> sectionMeetingTimes = ViewBag.sectionMeetingTimeList;
                                                 var sectionMeetingTime = sectionMeetingTimes.Where(smt => smt.SectionId == s.SectionId).ToList();
-                                                foreach(SectionMeetingTime smt in sectionMeetingTime)
+                                                foreach (SectionMeetingTime smt in sectionMeetingTime)
                                                 {
                                                     days.Add(smt.Day);
                                                 }
                                                 String day = string.Join(", ", days);
 
-                                            <tr>
-                                                <td>@s.SectionNumber</td>
-                                                <td>@instructorName</td>
-                                                <td>@s.Location</td>
-                                                <td>@s.Capacity</td>
-                                                <td>@day</td>
-                                               
-                                            </tr>
+                                                <tr>
+                                                    <td>@s.SectionNumber</td>
+                                                    <td>@instructorName</td>
+                                                    <td>@s.Location</td>
+                                                    <td>@s.Capacity</td>
+                                                    <td>@day</td>
+                                                    <td>
+                                                        <a asp-controller="Admin" asp-action="ViewSection" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                                    </td>
+                                                </tr>
                                             }
 
                                         </tbody>

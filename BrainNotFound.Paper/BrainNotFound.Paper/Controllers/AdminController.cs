@@ -644,8 +644,14 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        [HttpGet, Route("Sections/{CourseCode}/{SectionNumber}")]
-        public IActionResult ViewSection(String CourseCode, int SectionNumber)
+        //[HttpGet, Route("Sections/{CourseCode}/{SectionNumber}")]
+        //public IActionResult ViewSection(String CourseCode, int SectionNumber)
+        //{
+        //    return View();
+        //}
+
+        [HttpGet, Route("Sections/View")]
+        public IActionResult ViewSection()
         {
             return View();
         }
