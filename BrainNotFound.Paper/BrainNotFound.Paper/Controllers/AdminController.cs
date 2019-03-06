@@ -150,7 +150,7 @@ namespace BrainNotFound.Paper.Controllers
         /// Finds a specified instructor and deletes him from the _userManager - It does work!
         ///</summary>
         ///<param name="UserName">Selected instructor's email</param>
-        [HttpDelete("{UserName}"), Route("DeleteAdministrator")]
+        [HttpPost, Route("DeleteAdministrator")]
         public async Task<IActionResult> DeleteAdministrator(String UserName)
         {
             var admin = await _userManager.FindByNameAsync(UserName);
@@ -223,68 +223,18 @@ namespace BrainNotFound.Paper.Controllers
 
             var instructor = await _userManager.FindByNameAsync(username);
 
-            List<Course> courses = new List<Course>()
+            List<Section> sections = _context.Sections.Where(s => s.InstructorId == instructor.Id).ToList();
+            List<Course> allCourses = _context.Courses.ToList();
+            List<Course> courses = new List<Course>();
+            foreach(Section s in sections)
             {
-                new Course()
+               foreach(Course c in allCourses)
                 {
-                    CourseCode = "CS 306",
-                    CourseName = "Database II",
-                    CourseId = 1
-                },
-                new Course()
-                {
-                    CourseCode = "BI 101",
-                    CourseName = "Old Testament Survey",
-                    CourseId = 2
-                },
-                new Course()
-                {
-                    CourseCode = "EN 126",
-                    CourseName = "English Grammar and Composition",
-                    CourseId = 3
+                    if (s.CourseId == c.CourseId)
+                        if (!courses.Contains(c))
+                            courses.Add(c);
                 }
-            };
-
-            List<Section> sections = new List<Section>()
-            {
-                new Section()
-                {
-                    CourseId = 1,
-                    Capacity = 12,
-                    SectionNumber = 1
-                },
-                new Section()
-                {
-                    CourseId = 1,
-                    Capacity = 15,
-                    SectionNumber = 2
-                },
-                new Section()
-                {
-                    CourseId = 2,
-                    Capacity = 30,
-                    SectionNumber = 1
-                },
-                new Section()
-                {
-                    CourseId = 2,
-                    Capacity = 33,
-                    SectionNumber = 2
-                },
-                new Section()
-                {
-                    CourseId = 2,
-                    Capacity = 45,
-                    SectionNumber = 3
-                },
-                new Section()
-                {
-                    CourseId = 3,
-                    Capacity = 32,
-                    SectionNumber = 1
-                }
-
-            };
+            }
 
             ViewBag.courses = courses;
             ViewBag.sections = sections;
@@ -551,7 +501,6 @@ namespace BrainNotFound.Paper.Controllers
             return RedirectToAction("Departments", "Admin");
         }
         #endregion Department controllers
-
 
         #region Course controllers
 
