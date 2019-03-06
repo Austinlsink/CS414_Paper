@@ -655,7 +655,7 @@ namespace BrainNotFound.Paper.Controllers
         {
             //ViewData["message"] = courseCode + "\n" + sectionNumber.ToString();
             //return View("TestView");
-
+          
             var section = _context.Sections.Where(s => s.Course.CourseCode == courseCode && s.SectionNumber == sectionNumber).First();
             var course = _context.Courses.Find(section.CourseId);
             var students = await _userManager.GetUsersInRoleAsync("Student");
@@ -670,10 +670,13 @@ namespace BrainNotFound.Paper.Controllers
 
         // Delete a Course
         [HttpPost, Route("AssignStudent")]
-        public async Task<IActionResult> AssignStudent(ApplicationUser user, Section section)
+        public async Task<IActionResult> AssignStudent(ApplicationUser user, Section section, Course course)
         {
             var student = await _userManager.FindByNameAsync(user.UserName);
-          
+
+            ViewData["message"] = "Student First Name:" + student.FirstName + "\nSectionID: " + section.SectionId + "\nCourseCode: " + section.Course.CourseCode.ToString() + "\nCourseName: " + course.CourseName;
+            return View("TestView");
+
             Enrollment enroll = new Enrollment();
             enroll.SectionId = section.SectionId;
             enroll.StudentId = student.Id;
@@ -683,9 +686,8 @@ namespace BrainNotFound.Paper.Controllers
 
 
 
-            //ViewData["message"] = student.FirstName + section.SectionId;
-            //return View("TestView");
-            return RedirectToAction("ViewSection", "Admin", new {courseCode = section.Course.CourseCode, sectionNumber = section.SectionNumber });
+           
+            return RedirectToAction("ViewSection", "Admin", new {courseCode = course.CourseCode, sectionNumber = section.SectionNumber });
         }
 
 
