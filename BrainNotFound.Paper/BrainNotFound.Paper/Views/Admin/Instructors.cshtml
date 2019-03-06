@@ -10,6 +10,7 @@
         <div class="x_panel">
             <div class="x_title">
                 <h2><i class="fa fa-users"></i> Instructors</h2>
+                <p>@ViewBag.Message</p>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                     <li><a asp-controller="Admin" asp-action="NewInstructor"><i class="fa fa-plus"></i> New Instructor</a></li>
@@ -54,7 +55,10 @@
                                     <td>
                                         <a asp-controller="Admin" asp-action="ViewInstructor" asp-route-UserName="@instructor.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                         <a asp-controller="Admin" asp-action="EditInstructor" asp-route-UserName="@instructor.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                        <a asp-controller="Admin" asp-action="DeleteInstructor" asp-route-UserName="@instructor.UserName" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
+                                        <form asp-action="DeleteInstructor" asp-controller="Admin">
+                                            <input type="hidden" name="UserName" value="@instructor.UserName" />
+                                            <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
+                                        </form>
                                     </td>
                                 </tr>
                             }

@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Identity;
 using BrainNotFound.Paper.Models.BusinessModels;
 using BrainNotFound.Paper;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
+using Microsoft.AspNetCore.Http;
+using BrainNotFound.Paper.Models.ViewModels;
 
 //TODO There is a lot to do
 
@@ -160,10 +162,10 @@ namespace BrainNotFound.Paper.Controllers
 
         #region create instructor controllers
         [HttpGet, Route("Instructors")]
-        public async Task<IActionResult> Instructors()
+        public async Task<IActionResult> Instructors(String message = "")
         {
             var allInstructors = (await _userManager.GetUsersInRoleAsync("Instructor")).OrderBy(o => o.FirstName).ToList();
-
+            ViewBag.Message = message;
             return View(allInstructors);
         }
 
@@ -324,14 +326,22 @@ namespace BrainNotFound.Paper.Controllers
         /// Finds a specified instructor and deletes him from the _userManager - It does work!
         ///</summary>
         ///<param name="UserName">Selected instructor's email</param>
-        [HttpDelete("{UserName}"), Route("DeleteInstructor")]
-        public async Task<IActionResult> DeleteInstructor(String UserName)
+        [HttpPost, Route("DeleteInstructor")]
+        public async Task<IActionResult> DeleteInstructor(DeleteDepartment user)
         {
-            var instructor = await _userManager.FindByNameAsync(UserName);
-            await _userManager.DeleteAsync(instructor);
+            var instructor = await _userManager.FindByNameAsync(user.UserName);
+            if(_context.Sections.Where(s => s.InstructorId == instructor.Id).Any())
+            {
+                return RedirectToAction("Instructors", "Admin", new { message = "Error: Please delete all associated sections before deleting " + instructor.FirstName + " " + instructor.LastName });
+            }
+            else
+            {
+                await _userManager.DeleteAsync(instructor);
+            }
 
             return RedirectToAction("Instructors", "Admin");
         }
+
         #endregion instructor controllers
 
         #region admin profile controllers
@@ -494,32 +504,30 @@ namespace BrainNotFound.Paper.Controllers
 
         // Display the list of departments
         [HttpGet, Route("Departments")]
-        public IActionResult Departments()
+        public IActionResult Departments(string message = "")
         {
             var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
             var courses = _context.Courses.ToList();
             ViewBag.courses = courses;
+            ViewBag.Message = message;
             return View(departments);
         }
 
         // Delete a department
-        [HttpDelete("{id:long}"), Route("DeleteDepartment")]
-        public IActionResult DeleteDepartment(long id)
+        [HttpPost, Route("DeleteDepartment")]
+        public IActionResult DeleteDepartment(DeleteDepartment deleteDepartment)
         {
-            var department = _context.Departments.Find(id);
+            var department = _context.Departments.Find(deleteDepartment.DepartmentId);
 
             if (_context.Courses.Where(ac => ac.DepartmentId == department.DepartmentId).Any())
             {
-                ModelState.AddModelError("Error", "Please delete all associated courses before deleting the department");
-                ViewData["message"] = "Please delete all associated courses before deleting the departmentt";
-                return View("TestView");
+               return RedirectToAction("Departments", "Admin", new { message = "Error: Please delete all associated courses before deleting " + department.DepartmentCode + " " + department.DepartmentName });
             }
             else
             {
                 _context.Departments.Remove(department);
                 _context.SaveChanges();
             }
-
             return RedirectToAction("Departments", "Admin");
         }
 
