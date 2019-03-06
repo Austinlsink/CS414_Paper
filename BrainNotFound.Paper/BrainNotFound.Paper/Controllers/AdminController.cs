@@ -73,8 +73,9 @@ namespace BrainNotFound.Paper.Controllers
             }
 
             model.UserName = model.FirstName + model.LastName;
+            var admin = await _userManager.FindByIdAsync(model.Id);
 
-            if (await _userManager.FindByNameAsync(model.UserName) == null)
+            if ( admin == null)
             {
                 //Create a new Application User
                 var result = await _userManager.CreateAsync(model, model.Password);
@@ -93,15 +94,16 @@ namespace BrainNotFound.Paper.Controllers
                 {
                     foreach (var error in result.Errors)
                     {
-                        ViewData["Message"] += error.Description;
+                        ViewBag.UserError += error.Description;
                     }
                 }
             }
             else
             {
                 ViewBag.UserError = "That user already exists.";
+                ViewData["Message"] = admin.Id.ToString();
+                return View("TestView");
             }
-
             ViewData["message"] += model.Email;
             return View(model);
         }
