@@ -650,9 +650,19 @@ namespace BrainNotFound.Paper.Controllers
         //    return View();
         //}
 
-        [HttpGet, Route("Sections/View")]
-        public IActionResult ViewSection()
+        [HttpGet, Route("Sections/View/{CourseCode}/{sectionNumber}")]
+        public async Task<IActionResult> ViewSection(string courseCode, int sectionNumber)
         {
+            //ViewData["message"] = courseCode + "\n" + sectionNumber.ToString();
+            //return View("TestView");
+
+            var section = _context.Sections.Where(s => s.Course.CourseCode == courseCode && s.SectionNumber == sectionNumber).First();
+            var course = _context.Courses.Find(section.CourseId);
+            var students = await _userManager.GetUsersInRoleAsync("Student");
+
+            ViewBag.section = section;
+            ViewBag.course = course;
+            ViewBag.students = students;
             return View();
         }
 

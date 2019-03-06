@@ -96,7 +96,7 @@
                                                     <td>@s.Capacity</td>
                                                     <td>@day</td>
                                                     <td>
-                                                        <a asp-controller="Admin" asp-action="ViewSection" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                                        <a asp-controller="Admin" asp-action="ViewSection" asp-route-CourseCode="@ViewBag.course.CourseCode" asp-route-SectionNumber="@s.SectionNumber" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                                     </td>
                                                 </tr>
                                             }
