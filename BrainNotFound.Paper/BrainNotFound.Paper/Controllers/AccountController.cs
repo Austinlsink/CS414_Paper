@@ -61,6 +61,11 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         [Route("/")]
+        public IActionResult ForceLogin()
+        {
+            return View("LoginOptions");
+        }
+
         public async Task<IActionResult> ForceAdminLogin()
         {
             var result = await _signInManager.PasswordSignInAsync("AbmaelSilva", "PaperBrain2019!", false, false);
@@ -72,7 +77,7 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        //[Route("/")]
+        
         public async Task<IActionResult> ForceInstructorLogin()
         {
             var result = await _signInManager.PasswordSignInAsync("MikeRedhead", "redHeadMagic", false, false);
@@ -80,6 +85,18 @@ namespace BrainNotFound.Paper.Controllers
             if (result.Succeeded)
             {
                 return RedirectToAction("Index", "Instructor");
+            }
+
+            return View();
+        }
+
+        public async Task<IActionResult> ForceStudentLogin()
+        {
+            var result = await _signInManager.PasswordSignInAsync("MikeRedhead", "redHeadMagic", false, false);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", "Student");
             }
 
             return View();
