@@ -22,7 +22,7 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 		public Course Course {get; set;}
 		public string InstructorId {get; set;} // ID of instructor who wrote the test
         [ForeignKey("InstructorId")]
-        public ApplicationUser ApplicationUser {get; set;}
+        public ApplicationUser applicationUser {get; set;}
 		public List<StudentTestAssignment> StudentTestAssignments { get; set; }
 	}
 }

@@ -10,13 +10,13 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         [Key] // Primary key
         public long DepartmentId { get; set; }
 
-        [Required]
-        [StringLength(25, MinimumLength = 1, ErrorMessage ="Please enter a Department name.")]
+        [Required(ErrorMessage ="Please Enter a Department name.")]
+        [StringLength(25, MinimumLength = 1, ErrorMessage ="Please enter a Department name (1-25 characters).")]
         public string DepartmentName { get; set; }
         public List<Course> Courses { get; set; }
         public List<FieldOfStudy> FieldsOfStudy { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Please Enter a Department code.")]
         [StringLength(2, MinimumLength = 2, ErrorMessage = "Department code must contain 2 characters")]
         public string DepartmentCode { get; set; }
 
