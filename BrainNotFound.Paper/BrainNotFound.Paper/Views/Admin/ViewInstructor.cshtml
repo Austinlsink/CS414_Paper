@@ -147,15 +147,17 @@
                                                 <tbody>
                                                     @foreach (var s in ViewBag.sections)
                                                     {
-                                                        @if (s.CourseId == course.CourseId)
+                                                        foreach (var d in ViewBag.departments)
                                                         {
+                                                            if (course.DepartmentId == d.DepartmentId)
+                                                            {
                                                             <tr>
                                                                 <th>@s.SectionNumber</th>
                                                                 <td>@s.Capacity</td>
-                                                                <td> <a asp-controller="Admin" asp-action="ViewSection" asp-route-CourseId="@course.CourseId" asp-route-SectionId="@s.SectionId" class="btn btn-primary btn-xs">View </a> </td>
+                                                                <td> <a asp-controller="Admin" asp-action="ViewSection" asp-route-code="@d.DepartmentCode@course.CourseCode" asp-route-sectionNumber="@s.SectionNumber" class="btn btn-primary btn-xs">View </a> </td>
                                                             </tr>
+                                                            }
                                                         }
-
                                                     }
                                                 </tbody>
                                             </table>

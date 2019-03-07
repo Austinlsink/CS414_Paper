@@ -576,14 +576,17 @@ namespace BrainNotFound.Paper.Controllers
             return RedirectToAction("Courses", "Admin");
         }
 
+        /// <summary>
+        /// Allows the user to view a specific course and all of its information
+        /// </summary>
+        /// <param name="code">The DepartmentCode and CourseCode</param>
+        /// <returns></returns>
         [HttpGet, Route("Courses/{code}")] // ex: SP101
         public async Task<IActionResult> ViewCourse(string code)
         {
+            // Parsing code into the DepartmentCode and the CourseCode
             string departmentCode = code.Substring(0, 2);
             string courseCode = code.Substring(2, 3);
-
-            //ViewData["message"] = departmentCode + courseCode;
-            //return View("TestView");
 
             // Find the department and add it to the ViewBag
             var department = _context.Departments.Where(d => d.DepartmentCode == departmentCode).First();

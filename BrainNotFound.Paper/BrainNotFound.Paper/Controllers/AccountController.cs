@@ -68,7 +68,7 @@ namespace BrainNotFound.Paper.Controllers
 
         public async Task<IActionResult> ForceAdminLogin()
         {
-            var result = await _signInManager.PasswordSignInAsync("AbmaelSilva", "PaperBrain2019!", false, false);
+            var result = await _signInManager.PasswordSignInAsync("AbmaelFernandesDaSilva", "admini", false, false);
 
             if (result.Succeeded)
             {
