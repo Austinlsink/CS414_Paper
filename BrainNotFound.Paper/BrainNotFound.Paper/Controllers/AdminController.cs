@@ -655,11 +655,13 @@ namespace BrainNotFound.Paper.Controllers
             var course = _context.Courses.Find(section.CourseId);
             var students = await _userManager.GetUsersInRoleAsync("Student");
             var enrollment = _context.Enrollments.ToList();
+            var sectionMeetingTimeList = _context.SectionMeetingTimes.ToList();
 
             ViewBag.section    = section;
             ViewBag.course     = course;
             ViewBag.students   = students;
             ViewBag.enrollment = enrollment;
+            ViewBag.sectionMeetingTimeList = sectionMeetingTimeList;
             return View();
         }
 

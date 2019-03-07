@@ -39,7 +39,28 @@
                                 <b> Location:</b> @ViewBag.section.Location
                             </li>
                             <li>
-                                
+                                @{ 
+                                    // Find the meeting times for each section
+                                    List<String> days = new List<string>();
+                                    List<SectionMeetingTime> sectionMeetingTimes = ViewBag.sectionMeetingTimeList;
+                                    DateTime startTime = new DateTime();
+                                    DateTime endTime   = new DateTime();
+                                    var sectionMeetingTime = sectionMeetingTimes.Where(smt => smt.SectionId == ViewBag.section.SectionId).ToList();
+                                    foreach (SectionMeetingTime smt in sectionMeetingTime)
+                                    {
+                                        days.Add(smt.Day);
+                                        startTime = smt.StartTime;
+                                        endTime = smt.EndTime;
+                                    }
+                                    String day = string.Join(", ", days);
+                                }
+                                <b>Days Meeting: </b> @day
+                            </li>
+                            <li>
+                                <b>Start Time: </b> @startTime.ToString("h:mm tt")
+                            </li>
+                            <li>
+                                <b>End Time:</b> @endTime.ToString("h:mm tt")
                             </li>
                         </ul>
                         <br />
