@@ -644,18 +644,9 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        //[HttpGet, Route("Sections/{CourseCode}/{SectionNumber}")]
-        //public IActionResult ViewSection(String CourseCode, int SectionNumber)
-        //{
-        //    return View();
-        //}
-
         [HttpGet, Route("Sections/View/{CourseId}/{SectionId}")]
         public async Task<IActionResult> ViewSection(long courseId, long sectionId)
         {
-            //ViewData["message"] = courseCode + "\n" + sectionNumber.ToString();
-            //return View("TestView");
-          
             var section = _context.Sections.Where(s => s.CourseId == courseId && s.SectionId == sectionId).First();
             var course = _context.Courses.Find(section.CourseId);
             var students = await _userManager.GetUsersInRoleAsync("Student");
@@ -674,9 +665,6 @@ namespace BrainNotFound.Paper.Controllers
         {
             var student = await _userManager.FindByNameAsync(user.UserName);
 
-            //ViewData["message"] = "Student First Name: " + student.FirstName + "StudentId: " + student.Id + "\nSectionID: " + section.SectionId + "\nCourseId: " + course.CourseId + "CourseCode " + course.CourseCode;
-            //return View("TestView");
-
             Enrollment enroll = new Enrollment();
             enroll.SectionId = section.SectionId;
             enroll.StudentId = student.Id;
@@ -688,7 +676,7 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         [HttpPost, Route("UnassignStudent")]
-        public IActionResult UnassignStudent()
+        public IActionResult UnassignStudent(ApplicationException user)
         {
             return View();
         }

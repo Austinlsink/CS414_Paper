@@ -88,7 +88,7 @@
                                                 </td>
                                             </tr>
                                         }
-                                    }
+                                }
                                 }
 
                             </tbody>
@@ -121,13 +121,13 @@
                             </thead>
 
                             <tbody>
-
-                                @foreach (var e in ViewBag.enrollment)
+                                @{ 
+                                    IEnumerable<Enrollment> enrolled = ViewBag.enrollment;
+                                }
+                                @foreach (var s in ViewBag.students)
                                 {
-                                    foreach (var s in ViewBag.students)
-                                    {
-                                        if(s.Id != e.StudentId)
-                                        { 
+                                        if (!(enrolled.Any(x => x.StudentId == s.Id) && enrolled.Any(x => x.SectionId == ViewBag.section.SectionId)))
+                                        {
                                                 <tr class="odd pointer">
                                                     <td class="a-center ">
                                                         <input type="checkbox" class="flat" name="table_records">
@@ -147,9 +147,8 @@
                                                         </form>
                                                     </td>
                                                 </tr>
-                                            
+
                                         }
-                                    }
                                 }
                             </tbody>
                         </table>
