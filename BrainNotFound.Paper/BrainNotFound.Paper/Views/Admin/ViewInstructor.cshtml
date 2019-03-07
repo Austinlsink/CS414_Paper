@@ -87,14 +87,20 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var course in ViewBag.courses)
+                            @foreach (var department in ViewBag.departments)
                             {
-                                <tr>
-                                    <td>@course.CourseCode</td>
-                                    <td>@course.CourseName</td>
-                                    <td>3</td>
-                                    <td> <a asp-controller="Admin" asp-action="ViewCourse" asp-route-id="@course.CourseId" class="btn btn-primary btn-xs"> View </a> </td>
-                                </tr>
+                                foreach (var course in ViewBag.courses)
+                                {
+                                    if (department.DepartmentId == course.DepartmentId)
+                                    {
+                                        <tr>
+                                            <td>@course.CourseCode</td>
+                                            <td>@course.CourseName</td>
+                                            <td>3</td>
+                                            <td> <a asp-controller="Admin" asp-action="ViewCourse" asp-route-code="@department.DepartmentCode@course.CourseCode" class="btn btn-primary btn-xs"> View </a> </td>
+                                        </tr>
+                                    }
+                                }
                             }
 
                         </tbody>
