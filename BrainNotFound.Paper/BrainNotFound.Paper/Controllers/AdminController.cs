@@ -563,23 +563,22 @@ namespace BrainNotFound.Paper.Controllers
             return RedirectToAction("Courses", "Admin");
         }
 
-        [HttpGet, Route("Courses/{code}")]
+        [HttpGet, Route("Courses/{code}")] // ex: SP101
         public async Task<IActionResult> ViewCourse(string code)
         {
             string departmentCode = code.Substring(0, 2);
             string courseCode = code.Substring(2, 3);
-            //ViewData["message"] = "Hello" + departmentCode + courseCode + "world";
+
+            //ViewData["message"] = departmentCode + courseCode;
             //return View("TestView");
 
-            // Find the list of departments and add it to the ViewBag
+            // Find the department and add it to the ViewBag
             var department = _context.Departments.Where(d => d.DepartmentCode == departmentCode).First();
             ViewBag.department = department;
 
-
             // Find the specified course and add it to the ViewBag
-            var course = _context.Courses.Where(c => c.DepartmentId == department.DepartmentId).First();
+            var course = _context.Courses.Where(c => c.CourseCode == courseCode).First();
             ViewBag.course = course;
-
 
             // Find the sections with the same ID as the course and add it to the ViewBag
             var sections = _context.Sections.Where(s => s.CourseId == course.CourseId);
@@ -655,11 +654,18 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        [HttpGet, Route("Sections/View/{CourseId}/{SectionId}")]
-        public async Task<IActionResult> ViewSection(long courseId, long sectionId)
+        [HttpGet, Route("Sections/View/{code}/{sectionNumber}")]
+        public async Task<IActionResult> ViewSection(string code, int sectionNumber)
         {
-            var section = _context.Sections.Where(s => s.CourseId == courseId && s.SectionId == sectionId).First();
-            var course = _context.Courses.Find(section.CourseId);
+            string departmentCode = code.Substring(0, 2);
+            string courseCode = code.Substring(2, 3);
+            
+            // Find the section's course and add it to the ViewBag 
+            var course = _context.Courses.Where(c => c.CourseCode == courseCode).First();
+
+            // Find the section and its information and add it to the ViewBag
+            var section = _context.Sections.Where(s => s.CourseId == course.CourseId && s.SectionNumber == sectionNumber).First();
+            
             var students = await _userManager.GetUsersInRoleAsync("Student");
             var enrollment = _context.Enrollments.ToList();
             var sectionMeetingTimeList = _context.SectionMeetingTimes.ToList();
