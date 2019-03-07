@@ -39,14 +39,13 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         {
             IEnumerable<Course> courses;
 
-            using (var reader = new StreamReader(CsvFilePath))
-            using (var csv = new CsvReader(reader))
-            {
-                csv.Configuration.HeaderValidated = null;
-                csv.Configuration.MissingFieldFound = null;
+            var reader = new StreamReader(CsvFilePath);
+            var csv = new CsvReader(reader);
+            
+            csv.Configuration.HeaderValidated = null;
+            csv.Configuration.MissingFieldFound = null;
 
-                courses = csv.GetRecords<Course>();
-            }
+            courses = csv.GetRecords<Course>();
 
             return courses;
         }

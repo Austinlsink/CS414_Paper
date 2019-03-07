@@ -1,0 +1,73 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <!-- Bootstrap -->
+    <link href="~/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <h1>Data Base Manipulations</h1>
+            <code class="danger">@ViewData["Errors"]</code>
+            <table class="table col-md-6">
+                <thead>
+                    <tr>
+                        <th>Table Name</th>
+                        <th>Insert</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>Roles</th>
+                        <td><a asp-action="AddRoles" asp-controller="Data" class="button">Insert</a></td>
+                        <td><a asp-action="RemoveRoles" asp-controller="Data" class="button">Remove</a></td>
+                    </tr>
+                    <tr>
+                        <th>Administrators</th>
+                        <td><a asp-action="AddAdministrators" asp-controller="Data" class="button">Insert</a></td>
+                        <td><a asp-action="RemoveAdministrators" asp-controller="Data" class="button">Remove</a></td>
+                    </tr>
+                    <tr>
+                        <th>Instructors</th>
+                        <td><a asp-action="AddInstructors" asp-controller="Data" class="button">Insert</a></td>
+                        <td><a asp-action="RemoveInstructors" asp-controller="Data" class="button">Remove</a></td>
+                    </tr>
+                    <tr>
+                        <th>Students</th>
+                        <td><a asp-action="AddStudents" asp-controller="Data" class="button">Insert</a></td>
+                        <td><a asp-action="RemoveStudents" asp-controller="Data" class="button">Remove</a></td>
+                    </tr>
+                    <tr></tr>
+                    <tr>
+                        <th>Departments</th>
+                        <td><a asp-action="AddDepartments" asp-controller="Data" class="button">Insert</a></td>
+                        <td><a asp-action="RemoveDepartments" asp-controller="Data" class="button">Remove</a></td>
+                    </tr>
+                    <tr>
+                        <th>Courses</th>
+                        <td><a asp-action="AddCourses" asp-controller="Data" class="button">Insert</a></td>
+                        <td><a asp-action="RemoveCourses" asp-controller="Data" class="button">Remove</a></td>
+                    </tr>
+                    <tr>
+                        <th>Sections</th>
+                        <td><a asp-action="AddSections" asp-controller="Data" class="button">Insert</a></td>
+                        <td><a asp-action="RemoveSections" asp-controller="Data" class="button">Remove</a></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="clearfix"></div>
+            <a asp-action="ForceLogin" asp-controller="Account">Force Login</a>
+        </div>
+    </div>
+    
+</body>
+</html>

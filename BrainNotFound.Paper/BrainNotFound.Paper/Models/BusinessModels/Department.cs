@@ -24,17 +24,18 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         {
             IEnumerable<Department> departments;
 
-            using (var reader = new StreamReader(CsvFilePath))
-            using (var csv = new CsvReader(reader))
-            {
-                csv.Configuration.HeaderValidated = null;
-                csv.Configuration.MissingFieldFound = null;
+            var reader = new StreamReader(CsvFilePath);
+            var csv = new CsvReader(reader);
+            
+            csv.Configuration.HeaderValidated = null;
+            csv.Configuration.MissingFieldFound = null;
 
-                departments = csv.GetRecords<Department>();
-            }
-
+            departments = csv.GetRecords<Department>();
+            
             return departments;
         }
+
+
 
         public bool Equals(Department inputDepartment)
         {
@@ -42,6 +43,9 @@ namespace BrainNotFound.Paper.Models.BusinessModels
                 && DepartmentName == inputDepartment.DepartmentName
                 && DepartmentCode == inputDepartment.DepartmentName;
         }
+
+
+
 
         // Alternatively...
         //public bool Equals(Department inputDepartment)

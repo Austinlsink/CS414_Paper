@@ -40,7 +40,7 @@ namespace BrainNotFound.Paper
             //options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTestKara"),             // VisualStudios MSSql Server For Kara to BLOW UP!
             //options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTestLocal"),             // VisualStudios MSSql Server
             options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTest"),                  // PCC Server
-            // options.UseMySql(Configuration.GetConnectionString("PaperBrainTestMySql"),                // Brazil Server
+            //options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTestBima"),                // Bima Pc Server
             optionsBuilders => optionsBuilders.MigrationsAssembly("BrainNotFound.Paper"));
             });
 
@@ -85,7 +85,7 @@ namespace BrainNotFound.Paper
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Account}/{action=ForceLogin}/{id?}");
+                    template: "{controller=Data}/{action=Index}/{id?}");
             });
         }
     }
