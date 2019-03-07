@@ -9,7 +9,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2><i class="fa fa-user"></i>Course Information</h2>
+                    <h2><i class="fa fa-book"></i> Course Information</h2>
                     <ul class="nav navbar-right panel_toolbox">
 
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
@@ -47,67 +47,68 @@
                         </ul>
                         <br />
 
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
-                                <div class="x_title">
-                                    <h2><i class="fa fa-book"></i> Sections</h2>
-                                    <ul class="nav navbar-right panel_toolbox">
-                                        <li>
-                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                        </li>
-                                    </ul>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="x_content">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Section Number</th>
-                                                <th>Instructor</th>
-                                                <th>Location</th>
-                                                <th>Capcity</th>
-                                                <th>Day</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var s in ViewBag.sectionsList)
-                                            {
-                                                // Find the instructor name for each section
-                                                String instructorName;
-                                                List<ApplicationUser> instructors = ViewBag.instructorList;
-                                                var instructor = instructors.Where(i => i.Id == s.InstructorId).First();
-                                                instructorName = instructor.FirstName + " " + instructor.LastName;
-
-                                                // Find the meeting times for each section
-                                                List<String> days = new List<string>();
-                                                List<SectionMeetingTime> sectionMeetingTimes = ViewBag.sectionMeetingTimeList;
-                                                var sectionMeetingTime = sectionMeetingTimes.Where(smt => smt.SectionId == s.SectionId).ToList();
-                                                foreach(SectionMeetingTime smt in sectionMeetingTime)
-                                                {
-                                                    days.Add(smt.Day);
-                                                }
-                                                String day = string.Join(", ", days);
-
-                                            <tr>
-                                                <td>@s.SectionNumber</td>
-                                                <td>@instructorName</td>
-                                                <td>@s.Location</td>
-                                                <td>@s.Capacity</td>
-                                                <td>@day</td>
-                                               
-                                            </tr>
-                                            }
-
-                                        </tbody>
-                                    </table>
-
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="clearfix"></div>
+
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-book"></i> Sections</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Section Number</th>
+                                <th>Instructor</th>
+                                <th>Location</th>
+                                <th>Capcity</th>
+                                <th>Day</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var s in ViewBag.sectionsList)
+                            {
+                                // Find the instructor name for each section
+                                String instructorName;
+                                List<ApplicationUser> instructors = ViewBag.instructorList;
+                                var instructor = instructors.Where(i => i.Id == s.InstructorId).First();
+                                instructorName = instructor.FirstName + " " + instructor.LastName;
+
+                                // Find the meeting times for each section
+                                List<String> days = new List<string>();
+                                List<SectionMeetingTime> sectionMeetingTimes = ViewBag.sectionMeetingTimeList;
+                                var sectionMeetingTime = sectionMeetingTimes.Where(smt => smt.SectionId == s.SectionId).ToList();
+                                foreach (SectionMeetingTime smt in sectionMeetingTime)
+                                {
+                                    days.Add(smt.Day);
+                                }
+                                String day = string.Join(", ", days);
+
+                                <tr>
+                                    <td>@s.SectionNumber</td>
+                                    <td>@instructorName</td>
+                                    <td>@s.Location</td>
+                                    <td>@s.Capacity</td>
+                                    <td>@day</td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
     </div>
 </div>
