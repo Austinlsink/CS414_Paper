@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+</head>
+<body>
+
+<h1>The onclick Event</h1>
+
+<p>The onclick event is used to trigger a function when an element is clicked on.</p>
+
+<p>Click the button to trigger a function that will output "Hello World" in a p element with id="demo".</p>
+  <select id="questionType" name="questionList"> 
+    <option value="trueFalse">True/False</option>
+    <option value="multipleChoice">Multiple Choice</option>
+    <option value="matching">Matching</option>
+    <option value="fillInTheBlank">Fill in the Blank</option>
+    <option value="essay">Essay</option>
+  </select>
+
+<button onclick="myFunction()">Click me</button>
+<button onclick="myDeleteFunction()">Delete</button>
+<button onclick="BimaCalledIt()">Bima</button>
+<div id="demo">
+
+
+</div>
+
+<script>
+
+function BimaCalledIt()
+{
+	$("demo").before("This was Bima");
+}
+
+
+function myFunction() {
+var e = document.getElementById("questionType");
+var strUser = e.options[e.selectedIndex].value;
+//document.getElementById("demo").innerHTML += strUser;
+
+if(document.getElementById("questionType").options[e.selectedIndex].value == "trueFalse")
+{
+	document.getElementById("demo").innerHTML += "<form id=\"TFquestion\"><input id=\"question\" type=\" Text\"/><input type=\"radio\" name=\"answer\" value=\"true\"> True <input type=\"radio\" name=\"answer\" value=\"false\"> False<br></form>";
+}
+
+  /*document.getElementById("demo").innerHTML += 
+  "<form id= \"testId\"> <div id=\"questions\"> <input id=\"question\" type=\" Text\"/> </div> <br> <button onclick=\"addQuestion()\">Add Question</button> </form>";*/
+}
+
+function myDeleteFunction()
+{
+	document.getElementById("TFquestion").outerHTML = "";
+}
+
+/*function addQuestion()
+{
+	document.getElementByID("questions").innerHTML += "<input id=\"question\" type=\" Text\"/>";
+}*/
+</script>
+
+</body>
+</html>
