@@ -36,24 +36,14 @@
                             </div>
                             <span asp-validation-for="CourseName" class="text-danger"></span>
                         </div>
-
-
-
-
-
                         <div class="form-group">
                             <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Course Description </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <textarea asp-for="Description" class="form-control col-md-7 col-xs-12">Bima is not Awesome</textarea>
+                                <textarea asp-for="Description" type="text" class="form-control col-md-7 col-xs-12">@ViewBag.course.Description</textarea>
                                 <span class="text-danger"></span>
                             </div>
                             <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
-
-
-
-
-
                         <div class="form-group">
                             <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Credit Hours </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
@@ -69,15 +59,7 @@
                                     <option disabled selected value=""> -- select a department -- </option>
                                     @foreach (var d in ViewBag.departments)
                                     {
-                                        if (ViewBag.course.DepartmentId == d.departmentId)
-                                        {
-                                            <option selected value="departmentName">@d.DepartmentName</option>
-                                        }
-                                        else
-                                        {
-                                            <option value="departmentName">@d.DepartmentName</option>
-                                        }
-
+                                        <option value="departmentName">@d.DepartmentName</option>
                                     }
                                 </select>
                             </div>

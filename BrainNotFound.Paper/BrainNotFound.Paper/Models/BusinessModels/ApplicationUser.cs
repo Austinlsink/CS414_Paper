@@ -72,16 +72,13 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         {
             IEnumerable<ApplicationUser> applicationUsers;
 
-            using (var reader = new StreamReader(CsvFilePath))
-            using (var csv = new CsvReader(reader))
-            {
+            var reader = new StreamReader(CsvFilePath);
+            var csv = new CsvReader(reader);
 
-                csv.Configuration.HeaderValidated = null;
-                csv.Configuration.MissingFieldFound = null;
+            csv.Configuration.HeaderValidated = null;
+            csv.Configuration.MissingFieldFound = null;
 
-
-                applicationUsers = csv.GetRecords<ApplicationUser>();
-            }
+            applicationUsers = csv.GetRecords<ApplicationUser>();
 
             return applicationUsers;
         }

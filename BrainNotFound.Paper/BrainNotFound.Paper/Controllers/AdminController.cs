@@ -21,13 +21,13 @@ namespace BrainNotFound.Paper.Controllers
     [Route("Admin")]
     public class AdminController : Controller
     {
-        private readonly UserManager<Models.BusinessModels.ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly PaperDbContext _context;
 
         #region admin controllers
         // Constructor
         public AdminController(
-            UserManager<Models.BusinessModels.ApplicationUser> userManager, PaperDbContext context)
+            UserManager<ApplicationUser> userManager, PaperDbContext context)
         {
             _userManager = userManager;
             _context = context;
@@ -73,8 +73,9 @@ namespace BrainNotFound.Paper.Controllers
             }
 
             model.UserName = model.FirstName + model.LastName;
+            var admin = await _userManager.FindByIdAsync(model.Id);
 
-            if (await _userManager.FindByNameAsync(model.UserName) == null)
+            if ( admin == null)
             {
                 //Create a new Application User
                 var result = await _userManager.CreateAsync(model, model.Password);
@@ -93,15 +94,16 @@ namespace BrainNotFound.Paper.Controllers
                 {
                     foreach (var error in result.Errors)
                     {
-                        ViewData["Message"] += error.Description;
+                        ViewBag.UserError += error.Description;
                     }
                 }
             }
             else
             {
                 ViewBag.UserError = "That user already exists.";
+                ViewData["Message"] = admin.Id.ToString();
+                return View("TestView");
             }
-
             ViewData["message"] += model.Email;
             return View(model);
         }
@@ -296,16 +298,42 @@ namespace BrainNotFound.Paper.Controllers
 
         #region admin profile controllers
         [HttpGet, Route("Profile")]
-        public IActionResult Profile()
+        public async Task<IActionResult> Profile()
         {
+            var admin = await _userManager.GetUserAsync(HttpContext.User);
+            
+
+            ViewBag.profile = admin;
             return View();
         }
 
         [HttpGet, Route("Profile/Edit")]
-        public IActionResult EditProfile()
+        public async Task<IActionResult> EditProfile()
         {
+            ApplicationUser admin = await _userManager.GetUserAsync(HttpContext.User);
+            ViewBag.admin = admin;
+
             return View();
         }
+
+        [HttpPost, Route("Profile/Edit")]
+        public async Task<IActionResult> EditProfile(ApplicationUser user)
+        {
+            ApplicationUser admin = await _userManager.GetUserAsync(HttpContext.User);
+            admin.Salutation  = user.Salutation;
+            admin.FirstName   = user.FirstName;
+            admin.LastName    = user.LastName;
+            admin.PhoneNumber = user.PhoneNumber;
+            admin.Email       = user.Email;
+            admin.Address     = user.Address;
+            admin.City        = user.City;
+            admin.State       = user.State;
+            admin.ZipCode     = user.ZipCode;
+
+            await _userManager.UpdateAsync(admin);
+            return RedirectToAction("Profile", "Admin");
+        }
+
         #endregion admin profile controllers
 
         #region student controllers 
@@ -367,33 +395,30 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("Students/{UserName}")]
         public async Task<IActionResult> ViewStudent(String username)
         {
-
             var student = await _userManager.FindByNameAsync(username);
+            var enrollment = _context.Enrollments.Where(e => e.StudentId == student.Id).ToList();
+            var allSections = _context.Sections.ToList();
+            var allMeetingTimes = _context.SectionMeetingTimes.ToList();
+            var courses = _context.Courses.ToList();
+            var departments = _context.Departments.ToList();
+            List<Section> sections = new List<Section>();
 
-            List<Course> courses = new List<Course>()
+            foreach(Enrollment e in enrollment)
             {
-                new Course()
+                foreach(Section s in allSections)
                 {
-                    CourseCode = "CS 306",
-                    CourseName = "Database II",
-                    CourseId = 1
-                },
-                new Course()
-                {
-                    CourseCode = "BI 101",
-                    CourseName = "Old Testament Survey",
-                    CourseId = 2
-                },
-                new Course()
-                {
-                    CourseCode = "EN 126",
-                    CourseName = "English Grammar and Composition",
-                    CourseId = 3
+                    if (e.SectionId == s.SectionId)
+                    {
+                        sections.Add(s);
+                    }
                 }
-            };
+            }
 
-            ViewBag.courses = courses;
             ViewBag.profile = student;
+            ViewBag.sections = sections;
+            ViewBag.sectionMeetingTimesList = allMeetingTimes;
+            ViewBag.courses = courses;
+            ViewBag.departments = departments;
 
             return View();
         }
@@ -505,11 +530,12 @@ namespace BrainNotFound.Paper.Controllers
         #region Course controllers
 
         [HttpGet, Route("Courses")]
-        public IActionResult Courses()
+        public IActionResult Courses(String message = "")
         {
             var courses = _context.Courses.OrderBy(o => o.CourseCode).ToList();
             var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
             ViewBag.departmentList = departments;
+            ViewBag.Message = message;
             return View(courses);
         }
 
@@ -523,16 +549,16 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         [HttpPost, Route("Courses/New")]
-        public IActionResult NewCourse(Course model)
+        public IActionResult NewCourse(Course course)
         {
             if (!ModelState.IsValid)
                 return View();
 
-            var department = _context.Departments.Find(model.DepartmentId);
-            model.DepartmentId = department.DepartmentId;
-            model.DepartmentCode = department.DepartmentCode;
+            Department department = _context.Departments.Find(course.DepartmentId);
+            course.Department = department;
 
-            _context.Courses.Add(model);
+
+            _context.Courses.Add(course);
             _context.SaveChanges();
             return RedirectToAction("Courses", "Admin");
         }
@@ -589,13 +615,21 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         // Delete a Course
-        [HttpDelete("{id:long}"), Route("DeleteCourse")]
-        public IActionResult DeleteCourse(long id)
+        [HttpPost, Route("DeleteCourse")]
+        public IActionResult DeleteCourse(Delete deleteCourse)
         {
-            var course = _context.Courses.Find(id);
-            _context.Courses.Remove(course);
-            _context.SaveChanges();
+            var course = _context.Courses.Find(deleteCourse.CourseId);
 
+            if (_context.Sections.Where(ac => ac.CourseId == course.CourseId).Any())
+            {
+                return RedirectToAction("Courses", "Admin", new { message = "Error: Please delete all associated sections before deleting " + course.DepartmentCode });
+            }
+            else
+            {
+                _context.Courses.Remove(course);
+                _context.SaveChanges();
+            }
+            
             return RedirectToAction("Courses", "Admin");
         }
 
@@ -614,10 +648,49 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        [HttpGet, Route("Sections/{CourseCode}/{SectionNumber}")]
-        public IActionResult ViewSection(String CourseCode, int SectionNumber)
+        [HttpGet, Route("Sections/View/{CourseId}/{SectionId}")]
+        public async Task<IActionResult> ViewSection(long courseId, long sectionId)
         {
+            var section = _context.Sections.Where(s => s.CourseId == courseId && s.SectionId == sectionId).First();
+            var course = _context.Courses.Find(section.CourseId);
+            var students = await _userManager.GetUsersInRoleAsync("Student");
+            var enrollment = _context.Enrollments.ToList();
+            var sectionMeetingTimeList = _context.SectionMeetingTimes.ToList();
+
+            ViewBag.section    = section;
+            ViewBag.course     = course;
+            ViewBag.students   = students;
+            ViewBag.enrollment = enrollment;
+            ViewBag.sectionMeetingTimeList = sectionMeetingTimeList;
             return View();
+        }
+
+        // Assign a student to a section
+        [HttpPost, Route("AssignStudent")]
+        public async Task<IActionResult> AssignStudent(ApplicationUser user, Section section, Course course)
+        {
+            var student = await _userManager.FindByNameAsync(user.UserName);
+
+            Enrollment enroll = new Enrollment();
+            enroll.SectionId = section.SectionId;
+            enroll.StudentId = student.Id;
+
+            _context.Enrollments.Add(enroll);
+            _context.SaveChanges();
+           
+            return RedirectToAction("ViewSection", "Admin", new {CourseId = course.CourseId, SectionId = section.SectionId });
+        }
+
+        [HttpPost, Route("UnassignStudent")]
+        public async Task<IActionResult> UnassignStudent(ApplicationUser user, Section section, Course course)
+        {
+            var student = await _userManager.FindByNameAsync(user.UserName);
+
+            Enrollment deleteStudent = _context.Enrollments.Where(e => e.StudentId == student.Id).First();
+            _context.Enrollments.Remove(deleteStudent);
+            _context.SaveChanges();            
+
+            return RedirectToAction("ViewSection", "Admin", new { CourseId = course.CourseId, SectionId = section.SectionId });
         }
 
         [HttpGet, Route("Sections/Edit/{CourseCode}/{SectionNumber}")]

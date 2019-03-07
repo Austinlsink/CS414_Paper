@@ -15,19 +15,16 @@ namespace BrainNotFound.Paper.Controllers
     [Route("Instructor")]
     public class InstructorController : Controller
     {
-        // Start March 02 2019
-        /*
-        private readonly UserManager<Models.BusinessModels.ApplicationUser> _userManager;
+        
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly PaperDbContext _context;
 
         public InstructorController(
-            UserManager<Models.BusinessModels.ApplicationUser> userManager, PaperDbContext context)
+            UserManager<ApplicationUser> userManager, PaperDbContext context)
         {
             _userManager = userManager;
             _context = context;
         }
-        */
-        // End March 02 2019
 
         [HttpGet, Route("")]
         [HttpGet, Route("Index")]
@@ -88,6 +85,18 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("Tests/CreateTest")]
         public IActionResult CreateTest()
         {
+            ApplicationUser currentInstructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            var course = _context.Courses.Where(c => c.CourseName == "Origins").First();
+
+            Test test1 = new Test
+            {
+                IsVisible = true,
+                TestName = "Midterm",
+                applicationUser = currentInstructor,
+                Course = course
+            };
+            _context.Tests.Add(test1);
+            _context.SaveChanges();
             return View();
         }
 

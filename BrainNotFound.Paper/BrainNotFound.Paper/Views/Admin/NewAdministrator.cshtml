@@ -30,7 +30,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Salutation</label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <select asp-for="Salutation" class="select2_single form-control" tabindex="1">
+                                <select  asp-for="Salutation" class="select2_single form-control" tabindex="1">
                                     <option value="mr">Mr.</option>
                                     <option value="mrs">Mrs.</option>
                                     <option value="ms">Ms.</option>
@@ -124,7 +124,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-3">Date of Birth</label>
                             <div class="col-md-69 col-sm-6 col-xs-9">
-                                <input asp-for="DOB" type="text" class="form-control has-feedback-left" data-inputmask="'mask': '99/99/9999'">
+                                <input asp-for="DOB" type="text" class="form-control has-feedback-left" data-inputmask="'mask': '99/99/9999'" placeholder="##/##/####">
                                 <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                             </div>
                         </div>

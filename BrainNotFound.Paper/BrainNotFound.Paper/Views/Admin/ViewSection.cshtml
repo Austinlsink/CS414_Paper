@@ -1,7 +1,196 @@
+@using BrainNotFound.Paper.Models.BusinessModels
+@model BrainNotFound.Paper.Models.BusinessModels.Section;
 @{
-    ViewData["Title"] = "View Section Info - Admin";
+    ViewData["Title"] = "View Section - Admin";
 }
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
 
-<p>This page displays a section’s information.</p> 
+<div class="">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-user"></i>Section Information</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a>Edit information</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="col-md-10 col-sm-10 col-xs-12">
+
+                        <h3>@ViewBag.course.CourseName @ViewBag.course.CourseCode - @ViewBag.section.SectionNumber - @ViewBag.section.SectionId</h3>
+
+                        <ul class="list-unstyled user_data">
+                            <li>
+                                <b>Capacity</b> @ViewBag.section.Capacity
+                            </li>
+
+                            <li>
+                                <b> Location:</b> @ViewBag.section.Location
+                            </li>
+                            <li>
+                                @{ 
+                                    // Find the meeting times for each section
+                                    List<String> days = new List<string>();
+                                    List<SectionMeetingTime> sectionMeetingTimes = ViewBag.sectionMeetingTimeList;
+                                    DateTime startTime = new DateTime();
+                                    DateTime endTime   = new DateTime();
+                                    var sectionMeetingTime = sectionMeetingTimes.Where(smt => smt.SectionId == ViewBag.section.SectionId).ToList();
+                                    foreach (SectionMeetingTime smt in sectionMeetingTime)
+                                    {
+                                        days.Add(smt.Day);
+                                        startTime = smt.StartTime;
+                                        endTime = smt.EndTime;
+                                    }
+                                    String day = string.Join(", ", days);
+                                }
+                                <b>Days Meeting: </b> @day
+                            </li>
+                            <li>
+                                <b>Start Time: </b> @startTime.ToString("h:mm tt")
+                            </li>
+                            <li>
+                                <b>End Time:</b> @endTime.ToString("h:mm tt")
+                            </li>
+                        </ul>
+                        <br />
+                    </div>
+                </div>
+                <!--Students who are in this section-->
+                <h2>Students enrolled</h2>
+                <div class="x_content">
+
+                    <p>Click checkbox to select multiple Students.</p>
+                    <div class="table-responsive">
+                        <table class="table table-striped jambo_table bulk_action ">
+                            <thead>
+                                <tr class="headings">
+                                    <th>
+                                        <input type="checkbox" id="check-all" class="flat">
+                                    </th>
+                                    <th class="column-title">First Name </th>
+                                    <th class="column-title">Last name </th>
+                                    <th class="column-title">Classification </th>
+                                    <th class="column-title no-link last">
+                                        <span class="nobr">Action</span>
+                                    </th>
+                                    <th class="bulk-actions" colspan="7">
+                                        <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var s in ViewBag.students)
+                                {
+                                    foreach (var e in ViewBag.enrollment)
+                                    {
+                                        if (s.Id == e.StudentId && e.SectionId == ViewBag.section.SectionId)
+                                        {
+                                            <tr class="odd pointer">
+                                                <td class="a-center ">
+                                                    <input type="checkbox" class="flat" name="table_records">
+                                                </td>
+                                                <td class=" ">@s.FirstName </td>
+                                                <td class=" ">@s.LastName </td>
+                                                <td class=" ">@s.Classification </td>
+                                                <td class=" last">
+                                                    <form asp-controller="Admin" asp-action="UnassignStudent">
+                                                        <a asp-controller="Admin" asp-action="ViewStudent" asp-route-UserName="@s.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                                        <a asp-controller="Admin" asp-action="EditStudent" asp-route-UserName="@s.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                                        <button type="submit" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Unassign </button>
+                                                        <input type="hidden" name="UserName" value="@s.UserName" />
+                                                        <input type="hidden" name="SectionId" value="@ViewBag.section.SectionId" />
+                                                        <input type="hidden" name="CourseCode" value="@ViewBag.course.CourseCode" />
+                                                        <input type="hidden" name="CourseId" value="@ViewBag.section.CourseId" />
+                                                    </form>
+                                                    </td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+                <!--Students who are NOT in this section-->
+                <h2>Students not enrolled</h2>
+                <div class="x_content">
+                    <p>Click checkbox to select multiple Students.</p>
+                    <div class="table-responsive">
+                        <table class="table table-striped jambo_table bulk_action ">
+                            <thead>
+                                <tr class="headings">
+                                    <th>
+                                        <input type="checkbox" id="check-all" class="flat">
+                                    </th>
+                                    <th class="column-title">First Name </th>
+                                    <th class="column-title">Last name </th>
+                                    <th class="column-title">Classification </th>
+                                    <th class="column-title no-link last">
+                                        <span class="nobr">Action</span>
+                                    </th>
+                                    <th class="bulk-actions" colspan="7">
+                                        <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @{ 
+                                    IEnumerable<Enrollment> enrolled = ViewBag.enrollment;
+                                }
+                                @foreach (var s in ViewBag.students)
+                                {
+                                        if (!(enrolled.Any(x => x.StudentId == s.Id) && enrolled.Any(x => x.SectionId == ViewBag.section.SectionId)))
+                                        {
+                                                <tr class="odd pointer">
+                                                    <td class="a-center ">
+                                                        <input type="checkbox" class="flat" name="table_records">
+                                                    </td>
+                                                    <td class=" ">@s.FirstName </td>
+                                                    <td class=" ">@s.LastName </td>
+                                                    <td class=" ">@s.Classification </td>
+                                                    <td class=" last">
+                                                        <form asp-controller="Admin" asp-action="AssignStudent">
+                                                            <a asp-controller="Admin" asp-action="ViewStudent" asp-route-UserName="@s.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                                            <a asp-controller="Admin" asp-action="EditStudent" asp-route-UserName="@s.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                                            <input type="hidden" name="UserName" value="@s.UserName" />
+                                                            <input type="hidden" name="SectionId" value="@ViewBag.section.SectionId" />
+                                                            <input type="hidden" name="CourseCode" value="@ViewBag.course.CourseCode" />
+                                                            <input type="hidden" name="CourseId" value="@ViewBag.section.CourseId" />
+                                                            <button type="submit" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Assign </button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+
+                                        }
+                                }
+                            </tbody>
+                        </table>
+
+
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>

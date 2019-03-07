@@ -93,7 +93,7 @@
                                     <td>@course.CourseCode</td>
                                     <td>@course.CourseName</td>
                                     <td>3</td>
-                                    <td> <a href="#" class="btn btn-primary btn-xs"> View </a> </td>
+                                    <td> <a asp-controller="Admin" asp-action="ViewCourse" asp-route-id="@course.CourseId" class="btn btn-primary btn-xs"> View </a> </td>
                                 </tr>
                             }
 
@@ -133,9 +133,9 @@
                                             <table class="table table-hover">
                                                 <thead>
                                                     <tr>
-                                                        <th>Section #</th>
-                                                        <th># of Students</th>
-                                                        <th>Action</th>
+                                                        <th> Section #</th>
+                                                        <th> # of Students</th>
+                                                        <th> Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -146,7 +146,7 @@
                                                             <tr>
                                                                 <th>@s.SectionNumber</th>
                                                                 <td>@s.Capacity</td>
-                                                                <td> <a href="#" class="btn btn-primary btn-xs">View </a> </td>
+                                                                <td> <a asp-controller="Admin" asp-action="ViewSection" asp-route-CourseId="@course.CourseId" asp-route-SectionId="@s.SectionId" class="btn btn-primary btn-xs">View </a> </td>
                                                             </tr>
                                                         }
 

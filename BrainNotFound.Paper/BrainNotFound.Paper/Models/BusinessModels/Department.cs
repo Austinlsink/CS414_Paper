@@ -10,13 +10,13 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         [Key] // Primary key
         public long DepartmentId { get; set; }
 
-        [Required]
-        [StringLength(25, MinimumLength = 1, ErrorMessage ="Please enter a Department name.")]
+        [Required(ErrorMessage ="Please Enter a Department name.")]
+        [StringLength(25, MinimumLength = 1, ErrorMessage ="Please enter a Department name (1-25 characters).")]
         public string DepartmentName { get; set; }
         public List<Course> Courses { get; set; }
         public List<FieldOfStudy> FieldsOfStudy { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Please Enter a Department code.")]
         [StringLength(2, MinimumLength = 2, ErrorMessage = "Department code must contain 2 characters")]
         public string DepartmentCode { get; set; }
 
@@ -24,17 +24,18 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         {
             IEnumerable<Department> departments;
 
-            using (var reader = new StreamReader(CsvFilePath))
-            using (var csv = new CsvReader(reader))
-            {
-                csv.Configuration.HeaderValidated = null;
-                csv.Configuration.MissingFieldFound = null;
+            var reader = new StreamReader(CsvFilePath);
+            var csv = new CsvReader(reader);
+            
+            csv.Configuration.HeaderValidated = null;
+            csv.Configuration.MissingFieldFound = null;
 
-                departments = csv.GetRecords<Department>();
-            }
-
+            departments = csv.GetRecords<Department>();
+            
             return departments;
         }
+
+
 
         public bool Equals(Department inputDepartment)
         {
@@ -42,6 +43,9 @@ namespace BrainNotFound.Paper.Models.BusinessModels
                 && DepartmentName == inputDepartment.DepartmentName
                 && DepartmentCode == inputDepartment.DepartmentName;
         }
+
+
+
 
         // Alternatively...
         //public bool Equals(Department inputDepartment)
