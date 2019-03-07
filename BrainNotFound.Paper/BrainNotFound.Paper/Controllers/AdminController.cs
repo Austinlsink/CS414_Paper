@@ -399,6 +399,8 @@ namespace BrainNotFound.Paper.Controllers
             var enrollment = _context.Enrollments.Where(e => e.StudentId == student.Id).ToList();
             var allSections = _context.Sections.ToList();
             var allMeetingTimes = _context.SectionMeetingTimes.ToList();
+            var courses = _context.Courses.ToList();
+            var departments = _context.Departments.ToList();
             List<Section> sections = new List<Section>();
 
             foreach(Enrollment e in enrollment)
@@ -415,6 +417,8 @@ namespace BrainNotFound.Paper.Controllers
             ViewBag.profile = student;
             ViewBag.sections = sections;
             ViewBag.sectionMeetingTimesList = allMeetingTimes;
+            ViewBag.courses = courses;
+            ViewBag.departments = departments;
 
             return View();
         }

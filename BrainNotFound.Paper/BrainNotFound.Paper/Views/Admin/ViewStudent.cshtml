@@ -69,7 +69,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2><i class="fa fa-book"></i> Courses</h2>
+                    <h2><i class="fa fa-book"></i> Sections</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li>
                             <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -99,12 +99,27 @@
                                     days.Add(smt.Day);
                                 }
                                 String day = string.Join(", ", days);
-                                <tr>
-                                    <td>@s.Course.CourseCode @s.CourseName</td>
-                                    <td>@s.Location</td>
-                                    <td>@day</td>
-                                    <td> <a asp-controller="Admin" asp-action="ViewSection" asp-route-id="@s.SectionId" class="btn btn-primary btn-xs"> View </a> </td>
-                                </tr>
+                                foreach (var c in ViewBag.courses)
+                                {
+                                    if (s.CourseId == c.CourseId)
+                                    {
+                                        foreach (var d in ViewBag.departments)
+                                        {
+                                            if (c.DepartmentId == d.DepartmentId)
+                                            {
+                                                <tr>
+                                                    <td>@d.DepartmentCode @c.CourseCode @c.CourseName - @s.SectionNumber</td>
+                                                    <td>@s.Location</td>
+                                                    <td>@day</td>
+                                                    <td> <a asp-controller="Admin" asp-action="ViewSection" asp-route-CourseId="@c.CourseId" asp-route-SectionId="@s.SectionId" class="btn btn-primary btn-xs"> View </a> </td>
+                                                </tr>
+                                            }
+                                            
+                                        }
+
+                                    }
+                                }
+
                             }
 
                         </tbody>
