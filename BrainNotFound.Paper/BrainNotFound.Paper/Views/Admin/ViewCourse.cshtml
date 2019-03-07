@@ -29,9 +29,7 @@
                     <div class="col-md-10 col-sm-10 col-xs-12">
                         @{
                             String name;
-                            List<Department> departments = ViewBag.DepartmentList;
-                            var dept = departments.Where(x => x.DepartmentId == ViewBag.course.DepartmentId).First();
-                            name = dept.DepartmentCode + " " + ViewBag.course.CourseCode;
+                            name = ViewBag.department.DepartmentCode + " " + ViewBag.course.CourseCode;
 
                         }
                         <h3>@name @ViewBag.course.CourseName</h3>

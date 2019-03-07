@@ -563,16 +563,23 @@ namespace BrainNotFound.Paper.Controllers
             return RedirectToAction("Courses", "Admin");
         }
 
-        [HttpGet, Route("Courses/{id}")]
-        public async Task<IActionResult> ViewCourse(long id)
+        [HttpGet, Route("Courses/{code}")]
+        public async Task<IActionResult> ViewCourse(string code)
         {
-            // Find the specified course and add it to the ViewBag
-            var course = _context.Courses.Find(id);
-            ViewBag.course = course;
+            string departmentCode = code.Substring(0, 2);
+            string courseCode = code.Substring(2, 3);
+            //ViewData["message"] = "Hello" + departmentCode + courseCode + "world";
+            //return View("TestView");
 
             // Find the list of departments and add it to the ViewBag
-            var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
-            ViewBag.departmentList = departments;
+            var department = _context.Departments.Where(d => d.DepartmentCode == departmentCode).First();
+            ViewBag.department = department;
+
+
+            // Find the specified course and add it to the ViewBag
+            var course = _context.Courses.Where(c => c.DepartmentId == department.DepartmentId).First();
+            ViewBag.course = course;
+
 
             // Find the sections with the same ID as the course and add it to the ViewBag
             var sections = _context.Sections.Where(s => s.CourseId == course.CourseId);
