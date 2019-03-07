@@ -676,9 +676,15 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         [HttpPost, Route("UnassignStudent")]
-        public IActionResult UnassignStudent(ApplicationException user)
+        public async Task<IActionResult> UnassignStudent(ApplicationUser user, Section section, Course course)
         {
-            return View();
+            var student = await _userManager.FindByNameAsync(user.UserName);
+
+            Enrollment deleteStudent = _context.Enrollments.Where(e => e.StudentId == student.Id).First();
+            _context.Enrollments.Remove(deleteStudent);
+            _context.SaveChanges();            
+
+            return RedirectToAction("ViewSection", "Admin", new { CourseId = course.CourseId, SectionId = section.SectionId });
         }
 
         [HttpGet, Route("Sections/Edit/{CourseCode}/{SectionNumber}")]
