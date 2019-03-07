@@ -29,9 +29,7 @@
                     <div class="col-md-10 col-sm-10 col-xs-12">
                         @{
                             String name;
-                            List<Department> departments = ViewBag.DepartmentList;
-                            var dept = departments.Where(x => x.DepartmentId == ViewBag.course.DepartmentId).First();
-                            name = dept.DepartmentCode + " " + ViewBag.course.CourseCode;
+                            name = ViewBag.department.DepartmentCode + " " + ViewBag.course.CourseCode;
 
                         }
                         <h3>@name @ViewBag.course.CourseName</h3>
@@ -102,7 +100,7 @@
                                     <td>@s.Capacity</td>
                                     <td>@day</td>
                                     <td>
-                                        <a asp-controller="Admin" asp-action="ViewSection" asp-route-CourseId="@ViewBag.course.CourseId" asp-route-SectionId="@s.SectionId" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                        <a asp-controller="Admin" asp-action="ViewSection" asp-route-code="@ViewBag.department.DepartmentCode@ViewBag.course.CourseCode" asp-route-sectionNumber="@s.SectionNumber" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                     </td>
 
                                 </tr>
