@@ -129,3 +129,35 @@ function myDeleteFunction()
 
 </body>
 </html>
+
+
+
+
+
+IT WORKS
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+
+function addTextBox()
+{
+	$("body").append("<div class=\"form1\"></div>");
+    $(".form1").append("<input id=\"box\" type=\"text\"><button onclick=\"Swap()\">Swap code</button>");
+}
+function Swap()
+{
+	var box_text = $("#box").val();
+    $(".form1").empty();
+    $(".form1").append("<h1>" + box_text + "</h1>");
+}
+</script>
+</head>
+<body>
+
+<button onclick="addTextBox()">View Button</button>
+
+
+</body>
+</html>
