@@ -71,8 +71,33 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         [HttpGet, Route("Students")]
-        public IActionResult Students()
+        public async Task<IActionResult> Students()
         {
+            ApplicationUser instructor = await _userManager.GetUserAsync(HttpContext.User);
+
+            // Find all of the sections that the instructor teaches
+            var sections = _context.Sections.Where(s => s.InstructorId == instructor.Id).ToList();
+
+            // Get the enrollment table
+            var enrollment = _context.Enrollments.ToList();
+
+            // Find all of the students that the instructor teaches
+            var allStudents = (await _userManager.GetUsersInRoleAsync("Student")).OrderBy(o => o.FirstName).ToList();
+
+
+            List<ApplicationUser> students = new List<ApplicationUser>();
+            foreach(Enrollment e in enrollment)
+            {
+                foreach(ApplicationUser student in allStudents)
+                {
+                    if (e.StudentId == student.Id)
+                    {
+                        students.Add(student);
+                    }
+                }
+            }
+
+            ViewBag.students = students;
             return View();
         }
 
