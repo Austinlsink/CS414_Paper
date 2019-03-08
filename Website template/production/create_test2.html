@@ -14,24 +14,20 @@
     <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <!-- Google fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Crimson+Text|Raleway" rel="stylesheet">
     <!-- NProgress -->
     <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
     <!-- iCheck -->
     <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
-    <!-- bootstrap-progressbar -->
-    <link href="../vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
-    <!-- JQVMap -->
-    <link href="../vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/>
+    <!-- bootstrap-wysiwyg -->
+    <link href="../vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">
+    <!-- Select2 -->
+    <link href="../vendors/select2/dist/css/select2.min.css" rel="stylesheet">
+    <!-- Switchery -->
+    <link href="../vendors/switchery/dist/switchery.min.css" rel="stylesheet">
+    <!-- starrr -->
+    <link href="../vendors/starrr/dist/starrr.css" rel="stylesheet">
     <!-- bootstrap-daterangepicker -->
     <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
-    <!-- Datatable java -->
-    <link href="../vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-    <link href="../vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
-    <link href="../vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
-    <link href="../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
-    <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom Theme Style -->
     <link href="../build/css/custom.css" rel="stylesheet">
@@ -202,50 +198,15 @@
         <div class="right_col">
             <div class="row">
                 <div class="col-md-12 col-xs-12">
-                   
+
                    <!-- Test creation information -->
                     <div class="x_panel">
                         <div class="x_title">
-                            <h2><i class="fa fa-question"></i> | New test section</h2>
-                            <ul class="nav navbar-right panel_toolbox">
-                                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                                <li><a class="collapse-link"><i class="fa fa-arrow-up"></i></a></li>
-                                <li><a class="collapse-link"><i class="fa fa-arrow-down"></i></a></li>
-                            </ul>
-                            <div class="clearfix"></div>
-                        </div>
-                        <div class="x_content">
-                          <form id="new-department" data-parsley-validate class="form-horizontal form-label-left">
-                            <div class="col-md-12 col-sm-12 col-xs-12 form-group">
-                              <input type="text" placeholder="Enter the instructions here" class="form-control">
-                            </div>
-                            <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Question Type</label>
-                            <div class="col-md-3 col-sm-3 col-xs-12">
-                              <select class="form-control">
-                                <option>Choose option</option>
-                                <option>True/False</option>
-                                <option>Multiple Choice</option>
-                                <option>Fill In The Blank</option>
-                                <option>Matching</option>
-                              </select>
-                            </div>
-                          </div>
-                            <div class="ln_solid"></div>
-                            <div class="form-group">
-                              <div class="">
-                                <button type="button" class="btn btn-round btn-info"><i class="fa fa-plus"></i> Add Section</button>
-                              </div>
-                            </div>
-                          </form>
-                     </div>
-                  </div>
-                        <!-- end of test creation information -->
 
                         <!-- (Test creation information) beginning of row 2 -->
                         <div class="x_panel">
                             <div class="x_title">
-                                <h2><i class="fa fa-info-circle"></i> | Test creation information</h2>
+                                <h2><i class="fa fa-info-circle"></i> | True/False</h2>
                                 <ul class="nav navbar-right panel_toolbox">
                                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                                     <li class="dropdown">
@@ -263,18 +224,8 @@
                             <div class="x_content">
                               <div class="row">
                               <form id="new-department" data-parsley-validate class="form-horizontal form-label-left">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Teacher Assigned</label>
-                                <div class="col-md-3 col-sm-3 col-xs-12">
-                                  <select class="form-control">
-                                    <option>Choose option</option>
-                                    <option>True/False</option>
-                                    <option>Multiple Choice</option>
-                                    <option>Fill In The Blank</option>
-                                    <option>Matching</option>
-                                  </select>
-                                </div>
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Course</label>
-                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Question Type</label>
+                                <div class="col-md-4 col-sm-4 col-xs-12">
                                   <select class="form-control">
                                     <option>Choose option</option>
                                     <option>True/False</option>
@@ -295,106 +246,25 @@
                             }
                             </script>
                             <div class="row">
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                <div class="x_panel">
-                                  <div class="x_title">
-                                    <h2>Assign to section(s) <small>Try hovering over the rows</small></h2>
-                                    <ul class="nav navbar-right panel_toolbox">
-                                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                                    </ul>
-                                    <div class="clearfix"></div>
-                                  </div>
-                                  <div class="x_content">
-                                    <table class="table table-hover">
-                                      <thead>
-                                        <tr>
-                                          <th><input type="checkbox" onClick="toggle(this, 'foo')" /></th>
-                                          <th>Section</th>
-                                          <th>Number</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        <tr>
-                                           <td><div class="form-check">
-                                             <input class="form-check-input" type="checkbox" name="foo" value="" id="defaultCheck1">
-                                             <label class="form-check-label" for="defaultCheck1">
-                                             </label>
-                                          </div></td>
-                                          <td>Otto</td>
-                                          <td>@mdo</td>
-                                        </tr>
-                                        <tr>
-                                           <td><div class="form-check">
-                                             <input class="form-check-input" type="checkbox" name="foo" value="" id="defaultCheck1">
-                                             <label class="form-check-label" for="defaultCheck1">
-                                             </label>
-                                          </div></td>
-                                          <td>Thornton</td>
-                                          <td>@fat</td>
-                                        </tr>
-                                        <tr>
-                                           <td><div class="form-check">
-                                             <input class="form-check-input" type="checkbox"  name="foo" value="" id="defaultCheck1">
-                                             <label class="form-check-label" for="defaultCheck1">
-                                             </label>
-                                          </div></td>
-                                          <td>the Bird</td>
-                                          <td>@twitter</td>
-                                        </tr>
-                                      </tbody>
-                                    </table>
-
-                                  </div>
-                                </div>
+                           <div class="col-md-12 col-sm-12 col-xs-12">
+                                 <div class="col-md-2">
+                                    <input type="text" placeholder="#" class="form-control"><br>
+                                 </div>
+                                 <div class="col-md-8">
+                                  <input type="text" placeholder="Enter question text here" class="form-control"><br>
+                                  <input type="text" placeholder="Enter question text here" class="form-control"><br>
+                                  <input type="text" placeholder="Enter question text here" class="form-control"><br>
+                                  <input type="text" placeholder="Enter question text here" class="form-control"><br>
+                               </div>
+                               <div class="col-md-2">
+                                 <label class="">
+                                    <div class="iradio_flat-green checked" style="position: relative;"><input type="radio" class="flat" checked="" name="iCheck" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div> T
+                                 </label>
+                                 <label class="">
+                                    <div class="iradio_flat-green" style="position: relative;"><input type="radio" class="flat" name="iCheck" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div> F
+                                 </label>
                               </div>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                <div class="x_panel">
-                                  <div class="x_title">
-                                    <h2>Assign to student(s) <small>Try hovering over the rows</small></h2>
-                                    <ul class="nav navbar-right panel_toolbox">
-                                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                                    </ul>
-                                    <div class="clearfix"></div>
-                                  </div>
-                                  <div class="x_content">
-                                    <table class="table table-hover">
-                                      <thead>
-                                        <tr>
-                                          <th><input type="checkbox" onClick="toggle(this, 'foo2')" /></th>
-                                          <th>Student</th>
-                                          <th>First Name</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        <tr>
-                                           <td><div class="form-check">
-                                             <input class="form-check-input" type="checkbox" name="foo2" value="" id="defaultCheck1">
-                                             <label class="form-check-label" for="defaultCheck1">
-                                             </label>
-                                          <td>Otto</td>
-                                          <td>@mdo</td>
-                                        </tr>
-                                        <tr>
-                                           <td><div class="form-check">
-                                             <input class="form-check-input" type="checkbox" name="foo2" value="" id="defaultCheck1">
-                                             <label class="form-check-label" for="defaultCheck1">
-                                             </label>
-                                          <td>Thornton</td>
-                                          <td>@fat</td>
-                                        </tr>
-                                        <tr>
-                                           <td><div class="form-check">
-                                             <input class="form-check-input" type="checkbox" name="foo2" value="" id="defaultCheck1">
-                                             <label class="form-check-label" for="defaultCheck1">
-                                             </label>
-                                          <td>the Bird</td>
-                                          <td>@twitter</td>
-                                        </tr>
-                                      </tbody>
-                                    </table>
-                                  </div>
-                                </div>
-                              </div>
+                           </div>
                             </div>
                             <!-- end of row 2 -->
                             <div class="row">
@@ -432,36 +302,31 @@
     <script src="../vendors/fastclick/lib/fastclick.js"></script>
     <!-- NProgress -->
     <script src="../vendors/nprogress/nprogress.js"></script>
-    <!-- Chart.js -->
-    <script src="../vendors/Chart.js/dist/Chart.min.js"></script>
-    <!-- gauge.js -->
-    <script src="../vendors/gauge.js/dist/gauge.min.js"></script>
     <!-- bootstrap-progressbar -->
     <script src="../vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
     <!-- iCheck -->
     <script src="../vendors/iCheck/icheck.min.js"></script>
-    <!-- Skycons -->
-    <script src="../vendors/skycons/skycons.js"></script>
-    <!-- Flot -->
-    <script src="../vendors/Flot/jquery.flot.js"></script>
-    <script src="../vendors/Flot/jquery.flot.pie.js"></script>
-    <script src="../vendors/Flot/jquery.flot.time.js"></script>
-    <script src="../vendors/Flot/jquery.flot.stack.js"></script>
-    <script src="../vendors/Flot/jquery.flot.resize.js"></script>
-    <!-- Flot plugins -->
-    <script src="../vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
-    <script src="../vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
-    <script src="../vendors/flot.curvedlines/curvedLines.js"></script>
-    <!-- DateJS -->
-    <script src="../vendors/DateJS/build/date.js"></script>
-    <!-- JQVMap -->
-    <script src="../vendors/jqvmap/dist/jquery.vmap.js"></script>
-    <script src="../vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
-    <script src="../vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
     <!-- bootstrap-daterangepicker -->
     <script src="../vendors/moment/min/moment.min.js"></script>
     <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
-
+    <!-- bootstrap-wysiwyg -->
+    <script src="../vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js"></script>
+    <script src="../vendors/jquery.hotkeys/jquery.hotkeys.js"></script>
+    <script src="../vendors/google-code-prettify/src/prettify.js"></script>
+    <!-- jQuery Tags Input -->
+    <script src="../vendors/jquery.tagsinput/src/jquery.tagsinput.js"></script>
+    <!-- Switchery -->
+    <script src="../vendors/switchery/dist/switchery.min.js"></script>
+    <!-- Select2 -->
+    <script src="../vendors/select2/dist/js/select2.full.min.js"></script>
+    <!-- Parsley -->
+    <script src="../vendors/parsleyjs/dist/parsley.min.js"></script>
+    <!-- Autosize -->
+    <script src="../vendors/autosize/dist/autosize.min.js"></script>
+    <!-- jQuery autocomplete -->
+    <script src="../vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
+    <!-- starrr -->
+    <script src="../vendors/starrr/dist/starrr.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="../build/js/custom.min.js"></script>
 
