@@ -19,6 +19,7 @@ namespace BrainNotFound.Paper.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly PaperDbContext _context;
 
+        #region instructor controllers
         public InstructorController(
             UserManager<ApplicationUser> userManager, PaperDbContext context)
         {
@@ -69,7 +70,10 @@ namespace BrainNotFound.Paper.Controllers
             await _userManager.UpdateAsync(instructor);
             return RedirectToAction("Profile", "Admin");
         }
+        #endregion instructor controllers
 
+
+        #region student controllers
         [HttpGet, Route("Students")]
         public async Task<IActionResult> Students()
         {
@@ -131,11 +135,49 @@ namespace BrainNotFound.Paper.Controllers
 
             return View();
         }
+        #endregion student controllers
+
 
         [HttpGet, Route("Courses")]
-        public IActionResult Courses()
+        public async Task<IActionResult> Courses()
         {
-            return View();
+            var instructor = await _userManager.GetUserAsync(HttpContext.User);
+
+            // Find all of the sections that the instructor teaches and add it to the Viewbag
+            var sections = _context.Sections.Where(s => s.InstructorId == instructor.Id).ToList();
+            ViewBag.sections = sections;
+
+            // Find all of the courses that the instructor is in
+            var allCourses = _context.Courses.OrderBy(o => o.CourseCode).ToList();
+            List<Course> courses = new List<Course>();
+            foreach(Course c in allCourses)
+            {
+                foreach(Section s in sections)
+                {
+                    if(c.CourseId == s.CourseId)
+                    {
+                        courses.Add(c);
+                    }
+                }
+            }
+
+            ViewBag.courses = courses;
+
+            // Find all of the departments that the instructor is in
+            var allDepartments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
+            List<Department> departments = new List<Department>();
+            foreach(Department d in allDepartments)
+            {
+                foreach(Course c in courses)
+                {
+                    if(d.DepartmentId == c.DepartmentId)
+                    {
+                        departments.Add(d);
+                    }
+                }
+            }
+            ViewBag.departments = departments;
+            return View(courses);
         }
 
         [HttpGet, Route("Courses/{CourseCode}")]
