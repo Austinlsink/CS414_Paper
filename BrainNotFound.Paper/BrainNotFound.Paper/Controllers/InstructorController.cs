@@ -186,9 +186,39 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        [HttpGet, Route("Courses/{CourseCode}/Sections")]
-        public IActionResult ViewSections(String CourseCode)
+        [HttpGet, Route("Courses/{code}/{sectionNumber}")]
+        public async Task<IActionResult> ViewSections(string code, int sectionNumber)
         {
+            string departmentCode = code.Substring(0, 2);
+            string courseCode = code.Substring(2, 3);
+
+            // Find the department associated with the course by DepartmentCode and add it to the ViewBag
+            var department = _context.Departments.Where(d => d.DepartmentCode == departmentCode).First();
+            ViewBag.department = department;
+
+            // Find the section's course where the CourseCode and DepartmentIds match and add it to the ViewBag 
+            var course = _context.Courses.Where(c => c.CourseCode == courseCode && c.DepartmentId == department.DepartmentId).First();
+            ViewBag.course = course;
+
+            // Find the section and its information where the CourseIds and SectionNumber match and add it to the ViewBag
+            var section = _context.Sections.Where(s => s.CourseId == course.CourseId && s.SectionNumber == sectionNumber).First();
+            ViewBag.section = section;
+
+            // Find all of the instructors and add them to the ViewBag
+            var instructor = await _userManager.GetUsersInRoleAsync("Instructor");
+            ViewBag.instructorList = instructor;
+
+            // Find all of the students and add them to the ViewBag
+            var students = await _userManager.GetUsersInRoleAsync("Student");
+            ViewBag.students = students;
+
+            // Find all enrollments and add them to the ViewBag
+            var enrollment = _context.Enrollments.ToList();
+            ViewBag.enrollment = enrollment;
+
+            // Find all the SectionMeetingTimes and add them to the ViewBag
+            var sectionMeetingTimeList = _context.SectionMeetingTimes.ToList();
+            ViewBag.sectionMeetingTimeList = sectionMeetingTimeList;
             return View();
         }
 
