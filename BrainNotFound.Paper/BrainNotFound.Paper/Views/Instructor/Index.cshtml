@@ -2,24 +2,16 @@
     ViewData["Title"] = "Dashboard - Instructor";
 }
 
+
 <button onclick="GetAllStudents()">Get all Students</button>
+<button onclick="GetHostInfo()">GetHostInfo</button>
 <div id="test">
     <table class="table">
-        <tr>
-
-        </tr>
+        <tr></tr>
     </table>
 </div>
-<script type="text/javascript">
-    function GetAllStudents() {
-        
-        $.ajax({
-            type: "GET",
-            url: "@Url.Action("get", "students")",
-            async: true,
-            success: function (text) {
-                $('test').append(text);
-            }
-        });
-    }
-</script>
+<div id="demo"></div>
+
+@section scripts {
+    <script type="text/javascript" src="~/js/TestScript.js"></script>
+}

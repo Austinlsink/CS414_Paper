@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BrainNotFound.Paper.Models.BusinessModels;
+using BrainNotFound.Paper.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -24,13 +25,11 @@ namespace BrainNotFound.Paper.api
 
         // GET: api/Students
         [HttpGet]
-        public async Task<IEnumerable<ApplicationUser>> Get()
+        public async Task<string> Get()
         {
-            var allStudents = (await _userManager.GetUsersInRoleAsync("students")).OrderBy(o => o.FirstName).ToList();
+            var allStudents = (await _userManager.GetUsersInRoleAsync(UserRole.Student)).OrderBy(o => o.FirstName).First().FirstName;
             return allStudents;
-
-
-        }
+        } 
 
         // GET: api/Students/5
         [HttpGet("{id}", Name = "Get")]
