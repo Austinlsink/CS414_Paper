@@ -28,7 +28,7 @@
                 <div class="x_content">
                     <div class="col-md-10 col-sm-10 col-xs-12">
 
-                        <h3>@ViewBag.course.CourseName @ViewBag.course.CourseCode - @ViewBag.section.SectionNumber - @ViewBag.section.SectionId</h3>
+                        <h3>@ViewBag.course.CourseName @ViewBag.course.CourseCode - @ViewBag.section.SectionNumber</h3>
 
                         <ul class="list-unstyled user_data">
                             <li>
@@ -112,8 +112,10 @@
                                                         <button type="submit" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Unassign </button>
                                                         <input type="hidden" name="UserName" value="@s.UserName" />
                                                         <input type="hidden" name="SectionId" value="@ViewBag.section.SectionId" />
+                                                        <input type="hidden" name="SectionNumber" value="@ViewBag.section.SectionNumber" />
                                                         <input type="hidden" name="CourseCode" value="@ViewBag.course.CourseCode" />
                                                         <input type="hidden" name="CourseId" value="@ViewBag.section.CourseId" />
+                                                        <input type="hidden" name="DepartmentCode" value="@ViewBag.department.DepartmentCode" />
                                                     </form>
                                                 </td>
                                             </tr>
@@ -170,6 +172,7 @@
                                                     <a asp-controller="Admin" asp-action="ViewStudent" asp-route-UserName="@s.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                                     <a asp-controller="Admin" asp-action="EditStudent" asp-route-UserName="@s.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
                                                     <input type="hidden" name="UserName" value="@s.UserName" />
+                                                    <input type="hidden" name="SectionNumber" value="@ViewBag.section.SectionNumber" />
                                                     <input type="hidden" name="SectionId" value="@ViewBag.section.SectionId" />
                                                     <input type="hidden" name="CourseCode" value="@ViewBag.course.CourseCode" />
                                                     <input type="hidden" name="CourseId" value="@ViewBag.section.CourseId" />
