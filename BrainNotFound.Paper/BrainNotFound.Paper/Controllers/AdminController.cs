@@ -712,10 +712,17 @@ namespace BrainNotFound.Paper.Controllers
         public async Task<IActionResult> ReassignInstructor(ApplicationUser user, Section section, Course course, Department department)
         {
             string code = department.DepartmentCode + course.CourseCode;
+            //ViewData["message"] = code + "Hello, we made it...";
+            //return View("TestView");
 
+            // Find the instructor to reassign to the specified section
             var instructor = await _userManager.FindByNameAsync(user.UserName);
 
-    
+            // Find the specified section to reassign the instructor
+            var sect = _context.Sections.Where(s => s.SectionId == section.SectionId).First();
+            sect.InstructorId = instructor.Id;
+
+            _context.SaveChanges();    
 
             return RedirectToAction("ViewSection", "Admin", new { code, section.SectionNumber });
         }
