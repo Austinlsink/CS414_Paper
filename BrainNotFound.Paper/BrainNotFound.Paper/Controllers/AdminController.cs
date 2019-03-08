@@ -163,6 +163,11 @@ namespace BrainNotFound.Paper.Controllers
         #endregion create administrator controllers
 
         #region create instructor controllers
+        /// <summary>
+        /// Allows the user to view all of the instructors
+        /// </summary>
+        /// <param name="message">Error message from the DeleteInstructor method.</param>
+        /// <returns></returns>
         [HttpGet, Route("Instructors")]
         public async Task<IActionResult> Instructors(String message = "")
         {
@@ -219,13 +224,23 @@ namespace BrainNotFound.Paper.Controllers
             return View(model);
         }
 
+
         [HttpGet, Route("Instructors/{UserName}")]
         public async Task<IActionResult> ViewInstructor(String username)
         {
-
+            // Find the specified user by his username and add him to the ViewBag
             var instructor = await _userManager.FindByNameAsync(username);
+            ViewBag.profile = instructor;
 
+            // Grab all of the departments and add them to the ViewBag
+            List<Department> departments = _context.Departments.ToList();
+            ViewBag.departments = departments;
+
+            // Find all of the sections that the instructor teaches and add them to the ViewBag
             List<Section> sections = _context.Sections.Where(s => s.InstructorId == instructor.Id).ToList();
+            ViewBag.sections = sections;
+
+            // Find all of the courses that match its corresponding section and add them to the ViewBag
             List<Course> allCourses = _context.Courses.ToList();
             List<Course> courses = new List<Course>();
             foreach(Section s in sections)
@@ -239,8 +254,6 @@ namespace BrainNotFound.Paper.Controllers
             }
 
             ViewBag.courses = courses;
-            ViewBag.sections = sections;
-            ViewBag.profile = instructor;
 
             return View();
         }
@@ -563,14 +576,17 @@ namespace BrainNotFound.Paper.Controllers
             return RedirectToAction("Courses", "Admin");
         }
 
+        /// <summary>
+        /// Allows the user to view a specific course and all of its information
+        /// </summary>
+        /// <param name="code">The DepartmentCode and CourseCode</param>
+        /// <returns></returns>
         [HttpGet, Route("Courses/{code}")] // ex: SP101
         public async Task<IActionResult> ViewCourse(string code)
         {
+            // Parsing code into the DepartmentCode and the CourseCode
             string departmentCode = code.Substring(0, 2);
             string courseCode = code.Substring(2, 3);
-
-            //ViewData["message"] = departmentCode + courseCode;
-            //return View("TestView");
 
             // Find the department and add it to the ViewBag
             var department = _context.Departments.Where(d => d.DepartmentCode == departmentCode).First();
