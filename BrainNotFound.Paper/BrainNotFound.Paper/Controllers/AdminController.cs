@@ -688,6 +688,10 @@ namespace BrainNotFound.Paper.Controllers
             var section = _context.Sections.Where(s => s.CourseId == course.CourseId && s.SectionNumber == sectionNumber).First();
             ViewBag.section = section;
 
+            // Find all of the instructors and add them to the ViewBag
+            var instructor = await _userManager.GetUsersInRoleAsync("Instructor");
+            ViewBag.instructorList = instructor;
+
             // Find all of the students and add them to the ViewBag
             var students = await _userManager.GetUsersInRoleAsync("Student");
             ViewBag.students = students;

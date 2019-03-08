@@ -62,6 +62,19 @@
                             <li>
                                 <b>End Time:</b> @endTime.ToString("h:mm tt")
                             </li>
+                            <li>
+                                @{ 
+                                    ApplicationUser instructor = new ApplicationUser();
+                                    foreach(var i in ViewBag.instructorList)
+                                    {
+                                        if (i.Id == ViewBag.section.InstructorId)
+                                        {
+                                            instructor = (ApplicationUser) i;
+                                        }
+                                    }
+                                }
+                                <b>Instructor</b>@instructor.FirstName @instructor.LastName
+                            </li>
                         </ul>
                         <br />
                     </div>
