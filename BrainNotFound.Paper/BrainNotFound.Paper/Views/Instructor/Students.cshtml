@@ -40,9 +40,7 @@
                                 <td class=" ">@s.LastName </td>
                                 <td class=" ">@s.Classification </td>
                                 <td class=" last">
-                                    <form asp-controller="Admin" asp-action="UnassignStudent">
-                                        <a asp-controller="Admin" asp-action="ViewStudent" asp-route-UserName="@s.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                    </form>
+                                     <a asp-controller="Instructor" asp-action="ViewStudentProfile" asp-route-UserName="@s.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                 </td>
                             </tr>
                  }

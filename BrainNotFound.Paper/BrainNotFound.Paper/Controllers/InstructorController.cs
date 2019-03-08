@@ -101,9 +101,34 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        [HttpGet, Route("ViewStudentProfile")]
-        public IActionResult ViewStudentProfile()
+        [HttpGet, Route("ViewStudentProfile/{username}")]
+        public async Task<IActionResult> ViewStudentProfile(String username)
         {
+            var student = await _userManager.FindByNameAsync(username);
+            var enrollment = _context.Enrollments.Where(e => e.StudentId == student.Id).ToList();
+            var allSections = _context.Sections.ToList();
+            var allMeetingTimes = _context.SectionMeetingTimes.ToList();
+            var courses = _context.Courses.ToList();
+            var departments = _context.Departments.ToList();
+            List<Section> sections = new List<Section>();
+
+            foreach (Enrollment e in enrollment)
+            {
+                foreach (Section s in allSections)
+                {
+                    if (e.SectionId == s.SectionId)
+                    {
+                        sections.Add(s);
+                    }
+                }
+            }
+
+            ViewBag.profile = student;
+            ViewBag.sections = sections;
+            ViewBag.sectionMeetingTimesList = allMeetingTimes;
+            ViewBag.courses = courses;
+            ViewBag.departments = departments;
+
             return View();
         }
 
