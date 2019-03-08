@@ -38,15 +38,36 @@ namespace BrainNotFound.Paper.Controllers
         public async Task<IActionResult> Profile()
         {
             var instructor = await _userManager.GetUserAsync(HttpContext.User);
-
             ViewBag.profile = instructor;
+
             return View();
         }
 
         [HttpGet, Route("Profile/Edit")]
-        public IActionResult EditProfile()
+        public async Task<IActionResult> EditProfile()
         {
+            ApplicationUser instructor = await _userManager.GetUserAsync(HttpContext.User);
+            ViewBag.instructor = instructor;
+
             return View();
+        }
+
+        [HttpPost, Route("Profile/Edit")]
+        public async Task<IActionResult> EditProfile(ApplicationUser user)
+        {
+            ApplicationUser instructor = await _userManager.GetUserAsync(HttpContext.User);
+            instructor.Salutation = user.Salutation;
+            instructor.FirstName = user.FirstName;
+            instructor.LastName = user.LastName;
+            instructor.PhoneNumber = user.PhoneNumber;
+            instructor.Email = user.Email;
+            instructor.Address = user.Address;
+            instructor.City = user.City;
+            instructor.State = user.State;
+            instructor.ZipCode = user.ZipCode;
+
+            await _userManager.UpdateAsync(instructor);
+            return RedirectToAction("Profile", "Admin");
         }
 
         [HttpGet, Route("Students")]
