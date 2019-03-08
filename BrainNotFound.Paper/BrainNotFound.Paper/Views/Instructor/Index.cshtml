@@ -1,3 +1,17 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Dashboard - Instructor";
+}
+
+
+<button onclick="GetAllStudents()">Get all Students</button>
+<button onclick="GetHostInfo()">GetHostInfo</button>
+<div id="test">
+    <table class="table">
+        <tr></tr>
+    </table>
+</div>
+<div id="demo"></div>
+
+@section scripts {
+    <script type="text/javascript" src="~/js/TestScript.js"></script>
 }

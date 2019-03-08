@@ -60,7 +60,7 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-       // [Route("/")]
+       [Route("/")]
         public IActionResult ForceLogin()
         {
             return View("LoginOptions");

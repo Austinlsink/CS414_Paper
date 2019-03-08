@@ -593,7 +593,7 @@ namespace BrainNotFound.Paper.Controllers
             ViewBag.department = department;
 
             // Find the specified course and add it to the ViewBag
-            var course = _context.Courses.Where(c => c.CourseCode == courseCode).First();
+            var course = _context.Courses.Where(c => c.CourseCode == courseCode && c.DepartmentId == department.DepartmentId).First();
             ViewBag.course = course;
 
             // Find the sections with the same ID as the course and add it to the ViewBag
@@ -674,30 +674,58 @@ namespace BrainNotFound.Paper.Controllers
         public async Task<IActionResult> ViewSection(string code, int sectionNumber)
         {
             string departmentCode = code.Substring(0, 2);
-            string courseCode = code.Substring(2, 3);
-            
-            // Find the section's course and add it to the ViewBag 
-            var course = _context.Courses.Where(c => c.CourseCode == courseCode).First();
+            string courseCode     = code.Substring(2, 3);
 
-            // Find the section and its information and add it to the ViewBag
+            // Find the department associated with the course by DepartmentCode and add it to the ViewBag
+            var department = _context.Departments.Where(d => d.DepartmentCode == departmentCode).First();
+            ViewBag.department = department;
+
+            // Find the section's course where the CourseCode and DepartmentIds match and add it to the ViewBag 
+            var course = _context.Courses.Where(c => c.CourseCode == courseCode && c.DepartmentId == department.DepartmentId).First();
+            ViewBag.course = course;
+
+            // Find the section and its information where the CourseIds and SectionNumber match and add it to the ViewBag
             var section = _context.Sections.Where(s => s.CourseId == course.CourseId && s.SectionNumber == sectionNumber).First();
-            
-            var students = await _userManager.GetUsersInRoleAsync("Student");
-            var enrollment = _context.Enrollments.ToList();
-            var sectionMeetingTimeList = _context.SectionMeetingTimes.ToList();
+            ViewBag.section = section;
 
-            ViewBag.section    = section;
-            ViewBag.course     = course;
-            ViewBag.students   = students;
+            // Find all of the instructors and add them to the ViewBag
+            var instructor = await _userManager.GetUsersInRoleAsync("Instructor");
+            ViewBag.instructorList = instructor;
+
+            // Find all of the students and add them to the ViewBag
+            var students = await _userManager.GetUsersInRoleAsync("Student");
+            ViewBag.students = students;
+
+            // Find all enrollments and add them to the ViewBag
+            var enrollment = _context.Enrollments.ToList();
             ViewBag.enrollment = enrollment;
+
+            // Find all the SectionMeetingTimes and add them to the ViewBag
+            var sectionMeetingTimeList = _context.SectionMeetingTimes.ToList();
             ViewBag.sectionMeetingTimeList = sectionMeetingTimeList;
+
             return View();
         }
 
         // Assign a student to a section
-        [HttpPost, Route("AssignStudent")]
-        public async Task<IActionResult> AssignStudent(ApplicationUser user, Section section, Course course)
+        [HttpPost, Route("ReassignInstructor")]
+        public async Task<IActionResult> ReassignInstructor(ApplicationUser user, Section section, Course course, Department department)
         {
+            string code = department.DepartmentCode + course.CourseCode;
+
+            var instructor = await _userManager.FindByNameAsync(user.UserName);
+
+    
+
+            return RedirectToAction("ViewSection", "Admin", new { code, section.SectionNumber });
+        }
+
+        // Assign a student to a section
+        [HttpPost, Route("AssignStudent")]
+        public async Task<IActionResult> AssignStudent(ApplicationUser user, Section section, Course course, Department department)
+        {
+            string code = department.DepartmentCode + course.CourseCode;
+
             var student = await _userManager.FindByNameAsync(user.UserName);
 
             Enrollment enroll = new Enrollment();
@@ -707,19 +735,21 @@ namespace BrainNotFound.Paper.Controllers
             _context.Enrollments.Add(enroll);
             _context.SaveChanges();
            
-            return RedirectToAction("ViewSection", "Admin", new {CourseId = course.CourseId, SectionId = section.SectionId });
+            return RedirectToAction("ViewSection", "Admin", new { code, section.SectionNumber });
         }
 
         [HttpPost, Route("UnassignStudent")]
-        public async Task<IActionResult> UnassignStudent(ApplicationUser user, Section section, Course course)
+        public async Task<IActionResult> UnassignStudent(ApplicationUser user, Section section, Course course, Department department)
         {
+            string code = department.DepartmentCode + course.CourseCode;
+
             var student = await _userManager.FindByNameAsync(user.UserName);
 
-            Enrollment deleteStudent = _context.Enrollments.Where(e => e.StudentId == student.Id).First();
+            Enrollment deleteStudent = _context.Enrollments.Where(e => e.StudentId == student.Id && e.SectionId == section.SectionId).First();
             _context.Enrollments.Remove(deleteStudent);
             _context.SaveChanges();            
 
-            return RedirectToAction("ViewSection", "Admin", new { CourseId = course.CourseId, SectionId = section.SectionId });
+            return RedirectToAction("ViewSection", "Admin", new { code, section.SectionNumber });
         }
 
         [HttpGet, Route("Sections/Edit/{CourseCode}/{SectionNumber}")]
