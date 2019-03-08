@@ -63,19 +63,36 @@
                                 <b>End Time:</b> @endTime.ToString("h:mm tt")
                             </li>
                             <li>
-                                @{ 
+                                @{
                                     ApplicationUser instructor = new ApplicationUser();
-                                    foreach(var i in ViewBag.instructorList)
+                                    foreach (var i in ViewBag.instructorList)
                                     {
                                         if (i.Id == ViewBag.section.InstructorId)
                                         {
-                                            instructor = (ApplicationUser) i;
+                                            instructor = (ApplicationUser)i;
                                         }
                                     }
                                 }
-                                <b>Instructor</b>@instructor.FirstName @instructor.LastName
+                                <b>Instructor: </b>@instructor.FirstName @instructor.LastName
                             </li>
                         </ul>
+                        <br />
+                        <h2> Reassign Instructor</h2>
+                            <select asp-for="ApplicationUser.UserName" class="select2_single form-control" tabindex="1">
+                                <option disabled selected value=""> -- Assign a teacher -- </option>
+                                @foreach (var i in ViewBag.instructorList)
+                                {
+                                    <option value="@i.UserName">@i.FirstName @i.LastName</option>
+                                }
+                            </select>
+                            <form asp-controller="Admin" asp-action="ReassignTeacher">
+                                <button type="submit">Reassign</button>
+                                <input type="hidden" name="SectionId"      value="@ViewBag.section.SectionId" />
+                                <input type="hidden" name="SectionNumber"  value="@ViewBag.section.SectionNumber" />
+                                <input type="hidden" name="CourseCode"     value="@ViewBag.course.CourseCode" />
+                                <input type="hidden" name="CourseId"       value="@ViewBag.section.CourseId" />
+                                <input type="hidden" name="DepartmentCode" value="@ViewBag.department.DepartmentCode" />
+                            </form>
                         <br />
                     </div>
                 </div>

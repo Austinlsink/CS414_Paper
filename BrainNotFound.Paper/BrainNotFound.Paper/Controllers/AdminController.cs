@@ -708,6 +708,19 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         // Assign a student to a section
+        [HttpPost, Route("ReassignInstructor")]
+        public async Task<IActionResult> ReassignInstructor(ApplicationUser user, Section section, Course course, Department department)
+        {
+            string code = department.DepartmentCode + course.CourseCode;
+
+            var instructor = await _userManager.FindByNameAsync(user.UserName);
+
+    
+
+            return RedirectToAction("ViewSection", "Admin", new { code, section.SectionNumber });
+        }
+
+        // Assign a student to a section
         [HttpPost, Route("AssignStudent")]
         public async Task<IActionResult> AssignStudent(ApplicationUser user, Section section, Course course, Department department)
         {
