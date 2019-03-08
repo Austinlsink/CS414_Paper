@@ -315,7 +315,6 @@ namespace BrainNotFound.Paper.Controllers
         {
             var admin = await _userManager.GetUserAsync(HttpContext.User);
             
-
             ViewBag.profile = admin;
             return View();
         }

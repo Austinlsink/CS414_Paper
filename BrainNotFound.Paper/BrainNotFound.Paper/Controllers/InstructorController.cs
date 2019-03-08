@@ -35,8 +35,11 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         [HttpGet, Route("Profile")]
-        public IActionResult Profile()
+        public async Task<IActionResult> Profile()
         {
+            var instructor = await _userManager.GetUserAsync(HttpContext.User);
+
+            ViewBag.profile = instructor;
             return View();
         }
 
