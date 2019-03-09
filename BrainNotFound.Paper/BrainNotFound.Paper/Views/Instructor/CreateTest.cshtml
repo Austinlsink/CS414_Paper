@@ -1,4 +1,4 @@
-@using BrainNotFound.Paper.Models.BusinessModels
+﻿@using BrainNotFound.Paper.Models.BusinessModels
 @model BrainNotFound.Paper.Models.BusinessModels.ApplicationUser;
 
 @{
@@ -41,7 +41,7 @@
     <link href="../build/css/custom.css" rel="stylesheet">
   </head>
 
-  <body class="nav-md">
+<body class="nav-md">
     <div class="container body">
         <div class="main_container">
 
@@ -179,6 +179,7 @@
                                         <tbody>
                                             <tr>
                                                 <td>
+                                                    <!--where does this div end?-->
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox" name="foo2" value="" id="defaultCheck1">
                                                         <label class="form-check-label" for="defaultCheck1">
@@ -231,12 +232,12 @@
                 <div class="x_content">
                     <form id="new-department" data-parsley-validate class="form-horizontal form-label-left">
                         <!--<div class="col-md-12 col-sm-12 col-xs-12 form-group">
-                            <!--"****JUST A NOTE**** choose a question type should be the only thing visible until something has been chosen. once chosen, a button (we will need a smaller button next to the question type drop down box) will convert the choice into the instruction box along with whatever type of question section it should be
-                            <input type="text" placeholder="Enter Instructions Here" class="form-control">
-                        </div>-->
+                    <!--"****JUST A NOTE**** choose a question type should be the only thing visible until something has been chosen. once chosen, a button (we will need a smaller button next to the question type drop down box) will convert the choice into the instruction box along with whatever type of question section it should be
+                    <input type="text" placeholder="Enter Instructions Here" class="form-control">
+                </div>-->
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Question Type</label>
-                            <div class="col-md-3 col-sm-3 col-xs-12" >
+                            <div class="col-md-3 col-sm-3 col-xs-12">
                                 <select class="form-control">
                                     <option>Choose option</option>
                                     <option>True/False</option>
@@ -251,15 +252,71 @@
                 </div>
             </div>
             <!-- end of test creation information -->
-            <div class="" style="text-align:center">
-                <button type="button" class="btn btn-round btn-info"><i class="fa fa-plus"></i> Add Section</button>
-            </div>
-        </div>
+
+            <div id="genericSection" class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-question"></i> | New test section</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                        <li><a class="collapse-link"><i class="fa fa-arrow-up"></i></a></li>
+                        <li><a class="collapse-link"><i class="fa fa-arrow-down"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <form id="new-department" data-parsley-validate class="form-horizontal form-label-left">
+                        <!--<div class="col-md-12 col-sm-12 col-xs-12 form-group">
+                    <!--"****JUST A NOTE**** choose a question type should be the only thing visible until something has been chosen. once chosen, a button (we will need a smaller button next to the question type drop down box) will convert the choice into the instruction box along with whatever type of question section it should be
+                    <input type="text" placeholder="Enter Instructions Here" class="form-control">
+                </div>-->
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Question Type</label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <select class="form-control">
+                                    <option>Choose option</option>
+                                    <option>True/False</option>
+                                    <option>Multiple Choice</option>
+                                    <option>Fill In The Blank</option>
+                                    <option>Matching</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </form>
                 </div>
             </div>
+
+
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <script>
+
+                function addSection() {
+                    //$("body").append("<div class=\"form1\"></div>");
+                    $("#sectionAdd").before("<div class=\"x_panel\">< div class= \"x_title\" ><h2><i class=\"fa fa-question\"></i> | New test section</h2><ul class=\"nav navbar-right panel_toolbox\"> <li><a class=\"collapse-link\"><i class=\"fa fa-chevron-up\"></i></a></li><li><a class=\"collapse-link\"><i class=\"fa fa-arrow-up\"></i></a></li><li><a class=\"collapse-link\"><i class=\"fa fa-arrow-down\"></i></a></li></ul><div class=\"clearfix\"></div></div ><div class=\"x_content\"><form id=\"new-department\" data-parsley-validate class=\"form-horizontal form-label-left\"><!--<div class=\"col-md-12 col-sm-12 col-xs-12 form-group\"><input type=\"text\" placeholder=\"Enter Instructions Here\" class=\"form-control\"></div>--><div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\">Question Type</label><div class=\"col-md-3 col-sm-3 col-xs-12\"><select class=\"form-control\"><option>Choose option</option><option>True/False</option><option>Multiple Choice</option><option>Fill In The Blank</option><option>Matching</option></select></div></div></form></div></div>");
+                    //$(".form1").append("<input id=\"box\" type=\"text\"><button onclick=\"Swap()\">Swap code</button>");
+
+                    //****is it possible to just make a copy of the generic test section div and just add another before the add section button??****
+                    //$("#genericSection").clone().append("body");
+                }
+                /*function Swap() {
+                    var box_text = $("#box").val();
+                    $(".form1").empty();
+                    $(".form1").append("<h1>" + box_text + "</h1>");
+                }*/
+            </script>
+            <div class="" style="text-align:center">
+                <button id="sectionAdd" type="button" onclick="addSection()" class="btn btn-round btn-info"><i class="fa fa-plus"></i> Add Section</button>
+            </div>
         </div>
-        <!-- /page content -->
-      </div>
+    </div>
+    <!--not sure where this div starts-->
+    </div>
+    <!--not sure where this div starts-->
+    </div>
+    <!-- /page content -->
+
+    <!--not sure where this div starts-->
+    </div>
 
     <!-- jQuery -->
     <script src="../vendors/jquery/dist/jquery.min.js"></script>
@@ -302,4 +359,4 @@
     <!-- Custom Theme Scripts -->
     <script src="../build/js/custom.min.js"></script>
 
-  </body>
+</body>
