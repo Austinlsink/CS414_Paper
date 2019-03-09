@@ -1,7 +1,122 @@
+@using BrainNotFound.Paper.Models.BusinessModels
+@model BrainNotFound.Paper.Models.BusinessModels.ApplicationUser;
+
 @{
     ViewData["Title"] = "Student Profile - Instructor";
 }
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
 
-<p>This page displays the student’s personal information, which sections he’s enrolled in, his upcoming tests, and his test history.</p>
+<div class="">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-user"></i> Student Information</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="col-md-2 col-sm-2 col-xs-12 profile_left">
+                        <div class="profile_img">
+                            <div id="crop-avatar">
+                                <!-- Current avatar -->
+                                <img class="img-responsive avatar-view" src="images/picture.jpg" alt="Avatar"
+                                     title="Change the avatar">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-10 col-sm-10 col-xs-12">
+                        <h3> @ViewBag.profile.FirstName @ViewBag.profile.LastName</h3>
+
+                        <ul class="list-unstyled user_data">
+                            <li>
+                                <i class="fa fa-map-marker user-profile-icon"></i> @ViewBag.profile.Address @ViewBag.profile.City @ViewBag.profile.State @ViewBag.profile.ZipCode
+                            </li>
+
+                            <li>
+                                <i class="fa fa-at user-profile-icon"> @ViewBag.profile.Email</i>
+                            </li>
+
+                            <li>
+                                <i class="fa fa-user user-profile-icon"> @ViewBag.profile.UserName</i>
+
+                            <li>
+                                <i class="fa fa-phone user-profile-icon"> @ViewBag.profile.PhoneNumber</i>
+                            </li>
+
+                        </ul>
+                        <br />
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-book"></i> Sections</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Location</th>
+                                <th>Day</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var s in ViewBag.sections)
+                            {
+                                // Find the meeting times for each section
+                                List<String> days = new List<string>();
+                                List<SectionMeetingTime> sectionMeetingTimes = ViewBag.sectionMeetingTimesList;
+                                var sectionMeetingTime = sectionMeetingTimes.Where(smt => smt.SectionId == s.SectionId).ToList();
+                                foreach (SectionMeetingTime smt in sectionMeetingTime)
+                                {
+                                    days.Add(smt.Day);
+                                }
+                                String day = string.Join(", ", days);
+                                foreach (var c in ViewBag.courses)
+                                {
+                                    if (s.CourseId == c.CourseId)
+                                    {
+                                        foreach (var d in ViewBag.departments)
+                                        {
+                                            if (c.DepartmentId == d.DepartmentId)
+                                            {
+                                                <tr>
+                                                    <td>@d.DepartmentCode @c.CourseCode @c.CourseName - @s.SectionNumber</td>
+                                                    <td>@s.Location</td>
+                                                    <td>@day</td>
+                                                    <td> <a asp-controller="Admin" asp-action="ViewSection" asp-route-CourseId="@c.CourseId" asp-route-SectionId="@s.SectionId" class="btn btn-primary btn-xs"> View </a> </td>
+                                                </tr>
+                                            }
+
+                                        }
+
+                                    }
+                                }
+
+                            }
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>

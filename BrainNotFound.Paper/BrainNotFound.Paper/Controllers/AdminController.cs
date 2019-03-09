@@ -315,7 +315,6 @@ namespace BrainNotFound.Paper.Controllers
         {
             var admin = await _userManager.GetUserAsync(HttpContext.User);
             
-
             ViewBag.profile = admin;
             return View();
         }
@@ -664,12 +663,33 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        [HttpGet, Route("Sections/New")]
-        public IActionResult NewSection()
+        [HttpGet, Route("Sections/New/{code}")]
+        public async Task<IActionResult> NewSection(string code)
         {
+            string departmentCode = code.Substring(0, 2);
+            string courseCode = code.Substring(2, 3);
+
+            // Find the department associated with the course by DepartmentCode and add it to the ViewBag
+            var department = _context.Departments.Where(d => d.DepartmentCode == departmentCode).First();
+            ViewBag.department = department;
+
+            // Find the section's course where the CourseCode and DepartmentIds match and add it to the ViewBag 
+            var course = _context.Courses.Where(c => c.CourseCode == courseCode && c.DepartmentId == department.DepartmentId).First();
+            ViewBag.course = course;
+
+            // Find all of the instructors and add them to the ViewBag
+            var instructor = await _userManager.GetUsersInRoleAsync("Instructor");
+            ViewBag.instructorList = instructor;
+
             return View();
         }
 
+        /// <summary>
+        /// Allows the user to view a specific section
+        /// </summary>
+        /// <param name="code">DepartmentCode + CourseCode</param>
+        /// <param name="sectionNumber">section number for the corresonding course</param>
+        /// <returns></returns>
         [HttpGet, Route("Sections/View/{code}/{sectionNumber}")]
         public async Task<IActionResult> ViewSection(string code, int sectionNumber)
         {
@@ -707,15 +727,29 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        // Assign a student to a section
+        /// <summary>
+        /// Allows the user to reassign an instructor to a section
+        /// </summary>
+        /// <param name="user">Requested instructor to assign to the section</param>
+        /// <param name="section">The section being reassigned a new instructor</param>
+        /// <param name="course"></param>
+        /// <param name="department"></param>
+        /// <returns></returns>
         [HttpPost, Route("ReassignInstructor")]
         public async Task<IActionResult> ReassignInstructor(ApplicationUser user, Section section, Course course, Department department)
         {
             string code = department.DepartmentCode + course.CourseCode;
+            //ViewData["message"] = code + "Hello, we made it...";
+            //return View("TestView");
 
+            // Find the instructor to reassign to the specified section
             var instructor = await _userManager.FindByNameAsync(user.UserName);
 
-    
+            // Find the specified section to reassign the instructor
+            var sect = _context.Sections.Where(s => s.SectionId == section.SectionId).First();
+            sect.InstructorId = instructor.Id;
+
+            _context.SaveChanges();    
 
             return RedirectToAction("ViewSection", "Admin", new { code, section.SectionNumber });
         }
