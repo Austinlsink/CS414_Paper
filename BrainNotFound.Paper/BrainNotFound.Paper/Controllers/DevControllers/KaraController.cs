@@ -35,6 +35,7 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
             var sectionMeetingTimeList = _context.SectionMeetingTimes.ToList();
             var allStudents = (await _userManager.GetUsersInRoleAsync("Student")).OrderBy(o => o.FirstName).ToList();
 
+
             //foreach (var course in allCourses)
             //{
             //    ViewData["Message"] += "<li>" + course.CourseName + " Sections:";
@@ -53,6 +54,16 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
             // Populate Enrollment table
             foreach (var student in allStudents)
             {
+                List<Enrollment> currentEnrollments = new List<Enrollment>(); // Sections the student is already in
+
+                foreach (var enrollment in _context.Enrollments)
+                {
+                    if (enrollment.StudentId == student.Id)
+                    {
+                        currentEnrollments.Add(enrollment);
+                    }
+                }
+
                 // ViewData["Message"] += "<li>" + student.FullName + "</li>";
 
                 // random number generated 4 - 7 for # of sections taken
@@ -86,39 +97,65 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
 
 
                     // Select a random section in the selectedCourse
-                    // Section selectedSection = new Section();
-                    Section selectedSection = courseSections.ElementAt(rand.Next(0, courseSections.Count));
-                    //List<SectionMeetingTime> selectedSectionMeetingTimes = new List<SectionMeetingTime>();
+                    Section selectedSection = new Section();
+                    bool doesNotConflict = true;
+                    bool isNotTaken = true;
 
-                    // Make sure section doesn't conflict with other classes
-                    //foreach (var sectionMeetingTime in sectionMeetingTimeList)
-                    //{
-                    //    if (sectionMeetingTime.SectionId == selectedSection.SectionId)
-                    //    {
-                    //        // Check for conflicts
-                    //        foreach (var enrollment in _context.Enrollments)
-                    //        {
-                    //            if (student.Id == enrollment.StudentId)
-                    //            {
-                    //                List<Section> enrolledSections = new List<Section>();
-                    //                foreach (var section in allSections)
-                    //                {
-                    //                    if (section.SectionId == enrollment.SectionId)
-                    //                    {
-                    //                        enrolledSections.Add(section);
-                    //                    }
-                    //                }
-                    //                // check meeting times
-                    //                if (enrollment.SectionId == selectedSection.SectionId)
-                    //                {
-                    //                    selectedSectionMeetingTimes.Add(sectionMeetingTime);
-                    //                }
-                    //            }
-                    //        }
-                    //    }
-                    //}
+                    // Check if a section is already being taken by the student or not
+                    do
+                    {
+                        do
+                        {
+                            isNotTaken = true;
+                            selectedSection = courseSections.ElementAt(rand.Next(0, courseSections.Count));
 
-                    // TODO: Add to make sure not duplicates
+                            // Check if selectedSection is already being taken
+                            foreach (var enrollment in currentEnrollments)
+                            {
+                                if (selectedSection.SectionId == enrollment.SectionId)
+                                {
+                                    isNotTaken = false;
+                                }
+                            }
+                        } while (isNotTaken == false);
+
+                        // Make sure section doesn't conflict with other classes
+                        doesNotConflict = true;
+                        // Check all section meeting times
+                        foreach (var sectionMeetingTime in sectionMeetingTimeList)
+                        {
+                            // The time that the selected section meets
+                            if (sectionMeetingTime.SectionId == selectedSection.SectionId)
+                            {
+                                // If the section meeting time is the same as one of the meeting times for one of the enrollments
+
+                                // Check for conflicts in current enrollments
+                                foreach (var enrollment in currentEnrollments)
+                                {
+                                    foreach (var section in allSections)
+                                    {
+                                        // Get all sections the student is enrolled in
+                                        if (enrollment.SectionId == section.SectionId)
+                                        {
+                                            foreach (var enrolledSectionSectionMeetingTime in sectionMeetingTimeList)
+                                            {
+                                                // Check if the section meets at the same time as an already enrolled section
+                                                if (section.SectionId == enrolledSectionSectionMeetingTime.SectionId)
+                                                {
+                                                    if (sectionMeetingTime.SectionMeetingTimeId == enrolledSectionSectionMeetingTime.SectionMeetingTimeId)
+                                                    {
+                                                        doesNotConflict = false;
+
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } while ((isNotTaken == false) || (doesNotConflict == false));
+                //} while (isNotTaken == false);
 
                     // Make a new enrollment using the current student's Id and the SectionId of the selected section
                     Enrollment newEnrollment = new Enrollment
@@ -129,8 +166,9 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
                     _context.Enrollments.Add(newEnrollment);
                     ViewData["Message"] += "<li>Student Id: " + newEnrollment.StudentId + " Section Id: " + newEnrollment.SectionId + "</li>";
                 }
+                _context.SaveChanges();
             }
-            _context.SaveChanges();
+            //_context.SaveChanges();
 
             return View("TestView");
         }
