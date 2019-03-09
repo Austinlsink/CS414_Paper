@@ -1,7 +1,305 @@
+@using BrainNotFound.Paper.Models.BusinessModels
+@model BrainNotFound.Paper.Models.BusinessModels.ApplicationUser;
+
 @{
     ViewData["Title"] = "Create Test - Instructor";
 }
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" href="images/favicon.ico" type="image/ico" />
 
-<p>This page allows the instructor to create a test for a section.</p>
+    <title>Paper | Edit Course - Admin</title>
+
+    <!-- Bootstrap -->
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Crimson+Text|Raleway" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+    <!-- bootstrap-progressbar -->
+    <link href="../vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+    <!-- JQVMap -->
+    <link href="../vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/>
+    <!-- bootstrap-daterangepicker -->
+    <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <!-- Datatable java -->
+    <link href="../vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="../build/css/custom.css" rel="stylesheet">
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+
+
+            <!-- page content -->
+            <!-- (Test creation information) beginning of row 2 -->
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-info-circle"></i> | Test creation information</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">Settings 1</a></li>
+                                <li><a href="#">Settings 2</a></li>
+                            </ul>
+                        </li>
+                        <li><a class="collapse-link"><i class="fa fa-arrow-up"></i></a></li>
+                        <li><a class="collapse-link"><i class="fa fa-arrow-down"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="row">
+                        <form id="new-department" data-parsley-validate class="form-horizontal form-label-left">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Teacher Assigned</label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <select class="form-control">
+                                    <option>Choose option</option>
+                                    <option>Dr. Howell</option>
+                                    <option>Mr. Stemen</option>
+                                    <option>Dr. Geary</option>
+                                    <option>Dr. Sparks</option>
+                                </select>
+                            </div>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Course</label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <select class="form-control">
+                                    <option>Choose option</option>
+                                    <option>CS 246</option>
+                                    <option>CS 351</option>
+                                    <option>CS 403</option>
+                                    <option>CS 306</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div><br>
+                    <!-- for selecting all checkboxes -->
+                    <script language="JavaScript">
+                        function toggle(source, elementName) {
+                            checkboxes = document.getElementsByName(elementName);
+                            for (var i = 0, n = checkboxes.length; i < n; i++) {
+                                checkboxes[i].checked = source.checked;
+                            }
+                        }
+                    </script>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Assign to section(s) <small>Try hovering over the rows</small></h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th><input type="checkbox" onClick="toggle(this, 'foo')" /></th>
+                                                <th>Section</th>
+                                                <th>Number</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" name="foo" value="" id="defaultCheck1">
+                                                        <label class="form-check-label" for="defaultCheck1">
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td>CS246</td>
+                                                <td>1</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" name="foo" value="" id="defaultCheck1">
+                                                        <label class="form-check-label" for="defaultCheck1">
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td>CS246</td>
+                                                <td>2</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" name="foo" value="" id="defaultCheck1">
+                                                        <label class="form-check-label" for="defaultCheck1">
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td>CS246</td>
+                                                <td>3</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Assign to student(s) <small>Try hovering over the rows</small></h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th><input type="checkbox" onClick="toggle(this, 'foo2')" /></th>
+                                                <th>First Name</th>
+                                                <th>Last Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" name="foo2" value="" id="defaultCheck1">
+                                                        <label class="form-check-label" for="defaultCheck1">
+                                                        </label>
+                                                <td>Nick</td>
+                                                <td>Goblirsch</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <!--where does this div end?-->
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" name="foo2" value="" id="defaultCheck1">
+                                                        <label class="form-check-label" for="defaultCheck1">
+                                                        </label>
+                                                <td>Bima</td>
+                                                <td>Silva</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <!--where does this div end?-->
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" name="foo2" value="" id="defaultCheck1">
+                                                        <label class="form-check-label" for="defaultCheck1">
+                                                        </label>
+                                                <td>Austin</td>
+                                                <td>Sink</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end of row 2 -->
+
+                </div>
+            </div>
+
+            <!-- Test creation information -->
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-question"></i> | New test section</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                        <li><a class="collapse-link"><i class="fa fa-arrow-up"></i></a></li>
+                        <li><a class="collapse-link"><i class="fa fa-arrow-down"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <form id="new-department" data-parsley-validate class="form-horizontal form-label-left">
+                        <!--<div class="col-md-12 col-sm-12 col-xs-12 form-group">
+                            <!--"****JUST A NOTE**** choose a question type should be the only thing visible until something has been chosen. once chosen, a button (we will need a smaller button next to the question type drop down box) will convert the choice into the instruction box along with whatever type of question section it should be
+                            <input type="text" placeholder="Enter Instructions Here" class="form-control">
+                        </div>-->
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Question Type</label>
+                            <div class="col-md-3 col-sm-3 col-xs-12" >
+                                <select class="form-control">
+                                    <option>Choose option</option>
+                                    <option>True/False</option>
+                                    <option>Multiple Choice</option>
+                                    <option>Fill In The Blank</option>
+                                    <option>Matching</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <!-- end of test creation information -->
+            <div class="" style="text-align:center">
+                <button type="button" class="btn btn-round btn-info"><i class="fa fa-plus"></i> Add Section</button>
+            </div>
+        </div>
+                </div>
+            </div>
+        </div>
+        <!-- /page content -->
+      </div>
+
+    <!-- jQuery -->
+    <script src="../vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="../vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="../vendors/nprogress/nprogress.js"></script>
+    <!-- Chart.js -->
+    <script src="../vendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- gauge.js -->
+    <script src="../vendors/gauge.js/dist/gauge.min.js"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="../vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    <!-- iCheck -->
+    <script src="../vendors/iCheck/icheck.min.js"></script>
+    <!-- Skycons -->
+    <script src="../vendors/skycons/skycons.js"></script>
+    <!-- Flot -->
+    <script src="../vendors/Flot/jquery.flot.js"></script>
+    <script src="../vendors/Flot/jquery.flot.pie.js"></script>
+    <script src="../vendors/Flot/jquery.flot.time.js"></script>
+    <script src="../vendors/Flot/jquery.flot.stack.js"></script>
+    <script src="../vendors/Flot/jquery.flot.resize.js"></script>
+    <!-- Flot plugins -->
+    <script src="../vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+    <script src="../vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+    <script src="../vendors/flot.curvedlines/curvedLines.js"></script>
+    <!-- DateJS -->
+    <script src="../vendors/DateJS/build/date.js"></script>
+    <!-- JQVMap -->
+    <script src="../vendors/jqvmap/dist/jquery.vmap.js"></script>
+    <script src="../vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+    <script src="../vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="../vendors/moment/min/moment.min.js"></script>
+    <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="../build/js/custom.min.js"></script>
+
+  </body>
