@@ -199,11 +199,11 @@
          <!-- /top navigation -->
 
          <!-- page content -->
-         <div class="right_col">
+         <div id="pageContent" class="right_col">
             <div class="row">
                <div class="col-md-12 col-xs-12">
                   <!-- (Test creation information) beginning of row 2 -->
-                  <div class="x_panel">
+                  <div  class="x_panel">
                      <div class="x_title">
                         <h2><i class="fa fa-info-circle"></i> | Test creation information</h2>
                         <ul class="nav navbar-right panel_toolbox">
@@ -367,7 +367,7 @@
 						
                      </div>
 					 <!-- Test creation information -->
-                                 <div class="x_panel">
+                                 <div id="genericSection" class="x_panel">
                                     <!-- top of section header -->
                                     <div class="x_title">
                                        <h2><i class="fa fa-question"></i> | New test section</h2>
@@ -406,8 +406,18 @@
                                     </div>
                                  </div>
 							<div class="row">
-                                <div class="" style="text-align:center">
-                                    <button type="button" class="btn btn-round btn-info"><i class="fa fa-plus"></i> Add Section</button>
+							<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+								<script>
+									$(document).ready(function(){
+										$("#sectionAdd").click(function(){
+										$("#genericSection").clone().appendTo("#pageContent");
+										$("addSectionButton").remove();
+										$("addSectionButton").clone().appendTo("#pageContent");
+										});
+									});
+								</script>
+                                <div id="addSectionButton" class="" style="text-align:center">
+                                    <button id="sectionAdd" type="button" class="btn btn-round btn-info"><i class="fa fa-plus"></i> Add Section</button>
                                 </div>
                             </div>
                                  <!-- end of test creation information -->
