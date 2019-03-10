@@ -161,3 +161,32 @@ function Swap()
 
 </body>
 </html>
+
+
+
+IT WORKS with select
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+
+function addTextBox()
+{
+	$("body").append("<div class=\"form1\"></div>");
+    $(".form1").append("<select id=\"questionType\"><option>Choose option</option><option>True/False</option><option>Multiple Choice</option><option>Fill In The Blank</option><option>Matching</option></select><button onclick=\"Swap()\">Swap code</button>");
+}
+function Swap()
+{
+	var box_text = $("#questionType").val();
+    $(".form1").empty();
+    $(".form1").append("<h1>" + box_text + " Section" + "</h1>");
+}
+</script>
+</head>
+<body>
+
+<button onclick="addTextBox()">View Button</button>
+
+</body>
+</html>
