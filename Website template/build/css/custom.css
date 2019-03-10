@@ -1,15 +1,15 @@
 
 html , body{
  height:100%;
- 
+
 }
- 
+
 .full-width {
-	
+
  width:100%;
- 
+
  }
- 
+
 .full-height{
  height:100%;
  }
@@ -495,8 +495,8 @@ body .container.body .right_col {
     background: #D9DEE4
 }
 body {
-    color: #73879C;
-    background: rgb(77,92,111);
+    color: #34495E;
+    background: #fff;
     font-family: 'Raleway', sans-serif;
     font-size: 14px;
     font-weight: 400;
@@ -3498,7 +3498,7 @@ form:after {
     position: relative;
     text-align: center;
     text-shadow: 0 1px 0 #fff;
-    
+
 }
 #login-img{width: 70px;margin-bottom: 35px}
 .login_content a,
@@ -4228,7 +4228,7 @@ ul.notifications {
 table thead .checkbox { margin-top:-7px;margin-top:-21px; }
 table thead .checkbox.radio { margin-top:-7px;margin-top:-21px; }
 */
-			
+
 .daterangepicker.xdisplay { width:228px; }
 
 .dataTables_wrapper > .row{
