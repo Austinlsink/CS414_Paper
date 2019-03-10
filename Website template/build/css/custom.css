@@ -496,7 +496,7 @@ body .container.body .right_col {
 }
 body {
     color: #34495E;
-    background: #fff;
+    background: rgb(11,14,50);
     font-family: 'Raleway', sans-serif;
     font-size: 14px;
     font-weight: 400;
