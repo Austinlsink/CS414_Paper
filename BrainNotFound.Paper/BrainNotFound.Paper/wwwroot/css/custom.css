@@ -1,15 +1,15 @@
 
 html , body{
  height:100%;
- 
+
 }
- 
+
 .full-width {
-	
+
  width:100%;
- 
+
  }
- 
+
 .full-height{
  height:100%;
  }
@@ -383,7 +383,7 @@ body .container.body .right_col {
 @media (max-width: 1200px) {
     .x_title h2 {
         width: 62%;
-        font-size: 17px
+        font-size: 25px
     }
     .tile,
     .graph {
@@ -495,8 +495,8 @@ body .container.body .right_col {
     background: #D9DEE4
 }
 body {
-    color: #73879C;
-    background: rgb(77,92,111);
+    color: #34495E;
+    background: #fff;
     font-family: 'Raleway', sans-serif;
     font-size: 14px;
     font-weight: 400;
@@ -1080,7 +1080,8 @@ h2 {
 .x_title {
     border-bottom: 2px solid #E6E9ED;
     padding: 1px 5px 6px;
-    margin-bottom: 10px
+    margin-bottom: 10px;
+    color: rgb(11,14,50);
 }
 .x_title .filter {
     width: 40%;
@@ -2021,7 +2022,7 @@ button,
 .buttons,
 .btn,
 .modal-footer .btn+.btn {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     margin-right: 5px
 }
 .btn-group-vertical .btn,
@@ -3497,7 +3498,7 @@ form:after {
     position: relative;
     text-align: center;
     text-shadow: 0 1px 0 #fff;
-    
+
 }
 #login-img{width: 70px;margin-bottom: 35px}
 .login_content a,
@@ -4227,7 +4228,7 @@ ul.notifications {
 table thead .checkbox { margin-top:-7px;margin-top:-21px; }
 table thead .checkbox.radio { margin-top:-7px;margin-top:-21px; }
 */
-			
+
 .daterangepicker.xdisplay { width:228px; }
 
 .dataTables_wrapper > .row{
