@@ -36,16 +36,16 @@
 
                 <!--Days meet-->
                 <div class="form-group">
-                        <label class="control-label pull-left col-md-3 col-sm-3 col-xs-12">Days Meet</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            @{
-                                string[] days = ViewBag.sectionMeetingDays.Day.Split(" ");
-                                foreach (String day in days)
-                                {
-                                    <input type = "checkbox" name="daysMet" value="@day" class="flat" />@day
-                                }
-                            }
-                        </div>
+                    <label class="control-label pull-left col-md-3 col-sm-3 col-xs-12">Days Meet</label>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                    @{
+                        string[] days = ViewBag.sectionMeetingDays.Day.Split(" ");
+                        foreach (String day in days)
+                        {
+                            <input type = "checkbox" name="daysMet" value="@day" class="flat" />@day
+                        }
+                    }
+                    </div>
                 </div>
 
                 <!--Start time-->
