@@ -5,10 +5,17 @@
 @inject BrainNotFound.Paper.PaperDbContext _context
 @inject UserManager<ApplicationUser> _userManager
 @{
-    ApplicationUser instructor = (ApplicationUser) await _userManager.FindByNameAsync(User.Identity.Name);
-    var sections    = _context.Sections.Where(s => s.InstructorId == instructor.Id);
-    var courses     = _context.Courses.ToList();
+    ApplicationUser instructor = (ApplicationUser)await _userManager.FindByNameAsync(User.Identity.Name);
+    var sections = _context.Sections.Where(s => s.InstructorId == instructor.Id);
+    var courses = _context.Courses.ToList();
     var departments = _context.Departments.ToList();
+
+    string[] splitname = Regex.Split(Context.User.Identity.Name, @"(?<!^)(?=[A-Z])");
+    string username = string.Empty;
+    foreach (string s in splitname)
+    {
+        username += s + ' ';
+    }
 }
 
 <!DOCTYPE html>
@@ -84,7 +91,7 @@
                                                 }
                                             }
                                         }
-                                     </ul>
+                                    </ul>
                                 </li>
                                 <li>
                                     <a><i class="fa fa-users"></i> Students <span class="fa fa-chevron-down"></span></a>

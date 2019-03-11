@@ -706,7 +706,7 @@ namespace BrainNotFound.Paper.Controllers
             Department department = _context.Departments.Where(d => d.DepartmentCode == departmentCode).First();
             Course course = _context.Courses.Where(c => c.CourseCode == courseCode && c.DepartmentId == department.DepartmentId).First();
  
-            // Create the new section meeting times
+            // Create the new section meeting time list and add it to the new section
             List<SectionMeetingTime> allDaysMet = new List<SectionMeetingTime>();
             SectionMeetingTime newSectionMeetingTime = new SectionMeetingTime();
             foreach(String s in daysMet)
@@ -716,7 +716,6 @@ namespace BrainNotFound.Paper.Controllers
                 newSectionMeetingTime.EndTime = times.EndTime;
             }
             newSectionMeetingTime.Section = section;
-            newSectionMeetingTime.SectionId = section.SectionId;
 
             // Create the new section
             Section newSection = new Section();
