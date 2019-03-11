@@ -27,6 +27,7 @@ namespace BrainNotFound.Paper.Controllers
             _context = context;
         }
 
+
         [HttpGet, Route("")]
         [HttpGet, Route("Index")]
         [HttpGet, Route("Dashboard")]
