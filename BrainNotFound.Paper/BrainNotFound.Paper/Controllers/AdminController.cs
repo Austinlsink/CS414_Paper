@@ -684,6 +684,27 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        [HttpPost, Route("Sections/New/{code}")]
+        public async Task<IActionResult> NewSection(String code, Section section, ApplicationUser instructor)
+        {
+            string departmentCode = code.Substring(0, 2);
+            string courseCode     = code.Substring(2, 3);
+
+            
+
+            Section newSection = new Section();
+            newSection.Location = section.Location;
+            newSection.Capacity = section.Capacity;
+            newSection.SectionNumber = section.SectionNumber;
+            newSection.Course = _context.Courses.Where(c => c.CourseCode == courseCode).First();
+            newSection.InstructorId = instructor.Id;
+
+
+            SectionMeetingTime sectionMeetingTime = new SectionMeetingTime();
+
+            return RedirectToAction("Index", "Admin");
+        }
+
         /// <summary>
         /// Allows the user to view a specific section
         /// </summary>
