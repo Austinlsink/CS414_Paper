@@ -70,23 +70,21 @@
                                 <li><a asp-controller="Instructor" asp-action="Index"><i class="fa fa-dashboard"></i> Dashboard </a></li>
                                 <li>
                                     <a><i class="fa fa-book"></i> Courses <span class="fa fa-chevron-down"></span></a>
-
-                                    @foreach (Section s in sections)
-                                    {
-                                        foreach (Course c in courses)
+                                    <ul class="nav child_menu">
+                                        @foreach (Section s in sections)
                                         {
-                                            foreach (Department d in departments)
+                                            foreach (Course c in courses)
                                             {
-                                                if (s.CourseId == c.CourseId && c.DepartmentId == d.DepartmentId)
+                                                foreach (Department d in departments)
                                                 {
-                                                    <ul class="nav child_menu">
+                                                    if (s.CourseId == c.CourseId && c.DepartmentId == d.DepartmentId)
+                                                    {
                                                         <li> <a asp-controller="Instructor" asp-action="ViewCourses" asp-route-code="@d.DepartmentCode@c.CourseCode">@c.CourseName</a></li>
-                                                    </ul>
+                                                    }
                                                 }
                                             }
-
                                         }
-                                    }
+                                     </ul>
                                 </li>
                                 <li>
                                     <a><i class="fa fa-users"></i> Students <span class="fa fa-chevron-down"></span></a>

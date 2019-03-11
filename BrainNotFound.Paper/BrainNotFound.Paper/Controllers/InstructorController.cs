@@ -146,6 +146,9 @@ namespace BrainNotFound.Paper.Controllers
             string departmentCode = code.Substring(0, 2);
             string courseCode = code.Substring(2, 3);
 
+            var instructor = await _userManager.GetUserAsync(HttpContext.User);
+            ViewBag.instructor = instructor;
+
             // Find the department and add it to the ViewBag
             var department = _context.Departments.Where(d => d.DepartmentCode == departmentCode).First();
             ViewBag.department = department;
@@ -155,11 +158,12 @@ namespace BrainNotFound.Paper.Controllers
             ViewBag.course = course;
 
             // Find the sections with the same ID as the course and add it to the ViewBag
-            var sections = _context.Sections.Where(s => s.CourseId == course.CourseId);
+            var sections = _context.Sections.Where(s => s.CourseId == course.CourseId && s.InstructorId == instructor.Id);
             ViewBag.sectionsList = sections;
 
-            var instructor = await _userManager.GetUserAsync(HttpContext.User);
-            ViewBag.instructor = instructor;
+            // Find all of the section meeting times and add it to the ViewBag
+            var sectionsectionMeetingTimeList = _context.SectionMeetingTimes.ToList();
+            ViewBag.sectionMeetingTimeList = sectionsectionMeetingTimeList;
 
             return View();
         }

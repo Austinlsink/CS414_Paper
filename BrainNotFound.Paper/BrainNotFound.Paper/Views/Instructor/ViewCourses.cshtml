@@ -11,17 +11,7 @@
                 <div class="x_title">
                     <h2><i class="fa fa-book"></i> Course Information</h2>
                     <ul class="nav navbar-right panel_toolbox">
-
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a asp-controller="Admin" asp-action="EditCourse" asp-route-id="@ViewBag.course.CourseId">Edit information</a>
-                                </li>
-                            </ul>
-                        </li>
                     </ul>
                     <div class="clearfix"></div>
                 </div>
@@ -30,8 +20,8 @@
                         @{
                             String name;
                             name = ViewBag.department.DepartmentCode + " " + ViewBag.course.CourseCode;
-
                         }
+
                         <h3>@name @ViewBag.course.CourseName</h3>
 
                         <ul class="list-unstyled user_data">
@@ -54,11 +44,6 @@
             <div class="x_panel">
                 <div class="x_title">
                     <h2><i class="fa fa-book"></i> Sections</h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                        <li><a asp-controller="Admin" asp-action="NewSection" asp-route-code="@ViewBag.department.DepartmentCode@ViewBag.course.CourseCode"><i class="fa fa-plus"></i> New Section</a></li>
-                    </ul>
-
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
@@ -66,7 +51,6 @@
                         <thead>
                             <tr>
                                 <th>Section Number</th>
-                                <th>Instructor</th>
                                 <th>Location</th>
                                 <th>Capcity</th>
                                 <th>Day</th>
@@ -74,15 +58,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!--
-                            foreach (var s in ViewBag.sectionsList)
+                            
+                            @foreach (var s in ViewBag.sectionsList)
                             {
-                                // Find the instructor name for each section
-                                String instructorName;
-                                List<ApplicationUser> instructors = ViewBag.instructorList;
-                                var instructor = instructors.Where(i => i.Id == s.InstructorId).First();
-                                instructorName = instructor.FirstName + " " + instructor.LastName;
-
                                 // Find the meeting times for each section
                                 List<String> days = new List<string>();
                                 List<SectionMeetingTime> sectionMeetingTimes = ViewBag.sectionMeetingTimeList;
@@ -94,18 +72,17 @@
                                 String day = string.Join(", ", days);
 
                                 <tr>
-                                    <td>s.SectionNumber</td>
-                                    <td>instructorName</td>
-                                    <td>s.Location</td>
-                                    <td>s.Capacity</td>
-                                    <td>day</td>
+                                    <td>@s.SectionNumber</td>
+                                    <td>@s.Location</td>
+                                    <td>@s.Capacity</td>
+                                    <td>@day</td>
                                     <td>
-                                        <a asp-controller="Admin" asp-action="ViewSection" asp-route-code="ViewBag.department.DepartmentCodeViewBag.course.CourseCode" asp-route-sectionNumber="s.SectionNumber" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                        <a asp-controller="Admin" asp-action="ViewSection" asp-route-code="@ViewBag.department.DepartmentCode@ViewBag.course.CourseCode" asp-route-sectionNumber="@s.SectionNumber" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                     </td>
 
                                 </tr>
                             }
-                            -->
+                            
                         </tbody>
                     </table>
 
