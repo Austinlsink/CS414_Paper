@@ -6,10 +6,10 @@
 @inject UserManager<ApplicationUser> _userManager
 @{
     ApplicationUser instructor = (ApplicationUser) await _userManager.FindByNameAsync(User.Identity.Name);
-    var sections = _context.Sections.Where(s => s.InstructorId == instructor.Id);
-    var courses = _context.Courses.ToList();
+    var sections    = _context.Sections.Where(s => s.InstructorId == instructor.Id);
+    var courses     = _context.Courses.ToList();
+    var departments = _context.Departments.ToList();
 }
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -75,16 +75,18 @@
                                     {
                                         foreach (Course c in courses)
                                         {
-                                            if (s.CourseId == c.CourseId)
+                                            foreach (Department d in departments)
                                             {
-                                                <ul class="nav child_menu">
-                                                    <li> <a asp-controller="Instructor" asp-action="Courses">@c.CourseName</a></li>
-                                                </ul>
+                                                if (s.CourseId == c.CourseId && c.DepartmentId == d.DepartmentId)
+                                                {
+                                                    <ul class="nav child_menu">
+                                                        <li> <a asp-controller="Instructor" asp-action="ViewCourses" asp-route-code="@d.DepartmentCode@c.CourseCode">@c.CourseName</a></li>
+                                                    </ul>
+                                                }
                                             }
+
                                         }
-
                                     }
-
                                 </li>
                                 <li>
                                     <a><i class="fa fa-users"></i> Students <span class="fa fa-chevron-down"></span></a>

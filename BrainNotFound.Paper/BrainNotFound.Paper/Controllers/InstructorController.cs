@@ -139,51 +139,28 @@ namespace BrainNotFound.Paper.Controllers
         #endregion student controllers
 
 
-        [HttpGet, Route("Courses")]
-        public async Task<IActionResult> Courses()
+        [HttpGet, Route("Courses/{code}")]
+        public async Task<IActionResult> ViewCourses(String code)
         {
+            // Parsing code into the DepartmentCode and the CourseCode
+            string departmentCode = code.Substring(0, 2);
+            string courseCode = code.Substring(2, 3);
+
+            // Find the department and add it to the ViewBag
+            var department = _context.Departments.Where(d => d.DepartmentCode == departmentCode).First();
+            ViewBag.department = department;
+
+            // Find the specified course and add it to the ViewBag
+            var course = _context.Courses.Where(c => c.CourseCode == courseCode && c.DepartmentId == department.DepartmentId).First();
+            ViewBag.course = course;
+
+            // Find the sections with the same ID as the course and add it to the ViewBag
+            var sections = _context.Sections.Where(s => s.CourseId == course.CourseId);
+            ViewBag.sectionsList = sections;
+
             var instructor = await _userManager.GetUserAsync(HttpContext.User);
+            ViewBag.instructor = instructor;
 
-            // Find all of the sections that the instructor teaches and add it to the Viewbag
-            var sections = _context.Sections.Where(s => s.InstructorId == instructor.Id).ToList();
-            ViewBag.sections = sections;
-
-            // Find all of the courses that the instructor is in
-            var allCourses = _context.Courses.OrderBy(o => o.CourseCode).ToList();
-            List<Course> courses = new List<Course>();
-            foreach(Course c in allCourses)
-            {
-                foreach(Section s in sections)
-                {
-                    if(c.CourseId == s.CourseId)
-                    {
-                        courses.Add(c);
-                    }
-                }
-            }
-
-            ViewBag.courses = courses;
-
-            // Find all of the departments that the instructor is in
-            var allDepartments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
-            List<Department> departments = new List<Department>();
-            foreach(Department d in allDepartments)
-            {
-                foreach(Course c in courses)
-                {
-                    if(d.DepartmentId == c.DepartmentId)
-                    {
-                        departments.Add(d);
-                    }
-                }
-            }
-            ViewBag.departments = departments;
-            return View(courses);
-        }
-
-        [HttpGet, Route("Courses/{CourseCode}")]
-        public IActionResult ViewCourse(String CourseCode)
-        {
             return View();
         }
 
