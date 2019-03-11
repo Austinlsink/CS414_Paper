@@ -12,7 +12,9 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 		[Required(ErrorMessage = "Please enter a day of the week: Monday, Tuesday, Wednesday, Thursday, Friday.")]
         [RegularExpression(@"^(Sun|Mon|(T(ues|hurs))|Fri)(day|\.)?$|Wed(\.|nesday)?$|Sat(\.|urday)?$|T((ue?)|(hu?r?))\.?$", ErrorMessage = "Please enter a day of the week: Monday, Tuesday, Wednesday, Thursday, Friday.")]
         public string Day {get; set;}
- 
+
+       // public String[] Days =  { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" };
+
         [DataType(DataType.Time)]
         public DateTime StartTime {get; set;}
  
