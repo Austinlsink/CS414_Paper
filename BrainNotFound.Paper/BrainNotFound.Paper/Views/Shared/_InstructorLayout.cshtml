@@ -222,7 +222,7 @@
             </div>
             <!-- /top navigation -->
             <!-- page content -->
-            <div class="right_col" role="main">
+            <div id="pageContent" class="right_col" role="main">
                 @RenderBody()
 
 
@@ -245,6 +245,7 @@
     <!-- Custom Theme Scripts -->
     <script src="~/js/custom.min.js"></script>
     <!-- View Defined Scripts-->
+
     @RenderSection("scripts", required: false)
 
 </body>
