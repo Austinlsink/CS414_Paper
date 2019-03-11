@@ -174,6 +174,9 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("Courses/{code}/{sectionNumber}")]
         public async Task<IActionResult> ViewSection(string code, int sectionNumber)
         {
+            //ViewData["message"] = code;
+            //return View("TestView");
+
             string departmentCode = code.Substring(0, 2);
             string courseCode = code.Substring(2, 3);
 
@@ -204,6 +207,7 @@ namespace BrainNotFound.Paper.Controllers
             // Find all the SectionMeetingTimes and add them to the ViewBag
             var sectionMeetingTimeList = _context.SectionMeetingTimes.ToList();
             ViewBag.sectionMeetingTimeList = sectionMeetingTimeList;
+
             return View();
         }
 

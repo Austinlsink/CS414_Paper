@@ -15,7 +15,6 @@
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
 
                         <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>
                                     <a>Edit information</a>
@@ -119,7 +118,7 @@
                                                 <td class=" ">@s.LastName </td>
                                                 <td class=" ">@s.Classification </td>
                                                 <td class=" last">
-                                                        <a asp-controller="Instructor" asp-action="ViewStudent" asp-route-UserName="@s.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                                        <a asp-controller="Instructor" asp-action="ViewStudentProfile" asp-route-UserName="@s.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                                 </td>
                                             </tr>
                                         }
