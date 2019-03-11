@@ -569,7 +569,6 @@ namespace BrainNotFound.Paper.Controllers
             Department department = _context.Departments.Find(course.DepartmentId);
             course.Department = department;
 
-
             _context.Courses.Add(course);
             _context.SaveChanges();
             return RedirectToAction("Courses", "Admin");
