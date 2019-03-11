@@ -69,7 +69,7 @@ namespace BrainNotFound.Paper.Controllers
             instructor.ZipCode = user.ZipCode;
 
             await _userManager.UpdateAsync(instructor);
-            return RedirectToAction("Profile", "Admin");
+            return RedirectToAction("Profile", "Instructor");
         }
         #endregion instructor controllers
 
@@ -138,9 +138,12 @@ namespace BrainNotFound.Paper.Controllers
         }
         #endregion student controllers
 
-
+        /// <summary>
+        /// Allows the instructor to view a specific course and all of the sections that he teaches
+        /// </summary>
+        /// <param name="code">DpartmentCode + CourseCode</param>
         [HttpGet, Route("Courses/{code}")]
-        public async Task<IActionResult> ViewInstructorCourse(String code)
+        public async Task<IActionResult> ViewCourse(String code)
         {
             // Parsing code into the DepartmentCode and the CourseCode
             string departmentCode = code.Substring(0, 2);
@@ -169,7 +172,7 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         [HttpGet, Route("Courses/{code}/{sectionNumber}")]
-        public async Task<IActionResult> ViewSections(string code, int sectionNumber)
+        public async Task<IActionResult> ViewSection(string code, int sectionNumber)
         {
             string departmentCode = code.Substring(0, 2);
             string courseCode = code.Substring(2, 3);
