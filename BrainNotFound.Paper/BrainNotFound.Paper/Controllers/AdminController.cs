@@ -569,7 +569,6 @@ namespace BrainNotFound.Paper.Controllers
             Department department = _context.Departments.Find(course.DepartmentId);
             course.Department = department;
 
-
             _context.Courses.Add(course);
             _context.SaveChanges();
             return RedirectToAction("Courses", "Admin");
@@ -667,7 +666,7 @@ namespace BrainNotFound.Paper.Controllers
         public async Task<IActionResult> NewSection(string code)
         {
             string departmentCode = code.Substring(0, 2);
-            string courseCode = code.Substring(2, 3);
+            string courseCode     = code.Substring(2, 3);
 
             // Find the department associated with the course by DepartmentCode and add it to the ViewBag
             var department = _context.Departments.Where(d => d.DepartmentCode == departmentCode).First();
@@ -681,26 +680,59 @@ namespace BrainNotFound.Paper.Controllers
             var instructor = await _userManager.GetUsersInRoleAsync("Instructor");
             ViewBag.instructorList = instructor;
 
+            SectionMeetingTime sectionMeeting = new SectionMeetingTime();
+            sectionMeeting.Day = "Monday Tuesday Wednesday Thursday Friday";
+            ViewBag.sectionMeetingDays = sectionMeeting;
+
+            // Generate a section number
+            int sectionNumber = 1;
+            var sections = _context.Sections.Where(s => s.CourseId == course.CourseId).ToList();
+            foreach(Section s in sections)
+            {
+                sectionNumber++;
+            }
+            ViewBag.sectionNumber = sectionNumber;
+            
             return View();
         }
 
         [HttpPost, Route("Sections/New/{code}")]
-        public async Task<IActionResult> NewSection(String code, Section section, ApplicationUser instructor)
+        public async Task<IActionResult> NewSection(String code, Section section, string[] daysMet, SectionMeetingTime times)
         {
             string departmentCode = code.Substring(0, 2);
             string courseCode     = code.Substring(2, 3);
 
-            
+            // Find the department and course that are associated with the section
+            Department department = _context.Departments.Where(d => d.DepartmentCode == departmentCode).First();
+            Course course = _context.Courses.Where(c => c.CourseCode == courseCode && c.DepartmentId == department.DepartmentId).First();
+ 
+            // Create the new section meeting time list and add it to the new section
+            List<SectionMeetingTime> allDaysMet = new List<SectionMeetingTime>();
+            SectionMeetingTime newSectionMeetingTime = new SectionMeetingTime();
+            foreach(String s in daysMet)
+            {
+                newSectionMeetingTime.Day = s;
+                newSectionMeetingTime.StartTime = times.StartTime;
+                newSectionMeetingTime.EndTime = times.EndTime;
+            }
+            newSectionMeetingTime.Section = section;
 
+            // Create the new section
             Section newSection = new Section();
             newSection.Location = section.Location;
             newSection.Capacity = section.Capacity;
             newSection.SectionNumber = section.SectionNumber;
-            newSection.Course = _context.Courses.Where(c => c.CourseCode == courseCode).First();
-            newSection.InstructorId = instructor.Id;
+            newSection.Course = course;
+            newSection.CourseId = course.CourseId;
+            newSection.ApplicationUser = await _userManager.FindByIdAsync(section.InstructorId);
+            newSection.InstructorId = section.InstructorId;
+            newSection.SectionNumber = section.SectionNumber;
 
-
-            SectionMeetingTime sectionMeetingTime = new SectionMeetingTime();
+            //ViewData["message"] = newSection.CourseId;
+            //return View("TestView");
+            _context.SectionMeetingTimes.Add(newSectionMeetingTime);
+            _context.Sections.Add(newSection);
+            _context.SaveChanges();
 
             return RedirectToAction("Index", "Admin");
         }
