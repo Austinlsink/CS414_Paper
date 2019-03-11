@@ -28,13 +28,11 @@
                             <li>
                                 <b>Credit Hours:</b> @ViewBag.course.CreditHours
                             </li>
-
                             <li>
                                 <b> Description:</b> @ViewBag.course.Description
                             </li>
                         </ul>
                         <br />
-
                     </div>
                 </div>
             </div>
@@ -79,13 +77,10 @@
                                     <td>
                                         <a asp-controller="Admin" asp-action="ViewSection" asp-route-code="@ViewBag.department.DepartmentCode@ViewBag.course.CourseCode" asp-route-sectionNumber="@s.SectionNumber" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                     </td>
-
                                 </tr>
                             }
-                            
                         </tbody>
                     </table>
-
                 </div>
             </div>
         </div>

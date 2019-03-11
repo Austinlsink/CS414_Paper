@@ -140,7 +140,7 @@ namespace BrainNotFound.Paper.Controllers
 
 
         [HttpGet, Route("Courses/{code}")]
-        public async Task<IActionResult> ViewCourses(String code)
+        public async Task<IActionResult> ViewInstructorCourse(String code)
         {
             // Parsing code into the DepartmentCode and the CourseCode
             string departmentCode = code.Substring(0, 2);
