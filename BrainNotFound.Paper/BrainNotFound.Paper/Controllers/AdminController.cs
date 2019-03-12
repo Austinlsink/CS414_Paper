@@ -714,6 +714,11 @@ namespace BrainNotFound.Paper.Controllers
             string departmentCode = code.Substring(0, 2);
             string courseCode     = code.Substring(2, 3);
 
+            if(section.InstructorId == null || startTime == null || endTime == null)
+            {
+                return View(code);
+            }
+
             // Find the department and course that are associated with the section
             Department department = _context.Departments.Where(d => d.DepartmentCode == departmentCode).First();
             Course course = _context.Courses.Where(c => c.CourseCode == courseCode && c.DepartmentId == department.DepartmentId).First();

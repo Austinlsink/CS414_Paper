@@ -44,6 +44,7 @@
                                 <input type="checkbox" name="daysMet" value="@day" class="flat" />@day
                             }
                         }
+
                     </div>
                 </div>
 
@@ -51,7 +52,7 @@
                 <div class="form-group">
                     <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Start Time</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input name="startTime" type="time" class="form-control col-md-7 col-xs-12">
+                        <input required name="startTime" type="time" class="form-control col-md-7 col-xs-12">
                         <span class="text-danger"></span>
                     </div>
                 </div>
@@ -60,7 +61,7 @@
                 <div class="form-group">
                     <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> End Time</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input name="endTime" type="time" class="form-control col-md-7 col-xs-12">
+                        <input required name="endTime" type="time" class="form-control col-md-7 col-xs-12">
                         <span class="text-danger"></span>
                     </div>
                 </div>
@@ -78,7 +79,7 @@
                 <div class="form-group">
                     <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Instructor</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <select asp-for="InstructorId" class="select2_single form-control" tabindex="1">
+                        <select required asp-for="InstructorId" class="select2_single form-control" tabindex="1">
                             <option disabled selected value=""> --Assign a teacher -- </option>
                             @foreach (var i in ViewBag.instructorList)
                             {
