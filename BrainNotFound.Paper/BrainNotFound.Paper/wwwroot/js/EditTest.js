@@ -3,16 +3,17 @@
 //Add a generic section to the test
 var RootURL = "http://" + document.location.host + "/";
 
-$("#EditTestNameAndCourse").click(function () {
-    console.log("Before Ajax");
+$("#EditNameAndCourseBT").click(function () {
+
     $.ajax({
-        url: RootURL + "Instructor/Tests/Partials/NameAndCourse",
+        url: RootURL + "Instructor/Tests/Partials/EditNameAndCourse/132",
         success: function (result) {
             $("#x_c-infoSection").prepend(result);
 
         }
     });
 });
+
 //Change the generic section to a specified section
 //$("#setQuestionType").click(function () {
 //    if ("the selected option" == "True/False") {

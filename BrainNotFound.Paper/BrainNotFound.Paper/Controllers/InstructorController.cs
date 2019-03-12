@@ -265,13 +265,14 @@ namespace BrainNotFound.Paper.Controllers
         {
             var Instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
             var course = _context.Courses.Find(test.CourseId);
-            var departmnet = _context.Departments.Find(course.DepartmentId);
+            var department = _context.Departments.Find(course.DepartmentId);
             test.applicationUser = Instructor;
             test.IsVisible = false;
             test.URLSafeName = test.TestName.Replace(" ", "_");
+
             _context.Tests.Add(test);
             _context.SaveChanges();
-            return RedirectToAction("EditTest", "Instructor", new { DepartmentCode = departmnet.DepartmentCode, CourseCode = course.CourseCode, URLSafeName = test.URLSafeName });
+            return RedirectToAction("EditTest", "Instructor", new { DepartmentCode = department.DepartmentCode, CourseCode = course.CourseCode, URLSafeName = test.URLSafeName });
         }
 
         [HttpGet, Route("Tests/ViewTest")]
@@ -287,32 +288,24 @@ namespace BrainNotFound.Paper.Controllers
             var course = _context.Courses.Where(c => c.DepartmentId == department.DepartmentId && c.CourseCode == CourseCode).First();
             var test = _context.Tests.Where(t => t.URLSafeName == URLSafeName && t.CourseId == course.CourseId).First();
             course.DepartmentCode = department.DepartmentCode;
+
             ViewBag.Test = test;
             ViewBag.Course = course;
          
             return View();
         }
 
-        [HttpGet, Route("Tests/Partials/NameAndCourse/{TestId?}")]
-        public ActionResult PartialNameAndCourse(long? TestId)
+        [HttpGet, Route("Tests/Partials/EditNameAndCourse/{TestId}")]
+        public ActionResult PartialEditNameAndCourse(long TestId)
         {
-            var Instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
             var departments = _context.Departments;
             List<Course> coursesTaught = new List<Course>();
-            var sectionsTaught = _context.Sections.Where(S => S.InstructorId == Instructor.Id);
+            var sectionsTaught = _context.Sections.Where(S => S.InstructorId == instructor.Id);
+            
+            var test = _context.Tests.Find(TestId);
+            ViewBag.Test = test;
 
-            if (TestId == null)
-            {
-                ViewBag.IsCreate = true;
-            }
-            else
-            {
-                var test = _context.Tests.Find(TestId);
-                ViewBag.Test = test;
-                ViewBag.IsCreate = false;
-            }
-            
-            
             foreach (var section in sectionsTaught)
             {
                 var currentCourse = _context.Courses.Where(c => c.CourseId == section.CourseId).First();
@@ -326,5 +319,31 @@ namespace BrainNotFound.Paper.Controllers
             ViewBag.CoursesTaught = coursesTaught;
             return PartialView("~/Views/Instructor/CreateTestPartials/_EditNameAndCourse.cshtml");
         }
+
+        //When you press save on the information, this happens
+       [HttpPost, Route("Tests/Partials/EditNameAndCourse")]
+       public ActionResult PartialEditNameAndCourse(Test test)
+       {
+            //grab a copy of the test from the database
+            var dbTest = _context.Tests.Find(test.TestId);
+
+            //Grab the course id from the database test
+            var course = _context.Courses.Find(dbTest.CourseId);
+
+            //Grab the department from the database test
+            var department = _context.Departments.Find(course.DepartmentId);
+
+            //populate the database test name with the view's test name
+            dbTest.TestName = test.TestName;
+
+            //update the course on the database test
+            dbTest.CourseId = test.CourseId;
+
+            _context.Tests.Update(dbTest);
+            _context.SaveChanges();
+        
+           //When you press save, redirect back to the edit test page
+           return RedirectToAction("EditTest", "Instructor", new { DepartmentCode = department.DepartmentCode, CourseCode = course.CourseCode, URLSafeName = dbTest.URLSafeName });
+       }
     }
 }

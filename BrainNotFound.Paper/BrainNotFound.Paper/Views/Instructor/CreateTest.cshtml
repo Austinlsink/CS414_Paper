@@ -35,7 +35,7 @@
                                 <option>--Choose option--</option>
                                 @foreach (Course course in ViewBag.CoursesTaught)
                                 {
-                                    <option value="@course.CourseId">@(course.DepartmentCode + course.CourseCode + " " + course.CourseName)</option>
+                                    <option value="@course.CourseId">@(course.DepartmentCode + course.CourseCode + " " + course.Name)</option>
                                 }
                             </select>
                         </div>
