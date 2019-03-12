@@ -3,7 +3,7 @@
 
 $(document).ready(function () {
     $("#sectionAdd").click(function () {
-        $("#genericSection").clone().appendTo("#addSectionButton");
+        $("#genericSection").clone().appendTo("#contentBeforeButton");
         //alert("Testing Alerts");
     });
 });
