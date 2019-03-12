@@ -1,4 +1,6 @@
 @using BrainNotFound.Paper.Models.BusinessModels
+@using System.Text.RegularExpressions
+
 @{
     ViewData["Title"] = "View Instructor - Student";
 }
@@ -28,10 +30,12 @@
 
                             <ul class="list-unstyled user_data">
                                 <li>
-                                    <i class="fa fa-at user-profile-icon"> @i.Email</i>
+                                    <i class="fa fa-at user-profile-icon"> Email: @i.Email</i>
                                 </li>
                                 <li>
-                                    <i class="fa fa-phone user-profile-icon"> @i.PhoneNumber</i>
+                                    <i class="fa fa-phone user-profile-icon">
+                                        Phone: @Regex.Replace(i.PhoneNumber, @"(\d{3})(\d{3})(\d{4})", "($1) $2-$3")
+                                    </i>
                                 </li>
                             </ul>
                             <br />
