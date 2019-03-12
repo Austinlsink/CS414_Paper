@@ -211,8 +211,7 @@
                            <li class="dropdown">
                               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
                               <ul class="dropdown-menu" role="menu">
-                                 <li><a href="#">Settings 1</a></li>
-                                 <li><a href="#">Settings 2</a></li>
+                                 <li><a href="#">Edit test information</a></li>
                               </ul>
                            </li>
                            <li><a class="collapse-link"><i class="fa fa-arrow-up"></i></a></li>
@@ -223,8 +222,12 @@
                      <div class="x_content">
                         <div class="row">
                            <form id="new-department" data-parsley-validate class="form-horizontal form-label-left">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12">Teacher Assigned</label>
-                              <div class="col-md-3 col-sm-3 col-xs-12">
+                              <label class="control-label col-md-2 col-sm-2 col-xs-12">Test Name</label>
+                              <div class="col-md-4 col-sm-4 col-xs-12">
+                                 <input type="text" placeholder="Enter test name here." class="form-control">
+                              </div>
+                              <label class="control-label col-md-1 col-sm-1 col-xs-12">Course</label>
+                              <div style="margin-bottom:10px" class="col-md-3 col-sm-3 col-xs-12">
                                  <select class="form-control">
                                     <option>Choose option</option>
                                     <option>True/False</option>
@@ -233,16 +236,7 @@
                                     <option>Matching</option>
                                  </select>
                               </div>
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12">Course</label>
-                              <div class="col-md-3 col-sm-3 col-xs-12">
-                                 <select class="form-control">
-                                    <option>Choose option</option>
-                                    <option>True/False</option>
-                                    <option>Multiple Choice</option>
-                                    <option>Fill In The Blank</option>
-                                    <option>Matching</option>
-                                 </select>
-                              </div>
+                              <button style="margin-left:12px" type="button" class="btn btn-round btn-success">Save</button>
                            </form>
                         </div><br>
                         <!-- for selecting all checkboxes -->
@@ -255,10 +249,10 @@
                         }
                         </script>
                         <div class="row">
-                           <div class="col-md-6 col-sm-6 col-xs-12">
+                           <div class="col-md-4 col-sm-4 col-xs-12">
                               <div class="x_panel">
                                  <div class="x_title">
-                                    <h2>Assign to section(s)</h2>
+                                    <h2>Section</h2>
                                     <ul class="nav navbar-right panel_toolbox">
                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                                     </ul>
@@ -269,7 +263,6 @@
                                        <thead>
                                           <tr>
                                              <th><input type="checkbox" onClick="toggle(this, 'foo')" /></th>
-                                             <th>Section</th>
                                              <th>Number</th>
                                           </tr>
                                        </thead>
@@ -277,29 +270,20 @@
                                           <tr>
                                              <td><div class="form-check">
                                                 <input class="form-check-input" type="checkbox" name="foo" value="" id="defaultCheck1">
-                                                <label class="form-check-label" for="defaultCheck1">
-                                                </label>
                                              </div></td>
-                                             <td>Otto</td>
-                                             <td>@mdo</td>
+                                             <td>1</td>
                                           </tr>
                                           <tr>
                                              <td><div class="form-check">
                                                 <input class="form-check-input" type="checkbox" name="foo" value="" id="defaultCheck1">
-                                                <label class="form-check-label" for="defaultCheck1">
-                                                </label>
                                              </div></td>
-                                             <td>Thornton</td>
-                                             <td>@fat</td>
+                                             <td>2</td>
                                           </tr>
                                           <tr>
                                              <td><div class="form-check">
                                                 <input class="form-check-input" type="checkbox"  name="foo" value="" id="defaultCheck1">
-                                                <label class="form-check-label" for="defaultCheck1">
-                                                </label>
                                              </div></td>
-                                             <td>the Bird</td>
-                                             <td>@twitter</td>
+                                             <td>3</td>
                                           </tr>
                                        </tbody>
                                     </table>
@@ -307,7 +291,7 @@
                                  </div>
                               </div>
                            </div>
-                           <div class="col-md-6 col-sm-6 col-xs-12">
+                           <div class="col-md-8 col-sm-8 col-xs-12">
                               <div class="x_panel">
                                  <div class="x_title">
                                     <h2>Assign to student(s)</h2>
@@ -321,8 +305,8 @@
                                        <thead>
                                           <tr>
                                              <th><input type="checkbox" onClick="toggle(this, 'foo2')" /></th>
-                                             <th>Student</th>
-                                             <th>First Name</th>
+                                             <th>ID</th>
+                                             <th>Student Name</th>
                                           </tr>
                                        </thead>
                                        <tbody>
@@ -331,24 +315,24 @@
                                                 <input class="form-check-input" type="checkbox" name="foo2" value="" id="defaultCheck1">
                                                 <label class="form-check-label" for="defaultCheck1">
                                                 </label>
-                                                <td>Otto</td>
-                                                <td>@mdo</td>
+                                                <td>123456</td>
+                                                <td>Austin Sink</td>
                                              </tr>
                                              <tr>
                                                 <td><div class="form-check">
                                                    <input class="form-check-input" type="checkbox" name="foo2" value="" id="defaultCheck1">
                                                    <label class="form-check-label" for="defaultCheck1">
                                                    </label>
-                                                   <td>Thornton</td>
-                                                   <td>@fat</td>
+                                                   <td>123457</td>
+                                                   <td>Bima Dude</td>
                                                 </tr>
                                                 <tr>
                                                    <td><div class="form-check">
                                                       <input class="form-check-input" type="checkbox" name="foo2" value="" id="defaultCheck1">
                                                       <label class="form-check-label" for="defaultCheck1">
                                                       </label>
-                                                      <td>the Bird</td>
-                                                      <td>@twitter</td>
+                                                      <td>123458</td>
+                                                      <td>Nick Person</td>
                                                    </tr>
                                                 </tbody>
                                              </table>
@@ -357,14 +341,14 @@
                                     </div>
                                  </div>
                                  <!-- end of row 2 -->
-                                 
+
 
 
 
                               </div>
                            </div>
                         </div>
-						
+
                      </div>
 					 <!-- Test creation information -->
                                  <div id="genericSection" class="x_panel">

@@ -352,6 +352,96 @@ namespace BrainNotFound.Paper.Controllers
             return RedirectToAction("Index", "Data");
         }
 
+        public async Task<IActionResult> AddEnrollments()
+        {
+            // Get required data lists
+            var allCourses = _context.Courses.ToList();
+            var allStudents = (await _userManager.GetUsersInRoleAsync("Student")).ToList();
+
+
+            // Populate Enrollment table
+            foreach (var student in allStudents)
+            {
+                var currentEnrollments = _context.Enrollments.Where(E => E.StudentId == student.Id);
+
+                // random number generated 4 - 7 for # of sections taken
+                int numberOfClasses;
+                Random rand = new Random();
+
+                // Get the number of classes the student takes (range: 4-7)
+                numberOfClasses = rand.Next(4, 8);
+
+                // Choose 4-7 random courses/sections
+                for (int classCounter = 0; classCounter < numberOfClasses; classCounter++)
+                {
+                    // Get a random course
+                    Course selectedCourse = new Course();
+                    List<Section> courseSections = new List<Section>();
+
+                    // Get a course that has sections
+                    do
+                    {
+                        selectedCourse = allCourses.ElementAt(rand.Next(0, allCourses.Count));
+
+                        // Get all sections related to the selectedCourse
+                        courseSections = _context.Sections.Where(S => S.CourseId == selectedCourse.CourseId).ToList();
+    
+                    } while (courseSections.Count <= 0);
+
+
+                    // Select a random section in the selectedCourse and male sure it doesn't conflict with classes
+                    // the student is already enrolled in
+                    bool doesNotConflict = true; // Used in check in main do while
+                    Section selectedSection = new Section();
+                    List<Enrollment> enrolledAlready = new List<Enrollment>(); // Rename?
+                    do
+                    {
+                        do
+                        {
+                            selectedSection = courseSections.ElementAt(rand.Next(0, courseSections.Count));
+                            enrolledAlready = currentEnrollments.Where(CE => CE.SectionId == selectedSection.SectionId).ToList();
+                        } while (enrolledAlready.Count() > 0);
+
+                        doesNotConflict = true; // Reset to "true" in case a new section needed to be selected
+                        var selectedSectionSectionMeetingTimes = _context.SectionMeetingTimes.Where(SMT => SMT.SectionMeetingTimeId == selectedSection.SectionId);
+                        List<SectionMeetingTime> concurrentSectionMeetingTimes = new List<SectionMeetingTime>();
+                        foreach (var enrollment in currentEnrollments)
+                        {
+                            // The times that the student already has classes at
+                            concurrentSectionMeetingTimes = _context.SectionMeetingTimes.Where(SMT => SMT.SectionId == enrollment.SectionId).ToList();
+                            foreach (var concurrentSectionMeetingTime in concurrentSectionMeetingTimes)
+                            {
+                                foreach (var selectedSectionMeetingTime in selectedSectionSectionMeetingTimes)
+                                {
+                                    if (concurrentSectionMeetingTime.SectionMeetingTimeId == selectedSectionMeetingTime.SectionMeetingTimeId)
+                                    {
+                                        doesNotConflict = false;
+                                    }
+                                }
+                            }
+                        }
+                    } while (doesNotConflict == false);
+
+                    Enrollment newEnrollment = new Enrollment
+                    {
+                        StudentId = student.Id,
+                        SectionId = selectedSection.SectionId
+                    };
+                    _context.Enrollments.Add(newEnrollment);
+                }
+            }
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Data");
+        }
+
+        public async Task<IActionResult> RemoveEnrollments()
+        {
+            _context.Enrollments.RemoveRange(_context.Enrollments);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Data");
+        }
+
         #endregion Regular Tables
 
         #region Services Registration
