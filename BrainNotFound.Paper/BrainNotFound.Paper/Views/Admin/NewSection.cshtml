@@ -1,7 +1,6 @@
 
 @using BrainNotFound.Paper.Models.BusinessModels
-@model Tuple<Section, SectionMeetingTime, ApplicationUser>
-
+@model Section
 
 @{
         ViewData["Title"] = "Add Section Info - Admin";
@@ -22,14 +21,14 @@
                 <!--Section information(Ex: HI 101 - 1) -->
                 <h3 class="form-group">
                     <label class="control-label pull-left col-md-3 col-sm-3 col-xs-12">@ViewBag.department.DepartmentCode @ViewBag.course.CourseCode - @ViewBag.sectionNumber</label>
-                    <input type = "hidden" asp-for="Item1.SectionNumber" value= "@ViewBag.sectionNumber" />
-                </h3 >
+                    <input type="hidden" asp-for="SectionNumber" value="@ViewBag.sectionNumber" />
+                </h3>
 
                 <!--Location-->
                 <div class="form-group">
                     <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Location</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input asp-for="Item1.Location" type="text" class="form-control col-md-7 col-xs-12">
+                        <input asp-for="Location" type="text" class="form-control col-md-7 col-xs-12" />
                         <span class="text-danger"></span>
                     </div>
                 </div>
@@ -38,21 +37,21 @@
                 <div class="form-group">
                     <label class="control-label pull-left col-md-3 col-sm-3 col-xs-12">Days Meet</label>
                     <div class="col-md-6 col-sm-6 col-xs-6">
-                    @{
-                        string[] days = ViewBag.sectionMeetingDays.Day.Split(" ");
-                        foreach (String day in days)
-                        {
-                            <input type = "checkbox" name="daysMet" value="@day" class="flat" />@day
+                        @{
+                            string[] days = ViewBag.sectionMeetingDays.Day.Split(" ");
+                            foreach (String day in days)
+                            {
+                                <input type="checkbox" name="daysMet" value="@day" class="flat" />@day
+                            }
                         }
-                    }
                     </div>
                 </div>
 
-                <!--Start time-->
+                <!--Start Time-->
                 <div class="form-group">
                     <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Start Time</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input asp-for="Item2.StartTime" type = "time" class="form-control col-md-7 col-xs-12">
+                        <input name="startTime" type="time" class="form-control col-md-7 col-xs-12">
                         <span class="text-danger"></span>
                     </div>
                 </div>
@@ -61,7 +60,7 @@
                 <div class="form-group">
                     <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> End Time</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input asp-for="Item2.EndTime" type = "time" class="form-control col-md-7 col-xs-12">
+                        <input name="endTime" type="time" class="form-control col-md-7 col-xs-12">
                         <span class="text-danger"></span>
                     </div>
                 </div>
@@ -70,7 +69,7 @@
                 <div class="form-group">
                     <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Capacity</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input asp-for="Item1.Capacity" type="number" min="1" max="50" class="form-control col-md-7 col-xs-12">
+                        <input asp-for="Capacity" type="number" min="1" max="50" class="form-control col-md-7 col-xs-12">
                         <span class="text-danger"></span>
                     </div>
                 </div>
@@ -79,11 +78,11 @@
                 <div class="form-group">
                     <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Instructor</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <select asp-for="Item3.Id" class="select2_single form-control" tabindex="1">
-                            <option disabled selected value = "" > --Assign a teacher -- </option>
-                            @foreach(var i in ViewBag.instructorList)
+                        <select asp-for="InstructorId" class="select2_single form-control" tabindex="1">
+                            <option disabled selected value=""> --Assign a teacher -- </option>
+                            @foreach (var i in ViewBag.instructorList)
                             {
-                                <option value = "@i.Id" > @i.FirstName @i.LastName </option>
+                                <option value="@i.Id"> @i.FirstName @i.LastName </option>
                             }
                         </select>
                     </div>
@@ -92,9 +91,9 @@
                 <div class="ln_solid"></div>
                 <div class="form-group">
                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                        <button onclick = "history.go(-1)" class="btn btn-primary" type="button">Cancel</button>
-                        <button type = "submit" class="btn btn-success">Add Section</button>
-                      </div>
+                        <button onclick="history.go(-1)" class="btn btn-primary" type="button">Cancel</button>
+                        <button type="submit" class="btn btn-success">Add Section</button>
+                    </div>
                 </div>
             </form>
         </div>

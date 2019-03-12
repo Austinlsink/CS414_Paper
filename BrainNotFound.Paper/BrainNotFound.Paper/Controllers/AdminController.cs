@@ -705,13 +705,10 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         [HttpPost, Route("Sections/New/{code}")]
-        public async Task<IActionResult> NewSection(String code, Section section, string[] daysMet, SectionMeetingTime times, ApplicationUser user)
+        public async Task<IActionResult> NewSection(String code, Section section, string[] daysMet, DateTime startTime, DateTime endTime)
         {
             string departmentCode = code.Substring(0, 2);
             string courseCode     = code.Substring(2, 3);
-
-            ViewData["message"] = "Hi" + user.FirstName + user.LastName;
-            return View("TestView");
 
             // Find the department and course that are associated with the section
             Department department = _context.Departments.Where(d => d.DepartmentCode == departmentCode).First();
@@ -720,29 +717,28 @@ namespace BrainNotFound.Paper.Controllers
             // Create the new section meeting time list and add it to the new section
             List<SectionMeetingTime> allDaysMet = new List<SectionMeetingTime>();
 
-            foreach(String s in daysMet)
+            foreach (String s in daysMet)
             {
                 SectionMeetingTime newSectionMeetingTime = new SectionMeetingTime();
                 newSectionMeetingTime.Day = s;
-                newSectionMeetingTime.StartTime = times.StartTime;
-                newSectionMeetingTime.EndTime = times.EndTime;
+                newSectionMeetingTime.StartTime = startTime;
+                newSectionMeetingTime.EndTime = endTime;
                 newSectionMeetingTime.Section = section;
 
                 allDaysMet.Add(newSectionMeetingTime);
             }
-         
+
             // Create the new section
             Section newSection = new Section();
             newSection.Location = section.Location;
             newSection.Capacity = section.Capacity;
             newSection.SectionNumber = section.SectionNumber;
             newSection.Course = course;
-            newSection.ApplicationUser = await _userManager.FindByIdAsync(user.Id);
-            //newSection.InstructorId = user.Id;
+            newSection.ApplicationUser = await _userManager.FindByIdAsync(section.InstructorId);
+            newSection.InstructorId = section.InstructorId;
             newSection.SectionNumber = section.SectionNumber;
             newSection.TimesMet = allDaysMet;
 
-            
             _context.Sections.Add(newSection);
             _context.SaveChanges();
 
