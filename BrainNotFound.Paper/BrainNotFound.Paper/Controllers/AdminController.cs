@@ -643,7 +643,7 @@ namespace BrainNotFound.Paper.Controllers
 
             var course = _context.Courses.Find(c.CourseId);
             course.CourseCode  = c.CourseCode;
-            course.CourseName  = c.CourseName;
+            course.Name  = c.Name;
             course.Description = c.Description;
             course.CreditHours = c.CreditHours;
 

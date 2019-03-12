@@ -222,7 +222,7 @@ namespace BrainNotFound.Paper.Controllers
         public IActionResult CreateTest()
         {
             ApplicationUser currentInstructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
-            var course = _context.Courses.Where(c => c.CourseName == "Origins").First();
+            var course = _context.Courses.Where(c => c.Name == "Origins").First();
 
             Test test1 = new Test
             {

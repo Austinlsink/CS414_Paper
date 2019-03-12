@@ -71,7 +71,7 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
                                     if (coursesTaught.Contains(course) == false)
                                     {
                                         coursesTaught.Add(course);
-                                        ViewData["Message"] += "<li><t/> " + course.CourseName + "</li>";
+                                        ViewData["Message"] += "<li><t/> " + course.Name + "</li>";
                                     }
                                 }
                             }
@@ -96,7 +96,7 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
                     if (coursesTaught.Contains(currentCourse) == false)
                     {
                         coursesTaught.Add(currentCourse);
-                        ViewData["Message"] += "<li><t/> " + currentCourse.CourseName + "</li>";
+                        ViewData["Message"] += "<li><t/> " + currentCourse.Name + "</li>";
                     }
             }
 
