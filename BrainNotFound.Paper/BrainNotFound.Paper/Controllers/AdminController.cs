@@ -4,11 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using BrainNotFound.Paper.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using BrainNotFound.Paper.Models.BusinessModels;
-using BrainNotFound.Paper;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 using Microsoft.AspNetCore.Http;
 using BrainNotFound.Paper.Models.ViewModels;
@@ -25,7 +23,12 @@ namespace BrainNotFound.Paper.Controllers
         private readonly PaperDbContext _context;
 
         #region admin controllers
-        // Constructor
+        
+        /// <summary>
+        /// Constructor 
+        /// </summary>
+        /// <param name="userManager">Sets the UserManager</param>
+        /// <param name="context">Sets the database context</param>
         public AdminController(
             UserManager<ApplicationUser> userManager, PaperDbContext context)
         {
@@ -50,6 +53,9 @@ namespace BrainNotFound.Paper.Controllers
         #endregion admin controllers
 
         #region create administrator controllers
+        /// <summary>
+        /// Returns a list of all the administrators
+        /// </summary>
         [HttpGet, Route("Administrators")]
         public async Task<IActionResult> Administrators()
         {
@@ -58,12 +64,19 @@ namespace BrainNotFound.Paper.Controllers
             return View(allAdministrators);
         }
 
+        /// <summary>
+        /// GET: Displays the form for a new administrator
+        /// </summary>
         [HttpGet, Route("Administrators/New")]
         public IActionResult NewAdministrator()
         {
             return View();
         }
 
+        /// <summary>
+        /// POST: Creates a new administrator profile
+        /// </summary>
+        /// <param name="model">The admin info that is being added to the _userManager</param>
         [HttpPost, Route("Administrators/New")]
         public async Task<IActionResult> NewAdministrator(ApplicationUser model)
         {
@@ -108,15 +121,16 @@ namespace BrainNotFound.Paper.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Views a specific administrator's information
+        /// </summary>
+        /// <param name="username">The specific admin to look up</param>
         [HttpGet, Route("Administrators/{UserName}")]
         public async Task<IActionResult> ViewAdministrator(String username)
         {
-
             var admin = await _userManager.FindByNameAsync(username);
 
-            ViewBag.profile = admin;
-
-            return View();
+            return View(admin);
         }
 
         [HttpGet, Route("Administrators/Edit/{UserName}")]
@@ -564,7 +578,11 @@ namespace BrainNotFound.Paper.Controllers
         public IActionResult NewCourse(Course course)
         {
             if (!ModelState.IsValid)
+            {
+                var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
+                ViewBag.departmentList = departments;
                 return View();
+            }
 
             Department department = _context.Departments.Find(course.DepartmentId);
             course.Department = department;
@@ -705,13 +723,15 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         [HttpPost, Route("Sections/New/{code}")]
-        public async Task<IActionResult> NewSection(String code, Section section, string[] daysMet, SectionMeetingTime times, ApplicationUser user)
+        public async Task<IActionResult> NewSection(String code, Section section, string[] daysMet, DateTime startTime, DateTime endTime)
         {
             string departmentCode = code.Substring(0, 2);
             string courseCode     = code.Substring(2, 3);
 
-            ViewData["message"] = "Hi" + user.FirstName + user.LastName;
-            return View("TestView");
+            if(section.InstructorId == null || startTime == null || endTime == null)
+            {
+                return View(code);
+            }
 
             // Find the department and course that are associated with the section
             Department department = _context.Departments.Where(d => d.DepartmentCode == departmentCode).First();
@@ -720,29 +740,28 @@ namespace BrainNotFound.Paper.Controllers
             // Create the new section meeting time list and add it to the new section
             List<SectionMeetingTime> allDaysMet = new List<SectionMeetingTime>();
 
-            foreach(String s in daysMet)
+            foreach (String s in daysMet)
             {
                 SectionMeetingTime newSectionMeetingTime = new SectionMeetingTime();
                 newSectionMeetingTime.Day = s;
-                newSectionMeetingTime.StartTime = times.StartTime;
-                newSectionMeetingTime.EndTime = times.EndTime;
+                newSectionMeetingTime.StartTime = startTime;
+                newSectionMeetingTime.EndTime = endTime;
                 newSectionMeetingTime.Section = section;
 
                 allDaysMet.Add(newSectionMeetingTime);
             }
-         
+
             // Create the new section
             Section newSection = new Section();
             newSection.Location = section.Location;
             newSection.Capacity = section.Capacity;
             newSection.SectionNumber = section.SectionNumber;
             newSection.Course = course;
-            newSection.ApplicationUser = await _userManager.FindByIdAsync(user.Id);
-            //newSection.InstructorId = user.Id;
+            newSection.ApplicationUser = await _userManager.FindByIdAsync(section.InstructorId);
+            newSection.InstructorId = section.InstructorId;
             newSection.SectionNumber = section.SectionNumber;
             newSection.TimesMet = allDaysMet;
 
-            
             _context.Sections.Add(newSection);
             _context.SaveChanges();
 
