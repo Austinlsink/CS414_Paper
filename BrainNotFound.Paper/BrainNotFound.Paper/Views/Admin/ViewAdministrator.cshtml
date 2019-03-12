@@ -38,27 +38,24 @@
                         </div>
                     </div>
                     <div class="col-md-10 col-sm-10 col-xs-12">
-                        <h3>@ViewBag.profile.FirstName @ViewBag.profile.LastName</h3>
-
+                        <h3>@Model.FirstName @Model.LastName</h3>
                         <ul class="list-unstyled user_data">
                             <li>
-                                <i class="fa fa-map-marker user-profile-icon"></i> @ViewBag.profile.Address @ViewBag.profile.City @ViewBag.profile.State @ViewBag.profile.ZipCode
+                                <i class="fa fa-map-marker user-profile-icon"></i> @Model.Address @Model.City @Model.State @Model.ZipCode
                             </li>
 
                             <li>
-                                <i class="fa fa-at user-profile-icon">@ViewBag.profile.Email</i>
+                                <i class="fa fa-at user-profile-icon">@Model.Email</i>
                             </li>
 
                             <li>
-                                <i class="fa fa-user user-profile-icon">@ViewBag.profile.UserName</i>
+                                <i class="fa fa-user user-profile-icon">@Model.UserName</i>
 
                             <li>
-                                <i class="fa fa-phone user-profile-icon">@ViewBag.profile.PhoneNumber</i>
+                                <i class="fa fa-phone user-profile-icon">@Model.PhoneNumber</i>
                             </li>
-
                         </ul>
                         <br />
-
                     </div>
                 </div>
             </div>
