@@ -1,4 +1,39 @@
 ﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using BrainNotFound.Paper.Models.BusinessModels
+@using System.Text.RegularExpressions
+@using Microsoft.AspNetCore.Identity
+
+@inject BrainNotFound.Paper.PaperDbContext _context
+@inject UserManager<ApplicationUser> _userManager
+@{
+    ApplicationUser student = (ApplicationUser)await _userManager.FindByNameAsync(User.Identity.Name);
+    var enrollment = _context.Enrollments.Where(e => e.StudentId == student.Id).ToList();
+
+    List<Section> sections = new List<Section>();
+    List<ApplicationUser> instructors = new List<ApplicationUser>();
+    var allSections = _context.Sections.ToList();
+    foreach(Enrollment e in enrollment)
+    {
+        foreach(Section s in allSections)
+        {
+            if (e.SectionId == s.SectionId)
+            {
+                sections.Add(s);
+                instructors.Add(await _userManager.FindByIdAsync(s.InstructorId));
+            }
+        }
+    }
+
+    var courses = _context.Courses.ToList();
+    var departments = _context.Departments.ToList();
+
+    string[] splitname = Regex.Split(Context.User.Identity.Name, @"(?<!^)(?=[A-Z])");
+    string username = string.Empty;
+    foreach (string s in splitname)
+    {
+        username += s + ' ';
+    }
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,7 +80,7 @@
                         </div>
                         <div class="profile_info">
                             <span>Welcome,</span>
-                            <h2>John Doe</h2>
+                            <h2>@username</h2>
                         </div>
                     </div>
                     <!-- /menu profile quick info -->
@@ -55,59 +90,44 @@
                         <div class="menu_section">
                             <h3>General</h3>
                             <ul class="nav side-menu">
-                                <li><a asp-controller="Admin" asp-action="Index"><i class="fa fa-laptop"></i> Dashboard </a></li>
+                                <li><a asp-controller="Student" asp-action="Index"><i class="fa fa-laptop"></i> Dashboard </a></li>
                                 <li>
                                     <a><i class="fa fa-home"></i> Courses <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li> <a asp-controller="Admin" asp-action="NewCourse">New Course</a></li>
-                                        <li> <a asp-controller="Admin" asp-action="Courses">View All</></a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a><i class="fa fa-edit"></i> Departments <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a asp-controller="Admin" asp-action="Departments">New Department</a></li>
-                                        <li><a asp-controller="Admin" asp-action="Departments">View All</a></li>
+                                        @foreach (Section s in sections)
+                                        {
+                                            foreach (Department d in departments)
+                                            {
+                                                foreach (Course c in courses)
+                                                {
+                                                    if (s.CourseId == c.CourseId && c.DepartmentId == d.DepartmentId)
+                                                    {
+                                                        <li> <a asp-controller="Student" asp-action="ViewCourse">@d.DepartmentCode @c.CourseCode @c.Name - @s.SectionNumber </a></li>
+                                                    }
+                                                }
+                                            }
+                                        }
                                     </ul>
                                 </li>
                                 <li>
                                     <a><i class="fa fa-desktop"></i> Instructors <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a asp-controller="Admin" asp-action="NewInstructor">New Instructor</a></li>
-                                        <li><a asp-controller="Admin" asp-action="Instructors">View All</a></li>
+                                        @foreach (ApplicationUser i in instructors)
+                                        {
+                                            <li><a asp-controller="Student" asp-action="ViewInstructor">@i.FirstName @i.LastName</a></li>
+
+                                        }
                                     </ul>
                                 </li>
                                 <li>
-                                    <a><i class="fa fa-desktop"></i> Students <span class="fa fa-chevron-down"></span></a>
+                                    <a><i class="fa fa-file-text"></i> Tests <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a asp-controller="Admin" asp-action="NewStudent">New Student</a></li>
-                                        <li><a asp-controller="Admin" asp-action="Students">View All</a></li>
+                                         <li><a>View Tests</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="javascript:void(0)"><i class="fa fa-laptop"></i> Profile </a></li>
-                                <li><a href="javascript:void(0)"><i class="fa fa-laptop"></i> Help </a></li>
-                                <li><a href="javascript:void(0)"><i class="fa fa-laptop"></i> Settings </a></li>
-
                             </ul>
                         </div>
                     </div>
-                    <!-- /sidebar menu -->
-                    <!-- /menu footer buttons
-                    <div class="sidebar-footer hidden-small">
-                      <a data-toggle="tooltip" data-placement="top" title="Settings">
-                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                      </a>
-                      <a data-toggle="tooltip" data-placement="top" title="FullScreen">
-                        <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-                      </a>
-                      <a data-toggle="tooltip" data-placement="top" title="Lock">
-                        <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-                      </a>
-                      <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
-                        <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-                      </a>
-                    </div>
-                    /menu footer buttons -->
                 </div>
             </div>
             <!-- top navigation -->
@@ -120,23 +140,23 @@
                         <ul class="nav navbar-nav navbar-right">
                             <li class="">
                                 <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    <img src="~/images/img.jpg" alt="">John Doe
+                                    <img src="~/images/img.jpg" alt="">@username
                                     <span class=" fa fa-angle-down"></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-usermenu pull-right">
-                                    <li><!--<a href="javascript:;">--><a asp-controller="Admin" asp-action="Profile">Profile</a></li>
+                                    <li><!--<a href="javascript:;">--><a asp-controller="Student" asp-action="Profile">Profile</a></li>
                                     <li>
-                                        <a asp-controller="Admin" asp-action="Settings">
-                                        <!--<a href="javascript:;">-->
+                                        <a asp-controller="Student" asp-action="Settings">
+                                            <!--<a href="javascript:;">-->
 
                                             <span class="badge bg-red pull-right">50%</span>
                                             <span>Settings</span>
                                         </a>
                                     </li>
                                     <li><a href="javascript:;">Help</a></li>
-                                    
+
                                     <li>
-                                          <a asp-action="Logout" asp-controller="Account"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                                        <a asp-action="Logout" asp-controller="Account"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
                                     </li>
                                 </ul>
                             </li>
@@ -146,42 +166,6 @@
                                     <span class="badge bg-yellow">6</span>
                                 </a>
                                 <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-                                    <li>
-                                        <a>
-                                            <span class="image"><img src="~/images/img.jpg" alt="Profile Image" /></span>
-                                            <span>
-                                                <span>John Smith</span>
-                                                <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                                                Film festivals used to be do-or-die moments for movie makers. They were where...
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a>
-                                            <span class="image"><img src="~/images/img.jpg" alt="Profile Image" /></span>
-                                            <span>
-                                                <span>John Smith</span>
-                                                <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                                                Film festivals used to be do-or-die moments for movie makers. They were where...
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a>
-                                            <span class="image"><img src="~/images/img.jpg" alt="Profile Image" /></span>
-                                            <span>
-                                                <span>John Smith</span>
-                                                <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                                                Film festivals used to be do-or-die moments for movie makers. They were where...
-                                            </span>
-                                        </a>
-                                    </li>
                                     <li>
                                         <a>
                                             <span class="image"><img src="~/images/img.jpg" alt="Profile Image" /></span>
