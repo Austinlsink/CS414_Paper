@@ -11,7 +11,7 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 		 public long TestScheduleId {get; set;}
 		 
         // Ask about what is used for duration
-		 public int Duration {get; set;}
+		 public int TimeLimit {get; set;}
         [Required]
         [DataType(DataType.Date, ErrorMessage ="Please enter a start time.")]
         public DateTime StartTime {get; set;}
