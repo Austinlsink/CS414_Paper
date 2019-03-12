@@ -1,0 +1,52 @@
+﻿@using BrainNotFound.Paper.Models.BusinessModels
+@model Test;
+
+@{ 
+    bool IsCreate = ViewBag.IsCreate;
+    List<Course> Courses = ViewBag.CoursesTaught;
+    Test test = new Test();
+    if (IsCreate == false)
+    {
+        test = ViewBag.Test;
+    }
+}
+
+<div class="well">
+    <form asp-action="@(IsCreate ? "CreateTest" : "UpdateTest")" asp-controller="Instructor" id="new-department" data-parsley-validate class="form-horizontal form-label-left">
+        <label class="control-label col-md-2 col-sm-2 col-xs-12">Test Name</label>
+        <div class="col-md-4 col-sm-4 col-xs-12">
+
+            <input type="text" asp-for="TestName" placeholder="Enter test name" class="form-control" value="@(IsCreate ? string.Empty : test.TestName )">
+        </div>
+        <label class="control-label col-md-1 col-sm-1 col-xs-12">Course</label>
+        <div style="margin-bottom:10px" class="col-md-3 col-sm-3 col-xs-12">
+            @if (IsCreate == false)
+            {
+                <input asp-for="TestId" type="hidden" value="@test.TestId" />
+            }
+                <select asp-for="CourseId" class="form-control">
+                    <option>--Choose option--</option>
+                    @foreach (Course course in ViewBag.CoursesTaught)
+                    {
+                        @if (IsCreate)
+                        {
+                            <option value="@course.CourseId">@(course.DepartmentCode + course.CourseCode + " " + course.CourseName)</option>
+                        }
+                        else
+                        {
+                            if (test.CourseId == course.CourseId)
+                            {
+                                <option selected value="@course.CourseId">@(course.DepartmentCode + course.CourseCode + " " + course.CourseName)</option>
+                            }
+                            else
+                            {
+                                <option value="@course.CourseId">@(course.DepartmentCode + course.CourseCode + " " + course.CourseName)</option>
+                            }
+                        }
+
+                    }
+                </select>
+        </div>
+        <button style="margin-left:12px" type="submit" class="btn btn-round btn-success">Create</button>
+    </form>
+</div>

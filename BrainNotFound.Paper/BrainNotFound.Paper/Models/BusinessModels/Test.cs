@@ -13,6 +13,10 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         [Required]
         [StringLength(25, MinimumLength = 1, ErrorMessage ="There must be a name for the test.")]
 		public string TestName {get; set;}
+
+        public string URLSafeName { get; set; }
+
+
 		public List<TestSection> TestSections {get; set;}
 		public List<TestSchedule> TestSchedules {get; set;}
 		
