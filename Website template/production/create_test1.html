@@ -202,7 +202,6 @@
          <div id="pageContent" class="right_col">
             <div class="row">
                <div class="col-md-12 col-xs-12">
-                  <!-- (Test creation information) beginning of row 2 -->
                   <div  class="x_panel">
                      <div class="x_title">
                         <h2><i class="fa fa-info-circle"></i> | Test creation information</h2>
@@ -252,7 +251,7 @@
                            <div class="col-md-4 col-sm-4 col-xs-12">
                               <div class="x_panel">
                                  <div class="x_title">
-                                    <h2>Section</h2>
+                                    <h2>Section(s)</h2>
                                     <ul class="nav navbar-right panel_toolbox">
                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                                     </ul>
@@ -305,7 +304,7 @@
                                        <thead>
                                           <tr>
                                              <th><input type="checkbox" onClick="toggle(this, 'foo2')" /></th>
-                                             <th>ID</th>
+                                             <th>ID Number</th>
                                              <th>Student Name</th>
                                           </tr>
                                        </thead>
@@ -340,72 +339,54 @@
                                        </div>
                                     </div>
                                  </div>
-                                 <!-- end of row 2 -->
+                                 <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                       <div class="x_panel">
+                                          <div class="x_title">
+                                             <h2>Assigned to</h2>
+                                             <ul class="nav navbar-right panel_toolbox">
+                                                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                                             </ul>
+                                             <div class="clearfix"></div>
+                                          </div>
+                                          <div class="x_content">
+                                             <table class="table table-hover">
+                                                <thead>
+                                                   <tr>
+                                                      <th>First Name</th>
+                                                      <th>Last Name</th>
+                                                      <th>ID Number</th>
+                                                   </tr>
+                                                </thead>
+                                                <tbody>
+                                                   <tr>
+                                                      <td>1</td>
+                                                      <td>1</td>
+                                                      <td>1</td>
 
-
-
-
+                                                   </tr>
+                                                   <tr>
+                                                      <td>2</td>
+                                                      <td>1</td>
+                                                      <td>1</td>
+                                                   </tr>
+                                                   <tr>
+                                                      <td>3</td>
+                                                      <td>1</td>
+                                                      <td>1</td>
+                                                   </tr>
+                                                </tbody>
+                                             </table>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
                               </div>
                            </div>
                         </div>
-
-                     </div>
-					 <!-- Test creation information -->
-                                 <div id="genericSection" class="x_panel">
-                                    <!-- top of section header -->
-                                    <div class="x_title">
-                                       <h2><i class="fa fa-question"></i> | New test section</h2>
-                                       <ul class="nav navbar-right panel_toolbox">
-                                          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                                          <li><a class="collapse-link"><i class="fa fa-arrow-up"></i></a></li>
-                                          <li><a class="collapse-link"><i class="fa fa-arrow-down"></i></a></li>
-                                       </ul>
-                                       <div class="clearfix"></div>
-                                    </div>
-                                    <!-- end of section header -->
-                                    <div class="x_content">
-                                       <div class="row">
-                                          <form id="new-department" data-parsley-validate class="form-horizontal form-label-left">
-                                             <label class="control-label col-md-2 col-sm-2 col-xs-12">Question Type</label>
-                                             <div class="col-md-4 col-sm-4 col-xs-12">
-                                                <select class="form-control">
-                                                   <option>Choose option</option>
-                                                   <option>True/False</option>
-                                                   <option>Multiple Choice</option>
-                                                   <option>Fill In The Blank</option>
-                                                   <option>Matching</option>
-                                                </select>
-                                             </div>
-                                             <label class="control-label col-md-3 col-sm-2 col-xs-12">Question Point Value</label>
-                                             <div class="col-md-1">
-                                                <input type="text" placeholder="#" class="form-control"><br>
-                                             </div>
-                                          </div><br>
-                                          <div class="row">
-                                             <div class="col-md-12 col-sm-12 col-xs-12 form-group">
-                                                <input type="text" placeholder="Enter question here." class="form-control">
-                                             </div>
-                                          </div>
-                                       </form>
-                                    </div>
-                                 </div>
-							<div class="row">
-							<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-								<script>
-									$(document).ready(function(){
-										$("#sectionAdd").click(function(){
-										$("#genericSection").clone().appendTo("#pageContent");
-										$("addSectionButton").remove();
-										$("addSectionButton").clone().appendTo("#pageContent");
-										});
-									});
-								</script>
-                                <div id="addSectionButton" class="" style="text-align:center">
-                                    <button id="sectionAdd" type="button" class="btn btn-round btn-info"><i class="fa fa-plus"></i> Add Section</button>
-                                </div>
-                            </div>
-                                 <!-- end of test creation information -->
-					</div>
+                     </div><!-- x-content -->
+                     <button style="position: absolute;left:50%;" type="button" class="btn btn-round btn-info">Schedule</button>
+					   </div>
                </div>
                <!-- /page content -->
 
