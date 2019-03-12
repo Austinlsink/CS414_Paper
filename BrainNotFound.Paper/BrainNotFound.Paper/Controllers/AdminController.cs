@@ -685,22 +685,33 @@ namespace BrainNotFound.Paper.Controllers
             ViewBag.sectionMeetingDays = sectionMeeting;
 
             // Generate a section number
-            int sectionNumber = 1;
-            var sections = _context.Sections.Where(s => s.CourseId == course.CourseId).ToList();
-            foreach(Section s in sections)
+            var allSectionForCourse = _context.Sections.Where(s => s.CourseId == course.CourseId);
+
+            int sectionNumber = 0;
+            IQueryable<Section> SectionswithId;
+
+            bool SectionNumberFound = false;
+            do
             {
-                sectionNumber++;
-            }
+                sectionNumber += 1;
+                SectionswithId = allSectionForCourse.Where(asfc => asfc.SectionNumber == sectionNumber);
+                SectionNumberFound = SectionswithId.Any();
+
+            } while (SectionNumberFound);
+
             ViewBag.sectionNumber = sectionNumber;
             
             return View();
         }
 
         [HttpPost, Route("Sections/New/{code}")]
-        public async Task<IActionResult> NewSection(String code, Section section, string[] daysMet, SectionMeetingTime times)
+        public async Task<IActionResult> NewSection(String code, Section section, string[] daysMet, SectionMeetingTime times, ApplicationUser user)
         {
             string departmentCode = code.Substring(0, 2);
             string courseCode     = code.Substring(2, 3);
+
+            ViewData["message"] = "Hi" + user.FirstName + user.LastName;
+            return View("TestView");
 
             // Find the department and course that are associated with the section
             Department department = _context.Departments.Where(d => d.DepartmentCode == departmentCode).First();
@@ -708,29 +719,30 @@ namespace BrainNotFound.Paper.Controllers
  
             // Create the new section meeting time list and add it to the new section
             List<SectionMeetingTime> allDaysMet = new List<SectionMeetingTime>();
-            SectionMeetingTime newSectionMeetingTime = new SectionMeetingTime();
+
             foreach(String s in daysMet)
             {
+                SectionMeetingTime newSectionMeetingTime = new SectionMeetingTime();
                 newSectionMeetingTime.Day = s;
                 newSectionMeetingTime.StartTime = times.StartTime;
                 newSectionMeetingTime.EndTime = times.EndTime;
-            }
-            newSectionMeetingTime.Section = section;
+                newSectionMeetingTime.Section = section;
 
+                allDaysMet.Add(newSectionMeetingTime);
+            }
+         
             // Create the new section
             Section newSection = new Section();
             newSection.Location = section.Location;
             newSection.Capacity = section.Capacity;
             newSection.SectionNumber = section.SectionNumber;
             newSection.Course = course;
-            newSection.CourseId = course.CourseId;
-            newSection.ApplicationUser = await _userManager.FindByIdAsync(section.InstructorId);
-            newSection.InstructorId = section.InstructorId;
+            newSection.ApplicationUser = await _userManager.FindByIdAsync(user.Id);
+            //newSection.InstructorId = user.Id;
             newSection.SectionNumber = section.SectionNumber;
+            newSection.TimesMet = allDaysMet;
 
-            //ViewData["message"] = newSection.CourseId;
-            //return View("TestView");
-            _context.SectionMeetingTimes.Add(newSectionMeetingTime);
+            
             _context.Sections.Add(newSection);
             _context.SaveChanges();
 

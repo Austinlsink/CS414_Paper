@@ -1,6 +1,6 @@
 
 @using BrainNotFound.Paper.Models.BusinessModels
-@model Tuple<Section, SectionMeetingTime>
+@model Tuple<Section, SectionMeetingTime, ApplicationUser>
 
 
 @{
@@ -29,7 +29,7 @@
                 <div class="form-group">
                     <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Location</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input asp-for="Item1.Location" type="text" id="department-name" class="form-control col-md-7 col-xs-12">
+                        <input asp-for="Item1.Location" type="text" class="form-control col-md-7 col-xs-12">
                         <span class="text-danger"></span>
                     </div>
                 </div>
@@ -79,7 +79,7 @@
                 <div class="form-group">
                     <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Instructor</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <select asp-for="Item1.InstructorId" class="select2_single form-control" tabindex="1">
+                        <select asp-for="Item3.Id" class="select2_single form-control" tabindex="1">
                             <option disabled selected value = "" > --Assign a teacher -- </option>
                             @foreach(var i in ViewBag.instructorList)
                             {
