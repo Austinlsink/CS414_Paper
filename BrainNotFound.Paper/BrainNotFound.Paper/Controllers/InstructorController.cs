@@ -143,6 +143,7 @@ namespace BrainNotFound.Paper.Controllers
         /// Allows the instructor to view a specific course and all of the sections that he teaches
         /// </summary>
         /// <param name="code">DpartmentCode + CourseCode</param>
+
         [HttpGet, Route("Courses/{code}")]
         public async Task<IActionResult> ViewCourse(String code)
         {
