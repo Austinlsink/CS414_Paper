@@ -46,7 +46,10 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
 
             //ViewData["Message"] += "<li>Student Id: " + newEnrollment.StudentId + " Section Id: " + newEnrollment.SectionId + "</li>";
 
-            string instructorName = "Jeff Raplin";
+            string instructorName = "Mike Redhead";
+
+
+            List<Course> coursesTaught = new List<Course>();
             var allCourses = _context.Courses.OrderBy(o => o.CourseCode).ToList();
             var allDepartments = _context.Departments.OrderBy(o => o.DepartmentCode).ToList();
             var allSections = _context.Sections.OrderBy(o => o.SectionId).ToList();
@@ -54,32 +57,65 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
 
             foreach (var instructor in allInstructors)
             {
-                ViewData["Message"] += "<li>Instructor: " + instructor.FullName + "</li>"+ "<li><t/>Sections Taught: ";
-                foreach (var section in allSections)
+                if (instructor.FullName == instructorName)
                 {
-                    if (section.InstructorId == instructor.Id)
+                    ViewData["Message"] += "<li>" + instructorName + " teaches: </li>";
+                    foreach (var section in allSections)
                     {
-                        //ViewData["Message"] += section.SectionId + " ";
-                        foreach (var course in allCourses)
+                        if (section.InstructorId == instructor.Id)
                         {
-                            if (section.CourseId == course.CourseId)
+                            foreach (var course in allCourses)
                             {
-                                foreach (var department in allDepartments)
+                                if (section.CourseId == course.CourseId)
                                 {
-                                    if (course.DepartmentId == department.DepartmentId)
+                                    if (coursesTaught.Contains(course) == false)
                                     {
-                                        ViewData["Message"] += department.DepartmentCode + " " + course.CourseName + " " + course.CourseCode + "-";
+                                        coursesTaught.Add(course);
+                                        ViewData["Message"] += "<li><t/> " + course.CourseName + "</li>";
                                     }
                                 }
-                                //ViewData["Message"] += "(" + course.CourseName+ "), ";
                             }
                         }
                     }
                 }
             }
-            ViewData["Message"] += "</li>";
 
-            //_context.SaveChanges();
+            return View("TestView");
+        }
+
+        public async Task<IActionResult> FindCoursesTaughtBy()
+        {
+            string instructorName = "Mike Redhead";
+            List<Course> coursesTaught = new List<Course>();       
+            var instructor = _context.ApplicationUsers.Where(AU => AU.FullName == instructorName).First();
+            var sectionsTaught = _context.Sections.Where(S => S.InstructorId == instructor.Id);
+
+            foreach (var section in sectionsTaught)
+            {
+                var currentCourse = _context.Courses.Where(c => c.CourseId == section.CourseId).First();
+                    if (coursesTaught.Contains(currentCourse) == false)
+                    {
+                        coursesTaught.Add(currentCourse);
+                        ViewData["Message"] += "<li><t/> " + currentCourse.CourseName + "</li>";
+                    }
+            }
+
+            return View("TestView");
+        }
+
+        public async Task<IActionResult> GetStudentsInSection()
+        {
+            long sectionNumber = 201;
+            List<ApplicationUser> studentsIn = new List<ApplicationUser>();       
+            var section = _context.Sections.Where(S => S.SectionId == sectionNumber).First();
+            var enrollments = _context.Enrollments.Where(E => E.SectionId == sectionNumber);
+
+            foreach (var enrollment in enrollments)
+            {
+                var currentStudent = _context.ApplicationUsers.Where(AU => AU.Id == enrollment.StudentId).First();
+                studentsIn.Add(currentStudent);
+                ViewData["Message"] += "<li> " + currentStudent.FullName + "</li>";
+            }
 
             return View("TestView");
         }
