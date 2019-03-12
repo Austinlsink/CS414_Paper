@@ -17,7 +17,7 @@ namespace BrainNotFound.Paper.api
         [Route("GetSection")]
         public string GetSection()
         {
-            return "Nick is Awesome";
+            return "BimaIsCool";
         }       
     }
 }

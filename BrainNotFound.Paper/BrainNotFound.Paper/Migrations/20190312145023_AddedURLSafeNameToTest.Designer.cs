@@ -4,14 +4,16 @@ using BrainNotFound.Paper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BrainNotFound.Paper.Migrations
 {
     [DbContext(typeof(PaperDbContext))]
-    partial class PaperDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190312145023_AddedURLSafeNameToTest")]
+    partial class AddedURLSafeNameToTest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,6 +108,10 @@ namespace BrainNotFound.Paper.Migrations
                     b.Property<string>("CourseCode")
                         .IsRequired();
 
+                    b.Property<string>("CourseName")
+                        .IsRequired()
+                        .HasMaxLength(128);
+
                     b.Property<int>("CreditHours");
 
                     b.Property<long>("DepartmentId");
@@ -113,10 +119,6 @@ namespace BrainNotFound.Paper.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1024);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(128);
 
                     b.HasKey("CourseId");
 

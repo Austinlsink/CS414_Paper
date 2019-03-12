@@ -25,6 +25,7 @@ namespace BrainNotFound.Paper.Controllers
         {
             _userManager = userManager;
             _context = context;
+            
         }
 
 
@@ -212,42 +213,6 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        [HttpGet, Route("Tests")]
-        public IActionResult Tests()
-        {
-            return View();
-        }
-
-        [HttpGet, Route("Tests/CreateTest")]
-        public IActionResult CreateTest()
-        {
-            ApplicationUser currentInstructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
-            var course = _context.Courses.Where(c => c.Name == "Origins").First();
-
-            Test test1 = new Test
-            {
-                IsVisible = true,
-                TestName = "Midterm",
-                applicationUser = currentInstructor,
-                Course = course
-            };
-            _context.Tests.Add(test1);
-            _context.SaveChanges();
-            return View();
-        }
-
-        [HttpGet, Route("Tests/ViewTest")]
-        public IActionResult ViewTest()
-        {
-            return View();
-        }
-
-        [HttpGet, Route("Tests/EditTest")]
-        public IActionResult EditTest()
-        {
-            return View();
-        }
-
         [HttpGet, Route("Tests/EssayGrading")]
         public IActionResult EssayGrading()
         {
@@ -260,10 +225,106 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpGet, Route("Tests")]
+        public IActionResult Tests()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var Instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            var tests = _context.Tests.Where(t => t.InstructorId == Instructor.Id);
+            var courses = _context.Courses.ToList();
+            var departments = _context.Departments.ToList();
+
+            ViewBag.Tests = tests;
+            ViewBag.Courses = courses;
+            ViewBag.Departments = departments;
+            return View();
+        }
+
+        [HttpGet, Route("Tests/CreateTest")]
+        public IActionResult CreateTest()
+        {
+            var Instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            var departments = _context.Departments;
+            List<Course> coursesTaught = new List<Course>();
+            var sectionsTaught = _context.Sections.Where(S => S.InstructorId == Instructor.Id);
+            foreach (var section in sectionsTaught)
+            {
+                var currentCourse = _context.Courses.Where(c => c.CourseId == section.CourseId).First();
+                if (coursesTaught.Contains(currentCourse) == false)
+                {
+                    currentCourse.DepartmentCode = (departments.Where(d => d.DepartmentId == currentCourse.DepartmentId).First()).DepartmentCode;
+                    coursesTaught.Add(currentCourse);
+
+                }
+            }
+            ViewBag.CoursesTaught = coursesTaught;
+            return View();
+        }
+
+        [HttpPost, Route("Tests/CreateTest")]
+        public IActionResult CreateTest(Test test)
+        {
+            var Instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            var course = _context.Courses.Find(test.CourseId);
+            var departmnet = _context.Departments.Find(course.DepartmentId);
+            test.applicationUser = Instructor;
+            test.IsVisible = false;
+            test.URLSafeName = test.TestName.Replace(" ", "_");
+            _context.Tests.Add(test);
+            _context.SaveChanges();
+            return RedirectToAction("EditTest", "Instructor", new { DepartmentCode = departmnet.DepartmentCode, CourseCode = course.CourseCode, URLSafeName = test.URLSafeName });
+        }
+
+        [HttpGet, Route("Tests/ViewTest")]
+        public IActionResult ViewTest()
+        {
+            return View();
+        }
+
+        [HttpGet, Route("Tests/Edit/{DepartmentCode}/{CourseCode}/{URLSafeName}")]
+        public IActionResult EditTest(string DepartmentCode, string CourseCode, string URLSafeName)
+        {
+            var department = _context.Departments.Where(d => d.DepartmentCode == DepartmentCode).First();
+            var course = _context.Courses.Where(c => c.DepartmentId == department.DepartmentId && c.CourseCode == CourseCode).First();
+            var test = _context.Tests.Where(t => t.URLSafeName == URLSafeName && t.CourseId == course.CourseId).First();
+            course.DepartmentCode = department.DepartmentCode;
+            ViewBag.Test = test;
+            ViewBag.Course = course;
+         
+            return View();
+        }
+
+        [HttpGet, Route("Tests/Partials/NameAndCourse/{TestId?}")]
+        public ActionResult PartialNameAndCourse(long? TestId)
+        {
+            var Instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            var departments = _context.Departments;
+            List<Course> coursesTaught = new List<Course>();
+            var sectionsTaught = _context.Sections.Where(S => S.InstructorId == Instructor.Id);
+
+            if (TestId == null)
+            {
+                ViewBag.IsCreate = true;
+            }
+            else
+            {
+                var test = _context.Tests.Find(TestId);
+                ViewBag.Test = test;
+                ViewBag.IsCreate = false;
+            }
+            
+            
+            foreach (var section in sectionsTaught)
+            {
+                var currentCourse = _context.Courses.Where(c => c.CourseId == section.CourseId).First();
+                if (coursesTaught.Contains(currentCourse) == false)
+                {
+                    currentCourse.DepartmentCode = (departments.Where(d => d.DepartmentId == currentCourse.DepartmentId).First()).DepartmentCode;
+                    coursesTaught.Add(currentCourse);
+                }
+            }
+
+            ViewBag.CoursesTaught = coursesTaught;
+            return PartialView("~/Views/Instructor/CreateTestPartials/_EditNameAndCourse.cshtml");
         }
     }
 }
