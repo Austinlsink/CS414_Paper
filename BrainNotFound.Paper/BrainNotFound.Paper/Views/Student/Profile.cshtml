@@ -1,7 +1,52 @@
+@model BrainNotFound.Paper.Models.BusinessModels.ApplicationUser;
+
 @{
     ViewData["Title"] = "Profile - Student";
 }
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
 
-<p>This page displays the student’s information and allows the student to reset his password.</p>
+<div class="">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-user"></i> Student Information</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="col-md-2 col-sm-2 col-xs-12 profile_left">
+                        <div class="profile_img">
+                            <div id="crop-avatar">
+                                <!-- Current avatar -->
+                                <img class="img-responsive avatar-view" src="images/picture.jpg" alt="Avatar"
+                                     title="Change the avatar">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-10 col-sm-10 col-xs-12">
+                        <h3> @ViewBag.profile.FirstName @ViewBag.profile.LastName</h3>
+
+                        <ul class="list-unstyled user_data">
+                            <li>
+                                <i class="fa fa-map-marker user-profile-icon"></i> @ViewBag.profile.Address @ViewBag.profile.City @ViewBag.profile.State @ViewBag.profile.ZipCode
+                            </li>
+
+                            <li>
+                                <i class="fa fa-at user-profile-icon"> @ViewBag.profile.Email</i>
+                            </li>
+
+                            <li>
+                                <i class="fa fa-user user-profile-icon"> @ViewBag.profile.UserName</i>
+
+                            <li>
+                                <i class="fa fa-phone user-profile-icon"> @ViewBag.profile.PhoneNumber</i>
+                            </li>
+
+                        </ul>
+                        <br />
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

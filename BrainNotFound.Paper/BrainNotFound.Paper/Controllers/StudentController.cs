@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BrainNotFound.Paper.Models;
 using Microsoft.AspNetCore.Authorization;
+using BrainNotFound.Paper.Models.BusinessModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace BrainNotFound.Paper.Controllers
 {
@@ -13,6 +15,37 @@ namespace BrainNotFound.Paper.Controllers
     [Route("Student")]
     public class StudentController : Controller
     {
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly PaperDbContext _context;
+
+        /// <summary>
+        /// Constructor 
+        /// </summary>
+        /// <param name="userManager">Sets the UserManager</param>
+        /// <param name="context">Sets the database context</param>
+        public StudentController(
+            UserManager<ApplicationUser> userManager, PaperDbContext context)
+        {
+            _userManager = userManager;
+            _context = context;
+        }
+
+        #region Student profile controllers
+        [HttpGet, Route("Profile")]
+        public async Task<IActionResult> Profile()
+        {
+            var student = await _userManager.GetUserAsync(HttpContext.User);
+            ViewBag.profile = student;
+            return View();
+        }
+
+        [HttpGet, Route("Profile/Edit")]
+        public IActionResult EditProfile()
+        {
+            return View();
+        }
+        #endregion student profile controllers
+
         [HttpGet, Route("")]
         [HttpGet, Route("Index")]
         [HttpGet, Route("Dashboard")]
@@ -39,17 +72,7 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        [HttpGet, Route("Profile")]
-        public IActionResult Profile()
-        {
-            return View();
-        }
-
-        [HttpGet, Route("Profile/Edit")]
-        public IActionResult EditProfile()
-        {
-            return View();
-        }
+        
 
         [HttpGet, Route("Tests")]
         public IActionResult Tests()
