@@ -82,7 +82,7 @@
                             <tr>
                                 <th>Code</th>
                                 <th>Name</th>
-                                <th># of Sctions</th>
+                                <th># of Sections</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -95,7 +95,7 @@
                                     {
                                         <tr>
                                             <td>@course.CourseCode</td>
-                                            <td>@course.CourseName</td>
+                                            <td>@course.Name</td>
                                             <td>3</td>
                                             <td> <a asp-controller="Admin" asp-action="ViewCourse" asp-route-code="@department.DepartmentCode@course.CourseCode" class="btn btn-primary btn-xs"> View </a> </td>
                                         </tr>
@@ -132,7 +132,7 @@
                             {
                                 <div class="panel">
                                     <a class="panel-heading collapsed" role="tab" id="@NumberToWords.HEADING@NumberToWords.IntegerToWritten(count)@count" data-toggle="collapse" data-parent="#@NumberToWords.ACCORDIAN@count" href="#@NumberToWords.COLLAPSE@NumberToWords.IntegerToWritten(count)@count" aria-expanded="false" aria-controls="@NumberToWords.COLLAPSE@NumberToWords.IntegerToWritten(count)">
-                                        <h4 class="panel-title"><i class="fa fa-book"></i>@course.CourseCode @course.CourseName</h4>
+                                        <h4 class="panel-title"><i class="fa fa-book"></i>@course.CourseCode @course.Name</h4>
                                     </a>
                                     <div id="@NumberToWords.COLLAPSE@NumberToWords.IntegerToWritten(count)@count" class="panel-collapse collapse" role="tabpanel" aria-labelledby="@NumberToWords.HEADING@NumberToWords.IntegerToWritten(count)">
                                         <div class="panel-body">
