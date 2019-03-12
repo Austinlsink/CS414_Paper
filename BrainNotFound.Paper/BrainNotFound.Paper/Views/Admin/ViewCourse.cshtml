@@ -74,23 +74,25 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var s in ViewBag.sectionsList)
-                            {
-                                // Find the instructor name for each section
-                                String instructorName;
+                            @{
                                 List<ApplicationUser> instructors = ViewBag.instructorList;
-                                var instructor = instructors.Where(i => i.Id == s.InstructorId).First();
-                                instructorName = instructor.FirstName + " " + instructor.LastName;
-
-                                // Find the meeting times for each section
-                                List<String> days = new List<string>();
                                 List<SectionMeetingTime> sectionMeetingTimes = ViewBag.sectionMeetingTimeList;
-                                var sectionMeetingTime = sectionMeetingTimes.Where(smt => smt.SectionId == s.SectionId).ToList();
-                                foreach (SectionMeetingTime smt in sectionMeetingTime)
+                                foreach (var s in ViewBag.sectionsList)
                                 {
-                                    days.Add(smt.Day);
-                                }
-                                String day = string.Join(", ", days);
+                                    // Find the instructor name for each section
+                                    String instructorName;
+
+                                    var instructor = instructors.Where(i => i.Id == s.InstructorId).First();
+                                    instructorName = instructor.FirstName + " " + instructor.LastName;
+
+                                    // Find the meeting times for each section
+                                    List<String> days = new List<string>();
+                                    var sectionMeetingTime = sectionMeetingTimes.Where(smt => smt.SectionId == s.SectionId).ToList();
+                                    foreach (SectionMeetingTime smt in sectionMeetingTime)
+                                    {
+                                        days.Add(smt.Day);
+                                    }
+                                    String day = string.Join(", ", days);
 
                                 <tr>
                                     <td>@s.SectionNumber</td>
@@ -103,8 +105,8 @@
                                     </td>
 
                                 </tr>
-                            }
-
+                                    }
+                                }
                         </tbody>
                     </table>
 
