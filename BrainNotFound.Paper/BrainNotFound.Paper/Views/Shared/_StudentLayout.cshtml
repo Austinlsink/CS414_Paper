@@ -70,7 +70,7 @@
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
                     <div class="navbar nav_title" style="border: 0;">
-                        <a asp-controller="Admin" asp-action="Index" class="site_title"><img id="header_name" src="~/images/favicon3.ico" alt="..."> <span>| Paper</span></a>
+                        <a asp-controller="Student" asp-action="Index" class="site_title"><img id="header_name" src="~/images/favicon3.ico" alt="..."> <span>| Paper</span></a>
                     </div>
                     <div class="clearfix"></div>
                     <!-- menu profile quick info -->
@@ -102,7 +102,7 @@
                                                 {
                                                     if (s.CourseId == c.CourseId && c.DepartmentId == d.DepartmentId)
                                                     {
-                                                        <li> <a asp-controller="Student" asp-action="ViewCourse">@d.DepartmentCode @c.CourseCode @c.Name - @s.SectionNumber </a></li>
+                                                        <li> <a asp-controller="Student" asp-action="ViewSection" asp-route-code="@d.DepartmentCode@c.CourseCode" asp-route-sectionNumber="@s.SectionNumber">@d.DepartmentCode @c.CourseCode @c.Name - @s.SectionNumber </a></li>
                                                     }
                                                 }
                                             }
@@ -111,14 +111,7 @@
                                 </li>
 
                                 <li>
-                                    <a><i class="fa fa-desktop"></i> Instructors <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        @foreach (ApplicationUser i in instructors)
-                                        {
-                                            <li><a asp-controller="Student" asp-action="ViewInstructor">@i.FirstName @i.LastName</a></li>
-
-                                        }
-                                    </ul>
+                                    <a asp-controller="Student" asp-action="ViewInstructors" ><i class="fa fa-desktop"></i> Instructors</a>
                                 </li>
                                 <li>
                                     <a><i class="fa fa-file-text"></i> Grades <span class="fa fa-chevron-down"></span></a>
