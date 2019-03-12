@@ -222,44 +222,35 @@
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
-                              <div class="row">
-                              <form id="new-department" data-parsley-validate class="form-horizontal form-label-left">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Question Type</label>
-                                <div class="col-md-4 col-sm-4 col-xs-12">
-                                  <select class="form-control">
-                                    <option>Choose option</option>
-                                    <option>True/False</option>
-                                    <option>Multiple Choice</option>
-                                    <option>Fill In The Blank</option>
-                                    <option>Matching</option>
-                                  </select>
-                                </div>
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Question Point Value</label>
-                                     <div class="col-md-2">
+                               <div class="row">
+                                  <form id="new-department" data-parsley-validate class="form-horizontal form-label-left">
+                                     <label class="control-label col-md-2 col-sm-2 col-xs-12">Question Type</label>
+                                     <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <select class="form-control">
+                                           <option>Choose option</option>
+                                           <option>True/False</option>
+                                           <option>Multiple Choice</option>
+                                           <option>Fill In The Blank</option>
+                                           <option>Matching</option>
+                                        </select>
+                                     </div>
+                                     <label class="control-label col-md-3 col-sm-2 col-xs-12">Question Point Value</label>
+                                     <div class="col-md-1">
                                         <input type="text" placeholder="#" class="form-control"><br>
                                      </div>
-                              </form>
-                            </div><br>
-                            <!-- for selecting all checkboxes -->
-                            <script language="JavaScript">
-                            function toggle(source, elementName) {
-                              checkboxes = document.getElementsByName(elementName);
-                              for(var i=0, n=checkboxes.length;i<n;i++) {
-                                checkboxes[i].checked = source.checked;
-                              }
-                            }
-                            </script>
+                                  </div><br>
+
                             <div class="row">
                               <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="col-md-10">
+                                    <div class="col-md-10 col-sm-10 col-xs-12 form-group">
                                      <input type="text" placeholder="Enter question text here" class="form-control">
                                   </div>
-                                  <div class="col-md-2">
+                                  <div class="form-group col-md-2 col-sm-2">
                                     <label class="">
-                                       <div class="iradio_flat-green checked" style="position: relative;"><input type="radio" class="flat" checked="" name="iCheck" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div> T
+                                       <div class="" style="position: relative;"><input type="radio" class="flat" checked="" name="iCheck" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>True
                                     </label>
                                     <label class="">
-                                       <div class="iradio_flat-green" style="position: relative;"><input type="radio" class="flat" name="iCheck" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div> F
+                                       <div class="" style="position: relative;"><input type="radio" class="flat" name="iCheck" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>False
                                     </label>
                                  </div>
                               </div>
@@ -269,7 +260,7 @@
                               <div class="ln_solid"></div>
                               <div class="form-group">
                                 <div class="">
-                                  <button type="button" class="btn btn-round btn-info"><i class="fa fa-plus"></i> Add Section</button>
+                                  <button type="button" class="btn btn-round btn-info"><i class="fa fa-plus"></i> Add Question</button>
                                 </div>
                               </div>
                             </div>
