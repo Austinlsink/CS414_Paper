@@ -92,7 +92,7 @@ namespace BrainNotFound.Paper.Controllers
 
         public async Task<IActionResult> ForceStudentLogin()
         {
-            var result = await _signInManager.PasswordSignInAsync("MikeRedhead", "redHeadMagic", false, false);
+            var result = await _signInManager.PasswordSignInAsync("JamesButch", "JamesButch", false, false);
 
             if (result.Succeeded)
             {
