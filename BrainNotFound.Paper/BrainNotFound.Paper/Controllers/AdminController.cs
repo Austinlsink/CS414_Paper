@@ -564,7 +564,11 @@ namespace BrainNotFound.Paper.Controllers
         public IActionResult NewCourse(Course course)
         {
             if (!ModelState.IsValid)
+            {
+                var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
+                ViewBag.departmentList = departments;
                 return View();
+            }
 
             Department department = _context.Departments.Find(course.DepartmentId);
             course.Department = department;
