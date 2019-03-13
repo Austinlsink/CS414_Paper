@@ -38,14 +38,8 @@ namespace BrainNotFound.Paper
             {
 
             //options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTestKara"),             // VisualStudios MSSql Server For Kara to BLOW UP!
-            //options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTestLocal"),             // VisualStudios MSSql Server
-<<<<<<< HEAD
-            //options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTest"),                  // PCC Server
-            options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTestBima"),                // Bima Pc Server
-=======
-            options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTest"),                  // PCC Server
+            options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTest"),                      // PCC Server
             //options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTestBima"),                // Bima Pc Server
->>>>>>> 81c3d8c3af85454890cc5afab63ae7c99bcd075b
             optionsBuilders => optionsBuilders.MigrationsAssembly("BrainNotFound.Paper"));
             });
 

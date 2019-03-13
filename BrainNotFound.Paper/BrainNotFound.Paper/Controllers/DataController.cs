@@ -303,7 +303,7 @@ namespace BrainNotFound.Paper.Controllers
 
                 // Finds the course that the section belongs too
                 var courseName = sampleSection.CourseName.Substring(7);
-                var course = _context.Courses.Where(c => c.CourseName == courseName).First();
+                var course = _context.Courses.Where(c => c.Name == courseName).First();
                 section.Course = course;
 
                 // Assembles the days that the course meets

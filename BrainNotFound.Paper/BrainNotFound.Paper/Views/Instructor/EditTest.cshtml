@@ -11,9 +11,9 @@
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                     <li class="dropdown">
-                        <a  class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a id="EditTestNameAndCourse">Edit name and course</a></li>
+                            <li><a id="EditNameAndCourseBT">Edit name and course</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -26,8 +26,15 @@
         </div>
     </div>
 </div>
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    $("#EditNameAndCourseBT").click(function () {
 
+                Console.log(@Url.Action("PartialEditNameAndCourse", "Instructor", new { TestId = ViewBag.Test.TestId });
 
+            });
+
+</script>
 
 
 @section scripts
@@ -35,5 +42,6 @@
     <!-- bootstrap-datetimepicker -->
     <script src="~/vendors/moment/min/moment.min.js"></script>
     <script src="~/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
-    <script type="text/javascript" src="~/js/CreateTest.js"></script>
+
+
 }

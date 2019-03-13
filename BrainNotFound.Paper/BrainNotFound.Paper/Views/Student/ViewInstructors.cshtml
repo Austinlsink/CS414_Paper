@@ -1,0 +1,66 @@
+@using BrainNotFound.Paper.Models.BusinessModels
+@using System.Text.RegularExpressions
+
+@{
+    ViewData["Title"] = "View Instructor - Student";
+}
+
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-pie-chart"></i> Instructor Information</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <!-- start accordion -->
+            @{
+                int count = 1;
+            <div class="accordion" id="accordion1" role="tablist" aria-multiselectable="true">
+
+                @foreach (ApplicationUser i in ViewBag.instructorList)
+                {
+
+                    <div class="panel">
+                        <a class="panel-heading collapsed" role="tab" id="@NumberToWords.HEADING@NumberToWords.IntegerToWritten(count)@count" data-toggle="collapse" data-parent="#@NumberToWords.ACCORDIAN@count" href="#@NumberToWords.COLLAPSE@NumberToWords.IntegerToWritten(count)@count" aria-expanded="false" aria-controls="@NumberToWords.COLLAPSE@NumberToWords.IntegerToWritten(count)">
+                            <h3><b>@i.FirstName  @i.LastName</b></h3>
+                        </a>
+                        <div id="@NumberToWords.COLLAPSE@NumberToWords.IntegerToWritten(count)@count" class="panel-collapse collapse" role="tabpanel" aria-labelledby="@NumberToWords.HEADING@NumberToWords.IntegerToWritten(count)">
+                            
+                            <div class="panel-body">
+                                <div class="x_content">
+                                    <div class="col-md-2 col-sm-2 col-xs-12 profile_left">
+                                        <div class="profile_img">
+                                            <div id="crop-avatar">
+                                                <!-- Current avatar -->
+                                                <img class="img-responsive avatar-view" src="images/picture.jpg" alt="Avatar"
+                                                     title="Change the avatar">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10 col-sm-10 col-xs-12">
+                                        <ul class="list-unstyled user_data">
+                                            <li>
+                                                <i class="fa fa-at user-profile-icon"> Email: @i.Email</i>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-phone user-profile-icon">
+                                                    Phone: @Regex.Replace(i.PhoneNumber, @"(\d{3})(\d{3})(\d{4})", "($1) $2-$3")
+                                                </i>
+                                            </li>
+                                        </ul>
+                                        <br />
+                                        <br />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    count++;
+                }
+                </div>
+            <!-- end of accordion -->
+            }
+        </div>
+    </div>
+</div>

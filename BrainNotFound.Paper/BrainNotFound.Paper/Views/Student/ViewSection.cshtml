@@ -1,0 +1,66 @@
+@using BrainNotFound.Paper.Models.BusinessModels
+@model BrainNotFound.Paper.Models.BusinessModels.ApplicationUser;
+@{
+    ViewData["Title"] = "View Section - Student";
+}
+
+<div class="">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-user"></i>Section Information</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="col-md-10 col-sm-10 col-xs-12">
+
+                        <h3>@ViewBag.department.DepartmentCode @ViewBag.course.CourseCode @ViewBag.course.Name - @ViewBag.section.SectionNumber</h3>
+
+                        <ul class="list-unstyled user_data">
+                            <li>
+                                <b>Capacity</b> @ViewBag.section.Capacity
+                            </li>
+
+                            <li>
+                                <b> Location:</b> @ViewBag.section.Location
+                            </li>
+                            <li>
+                                @{
+                                    // Find the meeting times for the section
+                                    List<String> days = new List<string>();
+                                    List<SectionMeetingTime> sectionMeetingTimes = ViewBag.sectionMeetingTimeList;
+                                    DateTime startTime = new DateTime();
+                                    DateTime endTime = new DateTime();
+                                    var sectionMeetingTime = sectionMeetingTimes.Where(smt => smt.SectionId == ViewBag.section.SectionId).ToList();
+                                    foreach (SectionMeetingTime smt in sectionMeetingTime)
+                                    {
+                                        days.Add(smt.Day);
+                                        startTime = smt.StartTime;
+                                        endTime = smt.EndTime;
+                                    }
+                                    String day = string.Join(", ", days);
+                                }
+                                <b>Days Meeting: </b> @day
+                            </li>
+                            <li>
+                                <b>Start Time: </b> @startTime.ToString("h:mm tt")
+                            </li>
+                            <li>
+                                <b>End Time:</b> @endTime.ToString("h:mm tt")
+                            </li>
+                            <li>
+                                <b>Instructor: </b>@ViewBag.instructor.FirstName @ViewBag.instructor.LastName
+                            </li>
+                        </ul>
+                        <br />
+                    </div>
+                </div>
+                </div>
+             </div>
+        <div class="clearfix"></div>
+    </div>
+</div>

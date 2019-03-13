@@ -20,7 +20,7 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         public string CourseCode { get; set; } //should this be an int?
         [Required]
         [StringLength(128, MinimumLength = 1, ErrorMessage = "Please enter a course name (example: Intro To Biology, New Testament Survey).")]
-        public string CourseName { get; set; }
+        public string Name { get; set; }
         [Required]
         [StringLength(1024, MinimumLength = 1, ErrorMessage = "Please enter a course description.")]
         public string Description { get; set; }
