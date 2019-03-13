@@ -1,18 +1,42 @@
 ﻿///* Event Handlers */
 
-////Add a generic section to the test
-//var RootURL = "http://" + document.location.host + "/";
+// Button Handlers
+// Handles all forms in section as 
+$(function () {
+    $('.post-using-ajax').each(function () {
+        var $frm = $(this);
+        $frm.submit(function (e) {
+            e.preventDefault();
 
-////$("#EditNameAndCourseBT").click(function () {
+            $.ajax({
+                type: $frm.attr('method'),
+                url: $frm.attr('action'),
+                data: $frm.serialize(),
+                success: function (msg) {
+                    alert("Success");
+                }
+            });
+        });
+    });
+});
 
-////    $.ajax({
-////        url: RootURL + "Instructor/Tests/Partials/EditNameAndCourse/131",
-////        success: function (result) {
-////            $("#x_c-infoSection").prepend(result);
+// Edit test name and course
+function EditTestNameAndCourse(TestId)
+{
+    if ($("#EditNameAndCourse").length == 0) {
+        $.ajax({
+            url: "/Instructor/Tests/Partials/EditNameAndCourse/" + TestId,
+            success: function (result) {
+                $("#x_c-infoSection").prepend(result);
+            }
+        });
+    }
+}
 
-////        }
-////    });
-////});
+// Reassigns back browser button
+window.onpopstate = function () {
+    window.location.href = "/Instructor/Tests";
+}; history.pushState({}, '');
 
 ////Change the generic section to a specified section
 ////$("#setQuestionType").click(function () {

@@ -225,9 +225,11 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        //Displays all tests created by an Instructor
         [HttpGet, Route("Tests")]
         public IActionResult Tests()
         {
+            
             var Instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
             var tests = _context.Tests.Where(t => t.InstructorId == Instructor.Id);
             var courses = _context.Courses.ToList();
@@ -239,6 +241,7 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        // First Step in Creating a test
         [HttpGet, Route("Tests/CreateTest")]
         public IActionResult CreateTest()
         {
@@ -246,6 +249,8 @@ namespace BrainNotFound.Paper.Controllers
             var departments = _context.Departments;
             List<Course> coursesTaught = new List<Course>();
             var sectionsTaught = _context.Sections.Where(S => S.InstructorId == Instructor.Id);
+
+            // Gets all courses tought by instructor removing duplicates from sections
             foreach (var section in sectionsTaught)
             {
                 var currentCourse = _context.Courses.Where(c => c.CourseId == section.CourseId).First();
@@ -260,6 +265,7 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        // Saves the new test to the database
         [HttpPost, Route("Tests/CreateTest")]
         public IActionResult CreateTest(Test test)
         {
@@ -272,6 +278,7 @@ namespace BrainNotFound.Paper.Controllers
 
             _context.Tests.Add(test);
             _context.SaveChanges();
+
             return RedirectToAction("EditTest", "Instructor", new { DepartmentCode = department.DepartmentCode, CourseCode = course.CourseCode, URLSafeName = test.URLSafeName });
         }
 
@@ -281,6 +288,8 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+
+        // Allows the user to Edit a test information, add and remove sections
         [HttpGet, Route("Tests/Edit/{DepartmentCode}/{CourseCode}/{URLSafeName}")]
         public IActionResult EditTest(string DepartmentCode, string CourseCode, string URLSafeName)
         {
@@ -295,6 +304,7 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        // Gets the partial view being displayed
         [HttpGet, Route("Tests/Partials/EditNameAndCourse/{TestId}")]
         public ActionResult PartialEditNameAndCourse(long TestId)
         {
@@ -327,18 +337,18 @@ namespace BrainNotFound.Paper.Controllers
             //grab a copy of the test from the database
             var dbTest = _context.Tests.Find(test.TestId);
 
+            //populate the database test name with the view's test name
+            dbTest.TestName = test.TestName;
+            dbTest.URLSafeName = dbTest.TestName.Replace(" ", "_");
+
+            //update the course on the database test
+            dbTest.CourseId = test.CourseId;
+
             //Grab the course id from the database test
             var course = _context.Courses.Find(dbTest.CourseId);
 
             //Grab the department from the database test
             var department = _context.Departments.Find(course.DepartmentId);
-
-            //populate the database test name with the view's test name
-            dbTest.TestName = test.TestName;
-
-            //update the course on the database test
-            dbTest.CourseId = test.CourseId;
-
             _context.Tests.Update(dbTest);
             _context.SaveChanges();
         
