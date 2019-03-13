@@ -8,9 +8,24 @@
 @inject UserManager<ApplicationUser> _userManager
 @{
     ApplicationUser instructor = (ApplicationUser)await _userManager.FindByNameAsync(User.Identity.Name);
-    var sections = _context.Sections.Where(s => s.InstructorId == instructor.Id);
+    var allSections = _context.Sections.Where(s => s.InstructorId == instructor.Id).ToList();
     var courses = _context.Courses.ToList();
     var departments = _context.Departments.ToList();
+
+    List<Section> sections = new List<Section>();
+    foreach(Section s in allSections)
+    {
+        foreach(Course c in courses)
+        {
+            if (s.CourseId == c.CourseId)
+            {
+                if (!(sections.Where(section => section.CourseId == s.CourseId).Any()))
+                {
+                    sections.Add(s);
+                }
+            }
+        }
+    }
 
     string[] splitname = Regex.Split(Context.User.Identity.Name, @"(?<!^)(?=[A-Z])");
     string username = string.Empty;
