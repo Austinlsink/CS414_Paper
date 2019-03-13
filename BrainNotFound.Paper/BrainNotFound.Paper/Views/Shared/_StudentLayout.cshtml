@@ -10,7 +10,6 @@
     var enrollment = _context.Enrollments.Where(e => e.StudentId == student.Id).ToList();
 
     List<Section> sections = new List<Section>();
-    List<ApplicationUser> instructors = new List<ApplicationUser>();
     var allSections = _context.Sections.ToList();
     foreach(Enrollment e in enrollment)
     {
@@ -18,8 +17,10 @@
         {
             if (e.SectionId == s.SectionId)
             {
-                sections.Add(s);
-                instructors.Add(await _userManager.FindByIdAsync(s.InstructorId));
+                if (!(sections.Where(section => section.SectionId == s.SectionId).Any()))
+                {
+                    sections.Add(s);
+                }
             }
         }
     }

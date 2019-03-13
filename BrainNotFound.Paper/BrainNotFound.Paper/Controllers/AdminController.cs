@@ -634,18 +634,19 @@ namespace BrainNotFound.Paper.Controllers
             var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
             ViewBag.course = course;
             ViewBag.departments = departments;
+            ViewData["description"] = course.Description;
             return View();
         }
 
         [HttpPost, Route("Courses/Edit/{id}")]
-        public IActionResult EditCourse(Course c)
+        public IActionResult EditCourse(Course c, string description)
         {
-
             var course = _context.Courses.Find(c.CourseId);
             course.CourseCode  = c.CourseCode;
             course.Name  = c.Name;
-            course.Description = c.Description;
+            course.Description = description;
             course.CreditHours = c.CreditHours;
+            _context.Courses.Update(course);
 
             _context.SaveChanges();
 
