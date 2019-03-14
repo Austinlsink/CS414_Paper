@@ -21,7 +21,7 @@ namespace BrainNotFound.Paper.Controllers
 
         // Routes Start
 
-        //[HttpGet, Route("/")]
+        [HttpGet, Route("/")]
         [HttpGet, Route("Login")]
         public IActionResult Login()
         {
@@ -30,10 +30,11 @@ namespace BrainNotFound.Paper.Controllers
 
 
 
+        [HttpPost, Route("Account/Login")]
         [HttpPost, Route("Login")]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid || true)
             {
 
                 var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
@@ -41,15 +42,15 @@ namespace BrainNotFound.Paper.Controllers
                 if (result.Succeeded)
                 {
 
-                    if(User.IsInRole(UserRole.Admin))
+                    if(User.IsInRole("Admin"))
                     {
                         return RedirectToAction("Index", "Admin");
                     }
-                    else if(User.IsInRole(UserRole.Instructor))
+                    else if(User.IsInRole("Instructor"))
                     {
                         return RedirectToAction("Index", "Instructor");
                     }
-                    else if(User.IsInRole(UserRole.Student))
+                    else if(User.IsInRole("Student"))
                     {
                         return RedirectToAction("Index", "Student");
                     }
@@ -60,7 +61,7 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-       [Route("/")]
+       //[Route("/")]
         public IActionResult ForceLogin()
         {
             return View("LoginOptions");
