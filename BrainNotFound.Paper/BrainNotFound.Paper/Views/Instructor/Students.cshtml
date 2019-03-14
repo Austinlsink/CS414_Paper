@@ -2,12 +2,11 @@
 @model BrainNotFound.Paper.Models.BusinessModels.ApplicationUser;
 
 @{
-    ViewData["Title"] = "Manage Students - Instructor";
+    ViewData["Title"] = "View Students - Instructor";
 }
 
 <h2>Students</h2>
 <div class="x_content">
-
     <p>Click checkbox to select multiple Students.</p>
     <div class="table-responsive">
         <table class="table table-striped jambo_table bulk_action ">
@@ -27,22 +26,21 @@
                     </th>
                 </tr>
             </thead>
-
             <tbody>
 
                 @foreach (var s in ViewBag.students)
                 {
-                            <tr class="odd pointer">
-                                <td class="a-center ">
-                                    <input type="checkbox" class="flat" name="table_records">
-                                </td>
-                                <td class=" ">@s.FirstName </td>
-                                <td class=" ">@s.LastName </td>
-                                <td class=" ">@s.Classification </td>
-                                <td class=" last">
-                                     <a asp-controller="Instructor" asp-action="ViewStudentProfile" asp-route-UserName="@s.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                </td>
-                            </tr>
+                    <tr class="odd pointer">
+                        <td class="a-center ">
+                            <input type="checkbox" class="flat" name="table_records">
+                        </td>
+                        <td class="">@s.FirstName </td>
+                        <td class="">@s.LastName </td>
+                        <td class="">@s.Classification </td>
+                        <td class="">
+                             <a asp-controller="Instructor" asp-action="ViewStudentProfile" asp-route-UserName="@s.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                        </td>
+                    </tr>
                  }
             </tbody>
         </table>

@@ -98,7 +98,10 @@ namespace BrainNotFound.Paper.Controllers
                 {
                     if (e.StudentId == student.Id)
                     {
-                        students.Add(student);
+                        if (!(students.Where(s => s.Id == student.Id).Any()))
+                        {
+                            students.Add(student);
+                        }
                     }
                 }
             }
