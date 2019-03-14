@@ -1,4 +1,5 @@
-@using BrainNotFound.Paper.Models.BusinessModels
+@using BrainNotFound.Paper.Models.BusinessModels;
+@using System.Text.RegularExpressions;
 @model BrainNotFound.Paper.Models.BusinessModels.ApplicationUser;
 
 @{
@@ -32,7 +33,7 @@
 
                         <ul class="list-unstyled user_data">
                             <li>
-                                <i class="fa fa-map-marker user-profile-icon"></i> @ViewBag.profile.Address @ViewBag.profile.City @ViewBag.profile.State @ViewBag.profile.ZipCode
+                                <i class="fa fa-map-marker user-profile-icon"></i> @ViewBag.profile.Address, @ViewBag.profile.City, @ViewBag.profile.State @ViewBag.profile.ZipCode
                             </li>
 
                             <li>
@@ -43,7 +44,7 @@
                                 <i class="fa fa-user user-profile-icon"> @ViewBag.profile.UserName</i>
 
                             <li>
-                                <i class="fa fa-phone user-profile-icon"> @ViewBag.profile.PhoneNumber</i>
+                                <i class="fa fa-phone user-profile-icon"> @Regex.Replace(ViewBag.profile.PhoneNumber, @"(\d{3})(\d{3})(\d{4})", "($1) $2-$3")</i>
                             </li>
 
                         </ul>

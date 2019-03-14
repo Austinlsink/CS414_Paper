@@ -1,3 +1,4 @@
+@using System.Text.RegularExpressions;
 @model BrainNotFound.Paper.Models.BusinessModels.ApplicationUser;
 @{
     ViewData["Title"] = "View Administrator - Admin";
@@ -52,7 +53,7 @@
                                 <i class="fa fa-user user-profile-icon">@Model.UserName</i>
 
                             <li>
-                                <i class="fa fa-phone user-profile-icon">@Model.PhoneNumber</i>
+                                <i class="fa fa-phone user-profile-icon"> @Regex.Replace(Model.PhoneNumber, @"(\d{3})(\d{3})(\d{4})", "($1) $2-$3") </i>
                             </li>
                         </ul>
                         <br />
