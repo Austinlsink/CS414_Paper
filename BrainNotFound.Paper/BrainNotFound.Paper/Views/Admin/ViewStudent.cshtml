@@ -108,10 +108,10 @@
                                             if (c.DepartmentId == d.DepartmentId)
                                             {
                                                 <tr>
-                                                    <td>@d.DepartmentCode @c.CourseCode @c.CourseName - @s.SectionNumber</td>
+                                                    <td>@d.DepartmentCode @c.CourseCode @c.Name - @s.SectionNumber</td>
                                                     <td>@s.Location</td>
                                                     <td>@day</td>
-                                                    <td> <a asp-controller="Admin" asp-action="ViewSection" asp-route-CourseId="@c.CourseId" asp-route-SectionId="@s.SectionId" class="btn btn-primary btn-xs"> View </a> </td>
+                                                    <td> <a asp-controller="Admin" asp-action="ViewSection" asp-route-code="@d.DepartmentCode@c.CourseCode" asp-route-sectionNumber="@s.SectionNumber" class="btn btn-primary btn-xs"> View </a> </td>
                                                 </tr>
                                             }
                                             
