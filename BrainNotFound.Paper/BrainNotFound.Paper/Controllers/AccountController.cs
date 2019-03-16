@@ -21,7 +21,8 @@ namespace BrainNotFound.Paper.Controllers
 
         // Routes Start
 
-        [HttpGet, Route("/")]
+        //[HttpGet, Route("/")]
+        [HttpPost, Route("Account/Login")]
         [HttpGet, Route("Login")]
         public IActionResult Login()
         {
@@ -30,7 +31,7 @@ namespace BrainNotFound.Paper.Controllers
 
 
 
-        [HttpPost, Route("Account/Login")]
+        
         [HttpPost, Route("Login")]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -58,10 +59,10 @@ namespace BrainNotFound.Paper.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            return View();
+            return RedirectToAction("Login", "Account");
         }
 
-       //[Route("/")]
+       [Route("/")]
         public IActionResult ForceLogin()
         {
             return View("LoginOptions");
