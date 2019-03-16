@@ -1,5 +1,4 @@
-﻿
-@*
+﻿@*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 <div id="NewSchedule" class="well">
@@ -30,11 +29,14 @@
     <div class="col-md-2 col-sm-4 col-xs-12">
         <div class="checkbox">
             &emsp;
-            <label onclick="UnlimitedTimeCheckBox()" for="UnlimitedTimeCheckBox">
-                <input type="checkbox" name="UnlimitedTimeCheckBox" id="UnlimitedTimeCheckBox" checked="checked">  Unlimited
-            </label>
+            <div class="control-group">
+
+                <label for="UnlimitedTimeCheckBox">
+                    <input onclick="UnlimitedTimeCheckBox()" type="checkbox" name="UnlimitedTimeCheckBox" id="UnlimitedTimeCheckBox" checked="checked" />  Unlimited
+                </label>
+            </div>
         </div>
-        
+
 
     </div>
     <div class="clearfix"></div>
@@ -198,6 +200,6 @@
 
 <script type="text/javascript">
 
- 
+
     init_daterangepicker_TestSchedule();
 </script>

@@ -28,12 +28,10 @@ function NewTestSchedule(TestId) {
 function UnlimitedTimeCheckBox() {
 
     if ($("#UnlimitedTimeCheckBox").is(':checked')) {
-        console.log("Checked");
         $("#TimeLimitTextBox").attr("disabled", "disabled");
     }
     else {
-        $("#TimeLimitTextBox").removeProp("disabled");
-        console.log("UnChecked");
+        $("#TimeLimitTextBox").removeAttr("disabled");
     }
 }
 
