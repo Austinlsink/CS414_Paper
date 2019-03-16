@@ -40,8 +40,8 @@ namespace BrainNotFound.Paper
         public DbSet<StudentMatchingAnswer> StudentMatchingAnswers { get; set; }
         public DbSet<MatchingAnswerSide> MatchingAnswerSides { get; set; }
         public DbSet<MatchingQuestionSide> MatchingQuestionSides { get; set; }
-
-
+        public DbSet<Notification> Notifications { get; set; }
+        
         // Constructor
         public PaperDbContext(DbContextOptions<PaperDbContext> options)
             : base(options)

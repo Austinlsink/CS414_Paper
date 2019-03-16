@@ -260,6 +260,29 @@ namespace BrainNotFound.Paper.Migrations
                     b.ToTable("MultipleChoiceAnswers");
                 });
 
+            modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.Notification", b =>
+                {
+                    b.Property<long>("NotificationId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Content");
+
+                    b.Property<DateTime>("Timestamp");
+
+                    b.Property<string>("Title");
+
+                    b.Property<string>("Type");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("NotificationId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.Question", b =>
                 {
                     b.Property<long>("QuestionId")
@@ -771,6 +794,13 @@ namespace BrainNotFound.Paper.Migrations
                         .WithMany("MultipleChoiceAnswers")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.Notification", b =>
+                {
+                    b.HasOne("BrainNotFound.Paper.Models.BusinessModels.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.Question", b =>
