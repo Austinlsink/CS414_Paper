@@ -358,5 +358,12 @@ namespace BrainNotFound.Paper.Controllers
            //When you press save, redirect back to the edit test page
            return RedirectToAction("EditTest", "Instructor", new { DepartmentCode = department.DepartmentCode, CourseCode = course.CourseCode, URLSafeName = dbTest.URLSafeName });
        }
+
+        // Gets the partial view New Schedule
+        [HttpGet, Route("Tests/Partials/NewSchedule/{TestId}")]
+        public ActionResult PartialNewSchedule(long TestId)
+        {
+            return PartialView("~/Views/Instructor/CreateTestPartials/_NewTestSchedual.cshtml");
+        }
     }
 }

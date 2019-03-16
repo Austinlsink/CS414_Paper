@@ -1,0 +1,203 @@
+﻿
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<div id="NewSchedule" class="well">
+    <h4><i class="fa fa-calendar"></i> New Schedule</h4>
+    <hr />
+
+    <div class="col-md-6 col-sm-12">
+        Test Availability
+        <form class="form-horizontal">
+            <fieldset>
+                <div class="control-group">
+                    <div class="controls">
+                        <div class="input-prepend input-group">
+                            <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+                            <input type="text" name="testScheduleDateTime" id="testScheduleDateTime" class="form-control" value="01/01/2016 - 01/25/2016">
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
+    <div class="col-md-4 col-sm-8 col-xs-12">
+        Time Limit (minutes)
+        <input type="text" id="TimeLimitTextBox" class="form-control" name="TimeLimit" required="" value="50">
+
+    </div>
+    <div class="col-md-2 col-sm-4 col-xs-12">
+        <div class="checkbox">
+            &emsp;
+            <label onclick="UnlimitedTimeCheckBox()" for="UnlimitedTimeCheckBox">
+                <input type="checkbox" name="UnlimitedTimeCheckBox" id="UnlimitedTimeCheckBox" checked="checked">  Unlimited
+            </label>
+        </div>
+        
+
+    </div>
+    <div class="clearfix"></div>
+
+    <!-- Start: Student Test Assignmnet -->
+
+    <hr />
+    <!-- Start: Left -->
+    <div class=" col-md-6 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h4><i class="fa fa-users"></i> Assign</h4>
+            </div>
+            <div class="x_content">
+                <i class="fa fa-pie-chart"></i> Entire Section:
+                <select id="SectionId" class="form-control" required="">
+                    <option value="">-- Choose a Section --</option>
+                    <option value="press">Section 1</option>
+                    <option value="net">Section 2</option>
+                    <option value="mouth">Section 3</option>
+                </select>
+                &emsp;
+                <div class="clearfix"></div>
+                <button type="button" class="btn btn-sm btn-primary alignright">Assign to Section</button>
+                <div class="clearfix"></div>
+                <hr />
+                <i class="fa fa-user"></i>  Individual Students:
+
+                <select id="SectionId" class="form-control" required="">
+                    <option value="">-- Choose a Section --</option>
+                    <option value="press">Section 1</option>
+                    <option value="net">Section 2</option>
+                    <option value="mouth">Section 3</option>
+                </select>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" onclick="toggle(this, 'foo2')"></th>
+                            <th>ID Number</th>
+                            <th>Student Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="foo2" value="" id="defaultCheck1">
+                                </div>
+                            </td>
+                            <td>123456</td>
+                            <td>Austin Sink</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="foo2" value="" id="defaultCheck1">
+
+                                </div>
+                            </td>
+                            <td>123457</td>
+                            <td>Bima Dude</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="foo2" value="" id="defaultCheck1">
+
+                                </div>
+                            </td>
+                            <td>123458</td>
+                            <td>Nick Person</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <hr />
+                <button type="button" class="btn btn-sm btn-primary alignright">Assign to 3 students</button>
+                <div class="clearfix"></div>
+            </div>
+
+        </div>
+
+
+    </div>
+    <div class="col-md-6 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h4><i class="fa fa-users"></i> Assigned</h4>
+            </div>
+            <div class="x_content">
+                <i class="fa fa-pie-chart"></i> Sections
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Section Number</th>
+                            <th>Number of Students</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>43 Students</td>
+                            <td>
+                                <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Remove </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>13 Students</td>
+                            <td>
+                                <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Remove </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <hr />
+                <i class="fa fa-user"></i>  Individual Students
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Section Number</th>
+                            <th>Number of Students</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>43 Students</td>
+                            <td>
+                                <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>13 Students</td>
+                            <td>
+                                <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+        <!-- End: Student Test Assignmnet-->
+
+    </div>
+    <div class="clearfix"></div>
+    <table class="alignright">
+        <tr>
+            <td><a onclick="Calcel('#NewSchedule')" class="btn btn-round btn-danger">Cancel</a>
+            <td><button type="button" class="btn btn-round btn-primary">Save New Schedule</button></td>
+        </tr>
+    </table>
+    <div class="clearfix"></div>
+</div>
+
+
+<script type="text/javascript">
+
+ 
+    init_daterangepicker_TestSchedule();
+</script>

@@ -8,29 +8,20 @@
 
 <div id="EditNameAndCourse" class="well">
     <form asp-action="PartialEditNameAndCourse" asp-controller="Instructor" asp-route-TestId="" id="new-department" data-parsley-validate class="form-horizontal form-label-left">
-        <label class="control-label col-md-2 col-sm-2 col-xs-12">Test Name</label>
-        <div class="col-md-4 col-sm-4 col-xs-12">
-
+        <div class="col-md-9 col-xs-12">
+            <label for="TestName" class="control-label">Edti Test Name</label>
             <input type="text" asp-for="TestName" placeholder="Enter test name" class="form-control" value="@test.TestName">
+            <input asp-for="TestId" type="hidden" value="@test.TestId" />
+            <input asp-for="CourseId" type="hidden" value="@test.CourseId" />
         </div>
-        <label class="control-label col-md-1 col-sm-1 col-xs-12">Course</label>
-        <div style="margin-bottom:10px" class="col-md-3 col-sm-3 col-xs-12">
-        <input asp-for="TestId" type="hidden" value="@test.TestId" />
-                <select asp-for="CourseId" class="form-control">
-                    <option>--Choose option--</option>
-                    @foreach (Course course in ViewBag.CoursesTaught)
-                    {
-                            if (test.CourseId == course.CourseId)
-                            {
-                                <option selected value="@course.CourseId">@(course.DepartmentCode + course.CourseCode + " " + course.Name)</option>
-                            }
-                            else
-                            {
-                                <option value="@course.CourseId">@(course.DepartmentCode + course.CourseCode + " " + course.Name)</option>
-                            }
-                    }
-                </select>
+        <div class="col-md-3 col-sm-12">
+            <label class="control-label">&emsp;</label>
+            <table>
+                <tr>
+                    <td> <button type="submit" class="btn btn-round btn-primary">Save</button></td>
+                    <td><a onclick="Calcel('#EditNameAndCourse')" class="btn btn-round btn-danger">Cancel</a>
+                </tr>
+            </table>
         </div>
-        <button style="margin-left:12px" type="submit" class="btn btn-round btn-primary">Save</button>
     </form>
 </div>
