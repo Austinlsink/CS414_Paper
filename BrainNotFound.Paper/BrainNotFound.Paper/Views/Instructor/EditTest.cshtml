@@ -106,6 +106,128 @@
                         </tr>
                     </tbody>
                 </table>
+                <div class="well">
+                    <h4><i class="fa fa-calendar"></i> New Schedule</h4>
+                    <hr />
+
+                    <div class="col-md-8 col-sm-12">
+                        Test Availability
+                        <form class="form-horizontal">
+                            <fieldset>
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <div class="input-prepend input-group">
+                                            <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+                                            <input type="text" name="reservation-time" id="reservation-time" class="form-control" value="01/01/2016 - 01/25/2016">
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+
+                    <div class="col-md-2 col-sm-8">
+                        Time Limit
+                        <input type="text" id="TimeLimit" class="form-control" name="TimeLimit" required="" value="50 minutes">
+
+                    </div>
+                    <div class="col-md-2 col-sm-4">
+                        &nbsp;
+                        <div class="checkbox">
+                            <label class="">
+                                <div class="icheckbox_flat-green" style="position: relative;"><input type="checkbox" class="flat" checked="checked" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div> Unlimited
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <!-- Start: Student Test Assignmnet -->
+                    <h4><i class="fa fa-users"></i> Assign</h4>
+                    <hr />
+                    <!-- Start: Left -->
+                    <div class="col-md-6 col-sm-12">
+                        Entire Section:
+                        <div class="input-group">
+                            <select id="SectionId" class="form-control" required="">
+                                <option value="">-- Choose a Section --</option>
+                                <option value="press">Section 1</option>
+                                <option value="net">Section 2</option>
+                                <option value="mouth">Section 3</option>
+                            </select>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-primary">Assign</button>
+                            </span>
+                        </div>
+                        <hr />
+                        Individual Students:
+                        <div class="x_panel">
+                            <div class="x_content">
+                                <select id="SectionId" class="form-control" required="">
+                                    <option value="">-- Choose a Section --</option>
+                                    <option value="press">Section 1</option>
+                                    <option value="net">Section 2</option>
+                                    <option value="mouth">Section 3</option>
+                                </select>
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox" onclick="toggle(this, 'foo2')"></th>
+                                            <th>ID Number</th>
+                                            <th>Student Name</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="foo2" value="" id="defaultCheck1">
+                                                </div>
+                                            </td>
+                                            <td>123456</td>
+                                            <td>Austin Sink</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="foo2" value="" id="defaultCheck1">
+
+                                                </div>
+                                            </td>
+                                            <td>123457</td>
+                                            <td>Bima Dude</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="foo2" value="" id="defaultCheck1">
+
+                                                </div>
+                                            </td>
+                                            <td>123458</td>
+                                            <td>Nick Person</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <hr />
+                                <button type="button" class="btn btn-sm btn-primary alignright">Assign to 3 students</button>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+
+
+                    </div>
+
+
+
+                    <div class="clearfix"></div>
+                    <!-- End: Student Test Assignmnet-->
+
+                </div>
+
                 <button type="button" class="btn btn-round btn-info">New Schedule</button>
             </div>
         </div>
@@ -113,13 +235,8 @@
 </div>
 <div class="daterangepicker dropdown-menu ltr show-calendar opensright" style="top: 1632px; left: 101px; right: auto; display: none;"><div class="calendar left"><div class="daterangepicker_input"><input class="input-mini form-control active" type="text" name="daterangepicker_start" value=""><i class="fa fa-calendar glyphicon glyphicon-calendar"></i><div class="calendar-time"><div><select class="hourselect"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12" selected="selected">12</option></select> : <select class="minuteselect"><option value="0" selected="selected">00</option><option value="30">30</option></select> <select class="ampmselect"><option value="AM" selected="selected">AM</option><option value="PM">PM</option></select></div><i class="fa fa-clock-o glyphicon glyphicon-time"></i></div></div><div class="calendar-table"><table class="table-condensed"><thead><tr><th class="prev available"><i class="fa fa-chevron-left glyphicon glyphicon-chevron-left"></i></th><th colspan="5" class="month">Jan 2016</th><th></th></tr><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead><tbody><tr><td class="weekend off available" data-title="r0c0">27</td><td class="off available" data-title="r0c1">28</td><td class="off available" data-title="r0c2">29</td><td class="off available" data-title="r0c3">30</td><td class="off available" data-title="r0c4">31</td><td class="active start-date available" data-title="r0c5">1</td><td class="weekend in-range available" data-title="r0c6">2</td></tr><tr><td class="weekend in-range available" data-title="r1c0">3</td><td class="in-range available" data-title="r1c1">4</td><td class="in-range available" data-title="r1c2">5</td><td class="in-range available" data-title="r1c3">6</td><td class="in-range available" data-title="r1c4">7</td><td class="in-range available" data-title="r1c5">8</td><td class="weekend in-range available" data-title="r1c6">9</td></tr><tr><td class="weekend in-range available" data-title="r2c0">10</td><td class="in-range available" data-title="r2c1">11</td><td class="in-range available" data-title="r2c2">12</td><td class="in-range available" data-title="r2c3">13</td><td class="in-range available" data-title="r2c4">14</td><td class="in-range available" data-title="r2c5">15</td><td class="weekend in-range available" data-title="r2c6">16</td></tr><tr><td class="weekend in-range available" data-title="r3c0">17</td><td class="in-range available" data-title="r3c1">18</td><td class="in-range available" data-title="r3c2">19</td><td class="in-range available" data-title="r3c3">20</td><td class="in-range available" data-title="r3c4">21</td><td class="in-range available" data-title="r3c5">22</td><td class="weekend in-range available" data-title="r3c6">23</td></tr><tr><td class="weekend in-range available" data-title="r4c0">24</td><td class="active end-date available" data-title="r4c1">25</td><td class="available" data-title="r4c2">26</td><td class="available" data-title="r4c3">27</td><td class="available" data-title="r4c4">28</td><td class="available" data-title="r4c5">29</td><td class="weekend available" data-title="r4c6">30</td></tr><tr><td class="weekend available" data-title="r5c0">31</td><td class="off available" data-title="r5c1">1</td><td class="off available" data-title="r5c2">2</td><td class="off available" data-title="r5c3">3</td><td class="off available" data-title="r5c4">4</td><td class="off available" data-title="r5c5">5</td><td class="weekend off available" data-title="r5c6">6</td></tr></tbody></table></div></div><div class="calendar right"><div class="daterangepicker_input"><input class="input-mini form-control" type="text" name="daterangepicker_end" value=""><i class="fa fa-calendar glyphicon glyphicon-calendar"></i><div class="calendar-time"><div><select class="hourselect"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12" selected="selected">12</option></select> : <select class="minuteselect"><option value="0" selected="selected">00</option><option value="30">30</option></select> <select class="ampmselect"><option value="AM" selected="selected">AM</option><option value="PM">PM</option></select></div><i class="fa fa-clock-o glyphicon glyphicon-time"></i></div></div><div class="calendar-table"><table class="table-condensed"><thead><tr><th></th><th colspan="5" class="month">Feb 2016</th><th class="next available"><i class="fa fa-chevron-right glyphicon glyphicon-chevron-right"></i></th></tr><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead><tbody><tr><td class="weekend off available" data-title="r0c0">31</td><td class="available" data-title="r0c1">1</td><td class="available" data-title="r0c2">2</td><td class="available" data-title="r0c3">3</td><td class="available" data-title="r0c4">4</td><td class="available" data-title="r0c5">5</td><td class="weekend available" data-title="r0c6">6</td></tr><tr><td class="weekend available" data-title="r1c0">7</td><td class="available" data-title="r1c1">8</td><td class="available" data-title="r1c2">9</td><td class="available" data-title="r1c3">10</td><td class="available" data-title="r1c4">11</td><td class="available" data-title="r1c5">12</td><td class="weekend available" data-title="r1c6">13</td></tr><tr><td class="weekend available" data-title="r2c0">14</td><td class="available" data-title="r2c1">15</td><td class="available" data-title="r2c2">16</td><td class="available" data-title="r2c3">17</td><td class="available" data-title="r2c4">18</td><td class="available" data-title="r2c5">19</td><td class="weekend available" data-title="r2c6">20</td></tr><tr><td class="weekend available" data-title="r3c0">21</td><td class="available" data-title="r3c1">22</td><td class="available" data-title="r3c2">23</td><td class="available" data-title="r3c3">24</td><td class="available" data-title="r3c4">25</td><td class="available" data-title="r3c5">26</td><td class="weekend available" data-title="r3c6">27</td></tr><tr><td class="weekend available" data-title="r4c0">28</td><td class="available" data-title="r4c1">29</td><td class="off available" data-title="r4c2">1</td><td class="off available" data-title="r4c3">2</td><td class="off available" data-title="r4c4">3</td><td class="off available" data-title="r4c5">4</td><td class="weekend off available" data-title="r4c6">5</td></tr><tr><td class="weekend off available" data-title="r5c0">6</td><td class="off available" data-title="r5c1">7</td><td class="off available" data-title="r5c2">8</td><td class="off available" data-title="r5c3">9</td><td class="off available" data-title="r5c4">10</td><td class="off available" data-title="r5c5">11</td><td class="weekend off available" data-title="r5c6">12</td></tr></tbody></table></div></div><div class="ranges"><div class="range_inputs"><button class="applyBtn btn btn-sm btn-success" type="button">Apply</button> <button class="cancelBtn btn btn-sm btn-default" type="button">Cancel</button></div></div></div>
 
-@section scripts
-    {
-    <!-- bootstrap-datetimepicker -->
-    <script src="~/vendors/moment/min/moment.min.js"></script>
-    <script src="~/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="~/js/EditTest.js" type="text/javascript"></script>
+<div class="x_panel">
+    <div class="x_content">
 
-
-
-}
+    </div>
+</div>
