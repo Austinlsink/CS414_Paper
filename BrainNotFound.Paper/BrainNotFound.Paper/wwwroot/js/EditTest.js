@@ -35,6 +35,18 @@ function UnlimitedTimeCheckBox() {
     }
 }
 
+// -- Event Handlers
+$('#EditSchedulePlaceHolde').on('change', '#SectionIndividualStudent', function () {
+    $("table#StudentsInSection").remove();
+    var sectionId = $("#SectionIndividualStudent").val();
+    $.ajax({
+        url: "/Instructor/Tests/Partials/StudentInSectionTable/" + sectionId,
+        success: function (result) {
+            $("#StudentTablePlaceHolder").html(result);
+        }
+    });
+
+});
 
 // -- General Functions
 

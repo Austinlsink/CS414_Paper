@@ -8,6 +8,7 @@ using BrainNotFound.Paper.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using BrainNotFound.Paper.Models.BusinessModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace BrainNotFound.Paper.Controllers
 {
@@ -363,7 +364,28 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("Tests/Partials/NewSchedule/{TestId}")]
         public ActionResult PartialNewSchedule(long TestId)
         {
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            var test = _context.Tests.Find(TestId);
+            var sections = _context.Sections.Where(s => s.CourseId == test.CourseId).ToList();
+
+            ViewBag.Sections = sections;
+           // ViewBag.Sections = sections;
             return PartialView("~/Views/Instructor/CreateTestPartials/_NewTestSchedual.cshtml");
+        }
+
+        [HttpGet, Route("Tests/Partials/StudentInSectionTable/{SectionId}")]
+        public ActionResult PartialStudentInSectionTable(long SectionId)
+        {
+            var enrollments = _context.Enrollments.Where(e => e.SectionId == SectionId).Include(e => e.ApplicationUser);
+            var students = new List<ApplicationUser>();
+            
+            foreach(Enrollment e in enrollments)
+            {
+                students.Add(e.ApplicationUser);
+            }
+
+            ViewBag.Students = students;
+            return PartialView("~/Views/Instructor/CreateTestPartials/_StudentInSectionTable.cshtml");
         }
     }
 }

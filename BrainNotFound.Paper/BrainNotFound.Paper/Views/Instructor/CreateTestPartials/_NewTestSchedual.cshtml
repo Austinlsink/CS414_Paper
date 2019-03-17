@@ -1,24 +1,23 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using BrainNotFound.Paper.Models.BusinessModels
+@{
+    List<Section> sections = ViewBag.Sections;
+}
 <div id="NewSchedule" class="well">
     <h4><i class="fa fa-calendar"></i> New Schedule</h4>
     <hr />
 
     <div class="col-md-6 col-sm-12">
         Test Availability
-        <form class="form-horizontal">
-            <fieldset>
-                <div class="control-group">
-                    <div class="controls">
-                        <div class="input-prepend input-group">
-                            <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
-                            <input type="text" name="testScheduleDateTime" id="testScheduleDateTime" class="form-control" value="01/01/2016 - 01/25/2016">
-                        </div>
+        <fieldset>
+            <div class="control-group">
+                <div class="controls">
+                    <div class="input-prepend input-group">
+                        <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+                        <input type="text" name="testScheduleDateTime" id="testScheduleDateTime" class="form-control" value="01/01/2016 - 01/25/2016">
                     </div>
                 </div>
-            </fieldset>
-        </form>
+            </div>
+        </fieldset>
     </div>
 
     <div class="col-md-4 col-sm-8 col-xs-12">
@@ -32,7 +31,7 @@
             <div class="control-group">
 
                 <label for="UnlimitedTimeCheckBox">
-                    <input onclick="UnlimitedTimeCheckBox()" type="checkbox" name="UnlimitedTimeCheckBox" id="UnlimitedTimeCheckBox" checked="checked" />  Unlimited
+                    <input onclick="UnlimitedTimeCheckBox()" type="checkbox" name="UnlimitedTimeCheckBox" id="UnlimitedTimeCheckBox" />  Unlimited
                 </label>
             </div>
         </div>
@@ -52,11 +51,12 @@
             </div>
             <div class="x_content">
                 <i class="fa fa-pie-chart"></i> Entire Section:
-                <select id="SectionId" class="form-control" required="">
-                    <option value="">-- Choose a Section --</option>
-                    <option value="press">Section 1</option>
-                    <option value="net">Section 2</option>
-                    <option value="mouth">Section 3</option>
+                <select id="SectionAssignment" class="form-control" required="">
+                    <option selected disabled="disabled">-- Choose a Section --</option>
+                    @foreach (Section classSection in sections)
+                    {
+                        <option value="@classSection.SectionId">Section @classSection.SectionNumber</option>
+                    }
                 </select>
                 &emsp;
                 <div class="clearfix"></div>
@@ -65,52 +65,18 @@
                 <hr />
                 <i class="fa fa-user"></i>  Individual Students:
 
-                <select id="SectionId" class="form-control" required="">
-                    <option value="">-- Choose a Section --</option>
-                    <option value="press">Section 1</option>
-                    <option value="net">Section 2</option>
-                    <option value="mouth">Section 3</option>
+                <select id="SectionIndividualStudent" class="form-control" required="">
+                    <option selected disabled="disabled">-- Choose a Section --</option>
+                    @foreach (Section classSection in sections)
+                    {
+                        <option value="@classSection.SectionId">Section @classSection.SectionNumber</option>
+                    }
                 </select>
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th><input type="checkbox" onclick="toggle(this, 'foo2')"></th>
-                            <th>ID Number</th>
-                            <th>Student Name</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="foo2" value="" id="defaultCheck1">
-                                </div>
-                            </td>
-                            <td>123456</td>
-                            <td>Austin Sink</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="foo2" value="" id="defaultCheck1">
+                <div id="StudentTablePlaceHolder">
+                    &emsp;
+                    <div class="text-center"><p>Please select a section</p></div>
+                </div>
 
-                                </div>
-                            </td>
-                            <td>123457</td>
-                            <td>Bima Dude</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="foo2" value="" id="defaultCheck1">
-
-                                </div>
-                            </td>
-                            <td>123458</td>
-                            <td>Nick Person</td>
-                        </tr>
-                    </tbody>
-                </table>
                 <hr />
                 <button type="button" class="btn btn-sm btn-primary alignright">Assign to 3 students</button>
                 <div class="clearfix"></div>
