@@ -505,7 +505,7 @@ namespace BrainNotFound.Paper.Controllers
 
         // Display the list of departments
         [HttpGet, Route("Departments")]
-        public IActionResult Departments(string message = "")
+        public IActionResult Departments(String message = "")
         {
             var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
             var courses = _context.Courses.ToList();

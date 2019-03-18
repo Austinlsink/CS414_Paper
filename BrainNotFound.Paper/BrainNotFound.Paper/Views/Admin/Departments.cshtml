@@ -13,7 +13,15 @@
                     <div class="x_title">
                         <h2><i class="fa fa-mortar-board"></i> Departments</h2>
                         
-                        <p>@ViewBag.Message</p>
+                        <!--Error message for deleting a department-->
+                        @if(ViewBag.Message != String.Empty)
+                        {
+                            <script type="text/javascript">
+                                window.onload = function () {
+                                    alert("@ViewBag.Message");
+                                };
+                            </script>
+                        }
 
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
@@ -59,13 +67,13 @@
                                                         <input type="hidden" name="DepartmentId" value="@department.DepartmentId" />
                                                         <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
                                                     </form>
-                                                    
+
                                                 </td>
 
                                             </tr>
                                             rowIndex++;
                                         }
-
+                                        
                                     </tbody>
                                 </table>
 
