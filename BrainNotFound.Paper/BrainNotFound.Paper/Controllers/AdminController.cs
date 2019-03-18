@@ -505,9 +505,20 @@ namespace BrainNotFound.Paper.Controllers
 
         // Display the list of departments
         [HttpGet, Route("Departments")]
-        public IActionResult Departments(String message = "")
+        public IActionResult Departments(String sortOrder, String message = "")
         {
-            var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
+            ViewBag.NameSortParam = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            var departments = from d in _context.Departments select d;
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    departments = _context.Departments.OrderByDescending(d => d.DepartmentName);
+                    break;
+                default:
+                    departments = _context.Departments.OrderBy(d => d.DepartmentName);
+                    break;
+            }
+
             var courses = _context.Courses.ToList();
             ViewBag.deleteMessage = message;
             ViewBag.confirmMessage = message;
@@ -520,7 +531,7 @@ namespace BrainNotFound.Paper.Controllers
                 ViewBag.confirmMessage = message;
             }
             ViewBag.courses = courses;
-            return View(departments);
+            return View(departments.ToList());
         }
 
         // Delete a department
