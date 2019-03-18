@@ -505,20 +505,25 @@ namespace BrainNotFound.Paper.Controllers
 
         // Display the list of departments
         [HttpGet, Route("departments")]
-        public IActionResult Departments(String message = "")
+        public IActionResult Departments(String message)
         {
             var courses = _context.Courses.ToList();
             var departments = _context.Departments.ToList();
-            ViewBag.deleteMessage = message;
-            ViewBag.confirmMessage = message;
-            if (message.StartsWith("Error"))
+            //ViewBag.deleteMessage = message;
+            //ViewBag.confirmMessage = message
+
+            if (message != null)
             {
-                ViewBag.deleteMessage = message;
+                if (message.StartsWith("Error"))
+                {
+                    ViewBag.deleteMessage = message;
+                }
+                else
+                {
+                    ViewBag.confirmMessage = message;
+                }
             }
-            else
-            {
-                ViewBag.confirmMessage = message;
-            }
+            
             ViewBag.courses = courses;
             return View(departments.ToList());
         }
@@ -531,7 +536,7 @@ namespace BrainNotFound.Paper.Controllers
 
             if (_context.Courses.Where(ac => ac.DepartmentId == department.DepartmentId).Any())
             {
-               return RedirectToAction("Departments", "Admin", new { message = "Error: Please delete all associated courses before deleting " + department.DepartmentCode + " " + department.DepartmentName });
+                return RedirectToAction("Departments", "Admin", new { message = "Error: Please delete all associated courses before deleting " + department.DepartmentCode + " " + department.DepartmentName });
             }
             else
             {

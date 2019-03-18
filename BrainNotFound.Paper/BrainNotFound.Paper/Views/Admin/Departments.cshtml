@@ -24,7 +24,7 @@
                     <h2><i class="fa fa-mortar-board"></i> Departments</h2>
 
                     <!--Error message for deleting a department-->
-                    @if (ViewBag.deleteMessage != String.Empty)
+                    @if (ViewBag.deleteMessage != null)
                     {
                         <script type="text/javascript">
                                 window.onload = function () {
@@ -34,7 +34,7 @@
                     }
 
                     <!--Confimration message for when a department is deleted-->
-                    @if (ViewBag.confirmMessage != String.Empty)
+                    @if (ViewBag.confirmMessage != null)
                     {
                         <script type="text/javascript">
                                 window.onload = function () {
