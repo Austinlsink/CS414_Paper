@@ -5,6 +5,20 @@
     ViewData["Title"] = "Department Info - Admin";
     int rowIndex = 0;
 }
+<!--
+
+http://jsfiddle.net/dLjsgmyq/1/
+
+-->
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.5/css/jquery.dataTables.css">
+
+<!-- jQuery -->
+<script type="text/javascript" charset="utf8" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+
+<!-- DataTables -->
+<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.js">
+</script>
 
 <div class="">
     <div class="row">
@@ -50,8 +64,8 @@
                                         <th>
                                             <input type="checkbox" id="check-all" class="flat">
                                         </th>
-                                        <!--LOOK AT AJAX EXAMPLES-->
-                                        <th class="column-title">@Html.ActionLink("Name", "Departments", "Admin", new {sortOrder = @ViewBag.NameSortParam }) </th>
+                                        <!--LOOK AT AJAX EXAMPLES >Html.ActionLink("Name", "Departments", "Admin", new { sortOrder = ViewBag.NameSortParam })-->
+                                        <th class="column-title">Name </th>
                                         <th class="column-title">Code </th>
                                         <th class="column-title no-link last">
                                             <span class="nobr">Action</span>
@@ -61,7 +75,6 @@
                                         </th>
                                     </tr>
                                 </thead>
-
                                 <tbody>
 
                                     @foreach (Department department in Model)
@@ -102,5 +115,9 @@
     </div>
 </div>
 
-
+<script type="text/javascript" charset="utf8">
+    $(document).ready(function () {
+        $('#departmentTable').DataTable();
+    });
+</script>
 
