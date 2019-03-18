@@ -12,13 +12,23 @@
                 <div class="x_panel">
                     <div class="x_title">
                         <h2><i class="fa fa-mortar-board"></i> Departments</h2>
-                        
+
                         <!--Error message for deleting a department-->
-                        @if(ViewBag.Message != String.Empty)
+                        @if (ViewBag.deleteMessage != String.Empty)
                         {
                             <script type="text/javascript">
                                 window.onload = function () {
-                                    alert("@ViewBag.Message");
+                                    alert("@ViewBag.deleteMessage");
+                                };
+                            </script>
+                        }
+
+                        <!--Confimration message for when a department is deleted-->
+                        @if (ViewBag.confirmMessage != String.Empty)
+                        {
+                            <script type="text/javascript">
+                                window.onload = function () {
+                                    alert("@ViewBag.confirmMessage");
                                 };
                             </script>
                         }

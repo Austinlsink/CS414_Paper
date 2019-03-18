@@ -509,8 +509,17 @@ namespace BrainNotFound.Paper.Controllers
         {
             var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
             var courses = _context.Courses.ToList();
+            ViewBag.deleteMessage = message;
+            ViewBag.confirmMessage = message;
+            if (message.StartsWith("Error"))
+            {
+                ViewBag.deleteMessage = message;
+            }
+            else
+            {
+                ViewBag.confirmMessage = message;
+            }
             ViewBag.courses = courses;
-            ViewBag.Message = message;
             return View(departments);
         }
 
@@ -529,7 +538,7 @@ namespace BrainNotFound.Paper.Controllers
                 _context.Departments.Remove(department);
                 _context.SaveChanges();
             }
-            return RedirectToAction("Departments", "Admin");
+            return RedirectToAction("Departments", "Admin", new { message = department.DepartmentCode + " " + department.DepartmentName + " was successfully deleted!" });
         }
 
         // Add the details for a new Department
