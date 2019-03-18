@@ -509,8 +509,6 @@ namespace BrainNotFound.Paper.Controllers
         {
             var courses = _context.Courses.ToList();
             var departments = _context.Departments.ToList();
-            //ViewBag.deleteMessage = message;
-            //ViewBag.confirmMessage = message
 
             if (message != null)
             {
