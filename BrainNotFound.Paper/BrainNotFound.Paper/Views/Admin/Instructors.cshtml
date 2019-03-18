@@ -4,7 +4,15 @@
 @{
     ViewData["Title"] = "Manage Instructors - Admin";
 }
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.css">
 
+<!-- jQuery -->
+<script type="text/javascript" charset="utf8" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+
+<!-- DataTables -->
+<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.js">
+</script>
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
@@ -22,7 +30,7 @@
                 <p>Click to select all Instructors</p>
 
                 <div class="table-responsive">
-                    <table class="table table-striped jambo_table bulk_action">
+                    <table id="instructorTable" class="table table-striped jambo_table bulk_action">
                         <thead>
                             <tr class="headings">
                                 <th>
@@ -32,7 +40,8 @@
                                 <th class="column-title">Last Name </th>
                                 <th class="column-title">Phone Number </th>
                                 <th class="column-title">Email </th>
-                                <th class="column-title no-link last"><span class="nobr">Actions</span>
+                                <th class="column-title no-link last">
+                                    <span class="nobr">Actions</span>
                                 </th>
                                 <th class="bulk-actions" colspan="7">
                                     <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) </a>
@@ -53,7 +62,7 @@
                                     <td class=" ">@instructor.PhoneNumber</td>
                                     <td class=" ">@instructor.Email</td>
                                     <td>
-                                      
+
                                         <form asp-action="DeleteInstructor" asp-controller="Admin">
                                             <a asp-controller="Admin" asp-action="ViewInstructor" asp-route-UserName="@instructor.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                             <a asp-controller="Admin" asp-action="EditInstructor" asp-route-UserName="@instructor.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
@@ -71,3 +80,14 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript" charset="utf8">
+    $(document).ready(function () {
+        $('#instructorTable').DataTable({
+            "order": [1, 'asc'],
+            "columnDefs": [
+                { "orderable": false, "targets": [0, 3, 4, 5] }
+            ]
+        });
+    });
+</script>
