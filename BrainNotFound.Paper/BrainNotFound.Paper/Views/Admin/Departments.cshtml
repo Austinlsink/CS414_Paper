@@ -117,7 +117,12 @@ http://jsfiddle.net/dLjsgmyq/1/
 
 <script type="text/javascript" charset="utf8">
     $(document).ready(function () {
-        $('#departmentTable').DataTable();
+        $('#departmentTable').DataTable({
+            "columnDefs": [
+                { "orderable": false, "targets": 0 },
+                { "orderable": false, "targets": 3}
+            ]
+        });
     });
 </script>
 
