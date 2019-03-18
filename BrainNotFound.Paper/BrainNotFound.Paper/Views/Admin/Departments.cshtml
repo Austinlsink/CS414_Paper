@@ -50,7 +50,8 @@
                                         <th>
                                             <input type="checkbox" id="check-all" class="flat">
                                         </th>
-                                        <th class="column-title">Name </th>
+                                        <!--LOOK AT AJAX EXAMPLES-->
+                                        <th class="column-title">@Html.ActionLink("Name", "Departments", "Admin", new {sortOrder = @ViewBag.NameSortParam }) </th>
                                         <th class="column-title">Code </th>
                                         <th class="column-title no-link last">
                                             <span class="nobr">Action</span>
