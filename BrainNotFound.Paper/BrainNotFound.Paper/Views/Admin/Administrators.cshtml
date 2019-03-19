@@ -21,7 +21,7 @@
                 <p>Click to select all Administrators</p>
 
                 <div class="table-responsive">
-                    <table class="table table-striped jambo_table bulk_action">
+                    <table id="adminTable" class="table table-striped jambo_table bulk_action">
                         <thead>
                             <tr class="headings">
                                 <th>
@@ -31,7 +31,8 @@
                                 <th class="column-title">Last Name </th>
                                 <th class="column-title">Phone Number </th>
                                 <th class="column-title">Email </th>
-                                <th class="column-title no-link last"><span class="nobr">Actions</span>
+                                <th class="column-title no-link last">
+                                    <span class="nobr">Actions</span>
                                 </th>
                                 <th class="bulk-actions" colspan="7">
                                     <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) </a>
@@ -69,3 +70,20 @@
         </div>
     </div>
 </div>
+
+@section scripts
+    {
+
+    <script type="text/javascript" charset="utf8">
+        $(document).ready(function () {
+            $('#adminTable').DataTable({
+                "order": [1, 'asc'],
+                "columnDefs": [
+                    { "orderable": false, "targets": [0, 5] }
+                ]
+            });
+        });
+    </script>
+
+}
+
