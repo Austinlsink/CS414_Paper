@@ -6,16 +6,6 @@
     int rowIndex = 0;
 }
 
-<!-- DataTables CSS -->
-<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.css">
-
-<!-- jQuery -->
-<script type="text/javascript" charset="utf8" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
-
-<!-- DataTables -->
-<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.js">
-</script>
-
 <div class="">
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
@@ -110,14 +100,19 @@
     </div>
 </div>
 
-<script type="text/javascript" charset="utf8">
-    $(document).ready(function () {
-        $('#departmentTable').DataTable({
-            "order": [1, 'asc'],
-            "columnDefs": [
-                { "orderable": false, "targets": [0, 3] }
-            ]
+@section scripts
+    {
+
+    <script type="text/javascript" charset="utf8">
+        $(document).ready(function () {
+            $('#departmentTable').DataTable({
+                "order": [1, 'asc'],
+                "columnDefs": [
+                    { "orderable": false, "targets": [0, 3] }
+                ]
+            });
         });
-    });
-</script>
+    </script>
+
+}
 

@@ -148,6 +148,8 @@ namespace BrainNotFound.Paper.Controllers
         /// </summary>
         /// <param name="code">DpartmentCode + CourseCode</param>
 
+
+        #region Courses and Sections Actions
         [HttpGet, Route("Courses/{code}")]
         public async Task<IActionResult> ViewCourse(String code)
         {
@@ -229,6 +231,10 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+
+        #endregion Courses and Sections Actions
+
+        #region Test Actions
         //Displays all tests created by an Instructor
         [HttpGet, Route("Tests")]
         public IActionResult Tests()
@@ -307,6 +313,9 @@ namespace BrainNotFound.Paper.Controllers
          
             return View();
         }
+        #endregion Test Actions
+
+        #region Create Test Partials
 
         // Gets the partial view being displayed
         [HttpGet, Route("Tests/Partials/EditNameAndCourse/{TestId}")]
@@ -334,7 +343,7 @@ namespace BrainNotFound.Paper.Controllers
             return PartialView("~/Views/Instructor/CreateTestPartials/_EditNameAndCourse.cshtml");
         }
 
-        //When you press save on the information, this happens
+        // When you press save on the information, this happens
        [HttpPost, Route("Tests/Partials/EditNameAndCourse")]
        public ActionResult PartialEditNameAndCourse(Test test)
        {
@@ -369,7 +378,8 @@ namespace BrainNotFound.Paper.Controllers
             var sections = _context.Sections.Where(s => s.CourseId == test.CourseId).ToList();
 
             ViewBag.Sections = sections;
-           // ViewBag.Sections = sections;
+            ViewBag.TestId = test.TestId;
+            // ViewBag.Sections = sections;
             return PartialView("~/Views/Instructor/CreateTestPartials/_NewTestSchedual.cshtml");
         }
 
@@ -386,6 +396,19 @@ namespace BrainNotFound.Paper.Controllers
 
             ViewBag.Students = students;
             return PartialView("~/Views/Instructor/CreateTestPartials/_StudentInSectionTable.cshtml");
+            
         }
+
+
+        [HttpGet, Route("Tests/Partials/ViewSectionAndStudentsAssigned/{TestId}")]
+        public ActionResult PartialViewSectionAndStudentsAssigned(long TestId)
+        {
+            ViewBag.Students = new List<ApplicationUser>();
+            ViewBag.Sections = new List<Section>();
+
+            return PartialView("~/Views/Instructor/CreateTestPartials/_ViewSectionAndStudentsAssigned.cshtml");
+        }
+        #endregion Create Test Partials
+
     }
 }
