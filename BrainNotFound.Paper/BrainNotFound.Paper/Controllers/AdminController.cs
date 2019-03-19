@@ -505,22 +505,15 @@ namespace BrainNotFound.Paper.Controllers
 
         // Display the list of departments
         [HttpGet, Route("departments")]
-        public ActionResult Departments(String message)
+        public ActionResult Departments()
         {
             var courses = _context.Courses.ToList();
             var departments = _context.Departments.ToList();
-
-            if (message != null)
+            if (TempData["message"] != null)
             {
-                if (message.StartsWith("Error"))
-                {
-                    ViewBag.deleteMessage = message;
-                }
-                else
-                {
-                    ViewBag.confirmMessage = message;
-                }
+                ViewBag.message = TempData["message"].ToString();
             }
+            
             ViewBag.courses = courses;
             return View(departments.ToList());
         }
@@ -534,14 +527,16 @@ namespace BrainNotFound.Paper.Controllers
 
             if (_context.Courses.Where(ac => ac.DepartmentId == department.DepartmentId).Any())
             {
-                return Departments("Error: Please delete all associated courses before deleting " + department.DepartmentCode + " " + department.DepartmentName);
+                TempData["message"] = "Error: " + department.DepartmentCode + " " + department.DepartmentName + " could not be deleted. Please delete all associated courses.";
+                return RedirectToAction("Departments", "Admin");
             }
             else
             {
                 _context.Departments.Remove(department);
                 _context.SaveChanges();
             }
-            return RedirectToAction("Departments", "Admin", new { message = department.DepartmentCode + " " + department.DepartmentName + " was successfully deleted!" });
+            TempData["message"] = department.DepartmentCode + " " + department.DepartmentName + " was successfully deleted!";
+            return RedirectToAction("Departments", "Admin");
         }
 
         // Add the details for a new Department

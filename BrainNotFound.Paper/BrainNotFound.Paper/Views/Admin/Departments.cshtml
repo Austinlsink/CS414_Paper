@@ -14,24 +14,15 @@
                     <h2><i class="fa fa-mortar-board"></i> Departments</h2>
 
                     <!--Error message for deleting a department-->
-                    @if (ViewBag.deleteMessage != null)
+                    @if (ViewBag.message != null)
                     {
                         <script type="text/javascript">
                                 window.onload = function () {
-                                    alert("@ViewBag.deleteMessage");
+                                    alert("@ViewBag.message");
                                 };
                         </script>
                     }
-
-                    <!--Confimration message for when a department is deleted-->
-                    @if (ViewBag.confirmMessage != null)
-                    {
-                        <script type="text/javascript">
-                                window.onload = function () {
-                                    alert("@ViewBag.confirmMessage");
-                                };
-                        </script>
-                    }
+                                    
 
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
