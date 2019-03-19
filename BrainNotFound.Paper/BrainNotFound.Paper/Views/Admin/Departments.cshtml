@@ -14,21 +14,11 @@
                     <h2><i class="fa fa-mortar-board"></i> Departments</h2>
 
                     <!--Error message for deleting a department-->
-                    @if (ViewBag.deleteMessage != null)
+                    @if (ViewBag.message != null)
                     {
                         <script type="text/javascript">
                                 window.onload = function () {
-                                    alert("@ViewBag.deleteMessage");
-                                };
-                        </script>
-                    }
-
-                    <!--Confimration message for when a department is deleted-->
-                    @if (ViewBag.confirmMessage != null)
-                    {
-                        <script type="text/javascript">
-                                window.onload = function () {
-                                    alert("@ViewBag.confirmMessage");
+                                    alert("@ViewBag.message");
                                 };
                         </script>
                     }
@@ -42,7 +32,6 @@
                 <div class="x_content">
                     @if (Model.Any<Department>())
                     {
-                        <p>@ViewBag.errorMessage</p>
                         <div class="table-responsive">
                             <table id="departmentTable" class="table table-striped jambo_table bulk_action ">
                                 <thead>
@@ -79,8 +68,6 @@
 
                                 </tbody>
                             </table>
-
-
                         </div>
                     }
                     else
@@ -101,8 +88,9 @@
             $('#departmentTable').DataTable({
                 "order": [1, 'asc'],
                 "columnDefs": [
-                    { "orderable": false, "targets": [3] }
-                ]
+                    { "orderable": false, "targets": [2] }
+                ],
+                "sScrollY": "500px"
             });
         });
     </script>

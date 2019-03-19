@@ -72,7 +72,6 @@ namespace BrainNotFound.Paper
             }
 
             app.UseStaticFiles();
-            app.UseCookiePolicy();
 
             app.UseAuthentication();
 
@@ -82,6 +81,9 @@ namespace BrainNotFound.Paper
                     name: "default",
                     template: "{controller=Data}/{action=Index}/{id?}");
             });
+
+            app.UseCookiePolicy();
+
         }
     }
 }

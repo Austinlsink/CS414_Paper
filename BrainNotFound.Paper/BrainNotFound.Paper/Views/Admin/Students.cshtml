@@ -3,6 +3,15 @@
 @{
     ViewData["Title"] = "Manage Students - Admin";
 }
+<!--Error message for deleting a department-->
+@if (ViewBag.message != null)
+{
+    <script type="text/javascript">
+        window.onload = function () {
+            alert("@ViewBag.message");
+        };
+    </script>
+}
 
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
@@ -45,9 +54,12 @@
                                     <td class=" ">@student.PhoneNumber</td>
                                     <td class=" ">@student.Email</td>
                                     <td>
-                                        <a asp-controller="Admin" asp-action="ViewStudent" asp-route-UserName="@student.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                        <a asp-controller="Admin" asp-action="EditStudent" asp-route-UserName="@student.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                        <a asp-controller="Admin" asp-action="DeleteStudent" asp-route-UserName="@student.UserName" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
+                                        <form asp-controller="Admin" asp-action="DeleteStudent">
+                                            <a asp-controller="Admin" asp-action="ViewStudent" asp-route-UserName="@student.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                            <a asp-controller="Admin" asp-action="EditStudent" asp-route-UserName="@student.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                            <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
+                                            <input type="hidden" name="UserName" value="@student.UserName" />
+                                        </form>
                                     </td>
                                 </tr>
                             }
@@ -67,7 +79,7 @@
             $('#studentTable').DataTable({
                 "order": [1, 'asc'],
                 "columnDefs": [
-                    { "orderable": false, "targets": [0, 3] }
+                    { "orderable": false, "targets": [5] }
                 ]
             });
         });
