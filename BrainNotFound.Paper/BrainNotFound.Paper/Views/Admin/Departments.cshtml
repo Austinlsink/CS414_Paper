@@ -22,7 +22,6 @@
                                 };
                         </script>
                     }
-                                    
 
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
@@ -33,7 +32,6 @@
                 <div class="x_content">
                     @if (Model.Any<Department>())
                     {
-                        <p>@ViewBag.errorMessage</p>
                         <div class="table-responsive">
                             <table id="departmentTable" class="table table-striped jambo_table bulk_action ">
                                 <thead>
@@ -70,8 +68,6 @@
 
                                 </tbody>
                             </table>
-
-
                         </div>
                     }
                     else
@@ -92,7 +88,7 @@
             $('#departmentTable').DataTable({
                 "order": [1, 'asc'],
                 "columnDefs": [
-                    { "orderable": false, "targets": [3] }
+                    { "orderable": false, "targets": 3 }
                 ]
             });
         });

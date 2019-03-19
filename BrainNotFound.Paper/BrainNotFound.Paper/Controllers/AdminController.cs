@@ -183,11 +183,35 @@ namespace BrainNotFound.Paper.Controllers
         /// <param name="message">Error message from the DeleteInstructor method.</param>
         /// <returns></returns>
         [HttpGet, Route("Instructors")]
-        public async Task<IActionResult> Instructors(String message = "")
+        public async Task<IActionResult> Instructors()
         {
             var allInstructors = (await _userManager.GetUsersInRoleAsync("Instructor")).OrderBy(o => o.FirstName).ToList();
-            ViewBag.Message = message;
+            if(TempData["message"] != null)
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
             return View(allInstructors);
+        }
+
+        ///<summary>
+        /// Finds a specified instructor and deletes him from the _userManager - It does work!
+        ///</summary>
+        ///<param name="user">Selected instructor's email</param>
+        [HttpPost, Route("DeleteInstructor")]
+        public async Task<IActionResult> DeleteInstructor(Delete deleteUser)
+        {
+            var instructor = await _userManager.FindByNameAsync(deleteUser.UserName);
+            if (_context.Sections.Where(s => s.InstructorId == instructor.Id).Any())
+            {
+                TempData["message"] = "Error: Please delete all associated sections before deleting " + instructor.FirstName + " " + instructor.LastName;
+                return RedirectToAction("Instructors", "Admin");
+            }
+            else
+            {
+                await _userManager.DeleteAsync(instructor);
+            }
+            TempData["message"] = instructor.FirstName + " " + instructor.LastName + "was deleted.";
+            return RedirectToAction("Instructors", "Admin");
         }
 
         [HttpGet, Route("Instructors/New")]
@@ -237,7 +261,6 @@ namespace BrainNotFound.Paper.Controllers
             ViewData["message"] += model.Email;
             return View(model);
         }
-
 
         [HttpGet, Route("Instructors/{UserName}")]
         public async Task<IActionResult> ViewInstructor(String username)
@@ -300,27 +323,6 @@ namespace BrainNotFound.Paper.Controllers
 
             return RedirectToAction("Instructors", "Admin");
         }
-
-        ///<summary>
-        /// Finds a specified instructor and deletes him from the _userManager - It does work!
-        ///</summary>
-        ///<param name="user">Selected instructor's email</param>
-        [HttpPost, Route("DeleteInstructor")]
-        public async Task<IActionResult> DeleteInstructor(Delete deleteUser)
-        {
-            var instructor = await _userManager.FindByNameAsync(deleteUser.UserName);
-            if (_context.Sections.Where(s => s.InstructorId == instructor.Id).Any())
-            {
-                return RedirectToAction("Instructors", "Admin", new { message = "Error: Please delete all associated sections before deleting " + instructor.FirstName + " " + instructor.LastName });
-            }
-            else
-            {
-                await _userManager.DeleteAsync(instructor);
-            }
-
-            return RedirectToAction("Instructors", "Admin");
-        }
-
         #endregion instructor controllers
 
         #region admin profile controllers
@@ -503,7 +505,9 @@ namespace BrainNotFound.Paper.Controllers
             return RedirectToAction("Departments", "Admin");
         }
 
-        // Display the list of departments
+        /// <summary>
+        /// Displays the list of departments
+        /// </summary>
         [HttpGet, Route("departments")]
         public ActionResult Departments()
         {
@@ -518,12 +522,15 @@ namespace BrainNotFound.Paper.Controllers
             return View(departments.ToList());
         }
 
-        // Delete a department
+        /// <summary>
+        /// Deletes a department as long as there are no associated courses.
+        /// </summary>
+        /// <param name="DepartmentId">The Department to be deleted</param>
+        /// <returns>The Departments View</returns>
         [HttpPost, Route("DeleteDepartment")]
-        public IActionResult DeleteDepartment(Delete deleteDepartment)
+        public IActionResult DeleteDepartment(long DepartmentId)
         {
-
-            var department = _context.Departments.Find(deleteDepartment.DepartmentId);
+            var department = _context.Departments.Find(DepartmentId);
 
             if (_context.Courses.Where(ac => ac.DepartmentId == department.DepartmentId).Any())
             {
