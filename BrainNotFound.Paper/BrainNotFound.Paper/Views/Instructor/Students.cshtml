@@ -9,7 +9,7 @@
 <div class="x_content">
     <p>Click checkbox to select multiple Students.</p>
     <div class="table-responsive">
-        <table class="table table-striped jambo_table bulk_action ">
+        <table id="studentTable" class="table table-striped jambo_table bulk_action ">
             <thead>
                 <tr class="headings">
                     <th>
@@ -38,11 +38,27 @@
                         <td class="">@s.LastName </td>
                         <td class="">@s.Classification </td>
                         <td class="">
-                             <a asp-controller="Instructor" asp-action="ViewStudentProfile" asp-route-UserName="@s.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                            <a asp-controller="Instructor" asp-action="ViewStudentProfile" asp-route-UserName="@s.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                         </td>
                     </tr>
-                 }
+                }
             </tbody>
         </table>
     </div>
 </div>
+
+@section scripts
+    {
+
+    <script type="text/javascript" charset="utf8">
+        $(document).ready(function () {
+            $('#studentTable').DataTable({
+                "order": [1, 'asc'],
+                "columnDefs": [
+                    { "orderable": false, "targets": [0, 4] }
+                ]
+            });
+        });
+    </script>
+
+}
