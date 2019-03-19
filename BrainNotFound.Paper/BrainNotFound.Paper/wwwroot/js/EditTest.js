@@ -60,7 +60,7 @@ $('#EditSchedulePlaceHolde').on('change', '#SectionIndividualStudent', function 
 // -- General Functions
 
 // Removes Element from DOM if pressed Cancel
-function Calcel(ElementId) {
+function Cancel(ElementId) {
 
     $(ElementId).remove();
 }
