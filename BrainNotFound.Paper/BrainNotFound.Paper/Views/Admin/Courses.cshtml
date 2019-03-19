@@ -22,14 +22,11 @@
                 <div class="x_content">
                     @if (Model.Any<Course>())
                     {
-                        <p>Click checkbox to select multiple courses.</p>
+                        <p>@ViewBag.errorMessage</p>
                         <div class="table-responsive">
-                            <table id="courseTable" class="table table-striped ">
+                            <table id="courseTable" class="table table-striped jambo_table bulk_action ">
                                 <thead>
                                     <tr class="headings">
-                                        <th>
-                                            <input type="checkbox" id="check-all" class="flat">
-                                        </th>
                                         <th class="column-title">Course Code </th>
                                         <th class="column-title">Name </th>
                                         <th class="column-title">Credit Hours </th>
@@ -45,9 +42,6 @@
                                     @foreach (Course course in Model)
                                     {
                                         <tr class="odd pointer">
-                                            <td class="a-center ">
-                                                <input type="checkbox" class="flat" name="table_records">
-                                            </td>
                                             @{
                                                 String name;
                                                 List<Department> departments = ViewBag.DepartmentList;

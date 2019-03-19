@@ -18,15 +18,12 @@
             </div>
             <div class="x_content">
 
-                <p>Click to select all Administrators</p>
+                <p>@ViewBag.errorMessage</p>
 
                 <div class="table-responsive">
                     <table id="adminTable" class="table table-striped jambo_table bulk_action">
                         <thead>
                             <tr class="headings">
-                                <th>
-                                    <input type="checkbox" id="check-all" class="flat">
-                                </th>
                                 <th class="column-title">First Name </th>
                                 <th class="column-title">Last Name </th>
                                 <th class="column-title">Phone Number </th>
@@ -45,9 +42,6 @@
                             @foreach (ApplicationUser admin in Model)
                             {
                                 <tr class="odd pointer">
-                                    <td class="a-center ">
-                                        <input type="checkbox" class="flat" name="table_records">
-                                    </td>
                                     <td class=" ">@admin.FirstName</td>
                                     <td class=" ">@admin.LastName</td>
                                     <td class=" ">@admin.PhoneNumber</td>
