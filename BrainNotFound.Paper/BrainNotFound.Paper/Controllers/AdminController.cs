@@ -198,9 +198,9 @@ namespace BrainNotFound.Paper.Controllers
         ///</summary>
         ///<param name="user">Selected instructor's email</param>
         [HttpPost, Route("DeleteInstructor")]
-        public async Task<IActionResult> DeleteInstructor(Delete deleteUser)
+        public async Task<IActionResult> DeleteInstructor(String UserName)
         {
-            var instructor = await _userManager.FindByNameAsync(deleteUser.UserName);
+            var instructor = await _userManager.FindByNameAsync(UserName);
             if (_context.Sections.Where(s => s.InstructorId == instructor.Id).Any())
             {
                 TempData["message"] = "Error: Please delete all associated sections before deleting " + instructor.FirstName + " " + instructor.LastName;
@@ -369,7 +369,32 @@ namespace BrainNotFound.Paper.Controllers
         public async Task<IActionResult> Students()
         {
             var allStudents = (await _userManager.GetUsersInRoleAsync("Student")).OrderBy(o => o.FirstName).ToList();
+            if (TempData["message"] != null)
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
             return View(allStudents);
+        }
+
+        ///<summary>
+        /// Finds a specified student and deletes him from the _userManager
+        ///</summary>
+        ///<param name="user">Selected instructor's email</param>
+        [HttpPost, Route("DeleteStudent")]
+        public async Task<IActionResult> DeleteStudent(String UserName)
+        {
+            var student = await _userManager.FindByNameAsync(UserName);
+            if (_context.Enrollments.Where(e => e.StudentId == student.Id).Any())
+            {
+                TempData["message"] = "Error: Please remove " + student.FirstName + " " + student.LastName + " from corresponding sections before deleting.";
+                return RedirectToAction("Students", "Admin");
+            }
+            else
+            {
+                await _userManager.DeleteAsync(student);
+            }
+            TempData["message"] = student.FirstName + " " + student.LastName + "was deleted.";
+            return RedirectToAction("Students", "Admin");
         }
 
         [HttpGet, Route("Students/New")]
