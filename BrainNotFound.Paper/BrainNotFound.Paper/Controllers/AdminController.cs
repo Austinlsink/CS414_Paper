@@ -379,7 +379,7 @@ namespace BrainNotFound.Paper.Controllers
         ///<summary>
         /// Finds a specified student and deletes him from the _userManager
         ///</summary>
-        ///<param name="user">Selected instructor's email</param>
+        ///<param name="UserName">Selected student's username</param>
         [HttpPost, Route("DeleteStudent")]
         public async Task<IActionResult> DeleteStudent(String UserName)
         {
@@ -599,9 +599,35 @@ namespace BrainNotFound.Paper.Controllers
         {
             var courses = _context.Courses.OrderBy(o => o.CourseCode).ToList();
             var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
+
+            if(TempData["message"] != null)
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
+
             ViewBag.departmentList = departments;
-            ViewBag.Message = message;
             return View(courses);
+        }
+
+        // Delete a Course
+        [HttpPost, Route("DeleteCourse")]
+        public IActionResult DeleteCourse(long CourseId)
+        {
+            var course = _context.Courses.Find(CourseId);
+
+            if (_context.Sections.Where(ac => ac.CourseId == course.CourseId).Any())
+            {
+                TempData["message"] = "Error: Please delete all associated sections before deleting " + course.DepartmentCode;
+                return RedirectToAction("Courses", "Admin");
+            }
+            else
+            {
+                _context.Courses.Remove(course);
+                _context.SaveChanges();
+            }
+
+            TempData["message"] = "Success: " + course.Name + " was deleted.";
+            return RedirectToAction("Courses", "Admin");
         }
 
         [HttpGet, Route("Courses/New")]
@@ -689,25 +715,6 @@ namespace BrainNotFound.Paper.Controllers
 
             _context.SaveChanges();
 
-            return RedirectToAction("Courses", "Admin");
-        }
-
-        // Delete a Course
-        [HttpPost, Route("DeleteCourse")]
-        public IActionResult DeleteCourse(Delete deleteCourse)
-        {
-            var course = _context.Courses.Find(deleteCourse.CourseId);
-
-            if (_context.Sections.Where(ac => ac.CourseId == course.CourseId).Any())
-            {
-                return RedirectToAction("Courses", "Admin", new { message = "Error: Please delete all associated sections before deleting " + course.DepartmentCode });
-            }
-            else
-            {
-                _context.Courses.Remove(course);
-                _context.SaveChanges();
-            }
-            
             return RedirectToAction("Courses", "Admin");
         }
 
