@@ -47,9 +47,6 @@
                             <table id="departmentTable" class="table table-striped jambo_table bulk_action ">
                                 <thead>
                                     <tr class="headings">
-                                        <th>
-                                            <input type="checkbox" id="check-all" class="flat">
-                                        </th>
                                         <th class="column-title">Name </th>
                                         <th class="column-title">Code </th>
                                         <th class="column-title no-link last">
@@ -65,9 +62,6 @@
                                     @foreach (Department department in Model)
                                     {
                                         <tr class="odd pointer">
-                                            <td class="a-center ">
-                                                <input type="checkbox" class="flat" name="table_records">
-                                            </td>
                                             <td class=" ">@department.DepartmentName </td>
                                             <td class=" ">@department.DepartmentCode </td>
                                             <td class=" last">
@@ -107,7 +101,7 @@
             $('#departmentTable').DataTable({
                 "order": [1, 'asc'],
                 "columnDefs": [
-                    { "orderable": false, "targets": [0, 3] }
+                    { "orderable": false, "targets": [3] }
                 ]
             });
         });
