@@ -6,82 +6,118 @@
     int rowIndex = 0;
 }
 
-    <div class="">
-        <div class="row">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2><i class="fa fa-mortar-board"></i> Departments</h2>
-                        
-                        <p>@ViewBag.Message</p>
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.css">
 
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                            <li><a asp-controller="Admin" asp-action="NewDepartment"><i class="fa fa-plus"></i> New Department</a></li>
-                        </ul>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="x_content">
-                        @if (Model.Any<Department>())
-                        {
-                            <p>Click checkbox to select multiple departments.</p>
-                            <div class="table-responsive">
-                                <table class="table table-striped jambo_table bulk_action ">
-                                    <thead>
-                                        <tr class="headings">
-                                            <th>
-                                                <input type="checkbox" id="check-all" class="flat">
-                                            </th>
-                                            <th class="column-title">Name </th>
-                                            <th class="column-title">Code </th>
-                                            <th class="column-title no-link last">
-                                                <span class="nobr">Action</span>
-                                            </th>
-                                            <th class="bulk-actions" colspan="7">
-                                                <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-                                            </th>
+<!-- jQuery -->
+<script type="text/javascript" charset="utf8" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+
+<!-- DataTables -->
+<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.js">
+</script>
+
+<div class="">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-mortar-board"></i> Departments</h2>
+
+                    <!--Error message for deleting a department-->
+                    @if (ViewBag.deleteMessage != null)
+                    {
+                        <script type="text/javascript">
+                                window.onload = function () {
+                                    alert("@ViewBag.deleteMessage");
+                                };
+                        </script>
+                    }
+
+                    <!--Confimration message for when a department is deleted-->
+                    @if (ViewBag.confirmMessage != null)
+                    {
+                        <script type="text/javascript">
+                                window.onload = function () {
+                                    alert("@ViewBag.confirmMessage");
+                                };
+                        </script>
+                    }
+
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                        <li><a asp-controller="Admin" asp-action="NewDepartment"><i class="fa fa-plus"></i> New Department</a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    @if (Model.Any<Department>())
+                    {
+                        <p>Click checkbox to select multiple departments.</p>
+                        <div class="table-responsive">
+                            <table id="departmentTable" class="table table-striped jambo_table bulk_action ">
+                                <thead>
+                                    <tr class="headings">
+                                        <th>
+                                            <input type="checkbox" id="check-all" class="flat">
+                                        </th>
+                                        <th class="column-title">Name </th>
+                                        <th class="column-title">Code </th>
+                                        <th class="column-title no-link last">
+                                            <span class="nobr">Action</span>
+                                        </th>
+                                        <th class="bulk-actions" colspan="7">
+                                            <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (Department department in Model)
+                                    {
+                                        <tr class="odd pointer">
+                                            <td class="a-center ">
+                                                <input type="checkbox" class="flat" name="table_records">
+                                            </td>
+                                            <td class=" ">@department.DepartmentName </td>
+                                            <td class=" ">@department.DepartmentCode </td>
+                                            <td class=" last">
+                                                <form asp-action="DeleteDepartment" asp-controller="Admin">
+                                                    <a asp-controller="Admin" asp-action="EditDepartment" asp-route-id="@department.DepartmentId" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                                    <input type="hidden" name="DepartmentId" value="@department.DepartmentId" />
+                                                    <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
+                                                </form>
+
+                                            </td>
+
                                         </tr>
-                                    </thead>
+                                        rowIndex++;
+                                    }
 
-                                    <tbody>
+                                </tbody>
+                            </table>
 
-                                        @foreach (Department department in Model)
-                                        {
-                                            <tr class="odd pointer">
-                                                <td class="a-center ">
-                                                    <input type="checkbox" class="flat" name="table_records">
-                                                </td>
-                                                <td class=" ">@department.DepartmentName </td>
-                                                <td class=" ">@department.DepartmentCode </td>
-                                                <td class=" last">
-                                                    <form asp-action="DeleteDepartment" asp-controller="Admin">
-                                                        <a asp-controller="Admin" asp-action="EditDepartment" asp-route-id="@department.DepartmentId" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                                        <input type="hidden" name="DepartmentId" value="@department.DepartmentId" />
-                                                        <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
-                                                    </form>
-                                                    
-                                                </td>
 
-                                            </tr>
-                                            rowIndex++;
-                                        }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="center">There are no departments to list. Please create a new department.</p>
+                    }
 
-                                    </tbody>
-                                </table>
-
-                                
-                            </div>
-                        }
-                        else
-                        {
-                            <p class="center">There are no departments to list. Please create a new department.</p>
-                        }
-
-                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-
+<script type="text/javascript" charset="utf8">
+    $(document).ready(function () {
+        $('#departmentTable').DataTable({
+            "order": [1, 'asc'],
+            "columnDefs": [
+                { "orderable": false, "targets": [0, 3] }
+            ]
+        });
+    });
+</script>
 

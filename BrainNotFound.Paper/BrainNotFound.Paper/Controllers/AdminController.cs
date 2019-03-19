@@ -23,7 +23,7 @@ namespace BrainNotFound.Paper.Controllers
         private readonly PaperDbContext _context;
 
         #region admin controllers
-        
+
         /// <summary>
         /// Constructor 
         /// </summary>
@@ -88,7 +88,7 @@ namespace BrainNotFound.Paper.Controllers
             model.UserName = model.FirstName + model.LastName;
             var admin = await _userManager.FindByIdAsync(model.Id);
 
-            if ( admin == null)
+            if (admin == null)
             {
                 //Create a new Application User
                 var result = await _userManager.CreateAsync(model, model.Password);
@@ -233,7 +233,7 @@ namespace BrainNotFound.Paper.Controllers
             {
                 ViewBag.UserError = "That user already exists.";
             }
-            
+
             ViewData["message"] += model.Email;
             return View(model);
         }
@@ -257,9 +257,9 @@ namespace BrainNotFound.Paper.Controllers
             // Find all of the courses that match its corresponding section and add them to the ViewBag
             List<Course> allCourses = _context.Courses.ToList();
             List<Course> courses = new List<Course>();
-            foreach(Section s in sections)
+            foreach (Section s in sections)
             {
-               foreach(Course c in allCourses)
+                foreach (Course c in allCourses)
                 {
                     if (s.CourseId == c.CourseId)
                         if (!courses.Contains(c))
@@ -284,15 +284,15 @@ namespace BrainNotFound.Paper.Controllers
         public async Task<IActionResult> EditInstructor(ApplicationUser user)
         {
             var instructor = await _userManager.FindByNameAsync(user.UserName);
-            instructor.Salutation  = user.Salutation;
-            instructor.FirstName   = user.FirstName;
-            instructor.LastName    = user.LastName;
+            instructor.Salutation = user.Salutation;
+            instructor.FirstName = user.FirstName;
+            instructor.LastName = user.LastName;
             instructor.PhoneNumber = user.PhoneNumber;
-            instructor.Email       = user.Email;
-            instructor.Address     = user.Address;
-            instructor.City        = user.City;
-            instructor.State       = user.State;
-            instructor.ZipCode     = user.ZipCode;
+            instructor.Email = user.Email;
+            instructor.Address = user.Address;
+            instructor.City = user.City;
+            instructor.State = user.State;
+            instructor.ZipCode = user.ZipCode;
 
             await _userManager.UpdateAsync(instructor);
 
@@ -309,7 +309,7 @@ namespace BrainNotFound.Paper.Controllers
         public async Task<IActionResult> DeleteInstructor(Delete deleteUser)
         {
             var instructor = await _userManager.FindByNameAsync(deleteUser.UserName);
-            if(_context.Sections.Where(s => s.InstructorId == instructor.Id).Any())
+            if (_context.Sections.Where(s => s.InstructorId == instructor.Id).Any())
             {
                 return RedirectToAction("Instructors", "Admin", new { message = "Error: Please delete all associated sections before deleting " + instructor.FirstName + " " + instructor.LastName });
             }
@@ -328,7 +328,7 @@ namespace BrainNotFound.Paper.Controllers
         public async Task<IActionResult> Profile()
         {
             var admin = await _userManager.GetUserAsync(HttpContext.User);
-            
+
             ViewBag.profile = admin;
             return View();
         }
@@ -346,15 +346,15 @@ namespace BrainNotFound.Paper.Controllers
         public async Task<IActionResult> EditProfile(ApplicationUser user)
         {
             ApplicationUser admin = await _userManager.GetUserAsync(HttpContext.User);
-            admin.Salutation  = user.Salutation;
-            admin.FirstName   = user.FirstName;
-            admin.LastName    = user.LastName;
+            admin.Salutation = user.Salutation;
+            admin.FirstName = user.FirstName;
+            admin.LastName = user.LastName;
             admin.PhoneNumber = user.PhoneNumber;
-            admin.Email       = user.Email;
-            admin.Address     = user.Address;
-            admin.City        = user.City;
-            admin.State       = user.State;
-            admin.ZipCode     = user.ZipCode;
+            admin.Email = user.Email;
+            admin.Address = user.Address;
+            admin.City = user.City;
+            admin.State = user.State;
+            admin.ZipCode = user.ZipCode;
 
             await _userManager.UpdateAsync(admin);
             return RedirectToAction("Profile", "Admin");
@@ -429,9 +429,9 @@ namespace BrainNotFound.Paper.Controllers
             var departments = _context.Departments.ToList();
             List<Section> sections = new List<Section>();
 
-            foreach(Enrollment e in enrollment)
+            foreach (Enrollment e in enrollment)
             {
-                foreach(Section s in allSections)
+                foreach (Section s in allSections)
                 {
                     if (e.SectionId == s.SectionId)
                     {
@@ -461,15 +461,15 @@ namespace BrainNotFound.Paper.Controllers
         public async Task<IActionResult> EditStudent(ApplicationUser user)
         {
             var student = await _userManager.FindByNameAsync(user.UserName);
-            student.Salutation  = user.Salutation;
-            student.FirstName   = user.FirstName;
-            student.LastName    = user.LastName;
+            student.Salutation = user.Salutation;
+            student.FirstName = user.FirstName;
+            student.LastName = user.LastName;
             student.PhoneNumber = user.PhoneNumber;
-            student.Email       = user.Email;
-            student.Address     = user.Address;
-            student.City        = user.City;
-            student.State       = user.State;
-            student.ZipCode     = user.ZipCode;
+            student.Email = user.Email;
+            student.Address = user.Address;
+            student.City = user.City;
+            student.State = user.State;
+            student.ZipCode = user.ZipCode;
 
             await _userManager.UpdateAsync(student);
 
@@ -504,14 +504,26 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         // Display the list of departments
-        [HttpGet, Route("Departments")]
-        public IActionResult Departments(string message = "")
+        [HttpGet, Route("departments")]
+        public IActionResult Departments(String message)
         {
-            var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
             var courses = _context.Courses.ToList();
+            var departments = _context.Departments.ToList();
+
+            if (message != null)
+            {
+                if (message.StartsWith("Error"))
+                {
+                    ViewBag.deleteMessage = message;
+                }
+                else
+                {
+                    ViewBag.confirmMessage = message;
+                }
+            }
+            
             ViewBag.courses = courses;
-            ViewBag.Message = message;
-            return View(departments);
+            return View(departments.ToList());
         }
 
         // Delete a department
@@ -522,14 +534,14 @@ namespace BrainNotFound.Paper.Controllers
 
             if (_context.Courses.Where(ac => ac.DepartmentId == department.DepartmentId).Any())
             {
-               return RedirectToAction("Departments", "Admin", new { message = "Error: Please delete all associated courses before deleting " + department.DepartmentCode + " " + department.DepartmentName });
+                return RedirectToAction("Departments", "Admin", new { message = "Error: Please delete all associated courses before deleting " + department.DepartmentCode + " " + department.DepartmentName });
             }
             else
             {
                 _context.Departments.Remove(department);
                 _context.SaveChanges();
             }
-            return RedirectToAction("Departments", "Admin");
+            return RedirectToAction("Departments", "Admin", new { message = department.DepartmentCode + " " + department.DepartmentName + " was successfully deleted!" });
         }
 
         // Add the details for a new Department
