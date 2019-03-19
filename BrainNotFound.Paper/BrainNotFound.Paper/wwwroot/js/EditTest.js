@@ -13,6 +13,7 @@ function EditTestNameAndCourse(TestId)
     }
 }
 
+// Places the new Schechedule well in the page
 function NewTestSchedule(TestId) {
     if ($("#NewSchedule").length == 0) {
         $.ajax({
@@ -24,6 +25,7 @@ function NewTestSchedule(TestId) {
     }
 }
 
+//
 function UpdateAssigmentTables(TestId) {
     $.ajax({
         url: "/Instructor/Tests/Partials/ViewSectionAndStudentsAssigned/" + TestId,
@@ -44,10 +46,22 @@ function UnlimitedTimeCheckBox() {
     }
 }
 
+function AssignEntireSection() {
+    $.ajax({
+        url: "/Instructor/Tests/Partials/ViewSectionAndStudentsAssigned/",
+        type: "POST",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ HelloWorld: "BimaDaSilva"}),
+        success: function (result) {
+            $("#AssignedTablePlaceHolder").html(result);
+        }
+    });
+}
+
 // -- Event Handlers
-$('#EditSchedulePlaceHolde').on('change', '#SectionIndividualStudent', function () {
+$('#EditSchedulePlaceHolde').on('change', '#SelectSection', function () {
     $("table#StudentsInSection").remove();
-    var sectionId = $("#SectionIndividualStudent").val();
+    var sectionId = $("#SelectSection").val();
     $.ajax({
         url: "/Instructor/Tests/Partials/StudentInSectionTable/" + sectionId,
         success: function (result) {
