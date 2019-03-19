@@ -22,7 +22,7 @@
                 <div class="x_content">
                     @if (Model.Any<Course>())
                     {
-                        <p>Click checkbox to select multiple courses.</p>
+                        <p>@ViewBag.errorMessage</p>
                         <div class="table-responsive">
                             <table id="courseTable" class="table table-striped jambo_table bulk_action ">
                                 <thead>
