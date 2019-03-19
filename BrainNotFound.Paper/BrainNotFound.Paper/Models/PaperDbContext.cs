@@ -41,6 +41,7 @@ namespace BrainNotFound.Paper
         public DbSet<MatchingAnswerSide> MatchingAnswerSides { get; set; }
         public DbSet<MatchingQuestionSide> MatchingQuestionSides { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<StudentFillInTheBlankAnswer> StudentFillInTheBlankAnswers { get; set; }
         
         // Constructor
         public PaperDbContext(DbContextOptions<PaperDbContext> options)
