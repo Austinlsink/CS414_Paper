@@ -521,7 +521,7 @@ namespace BrainNotFound.Paper.Controllers
                     ViewBag.confirmMessage = message;
                 }
             }
-            
+
             ViewBag.courses = courses;
             return View(departments.ToList());
         }
