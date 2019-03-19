@@ -1,0 +1,23 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<!--Edit Questions Value Start-->
+<div id="EditQuestionsValue" class="well">
+    <form asp-action="PartialEditNameAndCourse" asp-controller="Instructor" asp-route-TestId="" id="new-department" data-parsley-validate class="form-horizontal form-label-left">
+        <div class="col-md-9 col-xs-12">
+            <label class="control-label">Edit Questions Value</label>
+            <input type="text" placeholder="pt(s)" class="form-control col-md-3">
+        </div>
+        <div class="col-md-3 col-sm-12">
+            <label class="control-label">&emsp;</label>
+            <table>
+                <tr>
+                    <td><a onclick="Cancel('#EditQuestionsValue')" class="pull-right btn btn-danger btn-md">Cancel</a>
+                    <td> <button type="submit" class="pull-right btn btn-primary btn-md">Assign</button></td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</div>
+<!--Edit Questions Value End-->

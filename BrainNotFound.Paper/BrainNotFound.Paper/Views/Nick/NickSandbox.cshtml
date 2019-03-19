@@ -9,8 +9,7 @@
 <div class="row">
     <div class="col-md-12 col-xs-12">
 
-        <!-- Test creation information -->
-        <!-- (Test creation information) beginning of row 2 -->
+        <!--True/False Section Start-->
         <div class="x_panel">
             <div class="x_title">
                 <h2><i class="fa fa-info-circle"></i> | True/False</h2>
@@ -87,67 +86,10 @@
                         </div>
                     }
                 }
-
-                <!--Editable Question Row-->
-                <div class="ln_solid"></div>
-                <div class="row well">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <div class="col-md-1 col-sm-1 col-xs-3">
-                            <input type="text" placeholder="pts" class="form-group form-control">
-                        </div>
-                        <div class="form-group col-md-5 col-sm-5 col-xs-12">
-                            <input type="text" placeholder="Enter question text here" class="form-control">
-                        </div>
-                        <div class="form-group col-md-3 col-sm-3 col-xs-12">
-                            <input type="radio" class="flat" checked="" name="iCheck" style="position: absolute; opacity: 0;"> True
-                            <input type="radio" class="flat" name="iCheck" style="position: absolute; opacity: 0;"> False
-                        </div>
-                        <div class="form-group col-md-3 col-sm-3 col-xs-12">
-                            <button type="button" class="pull-right btn btn-primary btn-md">Save</button>
-                            <button type="button" class="pull-right btn btn-danger btn-md">Cancel</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="ln_solid"></div>
-                <div class="row well">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <div class="col-md-1 col-sm-1 col-xs-3">
-                            <p><b>Instructions:</b></p>
-                        </div>
-                        <div class="form-group col-md-8 col-sm-8 col-xs-12">
-                            <input type="text" placeholder="Enter question text here" value="Determine if each statement is True or False." class="form-control">
-                        </div>
-                        <div class="form-group col-md-3 col-sm-3 col-xs-12">
-                        </div>
-                        <div class="form-group col-md-3 col-sm-3 col-xs-12">
-                            <button type="button" class="pull-right btn btn-primary btn-md">Save</button>
-                            <button type="button" class="pull-right btn btn-danger btn-md">Cancel</button>
-                        </div>
-                    </div>
-                </div>
-                <div id="EditQuestionValue" class="well">
-                    <form asp-action="PartialEditNameAndCourse" asp-controller="Instructor" asp-route-TestId="" id="new-department" data-parsley-validate class="form-horizontal form-label-left">
-                        <div class="col-md-9 col-xs-12">
-                            <label class="control-label">Edit Questions Value</label>
-                            <input type="text" placeholder="pt(s)" class="form-control col-md-3">
-                        </div>
-                        <div class="col-md-3 col-sm-12">
-                            <label class="control-label">&emsp;</label>
-                            <table>
-                                <tr>
-                                    <td><a onclick="Calcel('#EditQuestionValue')" class="pull-right btn btn-danger btn-md">Cancel</a>
-                                    <td> <button type="submit" class="pull-right btn btn-primary btn-md">Assign</button></td>
-                                </tr>
-                            </table>
-                        </div>
-                    </form>
-                </div>
                 <div class="ln_solid"></div>
                 <div class="text-right">
                     <button type="button" class="btn btn-round btn-info"><i class="fa fa-plus"></i> &nbsp;Add Question</button>
                 </div>
-
-                <!-- end of row 2 -->
             </div>
         </div>
         <div class="clearfix"></div>
@@ -156,5 +98,4 @@
         </div>
     </div>
 </div>
-
 <!-- /page content -->
