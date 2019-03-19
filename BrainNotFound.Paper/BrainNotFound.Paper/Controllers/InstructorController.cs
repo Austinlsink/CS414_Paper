@@ -8,6 +8,7 @@ using BrainNotFound.Paper.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using BrainNotFound.Paper.Models.BusinessModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace BrainNotFound.Paper.Controllers
 {
@@ -147,6 +148,8 @@ namespace BrainNotFound.Paper.Controllers
         /// </summary>
         /// <param name="code">DpartmentCode + CourseCode</param>
 
+
+        #region Courses and Sections Actions
         [HttpGet, Route("Courses/{code}")]
         public async Task<IActionResult> ViewCourse(String code)
         {
@@ -228,6 +231,10 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+
+        #endregion Courses and Sections Actions
+
+        #region Test Actions
         //Displays all tests created by an Instructor
         [HttpGet, Route("Tests")]
         public IActionResult Tests()
@@ -306,6 +313,9 @@ namespace BrainNotFound.Paper.Controllers
          
             return View();
         }
+        #endregion Test Actions
+
+        #region Create Test Partials
 
         // Gets the partial view being displayed
         [HttpGet, Route("Tests/Partials/EditNameAndCourse/{TestId}")]
@@ -333,7 +343,7 @@ namespace BrainNotFound.Paper.Controllers
             return PartialView("~/Views/Instructor/CreateTestPartials/_EditNameAndCourse.cshtml");
         }
 
-        //When you press save on the information, this happens
+        // When you press save on the information, this happens
        [HttpPost, Route("Tests/Partials/EditNameAndCourse")]
        public ActionResult PartialEditNameAndCourse(Test test)
        {
@@ -358,5 +368,47 @@ namespace BrainNotFound.Paper.Controllers
            //When you press save, redirect back to the edit test page
            return RedirectToAction("EditTest", "Instructor", new { DepartmentCode = department.DepartmentCode, CourseCode = course.CourseCode, URLSafeName = dbTest.URLSafeName });
        }
+
+        // Gets the partial view New Schedule
+        [HttpGet, Route("Tests/Partials/NewSchedule/{TestId}")]
+        public ActionResult PartialNewSchedule(long TestId)
+        {
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            var test = _context.Tests.Find(TestId);
+            var sections = _context.Sections.Where(s => s.CourseId == test.CourseId).ToList();
+
+            ViewBag.Sections = sections;
+            ViewBag.TestId = test.TestId;
+            // ViewBag.Sections = sections;
+            return PartialView("~/Views/Instructor/CreateTestPartials/_NewTestSchedual.cshtml");
+        }
+
+        [HttpGet, Route("Tests/Partials/StudentInSectionTable/{SectionId}")]
+        public ActionResult PartialStudentInSectionTable(long SectionId)
+        {
+            var enrollments = _context.Enrollments.Where(e => e.SectionId == SectionId).Include(e => e.ApplicationUser);
+            var students = new List<ApplicationUser>();
+            
+            foreach(Enrollment e in enrollments)
+            {
+                students.Add(e.ApplicationUser);
+            }
+
+            ViewBag.Students = students;
+            return PartialView("~/Views/Instructor/CreateTestPartials/_StudentInSectionTable.cshtml");
+            
+        }
+
+
+        [HttpGet, Route("Tests/Partials/ViewSectionAndStudentsAssigned/{TestId}")]
+        public ActionResult PartialViewSectionAndStudentsAssigned(long TestId)
+        {
+            ViewBag.Students = new List<ApplicationUser>();
+            ViewBag.Sections = new List<Section>();
+
+            return PartialView("~/Views/Instructor/CreateTestPartials/_ViewSectionAndStudentsAssigned.cshtml");
+        }
+        #endregion Create Test Partials
+
     }
 }

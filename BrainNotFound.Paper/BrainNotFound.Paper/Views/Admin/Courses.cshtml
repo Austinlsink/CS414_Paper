@@ -22,14 +22,11 @@
                 <div class="x_content">
                     @if (Model.Any<Course>())
                     {
-                        <p>Click checkbox to select multiple courses.</p>
+                        <p>@ViewBag.errorMessage</p>
                         <div class="table-responsive">
-                            <table class="table table-striped jambo_table bulk_action ">
+                            <table id="courseTable" class="table table-striped jambo_table bulk_action ">
                                 <thead>
                                     <tr class="headings">
-                                        <th>
-                                            <input type="checkbox" id="check-all" class="flat">
-                                        </th>
                                         <th class="column-title">Course Code </th>
                                         <th class="column-title">Name </th>
                                         <th class="column-title">Credit Hours </th>
@@ -45,10 +42,7 @@
                                     @foreach (Course course in Model)
                                     {
                                         <tr class="odd pointer">
-                                            <td class="a-center ">
-                                                <input type="checkbox" class="flat" name="table_records">
-                                            </td>
-                                            @{ 
+                                            @{
                                                 String name;
                                                 List<Department> departments = ViewBag.DepartmentList;
                                                 var dept = departments.Where(x => x.DepartmentId == course.DepartmentId).First();
@@ -64,7 +58,7 @@
                                                     <input type="hidden" name="CourseId" value="@course.CourseId" />
                                                     <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
                                                 </form>
-                                               
+
                                             </td>
                                         </tr>
                                     }
@@ -72,8 +66,41 @@
                             </table>
                         </div>
                     }
-                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+@section scripts{
+
+
+<script src="~/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="~/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="~/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+<script src="~/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+<script src="~/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="~/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="~/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script src="~/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+<script src="~/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="~/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script src="~/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+<script src="~/vendors/jszip/dist/jszip.min.js"></script>
+<script src="~/vendors/pdfmake/build/pdfmake.min.js"></script>
+<script src="~/vendors/pdfmake/build/vfs_fonts.js"></script>
+
+    
+<script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#courseTable').DataTable({
+                "order": [1, 'asc'],
+                "columnDefs": [
+                    { "orderable": false, "targets": [0, 3, 4] }
+                ]
+            });
+        });
+</script>
+}

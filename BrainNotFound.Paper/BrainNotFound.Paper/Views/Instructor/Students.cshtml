@@ -7,14 +7,11 @@
 
 <h2>Students</h2>
 <div class="x_content">
-    <p>Click checkbox to select multiple Students.</p>
+    <p>@ViewBag.errorMessage</p>
     <div class="table-responsive">
-        <table class="table table-striped jambo_table bulk_action ">
+        <table id="studentTable" class="table table-striped jambo_table bulk_action ">
             <thead>
                 <tr class="headings">
-                    <th>
-                        <input type="checkbox" id="check-all" class="flat">
-                    </th>
                     <th class="column-title">First Name </th>
                     <th class="column-title">Last name </th>
                     <th class="column-title">Classification </th>
@@ -31,18 +28,31 @@
                 @foreach (var s in ViewBag.students)
                 {
                     <tr class="odd pointer">
-                        <td class="a-center ">
-                            <input type="checkbox" class="flat" name="table_records">
-                        </td>
                         <td class="">@s.FirstName </td>
                         <td class="">@s.LastName </td>
                         <td class="">@s.Classification </td>
                         <td class="">
-                             <a asp-controller="Instructor" asp-action="ViewStudentProfile" asp-route-UserName="@s.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                            <a asp-controller="Instructor" asp-action="ViewStudentProfile" asp-route-UserName="@s.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                         </td>
                     </tr>
-                 }
+                }
             </tbody>
         </table>
     </div>
 </div>
+
+@section scripts
+    {
+
+    <script type="text/javascript" charset="utf8">
+        $(document).ready(function () {
+            $('#studentTable').DataTable({
+                "order": [1, 'asc'],
+                "columnDefs": [
+                    { "orderable": false, "targets": [0, 4] }
+                ]
+            });
+        });
+    </script>
+
+}

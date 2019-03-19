@@ -4,14 +4,16 @@ using BrainNotFound.Paper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BrainNotFound.Paper.Migrations
 {
     [DbContext(typeof(PaperDbContext))]
-    partial class PaperDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190316020643_AddNotificationsTable")]
+    partial class AddNotificationsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -713,15 +715,6 @@ namespace BrainNotFound.Paper.Migrations
                     b.Property<string>("EssayAnswerGiven");
 
                     b.HasDiscriminator().HasValue("StudentEssayAnswer");
-                });
-
-            modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.StudentFillInTheBlankAnswer", b =>
-                {
-                    b.HasBaseType("BrainNotFound.Paper.Models.BusinessModels.StudentAnswer");
-
-                    b.Property<string>("FillInTheBlankAnswerGiven");
-
-                    b.HasDiscriminator().HasValue("StudentFillInTheBlankAnswer");
                 });
 
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.StudentTrueFalseAnswer", b =>

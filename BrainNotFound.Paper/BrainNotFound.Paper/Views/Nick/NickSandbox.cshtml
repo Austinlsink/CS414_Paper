@@ -3,26 +3,24 @@
     ViewData["Title"] = "NickSandbox";
     Layout = "~/Views/Shared/_InstructorLayout.cshtml";
     List<TrueFalse> questions = ViewBag.Questions;
+    List<TrueFalse> SortedQuestions = questions.OrderBy(q => q.Index).ToList();
 }
 
+<div class="row">
+    <div class="col-md-12 col-xs-12">
 
-
-
-<!-- Test creation information -->
-<div class="x_panel">
-    <div class="x_title">
-
-        <!-- (Test creation information) beginning of row 2 -->
+        <!--True/False Section Start-->
         <div class="x_panel">
             <div class="x_title">
                 <h2><i class="fa fa-info-circle"></i> | True/False</h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class=""><i class="fa fa-trash-o"></i></a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">Settings 1</a></li>
-                            <li><a href="#">Settings 2</a></li>
+                            <li><a href="#">Edit Instructions</a></li>
+                            <li><a href="#">Edit Questions Value</a></li>
                         </ul>
                     </li>
                     <li><a class="collapse-link"><i class="fa fa-arrow-up"></i></a></li>
@@ -32,55 +30,71 @@
             </div>
             <div class="x_content">
                 <div class="row">
-                    <form id="new-department" data-parsley-validate class="form-horizontal form-label-left">
-                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Question Type</label>
-                        <div class="col-md-4 col-sm-4 col-xs-12">
-                            <select class="form-control">
-                                <option>Choose option</option>
-                                <option>True/False</option>
-                                <option>Multiple Choice</option>
-                                <option>Fill In The Blank</option>
-                                <option>Matching</option>
-                                <option>Essay</option>
-                            </select>
-                        </div>
-                        <label class="control-label col-md-3 col-sm-2 col-xs-12">Question Point Value</label>
-                        <div class="col-md-1">
-                            <input type="text" placeholder="#" class="form-control"><br>
-                        </div>
-                    </form>
-                </div><br>
 
-                @foreach (TrueFalse question in questions)
-                {
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="col-md-10 col-sm-10 col-xs-12 form-group">
-                                <input type="text" placeholder="Enter question text here" class="form-control" value="@question.Content" >
-                            </div>
-                            <div class="form-group col-md-2 col-sm-2">
-                                <label class="">
-                                    <div class="" style="position: relative;"><input type="radio" class="flat" name="@("TrueFalse" + question.QuestionId)" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>True
-                                </label>
-                                <label class="">
-                                    <div class="" style="position: relative;"><input type="radio" class="flat" name="@("TrueFalse" + question.QuestionId)" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>False
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                }
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <p><b>Instructions:</b> Determine if each statement is True or False.</p>
 
-
-                <!-- end of row 2 -->
-                <div class="row">
-                    <div class="ln_solid"></div>
-                    <div class="form-group">
-                        <div class="">
-                            <button type="button" class="btn btn-round btn-primary"><i class="fa fa-plus"></i> Add Question</button>
-                        </div>
                     </div>
                 </div>
+
+                @foreach (TrueFalse question in SortedQuestions)
+                {
+                    if (question.TrueFalseAnswer == true)
+                    {
+                        <div class="ln_solid"></div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-md-1 col-sm-1 col-xs-3">
+                                    <input type="text" placeholder="pts" value="@(question.PointValue + " pt(s)")" class="form-group form-control">
+                                </div>
+                                <div class="col-md-8 col-sm-8 col-xs-11">
+                                    <p>@question.Content</p>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-3 col-xs-12">
+                                    <span style="color:white" class="label label-success">True</span>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li><a class=""><i class="fa fa-trash-o"></i></a></li>
+                                        <li><a class=""><i class="fa fa-edit"></i></a></li>
+                                        <li><a class=""><i class="fa fa-chevron-up"></i></a></li>
+                                        <li><a class=""><i class="fa fa-chevron-down"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else if (question.TrueFalseAnswer == false)
+                    {
+                        <div class="ln_solid"></div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-md-1 col-sm-1 col-xs-3">
+                                    <input type="text" placeholder="pts" value="@(question.PointValue + " pt(s)")" class="form-group form-control">
+                                </div>
+                                <div class="col-md-8 col-sm-8 col-xs-11">
+                                    <p>@question.Content</p>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-3 col-xs-12">
+                                    <span style="color:white" class="label label-danger">False</span>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li><a class=""><i class="fa fa-trash-o"></i></a></li>
+                                        <li><a class=""><i class="fa fa-edit"></i></a></li>
+                                        <li><a class=""><i class="fa fa-chevron-up"></i></a></li>
+                                        <li><a class=""><i class="fa fa-chevron-down"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                <div class="ln_solid"></div>
+                <div class="text-right">
+                    <button type="button" class="btn btn-round btn-info"><i class="fa fa-plus"></i> &nbsp;Add Question</button>
+                </div>
             </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="text-center">
+            <button type="button" class="btn btn-round btn-primary"><i class="fa fa-plus"></i> &nbsp;Add Section</button>
         </div>
     </div>
 </div>

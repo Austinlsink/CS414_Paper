@@ -1,7 +1,71 @@
-﻿///* Event Handlers */
+﻿// -- Button Handlers
 
-// Button Handlers
-// Handles all forms in section as 
+// Edit test name and course
+function EditTestNameAndCourse(TestId)
+{
+    if ($("#EditNameAndCourse").length == 0) {
+        $.ajax({
+            url: "/Instructor/Tests/Partials/EditNameAndCourse/" + TestId,
+            success: function (result) {
+                $("#x_c-infoSection").prepend(result);
+            }
+        });
+    }
+}
+
+function NewTestSchedule(TestId) {
+    if ($("#NewSchedule").length == 0) {
+        $.ajax({
+            url: "/Instructor/Tests/Partials/NewSchedule/" + TestId,
+            success: function (result) {
+                $("#EditSchedulePlaceHolde").append(result);
+            }
+        });
+    }
+}
+
+function UpdateAssigmentTables(TestId) {
+    $.ajax({
+        url: "/Instructor/Tests/Partials/ViewSectionAndStudentsAssigned/" + TestId,
+        success: function (result) {
+            $("#AssignedTablePlaceHolder").html(result);
+        }
+    });
+}
+
+//Disables Time Limit Textbox
+function UnlimitedTimeCheckBox() {
+
+    if ($("#UnlimitedTimeCheckBox").is(':checked')) {
+        $("#TimeLimitTextBox").attr("disabled", "disabled");
+    }
+    else {
+        $("#TimeLimitTextBox").removeAttr("disabled");
+    }
+}
+
+// -- Event Handlers
+$('#EditSchedulePlaceHolde').on('change', '#SectionIndividualStudent', function () {
+    $("table#StudentsInSection").remove();
+    var sectionId = $("#SectionIndividualStudent").val();
+    $.ajax({
+        url: "/Instructor/Tests/Partials/StudentInSectionTable/" + sectionId,
+        success: function (result) {
+            $("#StudentTablePlaceHolder").html(result);
+        }
+    });
+
+});
+
+// -- General Functions
+
+// Removes Element from DOM if pressed Cancel
+function Cancel(ElementId) {
+
+    $(ElementId).remove();
+}
+
+// Handles all forms submition buttons
 $(function () {
     $('.post-using-ajax').each(function () {
         var $frm = $(this);
@@ -20,67 +84,7 @@ $(function () {
     });
 });
 
-// Edit test name and course
-function EditTestNameAndCourse(TestId)
-{
-    if ($("#EditNameAndCourse").length == 0) {
-        $.ajax({
-            url: "/Instructor/Tests/Partials/EditNameAndCourse/" + TestId,
-            success: function (result) {
-                $("#x_c-infoSection").prepend(result);
-            }
-        });
-    }
-}
-
-// Reassigns back browser button
+// Re-assigns back browser button
 window.onpopstate = function () {
     window.location.href = "/Instructor/Tests";
 }; history.pushState({}, '');
-
-////Change the generic section to a specified section
-////$("#setQuestionType").click(function () {
-////    if ("the selected option" == "True/False") {
-
-////    }
-////    else if ("the selected option" == "Multple Choice") {
-
-////    }
-////    else if ("the selected option" == "Matching") {
-
-////    }
-////    else if ("the selected option" == "Fill in the Blank") {
-
-////    }
-////    else if ("the selected option" == "Essay") {
-
-////    }
-    
-////    })
-
-
-
-
-/////* DOM Manipulation */
-
-//////Delete a specific section from the test
-////function DeleteSection(SectionId) {
-////    $(SectionId).Remove();
-////}
-
-
-/////* Data Access */
-
-////function GetSection(QuestionType) {
-    
-////}
-
-
-/////* Template Functions */
-
-////function toggle(source, elementName) {
-////    checkboxes = document.getElementsByName(elementName);
-////    for (var i = 0, n = checkboxes.length; i < n; i++) {
-////        checkboxes[i].checked = source.checked;
-////    }
-////}
