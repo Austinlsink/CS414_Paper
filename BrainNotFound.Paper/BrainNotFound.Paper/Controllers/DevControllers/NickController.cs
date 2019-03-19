@@ -36,26 +36,42 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
             {
                 Content = "Bima is from Brazil",
                 TrueFalseAnswer = true,
-                QuestionId = 1
+                QuestionId = 1,
+                PointValue = 1,
+                Index =  1
             };
 
             var q2 = new TrueFalse()
             {
                 Content = "Nick is from Brazil",
                 TrueFalseAnswer = false,
-                QuestionId = 2
+                QuestionId = 2,
+                PointValue = 2,
+                Index = 5
             };
 
             var q3 = new TrueFalse()
             {
                 Content = "Austin is from Brazil",
                 TrueFalseAnswer = false,
-                QuestionId = 3
+                QuestionId = 3,
+                PointValue = 3,
+                Index = 3
+            };
+
+            var q4 = new TrueFalse()
+            {
+                Content = "Kara is from Brazil",
+                TrueFalseAnswer = false,
+                QuestionId = 4,
+                PointValue = 4,
+                Index = 4
             };
 
             questions.Add(q1);
             questions.Add(q2);
             questions.Add(q3);
+            questions.Add(q4);
 
             ViewBag.Questions = questions;
 
