@@ -1,0 +1,90 @@
+﻿@using BrainNotFound.Paper.Models.BusinessModels
+@{
+    List<ApplicationUser> students = ViewBag.Students;
+    List<Section> sections = ViewBag.Sections;
+
+}
+
+<div class="x_panel">
+    <div class="x_title">
+        <h4><i class="fa fa-users"></i> Assigned</h4>
+    </div>
+    <div class="x_content">
+        <i class="fa fa-pie-chart"></i> Sections
+        @if (sections.Any())
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Section Number</th>
+                        <th>Number of Students</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>43 Students</td>
+                        <td>
+                            <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Remove </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>13 Students</td>
+                        <td>
+                            <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Remove </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <span>
+                &emsp;
+                <p>There are no entire section assigned.</p>
+            </span>
+
+        }
+        <hr />
+        <i class="fa fa-user"></i>  Individual Students
+
+        @if (students.Any())
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Section Number</th>
+                        <th>Number of Students</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>43 Students</td>
+                        <td>
+                            <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>13 Students</td>
+                        <td>
+                            <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <span>
+                &emsp;
+                <p>There are no indivisual students assigned.</p>
+            </span>
+        }
+
+    </div>
+</div>

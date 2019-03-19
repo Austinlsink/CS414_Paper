@@ -24,6 +24,15 @@ function NewTestSchedule(TestId) {
     }
 }
 
+function UpdateAssigmentTables(TestId) {
+    $.ajax({
+        url: "/Instructor/Tests/Partials/ViewSectionAndStudentsAssigned/" + TestId,
+        success: function (result) {
+            $("#AssignedTablePlaceHolder").html(result);
+        }
+    });
+}
+
 //Disables Time Limit Textbox
 function UnlimitedTimeCheckBox() {
 
