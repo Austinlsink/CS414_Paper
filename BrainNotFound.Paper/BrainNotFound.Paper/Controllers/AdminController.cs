@@ -505,7 +505,7 @@ namespace BrainNotFound.Paper.Controllers
 
         // Display the list of departments
         [HttpGet, Route("departments")]
-        public IActionResult Departments(String message)
+        public ActionResult Departments(String message)
         {
             var courses = _context.Courses.ToList();
             var departments = _context.Departments.ToList();
@@ -529,11 +529,12 @@ namespace BrainNotFound.Paper.Controllers
         [HttpPost, Route("DeleteDepartment")]
         public IActionResult DeleteDepartment(Delete deleteDepartment)
         {
+
             var department = _context.Departments.Find(deleteDepartment.DepartmentId);
 
             if (_context.Courses.Where(ac => ac.DepartmentId == department.DepartmentId).Any())
             {
-                return RedirectToAction("Departments", "Admin", new { message = "Error: Please delete all associated courses before deleting " + department.DepartmentCode + " " + department.DepartmentName });
+                return Departments("Error: Please delete all associated courses before deleting " + department.DepartmentCode + " " + department.DepartmentName);
             }
             else
             {
