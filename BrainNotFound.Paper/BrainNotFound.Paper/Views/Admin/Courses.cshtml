@@ -24,7 +24,7 @@
                     {
                         <p>Click checkbox to select multiple courses.</p>
                         <div class="table-responsive">
-                            <table id="ViewAllCourses" class="table table-striped ">
+                            <table id="courseTable" class="table table-striped ">
                                 <thead>
                                     <tr class="headings">
                                         <th>
@@ -78,7 +78,6 @@
     </div>
 </div>
 
-<button onclick="buutonClick()">Click me!</button>
 @section scripts{
 
 
@@ -101,8 +100,13 @@
     
 <script type="text/javascript">
 
-    function buutonClick() {
-        $("#ViewAllCourses").DataTable();
-    }
+        $(document).ready(function () {
+            $('#courseTable').DataTable({
+                "order": [1, 'asc'],
+                "columnDefs": [
+                    { "orderable": false, "targets": [0, 3, 4] }
+                ]
+            });
+        });
 </script>
 }

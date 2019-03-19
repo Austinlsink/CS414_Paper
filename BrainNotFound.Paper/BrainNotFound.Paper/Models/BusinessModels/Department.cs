@@ -35,8 +35,6 @@ namespace BrainNotFound.Paper.Models.BusinessModels
             return departments;
         }
 
-
-
         public bool Equals(Department inputDepartment)
         {
             return DepartmentId == inputDepartment.DepartmentId // Id comparison needed?
@@ -44,10 +42,7 @@ namespace BrainNotFound.Paper.Models.BusinessModels
                 && DepartmentCode == inputDepartment.DepartmentName;
         }
 
-
-
-
-        // Alternatively...
+            // Alternatively...
         //public bool Equals(Department inputDepartment)
         //{
         //    return DepartmentId == inputDepartment.DepartmentId;
