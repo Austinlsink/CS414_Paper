@@ -514,7 +514,7 @@ namespace BrainNotFound.Paper.Controllers
             var department = _context.Departments.Find(Id);
 
             ViewBag.department = department;
-            return View();
+            return PartialView();
         }
 
         [HttpPost, Route("Department/Edit/{Id}")]
@@ -537,14 +537,15 @@ namespace BrainNotFound.Paper.Controllers
         public ActionResult Departments()
         {
             var courses = _context.Courses.ToList();
-            var departments = _context.Departments.ToList();
+            List<Department> departments = _context.Departments.ToList();
             if (TempData["message"] != null)
             {
                 ViewBag.message = TempData["message"].ToString();
             }
             
             ViewBag.courses = courses;
-            return View(departments.ToList());
+            ViewBag.departmentList = departments;
+            return View();
         }
 
         /// <summary>
