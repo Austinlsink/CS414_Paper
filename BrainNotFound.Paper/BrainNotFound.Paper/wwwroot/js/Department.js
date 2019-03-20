@@ -8,3 +8,12 @@ function EditDepartmentCodeAndName(Id) {
             }
         });
 }
+
+function AddDepartment() {
+    $.ajax({
+        url: "/Admin/Department/New",
+        succes: function (result) {
+            $("departmentPlaceholder").html(result);
+        }
+    });
+}
