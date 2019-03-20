@@ -412,12 +412,12 @@ namespace BrainNotFound.Paper.Controllers
 
         [HttpPost, Route("Tests/Partials/ViewSectionAndStudentsAssigned")]
         //public ActionResult PartialViewSectionAndStudentsAssigned([FromBody] List<long> SectionIds, [FromBody] List<string> StudentIds)
-        public ActionResult PartialViewSectionAndStudentsAssigned([FromBody] string HelloWorld)
+        public IActionResult PartialViewSectionAndStudentsAssigned(List<long> SectionIds, List<string> StudentIds )
         {
-            ViewData["Message"] += "Start";
+           
             
-            ViewData["Message"] += HelloWorld;
-            /*
+
+            
             List<Section> sections = new List<Section>();
             List<ApplicationUser> students = new List<ApplicationUser>();
 
@@ -434,8 +434,6 @@ namespace BrainNotFound.Paper.Controllers
             ViewBag.Sections = sections;
 
             return PartialView("~/Views/Instructor/CreateTestPartials/_ViewSectionAndStudentsAssigned.cshtml");
-            */
-            return View("TestView");
         }
         #endregion Create Test Partials
 

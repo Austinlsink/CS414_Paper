@@ -17,7 +17,7 @@
             <tr>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="foo2" value="" id="defaultCheck1">
+                        <input onclick="StudentCheckBox('@student.Id')" class="form-check-input" id="CB-@student.Id" type="checkbox" name="StudentCkeckboxs" value="@student.Id" >
                     </div>
                 </td>
                 <td>@student.FirstName</td>
