@@ -11,7 +11,7 @@ function EditDepartmentCodeAndName(Id) {
 
 function AddDepartment() {
     $.ajax({
-        url: "/Admin/Department/New",
+        url: "/Admin/Departments/New",
         succes: function (result) {
             $("departmentPlaceholder").html(result);
         }
