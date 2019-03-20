@@ -470,6 +470,8 @@ namespace BrainNotFound.Paper.Migrations
 
                     b.Property<float>("Grade");
 
+                    b.Property<bool>("Signed");
+
                     b.Property<string>("StudentId");
 
                     b.Property<bool>("Submitted");

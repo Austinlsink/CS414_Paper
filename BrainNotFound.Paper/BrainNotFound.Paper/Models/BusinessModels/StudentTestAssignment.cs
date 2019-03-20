@@ -18,6 +18,7 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 		public ApplicationUser ApplicationUser { get; set; }
 
 		public bool Submitted { get; set; }
+        public bool Signed { get; set; }
 		public float Grade { get; set; }
 	}
 }
