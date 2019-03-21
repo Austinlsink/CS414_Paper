@@ -1,8 +1,9 @@
 ﻿// -- Button Handlers
+var StudentsSelected = [];
+var SectionsAssigned = [];
 
 // Edit test name and course
-function EditTestNameAndCourse(TestId)
-{
+function EditTestNameAndCourse(TestId) {
     if ($("#EditNameAndCourse").length == 0) {
         $.ajax({
             url: "/Instructor/Tests/Partials/EditNameAndCourse/" + TestId,
@@ -19,7 +20,7 @@ function NewTestSchedule(TestId) {
         $.ajax({
             url: "/Instructor/Tests/Partials/NewSchedule/" + TestId,
             success: function (result) {
-                $("#EditSchedulePlaceHolde").append(result);
+                $("#EditSchedulePlaceHolde").html(result);
             }
         });
     }
@@ -28,8 +29,11 @@ function NewTestSchedule(TestId) {
 //
 function UpdateAssigmentTables(TestId) {
     $.ajax({
-        url: "/Instructor/Tests/Partials/ViewSectionAndStudentsAssigned/" + TestId,
+        url: "/Instructor/Tests/Partials/ViewSectionAndStudentsAssigned/",
+        type: "POST",
+        data: { "SectionIds": SectionsSelected, "StudentIds": StudentsSelected },
         success: function (result) {
+            //alert(result);
             $("#AssignedTablePlaceHolder").html(result);
         }
     });
@@ -46,16 +50,33 @@ function UnlimitedTimeCheckBox() {
     }
 }
 
-function AssignEntireSection() {
-    $.ajax({
-        url: "/Instructor/Tests/Partials/ViewSectionAndStudentsAssigned/",
-        type: "POST",
-        contentType: 'application/json; charset=utf-8',
-        data: JSON.stringify({ HelloWorld: "BimaDaSilva"}),
-        success: function (result) {
-            $("#AssignedTablePlaceHolder").html(result);
+// Adds or removes selected students from list
+function StudentCheckBox(StudentId) {
+
+    if ($("#CB-" + StudentId).is(':checked')) {
+
+        StudentsSelected.push(StudentId);
+    } else {
+        for (var i = 0; i < StudentsSelected.length; i++) {
+            if (StudentsSelected[i] === StudentId) {
+                StudentsSelected.splice(i, 1);
+            }
         }
-    });
+    }
+    console.log("-------------------------------------------------");
+    for (var i = 0; i < StudentsSelected.length; i++) {
+        console.log(StudentsSelected[i]);
+    }
+}
+
+function AssignEntireSection() {
+    var sectionId = $("#SelectSection").val();
+    SectionsAssigned.push(sectionId);
+    UpdateAssigmentTables("Sections");
+}
+
+function AssignToSelectedStudents() {
+   
 }
 
 // -- Event Handlers
@@ -68,7 +89,6 @@ $('#EditSchedulePlaceHolde').on('change', '#SelectSection', function () {
             $("#StudentTablePlaceHolder").html(result);
         }
     });
-
 });
 
 // -- General Functions

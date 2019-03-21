@@ -1,5 +1,5 @@
 @using BrainNotFound.Paper.Models.BusinessModels
-@model List<Department>
+@model Department
 
 @{
     ViewData["Title"] = "Department Info - Admin";
@@ -25,12 +25,15 @@
 
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                        <li><a asp-controller="Admin" asp-action="NewDepartment"><i class="fa fa-plus"></i> New Department</a></li>
+
+                        <li>
+                            <a id="newDepartmentButton" data-toggle="modal" href="#NewDepartmentModel" onclick="AddNewDepartment(); return false;"><i class="fa fa-plus"></i> New Department</a>
+                        </li>
                     </ul>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    @if (Model.Any<Department>())
+                    @if (ViewBag.departmentList != null)
                     {
                         <div class="table-responsive">
                             <table id="departmentTable" class="table table-striped jambo_table bulk_action ">
@@ -48,14 +51,14 @@
                                 </thead>
                                 <tbody>
 
-                                    @foreach (Department department in Model)
+                                    @foreach (Department department in ViewBag.departmentList)
                                     {
                                         <tr class="odd pointer">
                                             <td class=" ">@department.DepartmentName </td>
                                             <td class=" ">@department.DepartmentCode </td>
                                             <td class=" last">
                                                 <form asp-action="DeleteDepartment" asp-controller="Admin">
-                                                    <a asp-controller="Admin" asp-action="EditDepartment" asp-route-id="@department.DepartmentId" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                                    <button id="EditDepartmentButton" type="button" onClick="EditDepartmentCodeAndName(@department.DepartmentId)" data-toggle="modal" data-target="#departmentModal" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </button>
                                                     <input type="hidden" name="DepartmentId" value="@department.DepartmentId" />
                                                     <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
                                                 </form>
@@ -81,12 +84,50 @@
     </div>
 </div>
 
+<!--Modal for editing a department-->
+<div id="departmentModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body" id="departmentPlaceholder">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Large modal -->
+
+<div id="NewDepartmentModel" class="modal fade new-department-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body" id="newDepartmentPlaceholder">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 @section scripts
-{
+    {
+
+    <script type="text/javascript" src="~/js/Department.js"></script>
+
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
             $('#departmentTable').DataTable({
-                "order": [1, 'asc'],
+                "order": [0, 'asc'],
                 "columnDefs": [
                     { "orderable": false, "targets": [2] }
                 ],

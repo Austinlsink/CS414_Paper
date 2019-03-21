@@ -4241,3 +4241,16 @@ table thead .checkbox.radio { margin-top:-7px;margin-top:-21px; }
     background-color: #ffff !important;
 }
 /** /bootstrap-datetimepicker **/
+
+bg-red-light {
+    background: #f9edeb;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #cc3333;
+}
+bg-green-light {
+    background: #eff8f5;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #26b99a;
+}
