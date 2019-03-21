@@ -25,7 +25,10 @@
 
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                        <li><button type="button"  onClick="AddDepartment()" data-toggle="modal" data-target=".newDepartment" class="btn btn-info btn-xs"><i class="fa fa-plus"></i> New Department</button></li>
+
+                        <li>
+                            <a id="newDepartmentButton" data-toggle="modal" data-target="#NewDepartmentModel" onclick="AddNewDepartment()"><i class="fa fa-plus"></i> New Department</a>
+                        </li>
                     </ul>
                     <div class="clearfix"></div>
                 </div>
@@ -55,7 +58,7 @@
                                             <td class=" ">@department.DepartmentCode </td>
                                             <td class=" last">
                                                 <form asp-action="DeleteDepartment" asp-controller="Admin">
-                                                    <button type="button"  onClick="EditDepartmentCodeAndName(@department.DepartmentId)" data-toggle="modal" data-target=".newDepartment" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </button>
+                                                    <button id="EditDepartmentButton" type="button" onClick="EditDepartmentCodeAndName(@department.DepartmentId)" data-toggle="modal" data-target="#departmentModal" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </button>
                                                     <input type="hidden" name="DepartmentId" value="@department.DepartmentId" />
                                                     <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
                                                 </form>
@@ -82,26 +85,45 @@
 </div>
 
 <!--Modal for editing a department-->
-<div class="modal fade newDepartment" tabindex="-1" role="dialog" aria-hidden="true" >
+<div id="departmentModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-body" id="departmentPlaceholder">
-            <!--Department modals appear here-->
+
             </div>
         </div>
     </div>
 </div>
 
+<!-- Large modal -->
+
+<div id="NewDepartmentModel" class="modal fade new-department-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body" id="newDepartmentPlaceholder">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section scripts
-  {
+    {
 
     <script type="text/javascript" src="~/js/Department.js"></script>
 
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
             $('#departmentTable').DataTable({
-                "order": [1, 'asc'],
+                "order": [0, 'asc'],
                 "columnDefs": [
                     { "orderable": false, "targets": [2] }
                 ],

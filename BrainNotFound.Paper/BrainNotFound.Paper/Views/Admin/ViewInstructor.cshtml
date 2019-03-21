@@ -1,3 +1,4 @@
+@using System.Text.RegularExpressions;
 @model BrainNotFound.Paper.Models.BusinessModels.ApplicationUser;
 @{
     ViewData["Title"] = "View Instructor - Admin";
@@ -53,7 +54,7 @@
                                 <i class="fa fa-user user-profile-icon"> @ViewBag.profile.UserName</i>
 
                             <li>
-                                <i class="fa fa-phone user-profile-icon"> @ViewBag.profile.PhoneNumber</i>
+                                <i class="fa fa-phone user-profile-icon"> @Regex.Replace(ViewBag.profile.PhoneNumber, @"(\d{3})(\d{3})(\d{4})", "($1) $2-$3")</i>
                             </li>
 
                         </ul>
@@ -151,11 +152,11 @@
                                                         {
                                                             if (course.DepartmentId == d.DepartmentId)
                                                             {
-                                                            <tr>
-                                                                <th>@s.SectionNumber</th>
-                                                                <td>@s.Capacity</td>
-                                                                <td> <a asp-controller="Admin" asp-action="ViewSection" asp-route-code="@d.DepartmentCode@course.CourseCode" asp-route-sectionNumber="@s.SectionNumber" class="btn btn-primary btn-xs">View </a> </td>
-                                                            </tr>
+                                                                <tr>
+                                                                    <th>@s.SectionNumber</th>
+                                                                    <td>@s.Capacity</td>
+                                                                    <td> <a asp-controller="Admin" asp-action="ViewSection" asp-route-code="@d.DepartmentCode@course.CourseCode" asp-route-sectionNumber="@s.SectionNumber" class="btn btn-primary btn-xs">View </a> </td>
+                                                                </tr>
                                                             }
                                                         }
                                                     }

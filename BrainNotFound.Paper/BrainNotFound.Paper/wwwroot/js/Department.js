@@ -1,19 +1,23 @@
-﻿// Edit Department code and name
-function EditDepartmentCodeAndName(Id) {
-        $.ajax({
-            url: "/Admin/Department/Edit/" + Id,
-            success: function (result) {
-                $("#departmentPlaceholder").html(result);
+﻿// Add a new department
+function AddNewDepartment() {
 
-            }
-        });
-}
-
-function AddDepartment() {
     $.ajax({
-        url: "/Admin/Department/New",
-        succes: function (result) {
-            $("departmentPlaceholder").html(result);
+        url: "/Admin/Departments/New/",
+        success: function (result) {
+            console.log("Bima Got Here");
+            $("#newDepartmentPlaceholder").html(result);
         }
     });
 }
+
+
+// Edit Department code and name
+function EditDepartmentCodeAndName(Id) {
+    $.ajax({
+        url: "/Admin/Department/Edit/" + Id,
+        success: function (result) {
+            $("#departmentPlaceholder").html(result);
+        }
+    });
+}
+
