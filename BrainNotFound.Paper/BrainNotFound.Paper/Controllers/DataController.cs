@@ -394,6 +394,7 @@ namespace BrainNotFound.Paper.Controllers
                     bool doesNotConflict = true; // Used in check in main do while
                     Section selectedSection = new Section();
                     List<Enrollment> enrolledAlready = new List<Enrollment>(); // Rename?
+                        // Wait, why do we even have the above line...?
                     do
                     {
                         do
