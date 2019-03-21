@@ -1,5 +1,7 @@
 ﻿// -- Button Handlers
 var StudentsSelected = [];
+
+var StudentsAssigned = [];
 var SectionsAssigned = [];
 
 // Edit test name and course
@@ -27,11 +29,11 @@ function NewTestSchedule(TestId) {
 }
 
 //
-function UpdateAssigmentTables(TestId) {
+function UpdateAssigmentTables() {
     $.ajax({
         url: "/Instructor/Tests/Partials/ViewSectionAndStudentsAssigned/",
         type: "POST",
-        data: { "SectionIds": SectionsSelected, "StudentIds": StudentsSelected },
+        data: { "SectionIds": SectionsAssigned, "StudentIds": StudentsAssigned },
         success: function (result) {
             //alert(result);
             $("#AssignedTablePlaceHolder").html(result);
@@ -73,10 +75,16 @@ function AssignEntireSection() {
     var sectionId = $("#SelectSection").val();
     SectionsAssigned.push(sectionId);
     UpdateAssigmentTables("Sections");
+
+    console.log("Section -------------------------------------------------");
+    for (var i = 0; i < SectionsAssigned.length; i++) {
+        console.log(SectionsAssigned[i]);
+    }
 }
 
 function AssignToSelectedStudents() {
-   
+    StudentsAssigned = StudentsSelected;
+    UpdateAssigmentTables();
 }
 
 // -- Event Handlers
@@ -95,7 +103,6 @@ $('#EditSchedulePlaceHolde').on('change', '#SelectSection', function () {
 
 // Removes Element from DOM if pressed Cancel
 function Cancel(ElementId) {
-
     $(ElementId).remove();
 }
 
