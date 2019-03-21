@@ -71,14 +71,24 @@ function StudentCheckBox(StudentId) {
     }
 }
 
+// Removes a specific Section from the list of assigments
+function removeSectionFromAssigmentList(sectionId) {
+
+    for (var i = 0; i < SectionsAssigned.length; i++) {
+        if (SectionsAssigned[i] == sectionId) {
+            SectionsAssigned.splice(i, 1);
+        }
+    }
+    UpdateAssigmentTables();
+}
+
+// Assignes the selected section to the list of assigments
 function AssignEntireSection() {
     var sectionId = $("#SelectSection").val();
-    SectionsAssigned.push(sectionId);
-    UpdateAssigmentTables("Sections");
 
-    console.log("Section -------------------------------------------------");
-    for (var i = 0; i < SectionsAssigned.length; i++) {
-        console.log(SectionsAssigned[i]);
+    if (!SectionsAssigned.includes(sectionId)) {
+        SectionsAssigned.push(sectionId);
+        UpdateAssigmentTables();
     }
 }
 
@@ -102,8 +112,14 @@ $('#EditSchedulePlaceHolde').on('change', '#SelectSection', function () {
 // -- General Functions
 
 // Removes Element from DOM if pressed Cancel
-function Cancel(ElementId) {
+function Cancel(ElementId, caller) {
     $(ElementId).remove();
+    if (caller.id == "NewScheduleCancelButton") {
+        StudentsSelected = [];
+
+        StudentsAssigned = [];
+        SectionsAssigned = [];
+    }
 }
 
 // Handles all forms submition buttons

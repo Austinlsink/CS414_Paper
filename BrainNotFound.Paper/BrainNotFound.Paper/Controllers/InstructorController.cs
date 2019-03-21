@@ -420,18 +420,21 @@ namespace BrainNotFound.Paper.Controllers
             
             List<Section> sections = new List<Section>();
             List<ApplicationUser> students = new List<ApplicationUser>();
+            
 
-            for(int index = 0; index <= SectionIds.Count; index++)
+            foreach(long sectionId in SectionIds)
             {
-                sections.Add(_context.Sections.Find(SectionIds[index]));
+                var currentSection = _context.Sections.Include(s => s.Enrollments).Where(s => s.SectionId == sectionId).First();
+                sections.Add(currentSection);
             }
 
-            for (int index = 0; index <= StudentIds.Count; index++)
+            foreach(string studentId in StudentIds)
             {
-                students.Add(_context.ApplicationUsers.Find(StudentIds[index]));
+                students.Add(_context.ApplicationUsers.Find(studentId));
             }
+
             ViewBag.Students = students;
-            ViewBag.Sections = sections;
+            ViewBag.Sections = sections.OrderBy(s => s.SectionNumber).ToList();
 
             return PartialView("~/Views/Instructor/CreateTestPartials/_ViewSectionAndStudentsAssigned.cshtml");
         }

@@ -22,20 +22,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>43 Students</td>
-                        <td>
-                            <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Remove </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>13 Students</td>
-                        <td>
-                            <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Remove </button>
-                        </td>
-                    </tr>
+                    @foreach (Section ClassSection in sections)
+                    {
+                        <tr>
+                            <th scope="row">@ClassSection.SectionNumber</th>
+                            <td>@ClassSection.Enrollments.Count Students</td>
+                            <td>
+                                <button onclick="removeSectionFromAssigmentList(@ClassSection.SectionId)"class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Remove </button>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         }
@@ -64,7 +60,6 @@
                     @foreach (ApplicationUser student in students)
                     {
                         <tr>
-                            <th scope="row">1</th>
                             <td>@student.FirstName</td>
                             <td>@student.LastName</td>
                             <td>
