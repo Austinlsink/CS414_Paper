@@ -55,26 +55,23 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Section Number</th>
-                        <th>Number of Students</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>43 Students</td>
-                        <td>
-                            <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>13 Students</td>
-                        <td>
-                            <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
-                        </td>
-                    </tr>
+                    @foreach (ApplicationUser student in students)
+                    {
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>@student.FirstName</td>
+                            <td>@student.LastName</td>
+                            <td>
+                                <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Remove </button>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         }

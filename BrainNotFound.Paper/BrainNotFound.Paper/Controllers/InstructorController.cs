@@ -380,7 +380,7 @@ namespace BrainNotFound.Paper.Controllers
             ViewBag.Sections = sections;
             ViewBag.TestId = test.TestId;
             // ViewBag.Sections = sections;
-            return PartialView("~/Views/Instructor/CreateTestPartials/_NewTestSchedual.cshtml");
+            return PartialView("~/Views/Instructor/CreateTestPartials/_NewTestSchedule.cshtml");
         }
 
         [HttpGet, Route("Tests/Partials/StudentInSectionTable/{SectionId}")]
@@ -403,8 +403,35 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("Tests/Partials/ViewSectionAndStudentsAssigned/{TestId}")]
         public ActionResult PartialViewSectionAndStudentsAssigned(long TestId)
         {
-            ViewBag.Students = new List<ApplicationUser>();
+
+            ViewBag.Students = _context.ApplicationUsers.Take(5).ToList();
             ViewBag.Sections = new List<Section>();
+
+            return PartialView("~/Views/Instructor/CreateTestPartials/_ViewSectionAndStudentsAssigned.cshtml");
+        }
+
+        [HttpPost, Route("Tests/Partials/ViewSectionAndStudentsAssigned")]
+        //public ActionResult PartialViewSectionAndStudentsAssigned([FromBody] List<long> SectionIds, [FromBody] List<string> StudentIds)
+        public IActionResult PartialViewSectionAndStudentsAssigned(List<long> SectionIds, List<string> StudentIds )
+        {
+           
+            
+
+            
+            List<Section> sections = new List<Section>();
+            List<ApplicationUser> students = new List<ApplicationUser>();
+
+            for(int index = 0; index <= SectionIds.Count; index++)
+            {
+                sections.Add(_context.Sections.Find(SectionIds[index]));
+            }
+
+            for (int index = 0; index <= StudentIds.Count; index++)
+            {
+                students.Add(_context.ApplicationUsers.Find(StudentIds[index]));
+            }
+            ViewBag.Students = students;
+            ViewBag.Sections = sections;
 
             return PartialView("~/Views/Instructor/CreateTestPartials/_ViewSectionAndStudentsAssigned.cshtml");
         }

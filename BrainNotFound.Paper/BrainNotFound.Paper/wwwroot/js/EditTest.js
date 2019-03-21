@@ -1,8 +1,9 @@
 ﻿// -- Button Handlers
+var StudentsSelected = [];
+var SectionsAssigned = [];
 
 // Edit test name and course
-function EditTestNameAndCourse(TestId)
-{
+function EditTestNameAndCourse(TestId) {
     if ($("#EditNameAndCourse").length == 0) {
         $.ajax({
             url: "/Instructor/Tests/Partials/EditNameAndCourse/" + TestId,
@@ -13,21 +14,26 @@ function EditTestNameAndCourse(TestId)
     }
 }
 
+// Places the new Schechedule well in the page
 function NewTestSchedule(TestId) {
     if ($("#NewSchedule").length == 0) {
         $.ajax({
             url: "/Instructor/Tests/Partials/NewSchedule/" + TestId,
             success: function (result) {
-                $("#EditSchedulePlaceHolde").append(result);
+                $("#EditSchedulePlaceHolde").html(result);
             }
         });
     }
 }
 
+//
 function UpdateAssigmentTables(TestId) {
     $.ajax({
-        url: "/Instructor/Tests/Partials/ViewSectionAndStudentsAssigned/" + TestId,
+        url: "/Instructor/Tests/Partials/ViewSectionAndStudentsAssigned/",
+        type: "POST",
+        data: { "SectionIds": SectionsSelected, "StudentIds": StudentsSelected },
         success: function (result) {
+            //alert(result);
             $("#AssignedTablePlaceHolder").html(result);
         }
     });
@@ -44,17 +50,45 @@ function UnlimitedTimeCheckBox() {
     }
 }
 
+// Adds or removes selected students from list
+function StudentCheckBox(StudentId) {
+
+    if ($("#CB-" + StudentId).is(':checked')) {
+
+        StudentsSelected.push(StudentId);
+    } else {
+        for (var i = 0; i < StudentsSelected.length; i++) {
+            if (StudentsSelected[i] === StudentId) {
+                StudentsSelected.splice(i, 1);
+            }
+        }
+    }
+    console.log("-------------------------------------------------");
+    for (var i = 0; i < StudentsSelected.length; i++) {
+        console.log(StudentsSelected[i]);
+    }
+}
+
+function AssignEntireSection() {
+    var sectionId = $("#SelectSection").val();
+    SectionsAssigned.push(sectionId);
+    UpdateAssigmentTables("Sections");
+}
+
+function AssignToSelectedStudents() {
+   
+}
+
 // -- Event Handlers
-$('#EditSchedulePlaceHolde').on('change', '#SectionIndividualStudent', function () {
+$('#EditSchedulePlaceHolde').on('change', '#SelectSection', function () {
     $("table#StudentsInSection").remove();
-    var sectionId = $("#SectionIndividualStudent").val();
+    var sectionId = $("#SelectSection").val();
     $.ajax({
         url: "/Instructor/Tests/Partials/StudentInSectionTable/" + sectionId,
         success: function (result) {
             $("#StudentTablePlaceHolder").html(result);
         }
     });
-
 });
 
 // -- General Functions
