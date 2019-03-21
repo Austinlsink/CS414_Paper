@@ -25,7 +25,10 @@
 
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                        <li><button type="button" onClick="AddNewDepartment()" data-toggle="modal" data-target=".edit-department" ><i class="fa fa-plus"></i> New Department</button></li>
+                       
+                        <li>
+                            <button type="button" onClick="AddNewDepartment()" data-toggle="modal" data-target="#newDepartmentModal"><i class="fa fa-plus"></i> New Department</button>
+                        </li>
                     </ul>
                     <div class="clearfix"></div>
                 </div>
@@ -55,7 +58,7 @@
                                             <td class=" ">@department.DepartmentCode </td>
                                             <td class=" last">
                                                 <form asp-action="DeleteDepartment" asp-controller="Admin">
-                                                    <button type="button" onClick="EditDepartmentCodeAndName(@department.DepartmentId)" data-toggle="modal" data-target=".edit-department" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </button>
+                                                    <button type="button" onClick="EditDepartmentCodeAndName(@department.DepartmentId)" data-toggle="modal" data-target="#departmentModal" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </button>
                                                     <input type="hidden" name="DepartmentId" value="@department.DepartmentId" />
                                                     <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
                                                 </form>
@@ -82,11 +85,48 @@
 </div>
 
 <!--Modal for editing a department-->
-<div class="modal fade edit-department" tabindex="-1" role="dialog" aria-hidden="true">
+<div id="departmentModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-body" id="departmentPlaceholder">
                 <!--Department modals appear here-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--New Department Modal-->
+<div id="newDepartmentModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                    <h2><i class="fa fa-mortar-board"></i> New Department</h2>
+                    <div class="clearfix"></div>
+            </div>
+            <div class="modal-body" id="newDepartmentPlaceholder">
+                <form asp-action="NewDepartment" asp-controller="Admin" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">
+                            Department Code <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" asp-for="DepartmentCode" id="department-code" class="form-control col-md-7 col-xs-12">
+                            <span asp-validation-for="DepartmentCode" class="text-danger"></span>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Department Name</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" id="department-name" asp-for="DepartmentName" class="form-control col-md-7 col-xs-12">
+                            <span asp-validation-for="DepartmentName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="button" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">Add Department</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -100,7 +140,7 @@
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
             $('#departmentTable').DataTable({
-                "order": [1, 'asc'],
+                "order": [0, 'asc'],
                 "columnDefs": [
                     { "orderable": false, "targets": [2] }
                 ],

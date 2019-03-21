@@ -4,7 +4,6 @@ function EditDepartmentCodeAndName(Id) {
         url: "/Admin/Department/Edit/" + Id,
         success: function (result) {
             $("#departmentPlaceholder").html(result);
-
         }
     });
 }
@@ -14,7 +13,7 @@ function AddNewDepartment() {
     $.ajax({
         url: "/Admin/Departments/New",
         succes: function (result) {
-            $("departmentPlaceholder").html(result);
+            $("newDepartmentPlaceholder").html(result);
         }
     });
 }

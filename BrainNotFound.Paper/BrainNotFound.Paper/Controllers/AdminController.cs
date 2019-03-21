@@ -576,7 +576,7 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("Departments/New")]
         public IActionResult NewDepartment()
         {
-            return PartialView();
+            return View();
         }
 
         // Creates the new Department and re-routes to the Department View
