@@ -584,7 +584,7 @@ namespace BrainNotFound.Paper.Controllers
         public IActionResult NewDepartment(Department model)
         {
             if (!ModelState.IsValid)
-                return View();
+                return PartialView();
 
             _context.Departments.Add(model);
             _context.SaveChanges();

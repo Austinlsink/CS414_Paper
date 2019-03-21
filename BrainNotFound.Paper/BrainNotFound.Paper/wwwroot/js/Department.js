@@ -10,6 +10,16 @@ function AddNewDepartment() {
     });
 }
 
+function ValidateNewDepartment() {
+    $.ajax({
+        url: "/Admin/Departments/New/",
+        type: "POST",
+        success: function (result) {
+            console.log("Bima Got Here");
+            $("#newDepartmentPlaceholder").html(result);
+        }
+    });
+}
 
 // Edit Department code and name
 function EditDepartmentCodeAndName(Id) {
