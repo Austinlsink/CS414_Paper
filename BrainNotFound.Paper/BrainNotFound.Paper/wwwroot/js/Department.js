@@ -11,9 +11,9 @@ function EditDepartmentCodeAndName(Id) {
 // Add a new department
 function AddNewDepartment() {
     $.ajax({
-        url: "/Admin/Departments/New",
+        url: "/Admin/Departments/New/",
         succes: function (result) {
-            $("newDepartmentPlaceholder").html(result);
+            $("#newDepartmentPlaceholder").html(result);
         }
     });
 }
