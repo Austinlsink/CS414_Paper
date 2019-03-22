@@ -10,6 +10,7 @@ function AddNewDepartment() {
     });
 }
 
+// Validate the department before submitting it
 function ValidateNewDepartment() {
     $.ajax({
         url: "/Admin/Departments/New/",
@@ -30,4 +31,3 @@ function EditDepartmentCodeAndName(Id) {
         }
     });
 }
-

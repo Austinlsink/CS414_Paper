@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Add Department Info- Admin";
 }
+<div class="">
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
@@ -12,7 +13,7 @@
                 </div>
                 <div class="x_content">
                     <br />
-                    <form id="newDepartmentForm" asp-action="NewDepartment" asp-controller="Admin" data-parsley-validate class="form-horizontal form-label-left">
+                    <form id="newDepartmentForm" asp-action="NewDepartment" asp-controller="Admin" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left post-using-ajax">
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">
                                 Department Code <span class="required">*</span>
@@ -30,14 +31,13 @@
                                 <span asp-validation-for="DepartmentName" class="text-danger"></span>
                             </div>
                         </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" type="button" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-success">New Department</button>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
-
-@section scripts
-    {
-    <script type="text/javascript" src="~/js/Department.js"></script>
-}
+</div>

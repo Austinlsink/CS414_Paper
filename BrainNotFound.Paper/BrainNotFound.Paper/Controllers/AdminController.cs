@@ -533,7 +533,7 @@ namespace BrainNotFound.Paper.Controllers
         /// <summary>
         /// Displays the list of departments
         /// </summary>
-        [HttpGet, Route("departments")]
+        [HttpGet, Route("Departments")]
         public ActionResult Departments()
         {
             var courses = _context.Courses.ToList();
@@ -545,6 +545,28 @@ namespace BrainNotFound.Paper.Controllers
             
             ViewBag.courses = courses;
             ViewBag.departmentList = departments;
+            return View();
+        }
+
+        [HttpPost, Route("Departments")]
+        public ActionResult Departments(Department department)
+        {
+            var courses = _context.Courses.ToList();
+            List<Department> departments = _context.Departments.ToList();
+            if (TempData["message"] != null)
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
+
+            ViewBag.courses = courses;
+            ViewBag.departmentList = departments;
+
+            if (ModelState.IsValid)
+            {
+                _context.Departments.Add(department);
+                _context.SaveChanges();
+            }
+
             return View();
         }
 
