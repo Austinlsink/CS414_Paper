@@ -362,7 +362,7 @@ namespace BrainNotFound.Paper.Controllers
             // Populate Enrollment table
             foreach (var student in allStudents)
             {
-                var currentEnrollments = _context.Enrollments.Where(E => E.StudentId == student.Id);
+                //var currentEnrollments = _context.Enrollments.Where(E => E.StudentId == student.Id);
 
                 // random number generated 4 - 7 for # of sections taken
                 int numberOfClasses;
@@ -378,35 +378,52 @@ namespace BrainNotFound.Paper.Controllers
                     Course selectedCourse = new Course();
                     List<Section> courseSections = new List<Section>();
 
-                    // Get a course that has sections
-                    do
-                    {
-                        selectedCourse = allCourses.ElementAt(rand.Next(0, allCourses.Count));
+                    // Get a random course that has sections
+                    //do
+                    //{
+                    //    selectedCourse = allCourses.ElementAt(rand.Next(0, allCourses.Count));
 
-                        // Get all sections related to the selectedCourse
-                        courseSections = _context.Sections.Where(S => S.CourseId == selectedCourse.CourseId).ToList();
+                    //    // Get all sections related to the selectedCourse
+                    //    courseSections = _context.Sections.Where(S => S.CourseId == selectedCourse.CourseId).ToList();
     
-                    } while (courseSections.Count <= 0);
+                    //} while (courseSections.Count <= 0);
 
-
-                    // Select a random section in the selectedCourse and male sure it doesn't conflict with classes
+                    // Select a random section in the selectedCourse and make sure it doesn't conflict with classes
                     // the student is already enrolled in
                     bool doesNotConflict = true; // Used in check in main do while
                     Section selectedSection = new Section();
-                    List<Enrollment> enrolledAlready = new List<Enrollment>(); // Rename?
-                        // Wait, why do we even have the above line...?
+                    //List<Enrollment> enrolledAlready = new List<Enrollment>();
                     do
                     {
                         do
                         {
+                            // Get a random course that has sections
+                            do
+                            {
+                                selectedCourse = allCourses.ElementAt(rand.Next(0, allCourses.Count));
+
+                                // Get all sections related to the selectedCourse
+                                courseSections = _context.Sections.Where(S => S.CourseId == selectedCourse.CourseId).ToList();
+
+                            } while (courseSections.Count <= 0);
+
                             selectedSection = courseSections.ElementAt(rand.Next(0, courseSections.Count));
-                            enrolledAlready = currentEnrollments.Where(CE => CE.SectionId == selectedSection.SectionId).ToList();
-                        } while (enrolledAlready.Count() > 0);
+                            //enrolledAlready = _context.Enrollments.Where(E => E.StudentId == student.Id).Where(CE => CE.SectionId == selectedSection.SectionId).ToList();
+                        } while (_context.Enrollments.Where(E => E.StudentId == student.Id).Where(CE => CE.SectionId == selectedSection.SectionId).ToList().Count() > 0);
+                        // Make sure the student is not already in that section
+                        //do
+                        //{
+                        //    // Get a random section in the Course
+                        //    //selectedSection = courseSections.ElementAt(rand.Next(0, courseSections.Count));
+
+                        //    // Check if the student is already in that section
+                        //    enrolledAlready = currentEnrollments.Where(CE => CE.SectionId == selectedSection.SectionId).ToList();
+                        //} while (enrolledAlready.Count() > 0);
 
                         doesNotConflict = true; // Reset to "true" in case a new section needed to be selected
                         var selectedSectionSectionMeetingTimes = _context.SectionMeetingTimes.Where(SMT => SMT.SectionMeetingTimeId == selectedSection.SectionId);
                         List<SectionMeetingTime> concurrentSectionMeetingTimes = new List<SectionMeetingTime>();
-                        foreach (var enrollment in currentEnrollments)
+                        foreach (var enrollment in _context.Enrollments.Where(E => E.StudentId == student.Id))
                         {
                             // The times that the student already has classes at
                             concurrentSectionMeetingTimes = _context.SectionMeetingTimes.Where(SMT => SMT.SectionId == enrollment.SectionId).ToList();
