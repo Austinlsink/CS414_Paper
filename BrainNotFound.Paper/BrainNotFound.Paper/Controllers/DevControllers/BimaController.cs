@@ -23,9 +23,21 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
         private readonly PaperDbContext _context;
 
         //public IActionResult Run()
-        public  IActionResult Run()
+        public string Run()
         {
-            return RedirectToAction("AddAdministratorsToDb", "Bima");
+            string ReturnMessage = string.Empty;
+            Department dept = new Department()
+            {
+                DepartmentCode = "BI"
+            };
+
+            if (TryValidateModel(dept))
+                ReturnMessage += "True";
+            else
+                ReturnMessage += ModelState["DepartmentName"].Errors.First().ErrorMessage;
+
+
+            return ReturnMessage;
         }
 
         // Populates the database with the sample Departments info
