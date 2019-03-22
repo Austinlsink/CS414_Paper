@@ -12,13 +12,13 @@ namespace BrainNotFound.Paper.api
     [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
-    public class DepartmentController : ControllerBase
+    public class DepartmentController : Controller
     {
 
         [HttpPost, Route("New")]
-        public string New(Department department)
+        public IActionResult New([FromForm] Department department)
         {
-            return "success";
+            return Json("Bima Did good");
         }
 
     }

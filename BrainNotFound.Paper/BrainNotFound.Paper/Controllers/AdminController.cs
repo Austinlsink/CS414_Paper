@@ -21,7 +21,6 @@ namespace BrainNotFound.Paper.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly PaperDbContext _context;
-
         #region admin controllers
 
         /// <summary>
@@ -29,8 +28,8 @@ namespace BrainNotFound.Paper.Controllers
         /// </summary>
         /// <param name="userManager">Sets the UserManager</param>
         /// <param name="context">Sets the database context</param>
-        public AdminController(
-            UserManager<ApplicationUser> userManager, PaperDbContext context)
+        /// 
+        public AdminController(UserManager<ApplicationUser> userManager, PaperDbContext context)
         {
             _userManager = userManager;
             _context = context;

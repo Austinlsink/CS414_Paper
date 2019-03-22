@@ -100,7 +100,7 @@
 <div id="NewDepartmentModel" class="modal fade new-department-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form id="newDepartmentForm" asp-action="Departments" asp-controller="Admin" data-parsley-validate class="form-horizontal form-label-left">
+            <form id="NewDepartment" asp-action="New" asp-controller="Department" data-parsley-validate class="form-horizontal form-label-left post-using-ajax'">
 
                 <div class="modal-body" id="newDepartmentPlaceholder">
                         <div class="form-group">
@@ -124,7 +124,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit"  class="btn btn-primary">Save changes</button>
+                    <button type="button" id="CreateDepartment" class="btn btn-primary">Create</button>
                 </div>
             </form>
         </div>

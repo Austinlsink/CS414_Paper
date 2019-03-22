@@ -1,28 +1,4 @@
-﻿// Add a new department
-function AddNewDepartment() {
-
-    $.ajax({
-        url: "/Admin/Departments/New/",
-        success: function (result) {
-            console.log("Bima Got Here");
-            $("#newDepartmentPlaceholder").html(result);
-        }
-    });
-}
-
-// Validate the department before submitting it
-function ValidateNewDepartment() {
-    $.ajax({
-        url: "/Admin/Departments/New/",
-        type: "POST",
-        success: function (result) {
-            console.log("Bima Got Here");
-            $("#newDepartmentPlaceholder").html(result);
-        }
-    });
-}
-
-// Edit Department code and name
+﻿// Edit Department code and name
 function EditDepartmentCodeAndName(Id) {
     $.ajax({
         url: "/Admin/Department/Edit/" + Id,
@@ -31,3 +7,21 @@ function EditDepartmentCodeAndName(Id) {
         }
     });
 }
+
+$("button#CreateDepartment").click(function () {
+    var form = $("form#NewDepartment");
+    var d = new Object();
+    d.DepartmentName = "Bible";
+    d.DepartmentCode = "BI";
+
+    alert(JSON.stringify(d));
+
+    $.ajax({
+        url: "/api/Department/New/",
+        type: "POST",
+        data: JSON.stringify(d),
+        success: function (result) {
+            alert(result);
+        }
+    })
+})
