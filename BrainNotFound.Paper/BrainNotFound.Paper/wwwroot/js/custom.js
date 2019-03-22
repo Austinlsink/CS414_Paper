@@ -5021,7 +5021,6 @@ $(document).ready(function () {
     init_daterangepicker();
     init_daterangepicker_right();
     init_daterangepicker_single_call();
-    init_daterangepicker_TestSchedule();
     init_SmartWizard();
     init_EasyPieChart();
     init_charts();

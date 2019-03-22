@@ -19,16 +19,12 @@ namespace BrainNotFound.Paper.Controllers
     [Route("Admin")]
     public class AdminController : Controller
     {
+        
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly PaperDbContext _context;
         #region admin controllers
 
-        /// <summary>
-        /// Constructor 
-        /// </summary>
-        /// <param name="userManager">Sets the UserManager</param>
-        /// <param name="context">Sets the database context</param>
-        /// 
+        // Constructor 
         public AdminController(UserManager<ApplicationUser> userManager, PaperDbContext context)
         {
             _userManager = userManager;
@@ -591,13 +587,6 @@ namespace BrainNotFound.Paper.Controllers
             }
             TempData["message"] = department.DepartmentCode + " " + department.DepartmentName + " was successfully deleted!";
             return RedirectToAction("Departments", "Admin");
-        }
-
-        // Add the details for a new Department
-        [HttpGet, Route("Departments/New")]
-        public IActionResult NewDepartment()
-        {
-            return PartialView();
         }
 
         // Creates the new Department and re-routes to the Department View

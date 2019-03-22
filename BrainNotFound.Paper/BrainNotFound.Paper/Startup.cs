@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace BrainNotFound.Paper
 {
@@ -33,8 +34,8 @@ namespace BrainNotFound.Paper
             services.AddDbContext<PaperDbContext>(options =>
             {
             //options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTestKara"),             // VisualStudios MSSql Server For Kara to BLOW UP!
-            //options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTest"),                      // PCC Server
-            options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTestBima"),                // Bima Pc Server
+            options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTest"),                      // PCC Server
+           // options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTestBima"),                // Bima Pc Server
             optionsBuilders => optionsBuilders.MigrationsAssembly("BrainNotFound.Paper"));
             });
 
@@ -56,6 +57,10 @@ namespace BrainNotFound.Paper
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddMvc().AddJsonOptions(options => {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

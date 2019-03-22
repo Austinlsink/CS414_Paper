@@ -1,126 +1,75 @@
-﻿// -- Button Handlers
-var StudentsSelected = [];
+﻿// Variables for this Page
 
-var StudentsAssigned = [];
-var SectionsAssigned = [];
+var TotalPoints = 180;
+var NumberOfQuestions = 50;
+var NumberOfSections = 4;
 
-// Edit test name and course
-function EditTestNameAndCourse(TestId) {
-    if ($("#EditNameAndCourse").length == 0) {
-        $.ajax({
-            url: "/Instructor/Tests/Partials/EditNameAndCourse/" + TestId,
-            success: function (result) {
-                $("#x_c-infoSection").prepend(result);
-            }
-        });
-    }
-}
+// Initialize Page
+init_daterangepicker_TestSchedule();
+Update_TestStatistics();
 
-// Places the new Schechedule well in the page
-function NewTestSchedule(TestId) {
-    if ($("#NewSchedule").length == 0) {
-        $.ajax({
-            url: "/Instructor/Tests/Partials/NewSchedule/" + TestId,
-            success: function (result) {
-                $("#EditSchedulePlaceHolde").html(result);
-            }
-        });
-    }
-}
-
-//
-function UpdateAssigmentTables() {
-    $.ajax({
-        url: "/Instructor/Tests/Partials/ViewSectionAndStudentsAssigned/",
-        type: "POST",
-        data: { "SectionIds": SectionsAssigned, "StudentIds": StudentsAssigned },
-        success: function (result) {
-            //alert(result);
-            $("#AssignedTablePlaceHolder").html(result);
-        }
-    });
-}
-
-//Disables Time Limit Textbox
-function UnlimitedTimeCheckBox() {
-
-    if ($("#UnlimitedTimeCheckBox").is(':checked')) {
-        $("#TimeLimitTextBox").attr("disabled", "disabled");
-    }
-    else {
-        $("#TimeLimitTextBox").removeAttr("disabled");
-    }
-}
-
-// Adds or removes selected students from list
-function StudentCheckBox(StudentId) {
-
-    if ($("#CB-" + StudentId).is(':checked')) {
-
-        StudentsSelected.push(StudentId);
-    } else {
-        for (var i = 0; i < StudentsSelected.length; i++) {
-            if (StudentsSelected[i] === StudentId) {
-                StudentsSelected.splice(i, 1);
-            }
-        }
-    }
-    console.log("-------------------------------------------------");
-    for (var i = 0; i < StudentsSelected.length; i++) {
-        console.log(StudentsSelected[i]);
-    }
-}
-
-// Removes a specific Section from the list of assigments
-function removeSectionFromAssigmentList(sectionId) {
-
-    for (var i = 0; i < SectionsAssigned.length; i++) {
-        if (SectionsAssigned[i] == sectionId) {
-            SectionsAssigned.splice(i, 1);
-        }
-    }
-    UpdateAssigmentTables();
-}
-
-// Assignes the selected section to the list of assigments
-function AssignEntireSection() {
-    var sectionId = $("#SelectSection").val();
-
-    if (!SectionsAssigned.includes(sectionId)) {
-        SectionsAssigned.push(sectionId);
-        UpdateAssigmentTables();
-    }
-}
-
-function AssignToSelectedStudents() {
-    StudentsAssigned = StudentsSelected;
-    UpdateAssigmentTables();
+// Updates the statistics in the information section of the test
+function Update_TestStatistics() {
+    $("#TotalPointsStats").text(TotalPoints);
+    $("#TotalQuestionsStats").text(NumberOfQuestions);
+    $("#TotalSectionsStats").text(NumberOfSections);
 }
 
 // -- Event Handlers
-$('#EditSchedulePlaceHolde').on('change', '#SelectSection', function () {
-    $("table#StudentsInSection").remove();
-    var sectionId = $("#SelectSection").val();
-    $.ajax({
-        url: "/Instructor/Tests/Partials/StudentInSectionTable/" + sectionId,
-        success: function (result) {
-            $("#StudentTablePlaceHolder").html(result);
-        }
-    });
+
+// Dropdowns
+// Fetched the list of students from the server
+$('select#SelectSection').change(function () {
+    var data = { "FirstName": "Becky", "LastName": "Mirafuentes", "Id": "bd7afdf5-0a7a-4fa4-8300-e86b7830f294" };
+    var TableRowTemplate = $("#StudentsInSectionTableRowTemplate").html();
+    Mustache.parse(TableRowTemplate);
+
+    var rendered = Mustache.render(TableRowTemplate, data);
+
+    $("#StudentsInSectionTable > tbody").html(rendered);
+    //var sectionId = $("#SelectSection").val();
+    //$.ajax({
+    //    url: "/api/CreateTest/GetStudentsInSection/" + sectionId,
+    //    success: function (result) {
+    //        $("#SelectSection > tbody").html(result);
+    //    }
+    //});
 });
 
-// -- General Functions
+// Checkboxes
+//Disables Time Limit Textbox
+$("#UnlimitedTimeCheckBox").change(function () {
 
-// Removes Element from DOM if pressed Cancel
-function Cancel(ElementId, caller) {
-    $(ElementId).remove();
-    if (caller.id == "NewScheduleCancelButton") {
-        StudentsSelected = [];
-
-        StudentsAssigned = [];
-        SectionsAssigned = [];
+    if ($("#UnlimitedTimeCheckBox").is(':checked')) {
+        $("input#TimeLimit").attr("disabled", "disabled");
     }
-}
+    else {
+        $("input#TimeLimit").removeAttr("disabled");
+    }
+})
+
+// Buttons
+// Shows the edit test name section
+$("a#EditTestName").click(function () {
+    $("div#EditNameContainer").removeClass("hidden").addClass("show");
+})
+
+// Hides the edit test name section
+$("a#cancelEditTestName").click(function () {
+    $("div#EditNameContainer").removeClass("show").addClass("hidden");
+})
+
+// Shows the new sechedule section
+$("a#NewSchedule").click(function () {
+    $("div#NewScheduleContainer").removeClass("hidden").addClass("show");
+    $("a#NewSchedule").addClass("hidden");
+})
+
+// Hides the new sechedule section
+$("a#CancelNewSchedule").click(function () {
+    $("div#NewScheduleContainer").removeClass("show").addClass("hidden");
+    $("a#NewSchedule").removeClass("hidden");
+})
 
 // Handles all forms submition buttons
 $(function () {
