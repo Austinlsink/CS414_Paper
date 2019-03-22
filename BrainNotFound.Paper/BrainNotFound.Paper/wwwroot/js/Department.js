@@ -8,20 +8,54 @@ function EditDepartmentCodeAndName(Id) {
     });
 }
 
+// Event Handlers
+$("button#CancelCreateDepartment").click(function () {
+    var newDepartmentForm = $('form#NewDepartment');
+    newDepartmentForm.trigger("reset");
+});
+
+// Submits the form information to the server
 $("button#CreateDepartment").click(function () {
-    var form = $("form#NewDepartment");
-    var d = new Object();
-    d.DepartmentName = "Bible";
-    d.DepartmentCode = "BI";
+    var newDepartmentForm = $('form#NewDepartment');
+    // Gets the values of the form, and creates an object to be sent to the server
+    var department = {};
+    $.each(newDepartmentForm.serializeArray(), function (i, field) {
+        department[field.name] = field.value;
+    });
 
-    alert(JSON.stringify(d));
 
-    $.ajax({
-        url: "/api/Department/New/",
-        type: "POST",
-        data: JSON.stringify(d),
-        success: function (result) {
-            alert(result);
+
+    $("#DepartmentNameErrorMessage").text("Your text here");
+    // Creates, submits, and responds to Ajax Call
+$.ajax({
+    url: "/api/Department/New/",
+    type: "POST",
+    contentType: "application/json",
+    // Data fetched from the form
+    data: JSON.stringify(department),
+    success: function (result) {
+        // Close the modal window
+        location.reload();
+    },
+    error: function (xhr, status, error) {
+        var err = JSON.parse(xhr.responseText);
+        console.log(err.errors.DepartmentCode[0]);
+        // Places validation on the Department Code Field
+        if (err.errors.DepartmentCode.lenght > 0) {
+            $("#DepartmentNameErrorMessage").html(err.errors.DepartmentCode[0]);
         }
-    })
+        else {
+            $("#DepartmentCodeErrorMessage").empty();
+        }
+        // Places validation on the Department Name Field
+        if (err.errors.DepartmentName.lenght > 0) {
+            $("#DepartmentNameErrorMessage").html(err.errors.DepartmentName[0]);
+        }
+        else {
+            $("#DepartmentNameErrorMessage").empty();
+        }
+
+
+    }
+})
 })

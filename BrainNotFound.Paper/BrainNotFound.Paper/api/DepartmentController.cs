@@ -16,9 +16,10 @@ namespace BrainNotFound.Paper.api
     {
 
         [HttpPost, Route("New")]
-        public IActionResult New([FromForm] Department department)
+        public IActionResult New([FromBody] Department department)
         {
-            return Json("Bima Did good");
+            
+            return Json("Here: " + department.DepartmentName);
         }
 
     }
