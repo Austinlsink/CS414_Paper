@@ -27,7 +27,7 @@
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
 
                         <li>
-                            <a id="newDepartmentButton" data-toggle="modal" data-target="#NewDepartmentModel" onclick="AddNewDepartment()"><i class="fa fa-plus"></i> New Department</a>
+                            <a id="newDepartmentButton" data-toggle="modal" data-target="#NewDepartmentModel" ><i class="fa fa-plus"></i> New Department</a>
                         </li>
                     </ul>
                     <div class="clearfix"></div>
@@ -100,17 +100,33 @@
 <div id="NewDepartmentModel" class="modal fade new-department-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
+            <form id="NewDepartment" asp-action="New" asp-controller="Department" data-parsley-validate class="form-horizontal form-label-left post-using-ajax'">
 
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-            </div>
-            <div class="modal-body" id="newDepartmentPlaceholder">
-                
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+                <div class="modal-body" id="newDepartmentPlaceholder">
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">
+                                Department Code <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" asp-for="DepartmentCode" id="departmentCode" class="form-control col-md-7 col-xs-12">
+                                <span id="codeError" asp-validation-for="DepartmentCode" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Department Name</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" id="departmentName" asp-for="DepartmentName" class="form-control col-md-7 col-xs-12">
+                                <span asp-validation-for="DepartmentName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" id="CreateDepartment" class="btn btn-primary">Create</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

@@ -21,7 +21,6 @@ namespace BrainNotFound.Paper.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly PaperDbContext _context;
-
         #region admin controllers
 
         /// <summary>
@@ -29,8 +28,8 @@ namespace BrainNotFound.Paper.Controllers
         /// </summary>
         /// <param name="userManager">Sets the UserManager</param>
         /// <param name="context">Sets the database context</param>
-        public AdminController(
-            UserManager<ApplicationUser> userManager, PaperDbContext context)
+        /// 
+        public AdminController(UserManager<ApplicationUser> userManager, PaperDbContext context)
         {
             _userManager = userManager;
             _context = context;
@@ -533,7 +532,7 @@ namespace BrainNotFound.Paper.Controllers
         /// <summary>
         /// Displays the list of departments
         /// </summary>
-        [HttpGet, Route("departments")]
+        [HttpGet, Route("Departments")]
         public ActionResult Departments()
         {
             var courses = _context.Courses.ToList();
@@ -545,6 +544,28 @@ namespace BrainNotFound.Paper.Controllers
             
             ViewBag.courses = courses;
             ViewBag.departmentList = departments;
+            return View();
+        }
+
+        [HttpPost, Route("Departments")]
+        public ActionResult Departments(Department department)
+        {
+            var courses = _context.Courses.ToList();
+            List<Department> departments = _context.Departments.ToList();
+            if (TempData["message"] != null)
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
+
+            ViewBag.courses = courses;
+            ViewBag.departmentList = departments;
+
+            if (ModelState.IsValid)
+            {
+                _context.Departments.Add(department);
+                _context.SaveChanges();
+            }
+
             return View();
         }
 
@@ -584,7 +605,7 @@ namespace BrainNotFound.Paper.Controllers
         public IActionResult NewDepartment(Department model)
         {
             if (!ModelState.IsValid)
-                return View();
+                return PartialView();
 
             _context.Departments.Add(model);
             _context.SaveChanges();
