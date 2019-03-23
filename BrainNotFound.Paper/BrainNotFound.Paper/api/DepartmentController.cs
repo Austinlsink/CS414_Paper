@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BrainNotFound.Paper.api
 {
     [Authorize(Roles = "Admin")]
-    [Route("api/[controller]")]
+    [Route("api/Department")]
     [ApiController]
     public class DepartmentController : Controller
     {
@@ -32,15 +32,34 @@ namespace BrainNotFound.Paper.api
         }
 
         #endregion Initialize Controllers
-        
+
         [HttpPost, Route("New")]
         public IActionResult New([FromBody] Department department)
         {
             _context.Departments.Add(department);
             _context.SaveChanges();
 
-            return Json(new { sucess = true});
+            return Json(new { sucess = true });
         }
 
+        [HttpPost, Route("Delete")]
+        public IActionResult Delete([FromBody]long DepartmentId)
+        {
+            var department = _context.Departments.Find(DepartmentId);
+            var SuceessMessage = string.Empty;
+
+            if (_context.Courses.Where(ac => ac.DepartmentId == department.DepartmentId).Any())
+            {
+                var ErrorMessage = department.DepartmentCode + "-" + department.DepartmentName + " could not be deleted. Please delete all associated courses.";
+                return Json(new { sucess = false, message = ErrorMessage });
+            }
+
+            _context.Departments.Remove(department);
+            _context.SaveChanges();
+            SuceessMessage = department.DepartmentCode + " " + department.DepartmentName + " was successfully deleted!";
+
+
+            return Json(new { success = true, message = SuceessMessage });
+        }
     }
 }

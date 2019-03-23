@@ -33,6 +33,7 @@ namespace BrainNotFound.Paper
 
             services.AddDbContext<PaperDbContext>(options =>
             {
+
            // options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTestKara"),             // VisualStudios MSSql Server For Kara to BLOW UP!
             //options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTest"),                      // PCC Server
             options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTestBima"),                // Bima Pc Server
