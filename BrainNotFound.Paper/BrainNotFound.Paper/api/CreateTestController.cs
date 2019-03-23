@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BrainNotFound.Paper.Models.BusinessModels;
+using BrainNotFound.Paper.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -30,8 +31,26 @@ namespace BrainNotFound.Paper.api
 
         #endregion Initialize Controllers
 
+        [HttpPost, Route("CreateTestSection")]
+        public JsonResult CreateTestSection(long TestId, string QuestionTypeName)
+        {
+            var test = _context.Tests.Find(TestId);
+            var questionType = _context.QuestionTypes.Where(qt => qt.Name == QuestionTypeName).First();
+            var NewSection = new TestSection()
+            {
+                QuestionType = questionType,
+                IsQuestionSection = true,
+                SectionInstructions = DefaultInstruction.TrueFalse
+            };
 
-        [Route("GetStudentsInSection/{SectionId}")]
+            test.TestSections.Add(NewSection);
+            _context.SaveChanges();
+
+            return Json(NewSection);
+        }
+
+
+        [HttpGet, Route("GetStudentsInSection/{SectionId}")]
         public JsonResult GetSection(long SectionId)
         {
 
