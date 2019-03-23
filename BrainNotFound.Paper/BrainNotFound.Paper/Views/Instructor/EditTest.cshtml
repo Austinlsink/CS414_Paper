@@ -167,7 +167,7 @@
                                     <div class="text-center"><p>Please select a section</p></div>
                                 </div>
 
-                                <div id="StudentsInSectionTableContainer">
+                                <div id="StudentsInSectionTableContainer" class="hidden">
                                     <table id="StudentsInSectionTable" class="table table-hover">
                                         <thead>
                                             <tr>
@@ -254,7 +254,7 @@
 
 @section Scripts
     {
-    <script type="text/javascript" src="~/js/mustache.min.js"></script>
+    <script type="text/javascript" src="~/vendors/handlebars/handlebars-v4.1.1.js"></script>
     <script type="text/javascript" src="~/js/EditTest.js"></script>
 }
 
@@ -265,7 +265,7 @@
     {
 
     <!-- Row template for students in section table -->
-    <script type="text/template" id="StudentsInSectionTableRowTemplate">
+    <script type="text/x-handlebars-template" id="StudentsInSectionTableRowTemplate">
         <tr>
             <td>
                 <div class="form-check">
@@ -278,7 +278,7 @@
     </script>
 
     <!-- Row template from schedule table -->
-    <script type="text/template" id="ScheduleTableRowTemplate">
+    <script type="text/x-handlebars-template" id="ScheduleTableRowTemplate">
         <tr>
             <th scope="row">{{counter}}</th>
             <td>
