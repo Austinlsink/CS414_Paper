@@ -95,11 +95,14 @@ $("a#CancelNewSchedule").click(function () {
 // Assign a section to the schedule
 $("button#AssignEntireSection").click(function () {
     var sectionId = $("SelectSection").val();
-    if (SectionsAssigned.indexOf(sectionId)) {
 
-    } else {
-        ``
+    if (SectionsAssigned.includes(sectionId)) {
+        SectionsAssigned.push(sectionId);
     }
+    console.log(SectionsAssigned);
+    SectionsAssigned.forEach(function (sectId) {
+        console.log(sectId);
+    })
 })
 
 // Handles all forms submition buttons

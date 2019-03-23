@@ -19,21 +19,24 @@ $("button#CancelCreateDepartment").click(function () {
 });
 
 $("button.delete-department").click(function () {
+    // Gets the department Id to be deleted
     var DepartmentId = $(this).val();
-    var info = []
-    info["DepartmentId"] = DepartmentId;
-
+    
     $.ajax({
         url: "/api/department/delete/",
         type: "POST",
-        contentType: "application/json",
-        data: JSON.stringify(info),
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(DepartmentId),
         success: function (result) {
-            location.reload();
+            if (result.success) {
+                location.reload();
+            }
+            else {
+                // Displays the error message to the user
+                $("#errorMessagePlaceHolder").text(result.message)
+                $("div#ErrorModal").modal("toggle");
+            }
         },
-        error: function () {
-            alert("Something didnt work");
-        }
 
     })
 })

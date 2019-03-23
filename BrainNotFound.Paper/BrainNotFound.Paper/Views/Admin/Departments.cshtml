@@ -27,7 +27,7 @@
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
 
                         <li>
-                            <a id="newDepartmentButton" data-toggle="modal" data-target="#NewDepartmentModel" ><i class="fa fa-plus"></i> New Department</a>
+                            <a id="newDepartmentButton" data-toggle="modal" data-target="#NewDepartmentModel"><i class="fa fa-plus"></i> New Department</a>
                         </li>
                     </ul>
                     <div class="clearfix"></div>
@@ -57,10 +57,10 @@
                                             <td class=" ">@department.DepartmentName </td>
                                             <td class=" ">@department.DepartmentCode </td>
                                             <td class=" last">
-                                                    <button id="EditDepartmentButton" type="button" onClick="EditDepartmentCodeAndName(@department.DepartmentId)" data-toggle="modal" data-target="#departmentModal" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </button>
-                                                    
-                                                    <button class="btn btn-danger btn-xs delete-department" value="@department.DepartmentId"><i class="fa fa-trash-o"></i> Delete </button>
-                                          
+                                                <button id="EditDepartmentButton" type="button" onClick="EditDepartmentCodeAndName(@department.DepartmentId)" data-toggle="modal" data-target="#departmentModal" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </button>
+
+                                                <button class="btn btn-danger btn-xs delete-department" value="@department.DepartmentId"><i class="fa fa-trash-o"></i> Delete </button>
+
 
                                             </td>
 
@@ -128,6 +128,26 @@
                     <button type="button" id="CreateDepartment" class="btn btn-primary">Create</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<!-- Message Modal-->
+<div id="ErrorModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel2">Delete Department Error</h4>
+            </div>
+            <div class="modal-body">
+                <p id="errorMessagePlaceHolder"></p>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>
