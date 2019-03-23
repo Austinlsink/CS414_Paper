@@ -4,6 +4,10 @@ var TotalPoints = 180;
 var NumberOfQuestions = 50;
 var NumberOfSections = 4;
 
+// Tracks the assigment
+var SectionsAssigned = [];
+var IndivisualsAssigned = [];
+
 // Initialize Page
 init_daterangepicker_TestSchedule();
 Update_TestStatistics();
@@ -20,20 +24,28 @@ function Update_TestStatistics() {
 // Dropdowns
 // Fetched the list of students from the server
 $('select#SelectSection').change(function () {
-    var data = { "FirstName": "Becky", "LastName": "Mirafuentes", "Id": "bd7afdf5-0a7a-4fa4-8300-e86b7830f294" };
-    var TableRowTemplate = $("#StudentsInSectionTableRowTemplate").html();
-    Mustache.parse(TableRowTemplate);
+    var sectionId = $("#SelectSection").val();
 
-    var rendered = Mustache.render(TableRowTemplate, data);
+    $.ajax({
+        url: "/api/CreateTest/GetStudentsInSection/" + sectionId,
+        success: function (result) {
 
-    $("#StudentsInSectionTable > tbody").html(rendered);
-    //var sectionId = $("#SelectSection").val();
-    //$.ajax({
-    //    url: "/api/CreateTest/GetStudentsInSection/" + sectionId,
-    //    success: function (result) {
-    //        $("#SelectSection > tbody").html(result);
-    //    }
-    //});
+            // Fetches the template and, iterates through students, and renders table rows
+            var rendered = "";
+            var StudentTableRowTemplate = $("#StudentsInSectionTableRowTemplate").html();
+            var template = Handlebars.compile(StudentTableRowTemplate);
+
+            result.forEach(function (student) {
+                rendered += template(student);
+            })
+
+            $("#StudentsInSectionTable > tbody").html(rendered);
+
+            // Hides no section select message
+            $("div#SectionNotSelectedContainer").removeClass("show").addClass("hidden");
+            $("div#StudentsInSectionTableContainer").removeClass("hidden").addClass("show");
+        }
+    });
 });
 
 // Checkboxes
@@ -65,10 +77,26 @@ $("a#NewSchedule").click(function () {
     $("a#NewSchedule").addClass("hidden");
 })
 
-// Hides the new sechedule section
+// Hides and Resets the new sechedule section
 $("a#CancelNewSchedule").click(function () {
     $("div#NewScheduleContainer").removeClass("show").addClass("hidden");
     $("a#NewSchedule").removeClass("hidden");
+
+    // Resets the dropdown section selection
+    $('#SelectSection option').prop('selected', function () {
+            return this.defaultSelected;
+    });
+
+    //hides the students table
+    $("div#StudentsInSectionTableContainer").removeClass("show").addClass("hidden");
+    $("div#SectionNotSelectedContainer").removeClass("hidden").addClass("show");
+
+})
+
+// Assign a section to the schedule
+$("button#AssignEntireSection").click(function () {
+    var sectionId = $("SelectSection").val();
+    if (SectionsAssigned.indexOf())
 })
 
 // Handles all forms submition buttons
