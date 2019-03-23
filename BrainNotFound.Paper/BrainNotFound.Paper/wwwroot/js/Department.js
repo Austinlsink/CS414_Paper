@@ -18,9 +18,28 @@ $("button#CancelCreateDepartment").click(function () {
     $("#departmentNameErrorMessage").empty();
 });
 
+$("button.delete-department").click(function () {
+    var DepartmentId = $(this).val();
+    var info = []
+    info["DepartmentId"] = DepartmentId;
+
+    $.ajax({
+        url: "/api/department/delete/",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(info),
+        success: function (result) {
+            location.reload();
+        },
+        error: function () {
+            alert("Something didnt work");
+        }
+
+    })
+})
 // Submits the form information to the server
 $("button#CreateDepartment").click(function () {
-    var newDepartmentForm = $('form#NewDepartment');
+    var newDepartmentForm = $("form#NewDepartment");
 
     // Gets the values of the form, and creates an object to be sent to the server
     var department = {};
@@ -41,21 +60,21 @@ $("button#CreateDepartment").click(function () {
         },
         error: function (xhr, status, error) {
             var err = JSON.parse(xhr.responseText);
-            console.log(xhr.responseText);
+            
             // Places validation on the Department Code Field
-            if (!(typeof err.errors.DepartmentCode === 'undefined')) {
-                $("#departmentCodeErrorMessage").html(err.errors.DepartmentCode[0]);
+            if (typeof err.errors.DepartmentCode === "undefined") {
+                $("#departmentCodeErrorMessage").empty();
             }
             else {
-                $("#departmentCodeErrorMessage").empty();
+                $("#departmentCodeErrorMessage").html(err.errors.DepartmentCode[0]);
             }
 
             // Places validation on the Department Name Field
-            if (err.errors.DepartmentName.length > 0) {
-                $("#departmentNameErrorMessage").html(err.errors.DepartmentName[0]);
+            if (typeof err.errors.DepartmentName === "undefined") {
+                $("#departmentNameErrorMessage").empty();
             }
             else {
-               $("#departmentNameErrorMessage").empty();
+                $("#departmentNameErrorMessage").html(err.errors.DepartmentName[0]);
             }
 
         }

@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BrainNotFound.Paper.api
 {
     [Authorize(Roles = "Admin")]
-    [Route("api/[controller]")]
+    [Route("api/Department")]
     [ApiController]
     public class DepartmentController : Controller
     {
@@ -42,5 +42,14 @@ namespace BrainNotFound.Paper.api
             return Json(new { sucess = true});
         }
 
+        [HttpPost, Route("Delete")]
+        public IActionResult Delete([FromBody] long DepartmentId)
+        {
+            var department = _context.Departments.Find(DepartmentId);
+            _context.Departments.Remove(department);
+            _context.SaveChanges();
+
+            return Json(new { sucess = true });
+        }
     }
 }

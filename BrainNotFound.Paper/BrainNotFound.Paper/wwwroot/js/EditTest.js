@@ -29,7 +29,6 @@ $('select#SelectSection').change(function () {
     $.ajax({
         url: "/api/CreateTest/GetStudentsInSection/" + sectionId,
         success: function (result) {
-
             // Fetches the template and, iterates through students, and renders table rows
             var rendered = "";
             var StudentTableRowTemplate = $("#StudentsInSectionTableRowTemplate").html();
@@ -96,7 +95,11 @@ $("a#CancelNewSchedule").click(function () {
 // Assign a section to the schedule
 $("button#AssignEntireSection").click(function () {
     var sectionId = $("SelectSection").val();
-    if (SectionsAssigned.indexOf())
+    if (SectionsAssigned.indexOf(sectionId)) {
+
+    } else {
+        ``
+    }
 })
 
 // Handles all forms submition buttons
