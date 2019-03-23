@@ -8,90 +8,84 @@
 
 <div class="row">
     <div class="col-md-12 col-xs-12">
+        <script type="text/x-handlebars-template" id="TestSectionTemplate">
+            <!--Test Section Start-->
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-info-circle"></i> | {{SectionType}}</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                        <li><a class=""><i class="fa fa-trash-o"></i></a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">Edit Instructions</a></li>
+                                <li><a href="#">Edit Questions Value</a></li>
+                            </ul>
+                        </li>
+                        <li><a class="collapse-link"><i class="fa fa-arrow-up"></i></a></li>
+                        <li><a class="collapse-link"><i class="fa fa-arrow-down"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="row">
 
-        <!--True/False Section Start-->
-        <div class="x_panel">
-            <div class="x_title">
-                <h2><i class="fa fa-info-circle"></i> | True/False</h2>
-                <ul class="nav navbar-right panel_toolbox">
-                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                    <li><a class=""><i class="fa fa-trash-o"></i></a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">Edit Instructions</a></li>
-                            <li><a href="#">Edit Questions Value</a></li>
-                        </ul>
-                    </li>
-                    <li><a class="collapse-link"><i class="fa fa-arrow-up"></i></a></li>
-                    <li><a class="collapse-link"><i class="fa fa-arrow-down"></i></a></li>
-                </ul>
-                <div class="clearfix"></div>
-            </div>
-            <div class="x_content">
-                <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <p><b>Instructions:</b> {{Instructions}}</p>
+                        </div>
+                    </div>
+                    <!--Edit Instructions Start-->
+                    <div class="row well">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="col-md-1 col-sm-1 col-xs-3">
+                                <p><b>Instructions:</b></p>
+                            </div>
+                            <div class="form-group col-md-8 col-sm-8 col-xs-12">
+                                <input type="text" placeholder="Enter question text here" value="{{Instructions}}" class="form-control">
+                            </div>
+                            <div class="form-group col-md-3 col-sm-3 col-xs-12">
+                            </div>
+                            <div class="form-group col-md-3 col-sm-3 col-xs-12">
+                                <button type="button" class="pull-right btn btn-primary btn-md">Save</button>
+                                <button type="button" class="pull-right btn btn-danger btn-md">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Edit Instructions End-->
+                    <!--Edit Questions Value Start-->
+                    <div id="EditQuestionsValue" class="well">
+                        <form asp-action="PartialEditNameAndCourse" asp-controller="Instructor" asp-route-TestId="" id="new-department" data-parsley-validate class="form-horizontal form-label-left">
+                            <div class="col-md-9 col-xs-12">
+                                <label class="control-label">Edit Questions Value</label>
+                                <input type="text" placeholder="pt(s)" class="form-control col-md-3">
+                            </div>
+                            <div class="col-md-3 col-sm-12">
+                                <label class="control-label">&emsp;</label>
+                                <table>
+                                    <tr>
+                                        <td><a onclick="Cancel('#EditQuestionsValue')" class="pull-right btn btn-danger btn-md">Cancel</a>
+                                        <td> <button type="submit" class="pull-right btn btn-primary btn-md">Assign</button></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </form>
+                    </div>
+                    <!--Edit Questions Value End-->
+                    <!--Question Start-->
+                    <div id="QuestionContainer"></div>
+                    <!--Question End-->
+                    <!--Edit Question Start-->
+                    <div id="EditQuestionContainer"></div>
+                    <!--Edit Question End-->
 
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <p><b>Instructions:</b> Determine if each statement is True or False.</p>
-
+                    <div class="text-right">
+                        <button type="button" class="btn btn-round btn-info"><i class="fa fa-plus"></i> &nbsp;Add Question</button>
                     </div>
                 </div>
-
-                @foreach (TrueFalse question in SortedQuestions)
-                {
-                    if (question.TrueFalseAnswer == true)
-                    {
-                        <div class="ln_solid"></div>
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="col-md-1 col-sm-1 col-xs-3">
-                                    <input type="text" placeholder="pts" value="@(question.PointValue + " pt(s)")" class="form-group form-control">
-                                </div>
-                                <div class="col-md-8 col-sm-8 col-xs-11">
-                                    <p>@question.Content</p>
-                                </div>
-                                <div class="form-group col-md-3 col-sm-3 col-xs-12">
-                                    <span style="color:white" class="label label-success">True</span>
-                                    <ul class="nav navbar-right panel_toolbox">
-                                        <li><a class=""><i class="fa fa-trash-o"></i></a></li>
-                                        <li><a class=""><i class="fa fa-edit"></i></a></li>
-                                        <li><a class=""><i class="fa fa-chevron-up"></i></a></li>
-                                        <li><a class=""><i class="fa fa-chevron-down"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    else if (question.TrueFalseAnswer == false)
-                    {
-                        <div class="ln_solid"></div>
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="col-md-1 col-sm-1 col-xs-3">
-                                    <input type="text" placeholder="pts" value="@(question.PointValue + " pt(s)")" class="form-group form-control">
-                                </div>
-                                <div class="col-md-8 col-sm-8 col-xs-11">
-                                    <p>@question.Content</p>
-                                </div>
-                                <div class="form-group col-md-3 col-sm-3 col-xs-12">
-                                    <span style="color:white" class="label label-danger">False</span>
-                                    <ul class="nav navbar-right panel_toolbox">
-                                        <li><a class=""><i class="fa fa-trash-o"></i></a></li>
-                                        <li><a class=""><i class="fa fa-edit"></i></a></li>
-                                        <li><a class=""><i class="fa fa-chevron-up"></i></a></li>
-                                        <li><a class=""><i class="fa fa-chevron-down"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                }
-                <div class="ln_solid"></div>
-                <div class="text-right">
-                    <button type="button" class="btn btn-round btn-info"><i class="fa fa-plus"></i> &nbsp;Add Question</button>
-                </div>
             </div>
-        </div>
+            <!--Test Section End-->
+        </script>
         <div class="clearfix"></div>
         <div class="text-center">
             <button type="button" class="btn btn-round btn-primary"><i class="fa fa-plus"></i> &nbsp;Add Section</button>
@@ -99,3 +93,56 @@
     </div>
 </div>
 <!-- /page content -->
+<!--Templates-->
+<script type="text/x-handlebars-template" id="TrueFalseQuestionTemplate">
+    <!--True False Question Start-->
+    <div class="ln_solid"></div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="col-md-1 col-sm-1 col-xs-3">
+                <input type="text" placeholder="pts" value="{{TrueFalseQuestionValue}}" class="form-group form-control">
+            </div>
+            <div class="col-md-8 col-sm-8 col-xs-11">
+                <p>{{TrueFalseQuestionContent}}</p>
+            </div>
+            <div class="form-group col-md-3 col-sm-3 col-xs-12">
+                {{#if TrueFalseAnswer}}
+                <span style="color:white" class="label label-success">True</span>
+                {{else}}
+                <span style="color:white" class="label label-danger">False</span>
+                {{/if}}
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class=""><i class="fa fa-trash-o"></i></a></li>
+                    <li><a class=""><i class="fa fa-edit"></i></a></li>
+                    <li><a class=""><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class=""><i class="fa fa-chevron-down"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--True False Question End-->
+</script>
+
+<script type="text/x-handlebars-template" id="EditTrueFalseQuestionTemplate">
+    <!--Edit True/False Question Start-->
+    <div class="ln_solid"></div>
+    <div class="row well">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="col-md-1 col-sm-1 col-xs-3">
+                <input type="text" placeholder="pts" class="form-group form-control" value="{{TrueFalseQuestionValue}}">
+            </div>
+            <div class="form-group col-md-5 col-sm-5 col-xs-12">
+                <input type="text" placeholder="Enter question text here" class="form-control" value="{{TrueFalseQuestionContent}}">
+            </div>
+            <div class="form-group col-md-3 col-sm-3 col-xs-12">
+                <input type="radio" class="flat" checked="" name="iCheck" style="position: absolute; opacity: 0;"> True
+                <input type="radio" class="flat" name="iCheck" style="position: absolute; opacity: 0;"> False
+            </div>
+            <div class="form-group col-md-3 col-sm-3 col-xs-12">
+                <button type="button" class="pull-right btn btn-primary btn-md">Save</button>
+                <button type="button" class="pull-right btn btn-danger btn-md">Cancel</button>
+            </div>
+        </div>
+    </div>
+    <!--Edit True/False Question End-->
+</script>
