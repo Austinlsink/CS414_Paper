@@ -356,8 +356,8 @@ namespace BrainNotFound.Paper.Controllers
         {
             // Get required data lists
             var allCourses = _context.Courses.ToList();
+            var allSections = _context.Sections.ToList();
             var allStudents = (await _userManager.GetUsersInRoleAsync("Student")).ToList();
-
 
             // Populate Enrollment table
             foreach (var student in allStudents)
@@ -390,48 +390,40 @@ namespace BrainNotFound.Paper.Controllers
 
                     // Select a random section in the selectedCourse and make sure it doesn't conflict with classes
                     // the student is already enrolled in
-                    bool doesNotConflict = true; // Used in check in main do while
+                    bool doesNotConflict = false; // Used in check in main do while
                     Section selectedSection = new Section();
                     //List<Enrollment> enrolledAlready = new List<Enrollment>();
                     do
                     {
                         do
                         {
-                            // Get a random course that has sections
-                            do
-                            {
-                                selectedCourse = _context.Courses.ToList().ElementAt(rand.Next(0, allCourses.Count));
+                            selectedCourse = allCourses.ElementAt(rand.Next(0, allCourses.Count));
+                        } while (allSections.Where(S => S.CourseId == selectedCourse.CourseId).Count() <= 0);
 
-                                // Get all sections related to the selectedCourse
-                                //courseSections = _context.Sections.Where(S => S.CourseId == selectedCourse.CourseId).ToList();
+                        selectedSection = allSections.Where(S => S.CourseId == selectedCourse.CourseId).ElementAt(rand.Next(0, allSections.Where(S => S.CourseId == selectedCourse.CourseId).Count()));
 
-                            } while (_context.Sections.Where(S => S.CourseId == selectedCourse.CourseId).ToList().Count <= 0); // Keep doing this until a course with sections is chosen
-
-                            selectedSection = _context.Sections.Where(S => S.CourseId == selectedCourse.CourseId).ToList().ElementAt(rand.Next(0, _context.Sections.Where(S => S.CourseId == selectedCourse.CourseId).ToList().Count));
-                            //enrolledAlready = _context.Enrollments.Where(E => E.StudentId == student.Id).Where(CE => CE.SectionId == selectedSection.SectionId).ToList();
-                        //} while (_context.Enrollments.Where(E => E.StudentId == student.Id).Where(CE => CE.SectionId == selectedSection.SectionId).ToList().Count > 0);
-                        } while (_context.Enrollments.Where(E => E.SectionId == selectedSection.SectionId && E.StudentId == student.Id).Count() > 0);
-
-
-                    doesNotConflict = true; // Reset to "true" in case a new section needed to be selected
-                        //var selectedSectionSectionMeetingTimes = _context.SectionMeetingTimes.Where(SMT => SMT.SectionMeetingTimeId == selectedSection.SectionId).ToList();
-                        List<SectionMeetingTime> concurrentSectionMeetingTimes = new List<SectionMeetingTime>();
-                        foreach (var enrollment in _context.Enrollments.Where(E => E.StudentId == student.Id))
+                        if (_context.Enrollments.Where(E => E.StudentId == student.Id && E.SectionId == selectedSection.SectionId).Count() <= 0) // TODO: For some reason this keeps == 0...
                         {
-                            // The times that the student already has classes at
-                            //concurrentSectionMeetingTimes = _context.SectionMeetingTimes.Where(SMT => SMT.SectionId == enrollment.SectionId).ToList();
-                            //foreach (var concurrentSectionMeetingTime in concurrentSectionMeetingTimes)
-                            foreach (var enrolledSectionMeetingTime in _context.SectionMeetingTimes.Where(SMT => SMT.SectionId == enrollment.SectionId).ToList())
+                            doesNotConflict = true; // Reset to "true" in case a new section needed to be selected
+                                                    //var selectedSectionSectionMeetingTimes = _context.SectionMeetingTimes.Where(SMT => SMT.SectionMeetingTimeId == selectedSection.SectionId).ToList();
+                            List<SectionMeetingTime> concurrentSectionMeetingTimes = new List<SectionMeetingTime>();
+                            foreach (var enrollment in _context.Enrollments.Where(E => E.StudentId == student.Id))
                             {
-                                foreach (var selectedSectionMeetingTime in _context.SectionMeetingTimes.Where(SMT => SMT.SectionMeetingTimeId == selectedSection.SectionId).ToList())
+                                // The times that the student already has classes at
+                                //concurrentSectionMeetingTimes = _context.SectionMeetingTimes.Where(SMT => SMT.SectionId == enrollment.SectionId).ToList();
+                                //foreach (var concurrentSectionMeetingTime in concurrentSectionMeetingTimes)
+                                foreach (var enrolledSectionMeetingTime in _context.SectionMeetingTimes.Where(SMT => SMT.SectionId == enrollment.SectionId).ToList())
                                 {
-                                    if (enrolledSectionMeetingTime.Day == selectedSectionMeetingTime.Day // If it meets on the same day...
-                                        && (  (selectedSectionMeetingTime.StartTime >= enrolledSectionMeetingTime.StartTime // If it starts after or at...
-                                               && selectedSectionMeetingTime.EndTime <= enrolledSectionMeetingTime.EndTime)  // and ends before or at
-                                           || (selectedSectionMeetingTime.StartTime <= enrolledSectionMeetingTime.StartTime // If it starts before or at...
-                                               && selectedSectionMeetingTime.EndTime >= enrolledSectionMeetingTime.EndTime))) // If it ends after or at...
+                                    foreach (var selectedSectionMeetingTime in _context.SectionMeetingTimes.Where(SMT => SMT.SectionMeetingTimeId == selectedSection.SectionId).ToList())
                                     {
-                                        doesNotConflict = false;
+                                        if (enrolledSectionMeetingTime.Day == selectedSectionMeetingTime.Day // If it meets on the same day...
+                                            && ((selectedSectionMeetingTime.StartTime >= enrolledSectionMeetingTime.StartTime // If it starts after or at...
+                                                   && selectedSectionMeetingTime.EndTime <= enrolledSectionMeetingTime.EndTime)  // and ends before or at
+                                               || (selectedSectionMeetingTime.StartTime <= enrolledSectionMeetingTime.StartTime // If it starts before or at...
+                                                   && selectedSectionMeetingTime.EndTime >= enrolledSectionMeetingTime.EndTime))) // If it ends after or at...
+                                        {
+                                            doesNotConflict = false;
+                                        }
                                     }
                                 }
                             }
