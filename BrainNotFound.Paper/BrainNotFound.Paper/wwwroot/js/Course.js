@@ -30,15 +30,9 @@ $("button#EditCourse").click(function () {
             document.getElementById("descriptionInput").value = result.description;
             document.getElementById("creditHourInput").value = result.creditHours;
             document.getElementById("departmentInput").value = result.department;
-
-
+            document.getElementById("courseId").value = result.id;
 
             $("#EditCourseModal").modal("show");
-            console.log("Lacy at the end of the success function " + result);
-
-        },
-        error: function () {
-            console.log("Didn't make it...");
         }
     })
 });
@@ -92,7 +86,40 @@ $("#SaveCourseChanges").click(function () {
             location.reload();
         },
         error: function (xhr, status, error) {
-          
+            console.log(xhr);
+            var err = JSON.parse(xhr.responseText);
+
+            // Places validation on the Course Code Field
+            if (typeof err.errors.CourseCode === "undefined") {
+                $("#EditCourseCodeErrorMessage").empty();
+            }
+            else {
+                $("#EditCourseCodeErrorMessage").html(err.errors.CourseCode[0]);
+            }
+
+            // Places validation on the Course Name Field
+            if (typeof err.errors.Name === "undefined") {
+                $("#EditCourseNameErrorMessage").empty();
+            }
+            else {
+                $("#EditCourseNameErrorMessage").html(err.errors.Name[0]);
+            }
+
+            // Places validation on the Course Description Field
+            if (typeof err.errors.Description === "undefined") {
+                $("#EditCourseDescriptionErrorMessage").empty();
+            }
+            else {
+                $("#EditCourseDescriptionErrorMessage").html(err.errors.Description[0]);
+            }
+
+            // Places validation on the Course Credit Hour Field
+            if (typeof err.errors.CreditHours === "undefined") {
+                $("#EditCourseCreditHoursErrorMessage").empty();
+            }
+            else {
+                $("#EditCourseCreditHoursErrorMessage").html(err.errors.CreditHours[0]);
+            }
         }
     })
 })

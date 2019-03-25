@@ -66,7 +66,7 @@ namespace BrainNotFound.Paper.api
         {
             var course = _context.Courses.Find(courseId);
 
-            return Json(new { success = true, code = course.CourseCode, name = course.Name, description = course.Description, creditHours = course.CreditHours, department = course.DepartmentId });
+            return Json(new { success = true, id = course.CourseId, code = course.CourseCode, name = course.Name, description = course.Description, creditHours = course.CreditHours, department = course.DepartmentId });
         }
 
         [HttpPost, Route("Save")]

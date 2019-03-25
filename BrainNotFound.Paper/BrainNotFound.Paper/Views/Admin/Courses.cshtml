@@ -141,6 +141,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form id="EditCourseForm" data-parsley-validate class="form-horizontal form-label-left">
+                <input asp-for="CourseId" type="hidden" value="" id="courseId"/>
                 <div class="modal-header">
                     <h3 class="modal-title"><i class="fa fa-mortar-board"></i> Edit Course</h3>
                 </div>
@@ -149,14 +150,14 @@
                         <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Course Code </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input asp-for="CourseCode" type="text" id="codeInput" class="form-control col-md-7 col-xs-12">
-                            <span id="courseCodeErrorMessage" class="text-danger"></span>
+                            <span id="EditCourseCodeErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Course Name </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input asp-for="Name" type="text" id="nameInput" class="form-control col-md-7 col-xs-12">
-                            <span id="courseNameErrorMessage" class="text-danger"></span>
+                            <span id="EditCourseNameErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -164,14 +165,14 @@
                         <div class="col-md-6 col-sm-6 col-xs-12">
                                 <textarea name="description" id="descriptionInput" class="form-control col-md-7 col-xs-12" style="overflow:auto">
                                 </textarea>
-                            <span id="courseDescriptionErrorMessage" class="text-danger"></span>
+                            <span id="EditCourseDescriptionErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Credit Hours </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input asp-for="CreditHours" type="number" value="0" id="creditHourInput" class="form-control col-md-7 col-xs-12">
-                            <span id="courseCreditHoursErrorMessage" class="text-danger"></span>
+                            <span id="EditCourseCreditHoursErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -184,7 +185,7 @@
                                     <option value="@d.DepartmentId">@d.DepartmentName</option>
                                 }
                             </select>
-                            <span id="courseDepartmentErrorMessage" class="text-danger"></span>
+                            <span id="EditCourseDepartmentErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
@@ -206,10 +207,7 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-                <h4 class="modal-title" id="myModalLabel2">Delete Course Error</h4>
+                <h4 class="modal-title" id="myModalLabel2">Delete Section Error</h4>
             </div>
             <div class="modal-body">
                 <p id="errorMessagePlaceHolder"></p>
