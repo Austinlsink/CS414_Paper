@@ -29,7 +29,8 @@ $("button.delete-department").click(function () {
         data: JSON.stringify(DepartmentId),
         success: function (result) {
             if (result.success) {
-                location.reload();
+                $("#errorMessagePlaceHolder").text(result.message)
+                $("div#ErrorModal").modal("toggle");
             }
             else {
                 // Displays the error message to the user
@@ -40,6 +41,12 @@ $("button.delete-department").click(function () {
 
     })
 })
+
+// Reloads the page when a department is successfully deleted
+$("#MessageClose").click(function () {
+    location.reload();
+})
+
 // Submits the form information to the server
 $("button#CreateDepartment").click(function () {
     var newDepartmentForm = $("form#NewDepartment");
