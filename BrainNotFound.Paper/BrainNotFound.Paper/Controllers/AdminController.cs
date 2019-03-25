@@ -617,7 +617,8 @@ namespace BrainNotFound.Paper.Controllers
             }
 
             ViewBag.departmentList = departments;
-            return View(courses);
+            ViewBag.courseList = courses;
+            return View();
         }
 
         // Delete a Course

@@ -1,6 +1,5 @@
 @using BrainNotFound.Paper.Models.BusinessModels
-
-@model List<Course>
+@model Course
 
 @{
     ViewData["Title"] = "Manage Courses - Admin";
@@ -22,12 +21,14 @@
                     <h2><i class="fa fa-book"></i> Courses</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                        <li><a asp-controller="Admin" asp-action="NewCourse"><i class="fa fa-plus"></i> New Course</a></li>
+                        <li>
+                            <a id="newCourseButton" data-toggle="modal" data-target="#NewCourseModal"><i class="fa fa-plus"></i> New Course</a>
+                        </li>
                     </ul>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    @if (Model.Any<Course>())
+                    @if (ViewBag.courseList != null)
                     {
                         <p>@ViewBag.errorMessage</p>
                         <div class="table-responsive">
@@ -46,7 +47,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (Course course in Model)
+                                    @foreach (Course course in ViewBag.courseList)
                                     {
                                         <tr class="odd pointer">
                                             @{
@@ -79,7 +80,69 @@
     </div>
 </div>
 
+<!--New Course modal-->
+<div id="NewCourseModal" class="modal fade new-course-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="NewCourse" data-parsley-validate class="form-horizontal form-label-left">
+                <div class="modal-header">
+                    <h3 class="modal-title"><i class="fa fa-mortar-board"></i> New Course</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Course Code </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="CourseCode" type="text" id="courseCodeInput" class="form-control col-md-7 col-xs-12">
+                            <span id="courseCodeErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Course Name </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="Name" type="text" id="courseNameInput" class="form-control col-md-7 col-xs-12">
+                            <span id="courseNameErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Course Description </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="Description" type="text" id="courseDescriptionInput" class="form-control col-md-7 col-xs-12">
+                            <span id="courseDescriptionErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Credit Hours </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="CreditHours" type="number" value="0" id="courseCreditHoursInput" class="form-control col-md-7 col-xs-12">
+                            <span id="courseCreditHoursErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label pull-left col-md-3 col-sm-3 col-xs-12">Department</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select id="courseDepartmentInput" asp-for="DepartmentId" class="select2_single form-control" tabindex="1">
+                                <option disabled selected value=""> -- select a department -- </option>
+                                @foreach (var d in ViewBag.departmentList)
+                                {
+                                    <option value="@d.DepartmentId">@d.DepartmentName</option>
+                                }
+                            </select>
+                            <span id="courseDepartmentErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="CancelCreateCourse" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" id="CreateCourse" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @section scripts{
+    <script type="text/javascript" src="~/js/Course.js"></script>
+
     <script type="text/javascript">
 
         $(document).ready(function () {
@@ -91,6 +154,6 @@
             });
         });
 
-      
+
     </script>
 }
