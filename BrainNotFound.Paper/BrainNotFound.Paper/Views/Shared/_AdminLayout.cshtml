@@ -77,11 +77,7 @@
                                     <a  asp-controller="Admin" asp-action="Departments"><i class="fa fa-mortar-board"></i> Departments</a>
                                 </li>
                                 <li>
-                                    <a><i class="fa fa-book"></i> Courses <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li> <a asp-controller="Admin" asp-action="Courses">View All</></a></li>
-                                        <li> <a asp-controller="Admin" asp-action="NewCourse">New Course</a></li>
-                                    </ul>
+                                    <a asp-controller="Admin" asp-action="Courses"><i class="fa fa-book"></i> Courses</a>
                                 </li>
                                 <li>
                                     <a><i class="fa fa-users"></i> Administrators <span class="fa fa-chevron-down"></span></a>
@@ -264,19 +260,6 @@
     <script src="~/js/custom.min.js"></script>
     <!-- View Specific JS Files -->
     @RenderSection("scripts", required: false)
-
-    <!-- Datatables -->
-    <script src="../vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="../vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-    <script src="../vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="../vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
-    <script src="../vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
-    <script src="../vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
-    <script src="../vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
-    <script src="../vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-    <script src="../vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
-    <script src="../vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-    <script src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+    
 </body>
 </html>

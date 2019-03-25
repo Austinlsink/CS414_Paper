@@ -1,6 +1,5 @@
 @using BrainNotFound.Paper.Models.BusinessModels
-
-@model List<Course>
+@model Course
 
 @{
     ViewData["Title"] = "Manage Courses - Admin";
@@ -22,12 +21,14 @@
                     <h2><i class="fa fa-book"></i> Courses</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                        <li><a asp-controller="Admin" asp-action="NewCourse"><i class="fa fa-plus"></i> New Course</a></li>
+                        <li>
+                            <a id="newCourseButton" data-toggle="modal" data-target="#NewCourseModal"><i class="fa fa-plus"></i> New Course</a>
+                        </li>
                     </ul>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    @if (Model.Any<Course>())
+                    @if (ViewBag.courseList != null)
                     {
                         <p>@ViewBag.errorMessage</p>
                         <div class="table-responsive">
@@ -46,7 +47,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (Course course in Model)
+                                    @foreach (Course course in ViewBag.courseList)
                                     {
                                         <tr class="odd pointer">
                                             @{
@@ -59,13 +60,9 @@
                                             <td class=" ">@course.Name</td>
                                             <td class=" ">@course.CreditHours</td>
                                             <td class=" last">
-                                                <form asp-controller="Admin" asp-action="DeleteCourse">
-                                                    <a asp-controller="Admin" asp-action="ViewCourse" asp-route-code="@dept.DepartmentCode@course.CourseCode" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                                    <a asp-controller="Admin" asp-action="EditCourse" asp-route-id="@course.CourseId" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                                    <input type="hidden" name="CourseId" value="@course.CourseId" />
-                                                    <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
-                                                </form>
-
+                                                <a asp-controller="Admin" asp-action="ViewCourse" asp-route-code="@dept.DepartmentCode@course.CourseCode" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                                <button id="EditCourse" type="button" value="@course.CourseId" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </button>
+                                                <button type="button" id="ConfirmDelete" value="@course.CourseId" class="btn btn-danger btn-xs delete-course" data-target="#ConfirmModal"><i class="fa fa-trash-o"></i> Delete </button>
                                             </td>
                                         </tr>
                                     }
@@ -79,9 +76,169 @@
     </div>
 </div>
 
-@section scripts{
-    <script type="text/javascript">
+<!--New Course modal-->
+<div id="NewCourseModal" class="modal fade new-course-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="NewCourse" data-parsley-validate class="form-horizontal form-label-left">
+                <div class="modal-header">
+                    <h3 class="modal-title"><i class="fa fa-mortar-board"></i> New Course</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Course Code </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="CourseCode" type="text" id="courseCodeInput" class="form-control col-md-7 col-xs-12">
+                            <span id="courseCodeErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Course Name </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="Name" type="text" id="courseNameInput" class="form-control col-md-7 col-xs-12">
+                            <span id="courseNameErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Course Description </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="Description" type="text" id="courseDescriptionInput" class="form-control col-md-7 col-xs-12">
+                            <span id="courseDescriptionErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Credit Hours </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="CreditHours" type="number" min="1" max="8" value="1" id="courseCreditHoursInput" class="form-control col-md-7 col-xs-12">
+                            <span id="courseCreditHoursErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label pull-left col-md-3 col-sm-3 col-xs-12">Department</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select id="courseDepartmentInput" asp-for="DepartmentId" class="select2_single form-control" tabindex="1">
+                                <option disabled selected value=""> -- select a department -- </option>
+                                @foreach (var d in ViewBag.departmentList)
+                                {
+                                    <option value="@d.DepartmentId">@d.DepartmentName</option>
+                                }
+                            </select>
+                            <span id="courseDepartmentErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="CancelCreateCourse" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" id="CreateCourse" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
+<!--Edit Course Modal-->
+<div id="EditCourseModal" class="modal fade post-using-ajax" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="EditCourseForm" data-parsley-validate class="form-horizontal form-label-left">
+                <input asp-for="CourseId" type="hidden" value="" id="courseId" />
+                <div class="modal-header">
+                    <h3 id="EditCourseHeader" class="modal-title"><i class="fa fa-mortar-board"></i> Edit Course</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Course Code </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="CourseCode" type="text" id="codeInput" class="form-control col-md-7 col-xs-12">
+                            <span id="EditCourseCodeErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Course Name </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="Name" type="text" id="nameInput" class="form-control col-md-7 col-xs-12">
+                            <span id="EditCourseNameErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Course Description </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <textarea name="description" id="descriptionInput" class="form-control col-md-7 col-xs-12" style="overflow:auto">
+                                </textarea>
+                            <span id="EditCourseDescriptionErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Credit Hours </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="CreditHours" type="number" min="1" max="8" value="0" id="creditHourInput" class="form-control col-md-7 col-xs-12">
+                            <span id="EditCourseCreditHoursErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label pull-left col-md-3 col-sm-3 col-xs-12">Department</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select id="departmentInput" asp-for="DepartmentId" class="select2_single form-control" tabindex="1">
+                                <option disabled selected value=""> -- select a department -- </option>
+                                @foreach (var d in ViewBag.departmentList)
+                                {
+                                    <option value="@d.DepartmentId">@d.DepartmentName</option>
+                                }
+                            </select>
+                            <span id="EditCourseDepartmentErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="CancelCreateCourse" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="SaveCourseChanges" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Confirm Deleting Modal-->
+<div id="ConfirmModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel2">Warning: Deleting Section</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this course?</p>
+                <div class="modal-footer">
+                    <button id="YesDelete" type="button" class="btn btn-default">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Message Modal-->
+<div id="ErrorModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="MessageModal"></h4>
+            </div>
+            <div class="modal-body">
+                <p id="errorMessagePlaceHolder"></p>
+                <p id="Sections"></p>
+                <div class="modal-footer">
+                    <button id="MessageClose" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <!--Datatables script for ordering columns-->
+    <script type="text/javascript">
         $(document).ready(function () {
             $('#courseTable').DataTable({
                 "order": [1, 'asc'],
@@ -90,7 +247,22 @@
                 ],
             });
         });
-
-      
     </script>
+
+    <!--Course functions-->
+    <script type="text/javascript" src="~/js/Course.js"></script>
+
+    <!-- Datatables -->
+    <script src="../vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="../vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="../vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="../vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="../vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="../vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="../vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="../vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="../vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
 }

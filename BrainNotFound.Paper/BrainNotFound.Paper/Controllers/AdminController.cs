@@ -617,55 +617,8 @@ namespace BrainNotFound.Paper.Controllers
             }
 
             ViewBag.departmentList = departments;
-            return View(courses);
-        }
-
-        // Delete a Course
-        [HttpPost, Route("DeleteCourse")]
-        public IActionResult DeleteCourse(long CourseId)
-        {
-            var course = _context.Courses.Find(CourseId);
-
-            if (_context.Sections.Where(ac => ac.CourseId == course.CourseId).Any())
-            {
-                TempData["message"] = "Error: Please delete all associated sections before deleting " + course.DepartmentCode;
-                return RedirectToAction("Courses", "Admin");
-            }
-            else
-            {
-                _context.Courses.Remove(course);
-                _context.SaveChanges();
-            }
-
-            TempData["message"] = "Success: " + course.Name + " was deleted.";
-            return RedirectToAction("Courses", "Admin");
-        }
-
-        [HttpGet, Route("Courses/New")]
-        public IActionResult NewCourse()
-        {
-            var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
-            ViewBag.departmentList = departments;
-
+            ViewBag.courseList = courses;
             return View();
-        }
-
-        [HttpPost, Route("Courses/New")]
-        public IActionResult NewCourse(Course course)
-        {
-            if (!ModelState.IsValid)
-            {
-                var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
-                ViewBag.departmentList = departments;
-                return View();
-            }
-
-            Department department = _context.Departments.Find(course.DepartmentId);
-            course.Department = department;
-
-            _context.Courses.Add(course);
-            _context.SaveChanges();
-            return RedirectToAction("Courses", "Admin");
         }
 
         /// <summary>
@@ -683,6 +636,10 @@ namespace BrainNotFound.Paper.Controllers
             // Find the department and add it to the ViewBag
             var department = _context.Departments.Where(d => d.DepartmentCode == departmentCode).First();
             ViewBag.department = department;
+
+            // Grab all of the departments for editing purposes
+            var departments = _context.Departments.ToList();
+            ViewBag.departmentList = departments;
 
             // Find the specified course and add it to the ViewBag
             var course = _context.Courses.Where(c => c.CourseCode == courseCode && c.DepartmentId == department.DepartmentId).First();
@@ -702,33 +659,6 @@ namespace BrainNotFound.Paper.Controllers
 
             return View();
         }
-
-        [HttpGet, Route("Courses/Edit/{id}")]
-        public IActionResult EditCourse(long Id)
-        {
-            var course = _context.Courses.Find(Id);
-            var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
-            ViewBag.course = course;
-            ViewBag.departments = departments;
-            ViewData["description"] = course.Description;
-            return View();
-        }
-
-        [HttpPost, Route("Courses/Edit/{id}")]
-        public IActionResult EditCourse(Course c, string description)
-        {
-            var course = _context.Courses.Find(c.CourseId);
-            course.CourseCode  = c.CourseCode;
-            course.Name  = c.Name;
-            course.Description = description;
-            course.CreditHours = c.CreditHours;
-            _context.Courses.Update(course);
-
-            _context.SaveChanges();
-
-            return RedirectToAction("Courses", "Admin");
-        }
-
         #endregion course controllers
 
         #region Section controllers
@@ -881,8 +811,8 @@ namespace BrainNotFound.Paper.Controllers
         public async Task<IActionResult> ReassignInstructor(ApplicationUser user, Section section, Course course, Department department)
         {
             string code = department.DepartmentCode + course.CourseCode;
-            //ViewData["message"] = code + "Hello, we made it...";
-            //return View("TestView");
+
+            
 
             // Find the instructor to reassign to the specified section
             var instructor = await _userManager.FindByNameAsync(user.UserName);
