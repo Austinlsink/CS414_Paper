@@ -61,12 +61,27 @@ namespace BrainNotFound.Paper.api
             return Json(new { success = true, message = SuceessMessage });
         }
 
-        [HttpGet, Route("Edit/{courseId}")]
+        [HttpPost, Route("Edit/{courseId}")]
         public IActionResult Edit([FromBody]long courseId)
         {
-            var newCourse = _context.Courses.Find(courseId);
+            var course = _context.Courses.Find(courseId);
 
-            return Json(new { success = true, course = newCourse });
+            return Json(new { success = true, code = course.CourseCode, name = course.Name, description = course.Description, creditHours = course.CreditHours, department = course.DepartmentId });
+        }
+
+        [HttpPost, Route("Save")]
+        public IActionResult Save([FromBody] Course c)
+        {
+            var course = _context.Courses.Find(c.CourseId);
+            course.CourseCode = c.CourseCode;
+            course.Name = c.Name;
+            course.Description = c.Description;
+            course.CreditHours = c.CreditHours;
+
+            _context.Courses.Update(course);
+            _context.SaveChanges();
+
+            return Json(new { success = true });
         }
     }
 }

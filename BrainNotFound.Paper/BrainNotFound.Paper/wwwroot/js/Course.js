@@ -18,22 +18,24 @@ $("button#CancelCreateCourse").click(function () {
 // Edit a course
 $("button#EditCourse").click(function () {
     var courseId = $(this).val();
+
     $.ajax({
         url: "/api/course/edit/" + courseId,
-        type: "GET",
+        type: "POST",
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(courseId),
-        success: function(result, course){
-            if (result.success) {
-                document.getElementById("courseCodeInput").value = course.CourseCode;
-                document.getElementById("courseNameInput").value = course.Name;
-                document.getElementById("courseDescriptionInput").value = course.Description;
-                document.getElementById("courseCreditHoursInput").value = course.CreditHours;
-                document.getElementById("courseDepartmentInput").value = course.Department;
-            }
-            else {
+        success: function (result, courseCode){
+            document.getElementById("codeInput").value = result.code;
+            document.getElementById("nameInput").value = result.name;
+            document.getElementById("descriptionInput").value = result.description;
+            document.getElementById("creditHourInput").value = result.creditHours;
+            document.getElementById("departmentInput").value = result.department;
 
-            }
+
+
+            $("#EditCourseModal").modal("show");
+            console.log("Lacy at the end of the success function " + result);
+
         },
         error: function () {
             console.log("Didn't make it...");
@@ -61,6 +63,37 @@ $("button.delete-course").click(function () {
                 $("div#ErrorModal").modal("toggle");
             }
         },
+    })
+})
+
+$("#SaveCourseChanges").click(function () {
+    var newCourseForm = $("form#EditCourseForm");
+
+    // Gets the values of the form, and creates an object to be sent to the server
+    var course = {};
+    $.each(newCourseForm.serializeArray(), function (i, field) {
+        if (field.value == null || field.value == "undefined") {
+            course[field.name] = 0;
+        }
+        else {
+            course[field.name] = field.value;
+        }
+    });
+
+    // Creates, submits, and responds to Ajax Call
+    $.ajax({
+        url: "/api/Course/Save/",
+        type: "POST",
+        contentType: "application/json",
+        // Data fetched from the form
+        data: JSON.stringify(course),
+        success: function (result) {
+            // Close the modal window
+            location.reload();
+        },
+        error: function (xhr, status, error) {
+          
+        }
     })
 })
 
