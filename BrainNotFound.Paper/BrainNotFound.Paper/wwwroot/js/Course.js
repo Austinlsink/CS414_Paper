@@ -1,15 +1,18 @@
-﻿var deleteCourseId;
+﻿// Global variable for deleting the course
+var deleteCourseId;
 
-// Resets Modal if canceled
+// Resets the new course form modal if the user cancels it
 $("button#CancelCreateCourse").click(function () {
-    var newDepartmentForm = $('form#NewCourse');
-    newDepartmentForm.trigger("reset");
+    var newCourseForm = $('form#NewCourse');
+    newCourseForm.trigger("reset");
+    // Reseting span elements
     $("#courseCodeErrorMessage").empty();
     $("#courseNameErrorMessage").empty();
     $("#courseDescriptionErrorMessage").empty();
     $("#courseCreditHoursErrorMessage").empty();
     $("#courseDepartmentErrorMessage").empty();
 
+    // Reseting input elements
     document.getElementById("courseCodeInput").value = "";
     document.getElementById("courseNameInput").value = "";
     document.getElementById("courseDescriptionInput").value = "";
@@ -17,7 +20,7 @@ $("button#CancelCreateCourse").click(function () {
     document.getElementById("courseDepartmentInput").value = "";
 });
 
-// Edit a course
+// Displays a modal form to edit a specific course
 $("button#EditCourse").click(function () {
     var courseId = $(this).val();
 
@@ -39,15 +42,13 @@ $("button#EditCourse").click(function () {
     })
 });
 
-// Confirm deleting a course
+// Display a confirmation modal if the user wants to delete a course
 $("button#ConfirmDelete").click(function () {
     deleteCourseId = $(this).val();
-
-    console.log("Delete course ID: " + deleteCourseId);
     $("#ConfirmModal").modal("toggle");
 })
 
-// Delete a course
+// Delete a course if the user specifies yes on the confirmation modal
 $("button#YesDelete").click(function () {
     // Gets the department Id to be deleted
     console.log(deleteCourseId);
@@ -61,10 +62,12 @@ $("button#YesDelete").click(function () {
         success: function (result) {
             if (result.success) {
                 $("#errorMessagePlaceHolder").text(result.message)
+                $("h4#MessageModal").text("Success!");
                 $("div#ErrorModal").modal("toggle");
             }
             else {
                 // Displays the error message to the user
+                $("h4#MessageModal").text("Error!");
                 $("#errorMessagePlaceHolder").text(result.message)
                 $("div#ErrorModal").modal("toggle");
             }
@@ -72,6 +75,12 @@ $("button#YesDelete").click(function () {
     })
 })
 
+// Reloads the page when a Course is successfully deleted
+$("#MessageClose").click(function () {
+    location.reload();
+})
+
+// Saves the edited changes to a course
 $("#SaveCourseChanges").click(function () {
     var newCourseForm = $("form#EditCourseForm");
 
@@ -136,7 +145,7 @@ $("#SaveCourseChanges").click(function () {
     })
 })
 
-// Submits the form information to the server
+// Submits the new course form information to the server
 $("button#CreateCourse").click(function () {
     var newCourseForm = $("form#NewCourse");
 
