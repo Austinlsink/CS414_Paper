@@ -621,54 +621,6 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        // Delete a Course
-        [HttpPost, Route("DeleteCourse")]
-        public IActionResult DeleteCourse(long CourseId)
-        {
-            var course = _context.Courses.Find(CourseId);
-
-            if (_context.Sections.Where(ac => ac.CourseId == course.CourseId).Any())
-            {
-                TempData["message"] = "Error: Please delete all associated sections before deleting " + course.DepartmentCode;
-                return RedirectToAction("Courses", "Admin");
-            }
-            else
-            {
-                _context.Courses.Remove(course);
-                _context.SaveChanges();
-            }
-
-            TempData["message"] = "Success: " + course.Name + " was deleted.";
-            return RedirectToAction("Courses", "Admin");
-        }
-
-        [HttpGet, Route("Courses/New")]
-        public IActionResult NewCourse()
-        {
-            var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
-            ViewBag.departmentList = departments;
-
-            return View();
-        }
-
-        [HttpPost, Route("Courses/New")]
-        public IActionResult NewCourse(Course course)
-        {
-            if (!ModelState.IsValid)
-            {
-                var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
-                ViewBag.departmentList = departments;
-                return View();
-            }
-
-            Department department = _context.Departments.Find(course.DepartmentId);
-            course.Department = department;
-
-            _context.Courses.Add(course);
-            _context.SaveChanges();
-            return RedirectToAction("Courses", "Admin");
-        }
-
         /// <summary>
         /// Allows the user to view a specific course and all of its information
         /// </summary>

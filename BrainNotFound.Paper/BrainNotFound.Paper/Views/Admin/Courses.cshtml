@@ -60,13 +60,9 @@
                                             <td class=" ">@course.Name</td>
                                             <td class=" ">@course.CreditHours</td>
                                             <td class=" last">
-                                                <form asp-controller="Admin" asp-action="DeleteCourse">
                                                     <a asp-controller="Admin" asp-action="ViewCourse" asp-route-code="@dept.DepartmentCode@course.CourseCode" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                                     <a asp-controller="Admin" asp-action="EditCourse" asp-route-id="@course.CourseId" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                                    <input type="hidden" name="CourseId" value="@course.CourseId" />
-                                                    <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
-                                                </form>
-
+                                                    <button value="@course.CourseId" class="btn btn-danger btn-xs delete-course"><i class="fa fa-trash-o"></i> Delete </button>
                                             </td>
                                         </tr>
                                     }
@@ -136,6 +132,27 @@
                     <button type="button" id="CreateCourse" class="btn btn-primary">Create</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<!-- Message Modal-->
+<div id="ErrorModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel2">Delete Course Error</h4>
+            </div>
+            <div class="modal-body">
+                <p id="errorMessagePlaceHolder"></p>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
