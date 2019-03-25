@@ -61,7 +61,7 @@
                                             <td class=" ">@course.CreditHours</td>
                                             <td class=" last">
                                                 <a asp-controller="Admin" asp-action="ViewCourse" asp-route-code="@dept.DepartmentCode@course.CourseCode" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                                <a asp-controller="Admin" asp-action="EditCourse" asp-route-id="@course.CourseId" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                                <button id="EditCourse" type="button" value="@course.CourseId" class="btn btn-info btn-xs" data-toggle="modal" data-target="#EditCourseModal"><i class="fa fa-pencil"></i> Edit </button>
                                                 <button value="@course.CourseId" class="btn btn-danger btn-xs delete-course"><i class="fa fa-trash-o"></i> Delete </button>
                                             </td>
                                         </tr>
@@ -136,6 +136,69 @@
     </div>
 </div>
 
+<!--Edit Course Modal-->
+<div id="EditCourseModal" class="modal fade edit-course-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="EditCourseForm" data-parsley-validate class="form-horizontal form-label-left">
+                <div class="modal-header">
+                    <h3 class="modal-title"><i class="fa fa-mortar-board"></i> Edit Course</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Course Code </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input value="" asp-for="CourseCode" type="text" id="department-name" class="form-control col-md-7 col-xs-12">
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Course Name </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input value="" asp-for="Name" type="text" class="form-control col-md-7 col-xs-12">
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12"> Course Description </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <textarea name="description" id="description" class="form-control col-md-7 col-xs-12" style="overflow:auto">
+                                    </textarea>
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Credit Hours </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input value="" asp-for="CreditHours" type="text" id="department-name" class="form-control col-md-7 col-xs-12">
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label pull-left col-md-3 col-sm-3 col-xs-12">Department</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select asp-for="DepartmentId" class="select2_single form-control" tabindex="1">
+                                <option disabled selected value=""> -- select a department -- </option>
+                                @foreach (var d in ViewBag.DepartmentList)
+                                {
+                                    <option value="departmentName">@d.DepartmentName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="CancelEditCourse" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" id="SaveCourseChanges" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
 <!-- Message Modal-->
 <div id="ErrorModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-sm">
@@ -158,10 +221,8 @@
 </div>
 
 @section scripts{
-    <script type="text/javascript" src="~/js/Course.js"></script>
-
+    <!--Datatables script for ordering columns-->
     <script type="text/javascript">
-
         $(document).ready(function () {
             $('#courseTable').DataTable({
                 "order": [1, 'asc'],
@@ -170,8 +231,6 @@
                 ],
             });
         });
-
-
     </script>
 
     <!--Course functions-->
