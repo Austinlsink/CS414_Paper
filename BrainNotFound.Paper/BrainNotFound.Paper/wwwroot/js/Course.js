@@ -80,7 +80,6 @@ $("#MessageClose").click(function () {
     location.reload();
 })
 
-// Saves the edited changes to a course
 $("#SaveCourseChanges").click(function () {
     var newCourseForm = $("form#EditCourseForm");
 
@@ -145,7 +144,7 @@ $("#SaveCourseChanges").click(function () {
     })
 })
 
-// Submits the new course form information to the server
+// Submits the form information to the server
 $("button#CreateCourse").click(function () {
     var newCourseForm = $("form#NewCourse");
 

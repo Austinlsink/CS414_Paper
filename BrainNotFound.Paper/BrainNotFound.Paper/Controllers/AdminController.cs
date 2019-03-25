@@ -637,6 +637,10 @@ namespace BrainNotFound.Paper.Controllers
             var department = _context.Departments.Where(d => d.DepartmentCode == departmentCode).First();
             ViewBag.department = department;
 
+            // Grab all of the departments for editing purposes
+            var departments = _context.Departments.ToList();
+            ViewBag.departmentList = departments;
+
             // Find the specified course and add it to the ViewBag
             var course = _context.Courses.Where(c => c.CourseCode == courseCode && c.DepartmentId == department.DepartmentId).First();
             ViewBag.course = course;
@@ -655,33 +659,6 @@ namespace BrainNotFound.Paper.Controllers
 
             return View();
         }
-
-        [HttpGet, Route("Courses/Edit/{id}")]
-        public IActionResult EditCourse(long Id)
-        {
-            var course = _context.Courses.Find(Id);
-            var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
-            ViewBag.course = course;
-            ViewBag.departments = departments;
-            ViewData["description"] = course.Description;
-            return View();
-        }
-
-        [HttpPost, Route("Courses/Edit/{id}")]
-        public IActionResult EditCourse(Course c, string description)
-        {
-            var course = _context.Courses.Find(c.CourseId);
-            course.CourseCode  = c.CourseCode;
-            course.Name  = c.Name;
-            course.Description = description;
-            course.CreditHours = c.CreditHours;
-            _context.Courses.Update(course);
-
-            _context.SaveChanges();
-
-            return RedirectToAction("Courses", "Admin");
-        }
-
         #endregion course controllers
 
         #region Section controllers
@@ -834,8 +811,8 @@ namespace BrainNotFound.Paper.Controllers
         public async Task<IActionResult> ReassignInstructor(ApplicationUser user, Section section, Course course, Department department)
         {
             string code = department.DepartmentCode + course.CourseCode;
-            //ViewData["message"] = code + "Hello, we made it...";
-            //return View("TestView");
+
+            
 
             // Find the instructor to reassign to the specified section
             var instructor = await _userManager.FindByNameAsync(user.UserName);

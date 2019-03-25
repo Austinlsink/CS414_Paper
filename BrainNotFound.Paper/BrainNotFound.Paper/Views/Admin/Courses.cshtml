@@ -109,7 +109,7 @@
                     <div class="form-group">
                         <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Credit Hours </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input asp-for="CreditHours" type="number" value="0" id="courseCreditHoursInput" class="form-control col-md-7 col-xs-12">
+                            <input asp-for="CreditHours" type="number" min="1" max="8" value="1" id="courseCreditHoursInput" class="form-control col-md-7 col-xs-12">
                             <span id="courseCreditHoursErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
@@ -143,7 +143,7 @@
             <form id="EditCourseForm" data-parsley-validate class="form-horizontal form-label-left">
                 <input asp-for="CourseId" type="hidden" value="" id="courseId" />
                 <div class="modal-header">
-                    <h3 class="modal-title"><i class="fa fa-mortar-board"></i> Edit Course</h3>
+                    <h3 id="EditCourseHeader" class="modal-title"><i class="fa fa-mortar-board"></i> Edit Course</h3>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -171,7 +171,7 @@
                     <div class="form-group">
                         <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Credit Hours </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input asp-for="CreditHours" type="number" value="0" id="creditHourInput" class="form-control col-md-7 col-xs-12">
+                            <input asp-for="CreditHours" type="number" min="1" max="8" value="0" id="creditHourInput" class="form-control col-md-7 col-xs-12">
                             <span id="EditCourseCreditHoursErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
@@ -197,7 +197,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- Confirm Deleting Modal-->
 <div id="ConfirmModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
