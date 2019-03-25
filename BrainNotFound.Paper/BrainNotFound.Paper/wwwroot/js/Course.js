@@ -1,4 +1,6 @@
-﻿// Resets Modal if canceled
+﻿var deleteCourseId;
+
+// Resets Modal if canceled
 $("button#CancelCreateCourse").click(function () {
     var newDepartmentForm = $('form#NewCourse');
     newDepartmentForm.trigger("reset");
@@ -37,26 +39,36 @@ $("button#EditCourse").click(function () {
     })
 });
 
+// Confirm deleting a course
+$("button#ConfirmDelete").click(function () {
+    deleteCourseId = $(this).val();
+
+    console.log("Delete course ID: " + deleteCourseId);
+    $("#ConfirmModal").modal("toggle");
+})
+
 // Delete a course
-$("button.delete-course").click(function () {
+$("button#YesDelete").click(function () {
     // Gets the department Id to be deleted
-    var courseId = $(this).val();
+    console.log(deleteCourseId);
+    $("#ConfirmModal").modal("hide");
 
     $.ajax({
         url: "/api/Course/delete/",
         type: "POST",
         contentType: 'application/json; charset=utf-8',
-        data: JSON.stringify(courseId),
+        data: JSON.stringify(deleteCourseId),
         success: function (result) {
             if (result.success) {
-                location.reload();
+                $("#errorMessagePlaceHolder").text(result.message)
+                $("div#ErrorModal").modal("toggle");
             }
             else {
                 // Displays the error message to the user
                 $("#errorMessagePlaceHolder").text(result.message)
                 $("div#ErrorModal").modal("toggle");
             }
-        },
+        }
     })
 })
 
