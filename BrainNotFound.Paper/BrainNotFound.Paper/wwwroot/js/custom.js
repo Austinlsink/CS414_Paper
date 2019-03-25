@@ -1,4 +1,5 @@
 /**
+/**
  * Resize function without multiple trigger
  * 
  * Usage:
@@ -1758,25 +1759,7 @@ function init_daterangepicker_single_call() {
 }
 
 
-function init_daterangepicker_TestSchedule() {
 
-    //if (typeof ($.fn.daterangepicker) === 'undefined') { return; }
-    //console.log('init_daterangepicker_reservation');
-
-    //$('#reservation').daterangepicker(null, function (start, end, label) {
-    //    console.log(start.toISOString(), end.toISOString(), label);
-    //});
-
-    $('#testScheduleDateTime').daterangepicker({
-        timePicker: true,
-        startDate: moment().startOf('hour'),
-        endDate: moment().startOf('hour').add(11, 'day'),
-        locale: {
-            format: 'MM/DD/YYYY h:mm A'
-        }
-    });
-
-}
 
 /* SMART WIZARD */
 

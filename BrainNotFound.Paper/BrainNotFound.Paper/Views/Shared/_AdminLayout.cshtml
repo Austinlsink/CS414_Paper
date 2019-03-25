@@ -37,6 +37,7 @@
     <link href="~/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
     <link href="~/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 </head>
+
 @{
     string[] splitname = Regex.Split(Context.User.Identity.Name, @"(?<!^)(?=[A-Z])");
     string username = string.Empty;

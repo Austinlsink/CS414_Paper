@@ -8,15 +8,126 @@ var NumberOfSections = 4;
 var SectionsAssigned = [];
 var IndivisualsAssigned = [];
 
+// DataTable
+var studentsDataTable;
+
+// Currently selected Section
+var studentsInSelectedSection;
+
 // Initialize Page
 init_daterangepicker_TestSchedule();
+init_students_datatable();
 Update_TestStatistics();
 
+// Starts the Datatables for the edit test
+function init_students_datatable() {
+    studentsDataTable = $('#StudentsInSectionTable').DataTable({
+        "columnDefs": [
+            {
+                targets: 0,
+                searchable: false,
+                orderable: false,
+                className: 'select-checkbox',
+                render: function (data, type, full, meta) {
+                    return '<input class="selectedStudent" type="checkbox" value="' + $('<div/>').text(data).html() + '">';
+                }
+
+            }
+        ],
+        'order': [[1, 'asc']]
+    });
+}
+
+// Reset New Schedule Time Picker
+function init_daterangepicker_TestSchedule() {
+
+    $('#testScheduleDateTime').daterangepicker({
+        timePicker: true,
+        startDate: moment().startOf('hour'),
+        endDate: moment().startOf('hour').add(11, 'day'),
+        locale: {
+            format: 'MM/DD/YYYY h:mm A'
+        }
+    });
+
+}
 // Updates the statistics in the information section of the test
 function Update_TestStatistics() {
     $("#TotalPointsStats").text(TotalPoints);
     $("#TotalQuestionsStats").text(NumberOfQuestions);
     $("#TotalSectionsStats").text(NumberOfSections);
+}
+
+// Updates the tables showing witch sections and students are assigned to the test
+function UpdateAssignmentTables() {
+
+    // Updates the selected Sections
+    if (SectionsAssigned.length == 0) {
+        $("#SectionsAssignedTest").removeClass("show").addClass("hidden");
+        $("#NoSectionsAssignedTest").removeClass("hidden").addClass("show");
+    } else {
+        var SectionsAssignedToTableRowTemplate = $("#SectionAssigmentTableRowTemplate").html();
+        var template = Handlebars.compile(SectionsAssignedToTableRowTemplate);
+        var rendered = "";
+        for (var index = 0; index * 2 < SectionsAssigned.length; index++) {
+            
+            var templateInfo = {RowNumber:(index + 1), SectionNumbers: SectionsAssigned[(index * 2) + 1], SectionId: SectionsAssigned[(index * 2)]}
+            rendered += template(templateInfo);
+        }
+        $("#SectionsAssignedTest > tbody").html(rendered);
+
+        $("#NoSectionsAssignedTest").removeClass("show").addClass("hidden");
+        $("#SectionsAssignedTest").removeClass("hidden");
+    }
+
+    // Updates the selected Students
+    if (IndivisualsAssigned.length == 0) {
+        $("#StudentsAssignedTest").removeClass("show").addClass("hidden");
+        $("#NoStudentsAssignedTest").removeClass("hidden").addClass("show");
+    } else {
+        var StudentAssignmnetRowTemplate = $("#StudentAssignmnetRowTemplate").html();
+        var template = Handlebars.compile(StudentAssignmnetRowTemplate);
+        var rendered = "";
+        for (var index = 0; index * 4 < IndivisualsAssigned.length; index++) {
+
+            var templateInfo = { SectionNumber: IndivisualsAssigned[(index * 4)], StudentId: IndivisualsAssigned[((index * 4) + 1)], FirstName: IndivisualsAssigned[((index * 4) + 2)], LastName: IndivisualsAssigned[((index * 4) + 3)]  }
+            rendered += template(templateInfo);
+        }
+        $("#StudentsAssignedTest > tbody").html(rendered);
+
+        $("#NoStudentsAssignedTest").removeClass("show").addClass("hidden");
+        $("#StudentsAssignedTest").removeClass("hidden");
+    }
+}
+
+// Resets the new schedule container
+function resetNewSchedule() {
+    $("div#NewScheduleContainer").removeClass("show").addClass("hidden");
+    $("a#NewSchedule").removeClass("hidden");
+
+    // Resets the dropdown section selection
+    $('#SelectSection option').prop('selected', function () {
+        return this.defaultSelected;
+    });
+
+    // Resets the assigned students and sections
+    SectionsAssigned = [];
+    IndivisualsAssigned = [];
+    UpdateAssignmentTables();
+
+    // Resets the time Picker
+    init_daterangepicker_TestSchedule();
+
+    // Reset Unlimited CheckBox
+    $('#UnlimitedTimeCheckBox').prop('checked', false);
+    $("input#TimeLimit").removeAttr("disabled");
+
+    // Reset Time Limit
+    $("#TimeLimit").val("50");
+
+    //hides the students table
+    $("div#StudentsInSectionTableContainer").removeClass("show").addClass("hidden");
+    $("div#SectionNotSelectedContainer").removeClass("hidden").addClass("show");
 }
 
 // -- Event Handlers
@@ -28,21 +139,26 @@ $('select#SelectSection').change(function () {
 
     $.ajax({
         url: "/api/CreateTest/GetStudentsInSection/" + sectionId,
-        success: function (result) {
-            // Fetches the template and, iterates through students, and renders table rows
-            var rendered = "";
-            var StudentTableRowTemplate = $("#StudentsInSectionTableRowTemplate").html();
-            var template = Handlebars.compile(StudentTableRowTemplate);
+        type: "GET",
+        success: function (students) {
+            //Fetches the template and, iterates through students, and renders table rows
 
-            result.forEach(function (student) {
-                rendered += template(student);
+            studentsInSelectedSection = students;
+            $("#StudentsInSectionTable").DataTable().clear();
+
+            students.forEach(function (student) {
+                $('#StudentsInSectionTable').dataTable().fnAddData([
+                    student.Id,
+                    student.FirstName,
+                    student.LastName,
+                ]);
             })
-
-            $("#StudentsInSectionTable > tbody").html(rendered);
-
+            
             // Hides no section select message
             $("div#SectionNotSelectedContainer").removeClass("show").addClass("hidden");
             $("div#StudentsInSectionTableContainer").removeClass("hidden").addClass("show");
+
+            
         }
     });
 });
@@ -78,33 +194,100 @@ $("a#NewSchedule").click(function () {
 
 // Hides and Resets the new sechedule section
 $("a#CancelNewSchedule").click(function () {
-    $("div#NewScheduleContainer").removeClass("show").addClass("hidden");
-    $("a#NewSchedule").removeClass("hidden");
-
-    // Resets the dropdown section selection
-    $('#SelectSection option').prop('selected', function () {
-            return this.defaultSelected;
-    });
-
-    //hides the students table
-    $("div#StudentsInSectionTableContainer").removeClass("show").addClass("hidden");
-    $("div#SectionNotSelectedContainer").removeClass("hidden").addClass("show");
-
+    resetNewSchedule();
 })
 
 // Assign a section to the schedule
 $("button#AssignEntireSection").click(function () {
-    var sectionId = $("SelectSection").val();
+    var sectionId = $("#SelectSection").val();
+    var sectionNumber = $("#SelectSection option:selected").text();
 
-    if (SectionsAssigned.includes(sectionId)) {
-        SectionsAssigned.push(sectionId);
+    // Checks if section has already been assigned.
+    if (sectionId != null && !SectionsAssigned.includes( sectionId, sectionNumber )) {
+        SectionsAssigned.push(sectionId, sectionNumber);
+        UpdateAssignmentTables();
     }
-    console.log(SectionsAssigned);
-    SectionsAssigned.forEach(function (sectId) {
-        console.log(sectId);
-    })
 })
 
+$("button#AssignSelectedStudents").click(function () {
+    var sectionNumber = $("#SelectSection option:selected").text();
+    studentsDataTable.$('.selectedStudent').each(function () {
+        if (this.checked) {
+            var studentId = $(this).val();
+
+            if (!IndivisualsAssigned.includes(studentId)) {
+                var index = studentsInSelectedSection.findIndex(s => s.Id == studentId);
+                IndivisualsAssigned.push(
+                    sectionNumber.replace("Section ",""),
+                    studentsInSelectedSection[index].Id,
+                    studentsInSelectedSection[index].FirstName,
+                    studentsInSelectedSection[index].LastName
+                )
+            }
+        }
+    })
+    UpdateAssignmentTables();
+})
+
+$("#NewTestSchedule").click(function () {
+    var TestId = $("#TestId").val();
+    var StartEndDateTime = $("#testScheduleDateTime").val();
+    var IsTimeUnlimited = $("#UnlimitedTimeCheckBox").is(':checked');
+    var TimeLimit = $("#TimeLimit").val();
+    var Students = [];
+    var Sections =[];
+
+    // Get the id for each selected section
+    for (var index = 0; index * 2 < SectionsAssigned.length; index++) {
+        Sections.push(SectionsAssigned[(index * 2)]);
+    }
+
+    // Get the id for each selected student
+    for (var index = 0; index * 4 < IndivisualsAssigned.length; index++) {
+        Students.push(IndivisualsAssigned[((index * 4) + 1)]);
+    }
+
+    var JsonData = JSON.stringify({
+        "TestId": TestId, "StartEndDateTime": StartEndDateTime, "IsTimeUnlimited": IsTimeUnlimited, "TimeLimit": TimeLimit, "Students": Students, "Sections": Sections
+    });
+
+    $.ajax({
+        url: "/api/CreateTest/NewTestSchedule",
+        type: "POST",
+        contentType: 'application/json; charset=utf-8',
+        data: JsonData,
+        success: function (result) {
+            if (result.success) {
+                console.log(result);
+            }
+            else {
+                // Displays the error message to the user
+                $("#errorMessagePlaceHolder").text(result.message)
+                $("div#ErrorModal").modal("toggle");
+            }
+        },
+
+    })
+
+})
+
+// Removes a section from the assigment table
+$("table#SectionsAssignedTest").on("click", ".deleteEntireSectionAssignment", function () {
+    var SectionId = $(this).val();
+
+    SectionsAssigned.splice(SectionsAssigned.indexOf(SectionId), 2);
+    UpdateAssignmentTables();
+    
+})
+
+// Remove a student from the assignment table
+$("table#StudentsAssignedTest").on("click", ".deleteStudentAssigment", function () {
+    var StudentId = $(this).val();
+    IndivisualsAssigned.splice(IndivisualsAssigned.indexOf(StudentId) - 1, 4);
+
+    UpdateAssignmentTables();
+    
+})
 // Handles all forms submition buttons
 $(function () {
     $('.post-using-ajax').each(function () {

@@ -49,7 +49,30 @@ namespace BrainNotFound.Paper.api
             return Json(NewSection);
         }
 
+        // Creates a new Test Schedule
+        [HttpPost, Route("NewTestSchedule")]
+        public JsonResult NewTestSchedule([FromBody]JObject jsonData)
+        {
+            // Receiveing the data
+            dynamic json = jsonData;
+            long testId = json.TestId;
+            string startEndDateTime = json.StartEndDateTime;
+            bool isTimeUnlimited = bool.Parse((string) json.IsTimeUnlimited);
+            int timeLimit = json.TimeLimit;
+            List<string> studentIds = json.Students;
+            List<long> sectionIds = json.Sections;
 
+
+            var me = "";
+            var test = _context.Tests.Find(testId);
+            me += test.TestName + " / " + startEndDateTime;
+
+
+
+            return Json(new { success = true, testName = test.TestName, startEndDateTime, isTimeUnlimited , timeLimit , studentIds , sectionIds });
+        }
+
+        // Gets all the students in a section
         [HttpGet, Route("GetStudentsInSection/{SectionId}")]
         public JsonResult GetSection(long SectionId)
         {
