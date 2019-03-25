@@ -60,9 +60,9 @@
                                             <td class=" ">@course.Name</td>
                                             <td class=" ">@course.CreditHours</td>
                                             <td class=" last">
-                                                    <a asp-controller="Admin" asp-action="ViewCourse" asp-route-code="@dept.DepartmentCode@course.CourseCode" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                                    <a asp-controller="Admin" asp-action="EditCourse" asp-route-id="@course.CourseId" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                                    <button value="@course.CourseId" class="btn btn-danger btn-xs delete-course"><i class="fa fa-trash-o"></i> Delete </button>
+                                                <a asp-controller="Admin" asp-action="ViewCourse" asp-route-code="@dept.DepartmentCode@course.CourseCode" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                                <a asp-controller="Admin" asp-action="EditCourse" asp-route-id="@course.CourseId" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                                <button value="@course.CourseId" class="btn btn-danger btn-xs delete-course"><i class="fa fa-trash-o"></i> Delete </button>
                                             </td>
                                         </tr>
                                     }
@@ -173,4 +173,21 @@
 
 
     </script>
+
+    <!--Course functions-->
+    <script type="text/javascript" src="~/js/Course.js"></script>
+
+    <!-- Datatables -->
+    <script src="../vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="../vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="../vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="../vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="../vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="../vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="../vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="../vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="../vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
 }
