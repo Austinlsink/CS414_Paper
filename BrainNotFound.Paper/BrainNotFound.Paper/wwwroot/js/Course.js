@@ -51,7 +51,6 @@ $("button#ConfirmDelete").click(function () {
 // Delete a course if the user specifies yes on the confirmation modal
 $("button#YesDelete").click(function () {
     // Gets the department Id to be deleted
-    console.log(deleteCourseId);
     $("#ConfirmModal").modal("hide");
 
     $.ajax({

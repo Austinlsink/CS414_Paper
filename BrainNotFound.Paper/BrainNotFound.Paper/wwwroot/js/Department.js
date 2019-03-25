@@ -1,4 +1,7 @@
-﻿// Edit Department code and name
+﻿// Global variable for deleting the course
+var deleteDepartmentId;
+
+// Edit Department code and name
 function EditDepartmentCodeAndName(Id) {
     $.ajax({
         url: "/Admin/Department/Edit/" + Id,
@@ -18,28 +21,43 @@ $("button#CancelCreateDepartment").click(function () {
     $("#departmentNameErrorMessage").empty();
 });
 
-$("button.delete-department").click(function () {
+
+// Display a confirmation modal if the user wants to delete a department
+$("button#ConfirmDelete").click(function () {
+    deleteDepartmentId = $(this).val();
+    $("#ConfirmModal").modal("toggle");
+})
+
+// Delete a Department if the user specifies yes on the confirmation modal
+$("button#YesDelete").click(function () {
     // Gets the department Id to be deleted
-    var DepartmentId = $(this).val();
+    $("#ConfirmModal").modal("hide");
     
     $.ajax({
         url: "/api/department/delete/",
         type: "POST",
         contentType: 'application/json; charset=utf-8',
-        data: JSON.stringify(DepartmentId),
+        data: JSON.stringify(deleteDepartmentId),
         success: function (result) {
             if (result.success) {
                 $("#errorMessagePlaceHolder").text(result.message)
+                $("h4#MessageModal").text("Success!");
                 $("div#ErrorModal").modal("toggle");
             }
             else {
                 // Displays the error message to the user
+                $("h4#MessageModal").text("Error!");
                 $("#errorMessagePlaceHolder").text(result.message)
                 $("div#ErrorModal").modal("toggle");
             }
         },
 
     })
+})
+
+// Reloads the page when a Course is successfully deleted
+$("#MessageClose").click(function () {
+    location.reload();
 })
 
 // Reloads the page when a department is successfully deleted

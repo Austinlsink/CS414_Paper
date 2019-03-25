@@ -59,7 +59,7 @@
                                             <td class=" last">
                                                 <button id="EditDepartmentButton" type="button" onClick="EditDepartmentCodeAndName(@department.DepartmentId)" data-toggle="modal" data-target="#departmentModal" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </button>
 
-                                                <button class="btn btn-danger btn-xs delete-department" value="@department.DepartmentId"><i class="fa fa-trash-o"></i> Delete </button>
+                                                <button id="ConfirmDelete" type="button" data-target="#ConfirmModal" class="btn btn-danger btn-xs delete-department" value="@department.DepartmentId"><i class="fa fa-trash-o"></i> Delete </button>
 
 
                                             </td>
@@ -94,8 +94,7 @@
     </div>
 </div>
 
-<!-- Large modal -->
-
+<!-- Create a New Department Modal -->
 <div id="NewDepartmentModel" class="modal fade new-department-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -132,6 +131,25 @@
     </div>
 </div>
 
+<!-- Confirm Deleting Modal-->
+<div id="ConfirmModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel2">Warning: Deleting Department</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this course?</p>
+                <div class="modal-footer">
+                    <button id="YesDelete" type="button" class="btn btn-default">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Message Modal-->
 <div id="ErrorModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-sm">
@@ -143,7 +161,7 @@
             <div class="modal-body">
                 <p id="errorMessagePlaceHolder"></p>
                 <div class="modal-footer">
-                    <button id="MessageClose"type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="MessageClose" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -152,9 +170,6 @@
 
 @section scripts
     {
-
-    
-
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
             $('#departmentTable').DataTable({
