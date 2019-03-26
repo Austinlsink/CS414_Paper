@@ -229,6 +229,7 @@ $("button#AssignSelectedStudents").click(function () {
     UpdateAssignmentTables();
 })
 
+// Send the information about a new schedule to the server and updates the view
 $("#NewTestSchedule").click(function () {
     var TestId = $("#TestId").val();
     var StartEndDateTime = $("#testScheduleDateTime").val();
@@ -266,10 +267,21 @@ $("#NewTestSchedule").click(function () {
                 $("div#ErrorModal").modal("toggle");
             }
         },
-
     })
-
 })
+
+// Adds a Generic Section to a Test
+$("#AddTestSectionBtn").click(function () {
+    var rendered = "";
+    var GenericTestSection = $("#GenericTestSectionTemplate").html();
+    var template = Handlebars.compile(GenericTestSection);
+
+    rendered += template();
+
+    $("#TestSections").append(rendered);
+})
+
+
 
 // Removes a section from the assigment table
 $("table#SectionsAssignedTest").on("click", ".deleteEntireSectionAssignment", function () {
@@ -288,6 +300,38 @@ $("table#StudentsAssignedTest").on("click", ".deleteStudentAssigment", function 
     UpdateAssignmentTables();
     
 })
+
+// Cancels the new section 
+$("#TestSections").on("click", "button#cancelQuestionType", function () {
+    $(this).parents(".newSectionContainer").remove();
+})
+
+// Sets the test section to the chosen question type
+$("#TestSections").on("click", "button#setQuestionType", function () {
+    // Get the data
+    var QuestionType = $(this).prev().find("#questionType").val();
+    var TestId = $("#TestId").val(); 
+
+    var JsonData = JSON.stringify({ "TestId": TestId, "QuestionType": QuestionType });
+
+    $.ajax({
+        url: "/api/CreateTest/CreateTestSection",
+        type: "POST",
+        contentType: 'application/json; charset=utf-8',
+        data: JsonData,
+        success: function (result) {
+            if (result.success) {
+                console.log(result);
+            }
+            else {
+                // Displays the error message to the user
+                $("#errorMessagePlaceHolder").text(result.message)
+                $("div#ErrorModal").modal("toggle");
+            }
+        },
+    })
+})
+
 // Handles all forms submition buttons
 $(function () {
     $('.post-using-ajax').each(function () {

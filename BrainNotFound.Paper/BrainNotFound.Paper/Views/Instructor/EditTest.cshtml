@@ -99,7 +99,7 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody ></tbody>
+                    <tbody></tbody>
                 </table>
                 <!-- END: Schedule -->
                 <!-- START: New Test Schedule -->
@@ -228,9 +228,7 @@
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                          
-                                        </tbody>
+                                        <tbody></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -259,9 +257,18 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="text-center">
-        <button type="button" class="btn btn-round btn-info"><i class="fa fa-plus"></i> Add Section</button>
+<div id="TestSections">
+
+</div>
+
+<div id="AddTestSection">
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="clearfix"></div>
+            <div class="text-center">
+                <button type="button" id="AddTestSectionBtn" class="btn btn-round btn-primary"><i class="fa fa-plus"></i> &nbsp;Add Section</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -315,4 +322,41 @@
             </td>
         </tr>
     </script>
+
+    <!--Section Type Start-->
+    <script type="text/x-handlebars-template" id="GenericTestSectionTemplate">
+        <div class="row newSectionContainer">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div id="genericSection" class="x_panel">
+                    <!-- top of section header -->
+                    <div class="x_title">
+                        <h2 id="Titlefff"><i class="fa fa-question"></i> New test section</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <!-- end of section header -->
+                    <div class="x_content">
+                        <div class="row">
+                            <form id="new-test-Section" class="form-horizontal form-label-left">
+                                <label class="control-label col-md-2 col-sm-2 col-xs-12">Question Type</label>
+                                <div class="col-md-4 col-sm-4 col-xs-12 ">
+                                    <select id="questionType" class="form-control col-md-4 col-sm-4 col-xs-12">
+                                        <option selected disabled="disabled">-- Choose option --</option>
+                                        <option value="TrueFalse">True/False</option>
+                                        <option value="MultipleChoice">Multiple Choice</option>
+                                        <option value="FillInTheBlank">Fill In The Blank</option>
+                                        <option value="Matching">Matching</option>
+                                        <option value="Essay">Essay</option>
+                                    </select>
+                                </div>
+                                <button id="setQuestionType" type="button" class="btn btn-primary">Set Question Type</button>
+                                <button id="cancelQuestionType" class="btn btn-danger">Cancel</button>
+                                <br>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+    <!--Section Type End-->
 }
