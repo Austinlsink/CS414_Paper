@@ -50,17 +50,24 @@ namespace BrainNotFound.Paper.api
 
 
         [HttpPost, Route("CreateTestSection")]
-        public JsonResult CreateTestSection(long TestId, string QuestionTypeName)
+        public JsonResult CreateTestSection([FromBody]JObject jsonData)
         {
-            var test = _context.Tests.Find(TestId);
-            var questionType = _context.QuestionTypes.Where(qt => qt.Name == QuestionTypeName).First();
+            // Converting the data from the json object to variables
+            dynamic json = jsonData;
+            long testId = json.TestId;
+            string questionType = json.QuestionType;
+
+            // Find the test and create a section in it
+            
+            var test = _context.Tests.Find(testId);
+
             var NewSection = new TestSection()
             {
                 QuestionType = questionType,
                 IsQuestionSection = true,
-                SectionInstructions = DefaultInstruction.TrueFalse
             };
 
+          
             test.TestSections.Add(NewSection);
             _context.SaveChanges();
 
