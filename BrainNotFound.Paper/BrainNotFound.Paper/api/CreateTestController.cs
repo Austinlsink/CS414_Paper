@@ -35,7 +35,19 @@ namespace BrainNotFound.Paper.api
 
         // TODO Lacy - create controller actions for each type of question: TF, MC, Matching, FitB, Essay; QUESTION is my model
 
-        // T&F - receives section id, answer, point value, content, inde
+        [HttpGet, Route("TrueFalse")]
+        public JsonResult GetTrueFalse(long sectionId, int index, string content, int pointValue, bool answer)
+        {
+            TrueFalse TFQuestion = new TrueFalse();
+            TFQuestion.Content = content;
+            TFQuestion.Index = index;
+            TFQuestion.PointValue = pointValue;
+            TFQuestion.TestSectionId = sectionId;
+            TFQuestion.TrueFalseAnswer = answer;
+
+            return Json(TFQuestion);
+        }
+
 
         [HttpPost, Route("CreateTestSection")]
         public JsonResult CreateTestSection(long TestId, string QuestionTypeName)
