@@ -57,17 +57,27 @@ namespace BrainNotFound.Paper.api
             long testId = json.TestId;
             string questionType = json.QuestionType;
 
+            // TODO: Check if test really belongs to the current teacher
+
             // Find the test and create a section in it
             
             var test = _context.Tests.Find(testId);
 
+            
             var NewSection = new TestSection()
             {
                 QuestionType = questionType,
                 IsQuestionSection = true,
             };
 
-          
+            // Sets the Instuction to the section
+            switch(questionType)
+            {
+                case QuestionType.TrueFalse:
+                    NewSection.SectionInstructions = DefaultInstruction.TrueFalse;
+                    break;
+            }
+            
             test.TestSections.Add(NewSection);
             _context.SaveChanges();
 
@@ -106,8 +116,6 @@ namespace BrainNotFound.Paper.api
 
             newTestSchedule.StudentTestAssignments = new List<StudentTestAssignment>();
 
-
-
             // Get all students in sections
             foreach (long sectionId in sectionIds)
             {
@@ -121,12 +129,8 @@ namespace BrainNotFound.Paper.api
                 }
             }
 
-
             _context.TestSchedules.Add(newTestSchedule);
             _context.SaveChanges();
-
-
-
 
             return Json(new { success = true });
         }
