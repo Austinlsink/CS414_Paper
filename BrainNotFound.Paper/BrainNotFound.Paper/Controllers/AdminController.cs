@@ -60,63 +60,6 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         /// <summary>
-        /// GET: Displays the form for a new administrator
-        /// </summary>
-        [HttpGet, Route("Administrators/New")]
-        public IActionResult NewAdministrator()
-        {
-            return View();
-        }
-
-        /// <summary>
-        /// POST: Creates a new administrator profile
-        /// </summary>
-        /// <param name="model">The admin info that is being added to the _userManager</param>
-        [HttpPost, Route("Administrators/New")]
-        public async Task<IActionResult> NewAdministrator(ApplicationUser model)
-        {
-            if (model.FirstName == null || model.LastName == null || model.Password == null)
-            {
-                return View(model);
-            }
-
-            model.UserName = model.FirstName + model.LastName;
-            var admin = await _userManager.FindByIdAsync(model.Id);
-
-            if (admin == null)
-            {
-                //Create a new Application User
-                var result = await _userManager.CreateAsync(model, model.Password);
-
-                if (result.Succeeded)
-                {
-                    //Fetch created user
-                    var CreatedUser = await _userManager.FindByNameAsync(model.UserName);
-
-                    //Add instructor role to created Application User
-                    await _userManager.AddToRoleAsync(CreatedUser, "Admin");
-
-                    return RedirectToAction("Administrators", "Admin");
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ViewBag.UserError += error.Description;
-                    }
-                }
-            }
-            else
-            {
-                ViewBag.UserError = "That user already exists.";
-                ViewData["Message"] = admin.Id.ToString();
-                return View("TestView");
-            }
-            ViewData["message"] += model.Email;
-            return View(model);
-        }
-
-        /// <summary>
         /// Views a specific administrator's information
         /// </summary>
         /// <param name="username">The specific admin to look up</param>
