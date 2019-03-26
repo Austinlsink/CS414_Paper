@@ -1,0 +1,31 @@
+USE [CS414_BrainNotFound]
+GO
+/****** Object:  Trigger [dbo].[testNotification]    Script Date: 3/25/2019 9:17:59 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+--Trigger for notifying students of a newly assigned test
+ALTER TRIGGER [dbo].[testNotification] ON [dbo].[StudentTestAssignments]
+AFTER INSERT
+AS
+
+BEGIN
+ (SELECT * 
+			 FROM StudentTestAssignments sta
+			 JOIN inserted AS i
+			   ON sta.StudentTestAssignmentId = i.StudentTestAssignmentId
+		  )
+	INSERT INTO Notifications
+		(UserId, Title, Content, Type, Timestamp)
+	VALUES
+		( (SELECT inserted.StudentId 
+			 FROM StudentTestAssignments
+			 JOIN inserted
+			   ON StudentTestAssignments.StudentTestAssignmentId = inserted.StudentTestAssignmentId
+		  ),
+		  (SELECT Tests.TestName FROM Tests JOIN inserted ON Tests.TestId = inserted.TestId) + ' ' + (SELECT Courses.Name FROM Courses JOIN Tests ON Tests.CourseId = Courses.CourseId JOIN inserted ON inserted.TestId = Tests.TestId) + ' Assigned',
+		'You have been assigned ' + (SELECT Tests.TestName FROM Tests JOIN inserted ON Tests.TestId = inserted.TestId) + ' for ' + (SELECT Courses.Name FROM Courses JOIN Tests ON Tests.CourseId = Courses.CourseId JOIN inserted ON inserted.TestId = Tests.TestId),
+		'Test Assigned',
+		SYSDATETIME());
+END;

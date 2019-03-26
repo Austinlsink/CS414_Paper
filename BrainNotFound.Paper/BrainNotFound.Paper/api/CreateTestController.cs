@@ -79,24 +79,24 @@ namespace BrainNotFound.Paper.api
                 TimeLimit = isTimeUnlimited ? 0 : timeLimit,
                 IsTimeUnlimited = isTimeUnlimited
             };
-            
-            //List<StudentTestAssignment> studentTestAssignments = new List<StudentTestAssignment>();
+
+            newTestSchedule.StudentTestAssignments = new List<StudentTestAssignment>();
 
 
-            //// Get all students in sections
-            //foreach (long sectionId in sectionIds)
-            //{
-            //    var section = _context.Sections.Include(s => s.Enrollments).Where(s => s.SectionId == sectionId).First();
-            //    foreach(Enrollment en in section.Enrollments)
-            //    {
-            //        studentTestAssignments.Add(new StudentTestAssignment()
-            //        {
-            //            StudentId = en.StudentId
-            //        });
-            //    }
-            //}
 
-            //newTestSchedule.StudentTestAssignments = studentTestAssignments;
+            // Get all students in sections
+            foreach (long sectionId in sectionIds)
+            {
+                var section = _context.Sections.Include(s => s.Enrollments).Where(s => s.SectionId == sectionId).First();
+                foreach (Enrollment en in section.Enrollments)
+                {
+                    newTestSchedule.StudentTestAssignments.Add(new StudentTestAssignment()
+                    {
+                        StudentId = en.StudentId
+                    });
+                }
+            }
+
 
             _context.TestSchedules.Add(newTestSchedule);
             _context.SaveChanges();
