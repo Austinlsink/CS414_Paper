@@ -46,7 +46,7 @@ function init_daterangepicker_TestSchedule() {
         startDate: moment().startOf('hour'),
         endDate: moment().startOf('hour').add(11, 'day'),
         locale: {
-            format: 'MM/DD/YYYY h:mm A'
+            format: 'MM/DD/YYYY hh:mm A'
         }
     });
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using BrainNotFound.Paper.Models.BusinessModels;
@@ -7,6 +8,7 @@ using BrainNotFound.Paper.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace BrainNotFound.Paper.api
@@ -59,17 +61,50 @@ namespace BrainNotFound.Paper.api
             string startEndDateTime = json.StartEndDateTime;
             bool isTimeUnlimited = bool.Parse((string) json.IsTimeUnlimited);
             int timeLimit = json.TimeLimit;
-            List<string> studentIds = json.Students;
-            List<long> sectionIds = json.Sections;
+            JArray studentIds = json.Students;
+            JArray sectionIds = json.Sections;
 
 
-            var me = "";
-            var test = _context.Tests.Find(testId);
-            me += test.TestName + " / " + startEndDateTime;
+            // Parsing the date
+            string startDateTime = startEndDateTime.Substring(0, startEndDateTime.IndexOf(" - "));
+            string endDateTime = startEndDateTime.Substring(startEndDateTime.IndexOf(" - ") + 3);
+            DateTime parsedStartDateTime = DateTime.ParseExact(startDateTime, "MM/dd/yyyy hh:mm tt", new CultureInfo("en-US"), DateTimeStyles.None);
+            DateTime parsedEndDateTime   = DateTime.ParseExact(endDateTime,   "MM/dd/yyyy hh:mm tt", new CultureInfo("en-US"), DateTimeStyles.None);
+
+            var newTestSchedule = new TestSchedule()
+            {
+                StartTime = parsedStartDateTime,
+                EndTime = parsedEndDateTime,
+                TestId = testId,
+                TimeLimit = isTimeUnlimited ? 0 : timeLimit,
+                IsTimeUnlimited = isTimeUnlimited
+            };
+            
+            //List<StudentTestAssignment> studentTestAssignments = new List<StudentTestAssignment>();
+
+
+            //// Get all students in sections
+            //foreach (long sectionId in sectionIds)
+            //{
+            //    var section = _context.Sections.Include(s => s.Enrollments).Where(s => s.SectionId == sectionId).First();
+            //    foreach(Enrollment en in section.Enrollments)
+            //    {
+            //        studentTestAssignments.Add(new StudentTestAssignment()
+            //        {
+            //            StudentId = en.StudentId
+            //        });
+            //    }
+            //}
+
+            //newTestSchedule.StudentTestAssignments = studentTestAssignments;
+
+            _context.TestSchedules.Add(newTestSchedule);
+            _context.SaveChanges();
 
 
 
-            return Json(new { success = true, testName = test.TestName, startEndDateTime, isTimeUnlimited , timeLimit , studentIds , sectionIds });
+
+            return Json(new { success = true });
         }
 
         // Gets all the students in a section

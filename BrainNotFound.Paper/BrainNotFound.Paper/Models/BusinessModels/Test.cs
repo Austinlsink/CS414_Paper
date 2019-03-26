@@ -27,6 +27,6 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 		public string InstructorId {get; set;} // ID of instructor who wrote the test
         [ForeignKey("InstructorId")]
         public ApplicationUser applicationUser {get; set;}
-		public List<StudentTestAssignment> StudentTestAssignments { get; set; }
+		
 	}
 }

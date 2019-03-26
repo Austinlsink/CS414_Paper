@@ -4,14 +4,16 @@ using BrainNotFound.Paper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BrainNotFound.Paper.Migrations
 {
     [DbContext(typeof(PaperDbContext))]
-    partial class PaperDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190326003935_AddedUnlimitedTimePropertyToTestSchedule")]
+    partial class AddedUnlimitedTimePropertyToTestSchedule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -476,13 +478,13 @@ namespace BrainNotFound.Paper.Migrations
 
                     b.Property<bool>("Submitted");
 
-                    b.Property<long>("TestScheduleId");
+                    b.Property<long>("TestId");
 
                     b.HasKey("StudentTestAssignmentId");
 
                     b.HasIndex("StudentId");
 
-                    b.HasIndex("TestScheduleId");
+                    b.HasIndex("TestId");
 
                     b.ToTable("StudentTestAssignments");
                 });
@@ -537,13 +539,13 @@ namespace BrainNotFound.Paper.Migrations
 
                     b.Property<DateTime>("EndTime");
 
-                    b.Property<bool>("IsTimeUnlimited");
-
                     b.Property<DateTime>("StartTime");
 
                     b.Property<long>("TestId");
 
                     b.Property<int>("TimeLimit");
+
+                    b.Property<bool>("UnlimitedTime");
 
                     b.HasKey("TestScheduleId");
 
@@ -914,9 +916,9 @@ namespace BrainNotFound.Paper.Migrations
                         .WithMany("StudentTestAssignments")
                         .HasForeignKey("StudentId");
 
-                    b.HasOne("BrainNotFound.Paper.Models.BusinessModels.TestSchedule", "TestSchedule")
+                    b.HasOne("BrainNotFound.Paper.Models.BusinessModels.Test", "Test")
                         .WithMany("StudentTestAssignments")
-                        .HasForeignKey("TestScheduleId")
+                        .HasForeignKey("TestId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

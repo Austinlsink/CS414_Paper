@@ -11,7 +11,9 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 		 public long TestScheduleId {get; set;}
 		 
         // Ask about what is used for duration
-		 public int TimeLimit {get; set;}
+		public int TimeLimit {get; set;}
+
+        public bool IsTimeUnlimited { get; set; }
         [Required]
         [DataType(DataType.Date, ErrorMessage ="Please enter a start time.")]
         public DateTime StartTime {get; set;}
@@ -25,5 +27,6 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 		 public Test Test {get; set;}
 
         public List<StudentAnswer> StudentAnswers { get; set; }
-	}
+        public List<StudentTestAssignment> StudentTestAssignments { get; set; }
+    }
 }
