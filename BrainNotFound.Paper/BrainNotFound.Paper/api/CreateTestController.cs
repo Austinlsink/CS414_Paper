@@ -35,17 +35,59 @@ namespace BrainNotFound.Paper.api
 
         // TODO Lacy - create controller actions for each type of question: TF, MC, Matching, FitB, Essay; QUESTION is my model
 
-        [HttpGet, Route("TrueFalse")]
-        public JsonResult GetTrueFalse(long sectionId, int index, string content, int pointValue, bool answer)
+        /// <summary>
+        /// Bima says that this method gets a true false questions, saves it to the DB, and returns the question
+        /// </summary>
+        /// <param name="jsonData">The object that contains all of the question information</param>
+        /// <returns>The question that was created</returns>        
+        [HttpPost, Route("TrueFalse")]
+        public JsonResult GetTrueFalse([FromBody] JObject jsonData)
         {
-            TrueFalse TFQuestion = new TrueFalse();
-            TFQuestion.Content = content;
-            TFQuestion.Index = index;
-            TFQuestion.PointValue = pointValue;
-            TFQuestion.TestSectionId = sectionId;
-            TFQuestion.TrueFalseAnswer = answer;
+            dynamic json = jsonData;
 
-            return Json(TFQuestion);
+            // Create a new question and add it to the DB
+            TrueFalse TFQuestion = new TrueFalse();
+            TFQuestion.Content = json.Content;
+            TFQuestion.Index = int.Parse((string) json.Index);
+            TFQuestion.PointValue = int.Parse((string) json.PointValue);
+            TFQuestion.TestSectionId = long.Parse((string) json.TestSectionId);
+            TFQuestion.TrueFalseAnswer = bool.Parse((string) json.TrueFalseAnswer);
+            TFQuestion.QuestionType = QuestionType.TrueFalse;
+
+            _context.Questions.Add(TFQuestion);
+            _context.SaveChanges();         
+            
+            return Json(new { success = true, question = TFQuestion });
+        }
+
+        [HttpPost, Route("MultipleChoice")]
+        public JsonResult GetMultipleChoice([FromBody] JObject jsonData)
+        {
+            dynamic json = jsonData;
+            JArray MCAnswers = json.MultipleChoiceAnswers;
+
+
+            Question MCQuestion = new Question();
+            MCQuestion.Content = json.Content;
+            MCQuestion.Index = int.Parse((string)json.Index);
+            MCQuestion.PointValue = int.Parse((string)json.PointValue);
+            MCQuestion.TestSectionId = long.Parse((string)json.TestSectionId);
+            MCQuestion.QuestionType = QuestionType.MultipleChoice;
+
+            return Json(new { success = true });
+        }
+
+        /// <summary>
+        /// Bima says that this method gets all of the true false questions in a section
+        /// </summary>
+        /// <param name="testSectionId">Specifies which questions need to be grabbed</param>
+        /// <returns>All of the questions in that test section</returns>
+        [HttpGet, Route("GetQuestionsInSection/{testSectionId}")]
+        public JsonResult GetQuestionsInSection(long testSectionId)
+        {
+            var questions = _context.Questions.Where(q => q.TestSectionId == testSectionId).ToList();
+
+            return Json(questions);
         }
 
 
@@ -62,7 +104,7 @@ namespace BrainNotFound.Paper.api
             // Find the test and create a section in it
             
             var test = _context.Tests.Find(testId);
-
+            test.TestSections = new List<TestSection>();
             
             var NewSection = new TestSection()
             {
