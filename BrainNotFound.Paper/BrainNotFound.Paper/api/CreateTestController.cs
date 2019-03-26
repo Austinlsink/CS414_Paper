@@ -33,18 +33,41 @@ namespace BrainNotFound.Paper.api
 
         #endregion Initialize Controllers
 
-        [HttpPost, Route("CreateTestSection")]
-        public JsonResult CreateTestSection(long TestId, string QuestionTypeName)
+        // TODO Lacy - create controller actions for each type of question: TF, MC, Matching, FitB, Essay; QUESTION is my model
+
+        [HttpGet, Route("TrueFalse")]
+        public JsonResult GetTrueFalse(long sectionId, int index, string content, int pointValue, bool answer)
         {
-            var test = _context.Tests.Find(TestId);
-            var questionType = _context.QuestionTypes.Where(qt => qt.Name == QuestionTypeName).First();
+            TrueFalse TFQuestion = new TrueFalse();
+            TFQuestion.Content = content;
+            TFQuestion.Index = index;
+            TFQuestion.PointValue = pointValue;
+            TFQuestion.TestSectionId = sectionId;
+            TFQuestion.TrueFalseAnswer = answer;
+
+            return Json(TFQuestion);
+        }
+
+
+        [HttpPost, Route("CreateTestSection")]
+        public JsonResult CreateTestSection([FromBody]JObject jsonData)
+        {
+            // Converting the data from the json object to variables
+            dynamic json = jsonData;
+            long testId = json.TestId;
+            string questionType = json.QuestionType;
+
+            // Find the test and create a section in it
+            
+            var test = _context.Tests.Find(testId);
+
             var NewSection = new TestSection()
             {
                 QuestionType = questionType,
                 IsQuestionSection = true,
-                SectionInstructions = DefaultInstruction.TrueFalse
             };
 
+          
             test.TestSections.Add(NewSection);
             _context.SaveChanges();
 

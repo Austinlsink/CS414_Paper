@@ -12,16 +12,17 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 		public int Index      { get; set; }
 		public int PointValue { get; set; }
         [Required]
-		public string Content { get; set; } 
-		
-		//foreign keys
+		public string Content { get; set; }
+        [Required]
+        public string QuestionType { get; set; }
 
-		public long TestSectionId  { get; set; }
+        //foreign keys
+
+        public long TestSectionId  { get; set; }
 		[ForeignKey("TestSectionId")]
 		public TestSection  TestSection;
-        public long QuestionTypeId { get; set; }
-        [ForeignKey("QuestionTypeId")]
-        public QuestionType QuestionType;
+
+       
 
         public List<StudentAnswer> StudentAnswers { get; set; }
         public List<MultipleChoiceAnswer> MultipleChoiceAnswers { get; set; }
