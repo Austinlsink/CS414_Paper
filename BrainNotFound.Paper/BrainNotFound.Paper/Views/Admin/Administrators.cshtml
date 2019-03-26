@@ -49,7 +49,7 @@
                                     <td>
                                         <form asp-action="DeleteAdministrator" asp-controller="Admin">
                                             <a asp-controller="Admin" asp-action="ViewAdministrator" asp-route-UserName="@admin.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                            <a asp-controller="Admin" asp-action="EditAdministrator" asp-route-UserName="@admin.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                            <a id="EditAdmin" value="@admin.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
                                             <input type="hidden" name="DepartmentId" value="@admin.UserName" />
                                             <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
                                         </form>
@@ -197,7 +197,7 @@
 </div>
 
 @section scripts
-    {
+{
     <!--Administrator functions-->
     <script type="text/javascript" src="~/js/Administrator.js"></script>
 
