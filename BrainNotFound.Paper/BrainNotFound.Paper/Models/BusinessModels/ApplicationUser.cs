@@ -33,7 +33,7 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         [PersonalData]
         public string State { get; set; }
         [PersonalData]
-        public DateTime DOB { get; set; }
+        public DateTime? DOB { get; set; }
         [PersonalData]
         public string ZipCode { get; set; }
 

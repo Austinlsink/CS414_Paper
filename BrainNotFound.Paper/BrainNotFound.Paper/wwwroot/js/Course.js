@@ -79,6 +79,7 @@ $("#MessageClose").click(function () {
     location.reload();
 })
 
+// Allows a course to be edited and saved
 $("#SaveCourseChanges").click(function () {
     var newCourseForm = $("form#EditCourseForm");
 

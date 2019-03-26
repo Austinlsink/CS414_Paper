@@ -1,5 +1,5 @@
 @using BrainNotFound.Paper.Models.BusinessModels;
-@model List<ApplicationUser>;
+@model ApplicationUser;
 
 @{
     ViewData["Title"] = "Manage Administators - Admin";
@@ -12,7 +12,7 @@
                 <h2><i class="fa fa-users"></i> Administrators</h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                    <li><a asp-controller="Admin" asp-action="NewAdministrator"><i class="fa fa-plus"></i> New Administrator</a></li>
+                    <li><a id="newAdminButton" data-toggle="modal" data-target="#NewAdminModal"><i class="fa fa-plus"></i> New Administrator</a></li>
                 </ul>
                 <div class="clearfix"></div>
             </div>
@@ -39,7 +39,7 @@
                         </thead>
 
                         <tbody>
-                            @foreach (ApplicationUser admin in Model)
+                            @foreach (ApplicationUser admin in ViewBag.adminList)
                             {
                                 <tr class="odd pointer">
                                     <td class=" ">@admin.FirstName</td>
@@ -65,8 +65,141 @@
     </div>
 </div>
 
+
+<!--New Admin modal-->
+<div id="NewAdminModal" class="modal fade new-admin-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="NewAdminForm" class="form-horizontal form-label-left input_mask">
+                <div class="modal-header">
+                    <h3 class="modal-title"><i class="fa fa-mortar-board"></i> New Administrator</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Salutation</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select asp-for="Salutation" class="select2_single form-control" tabindex="1">
+                                <option value="mr">Mr.</option>
+                                <option value="mrs">Mrs.</option>
+                                <option value="ms">Ms.</option>
+                                <option value="miss">Miss</option>
+                                <option value="dr">Dr.</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
+                            First Name <span class="required">*</span>
+                        </label>
+
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="FirstName" type="text" class="form-control has-feedback-left" placeholder="First Name">
+                            <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                            <span id="AdminFirstNameErrorMessage" class="text-danger"></span>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
+                            Last Name <span class="required">*</span>
+                        </label>
+
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="LastName" type="text" class="form-control has-feedback-left" placeholder="Last Name">
+                            <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                            <span id="AdminLastNameErrorMessage" class="text-danger"></span>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dept-name" class="control-label col-md-3 col-sm-3 col-xs-12">Email </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="Email" type="text" class="form-control has-feedback-left" placeholder="Email">
+                            <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
+                            <span id="AdminEmailErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Phone Number</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="PhoneNumber" type="text" class="form-control has-feedback-left" placeholder="Phone">
+                            <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
+                            <span id="AdminPhoneErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Address</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="Address" type="text" class="form-control has-feedback-left" placeholder="Address">
+                            <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
+                            <span id="AdminAddressErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">City</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="City" type="text" class="form-control has-feedback-left" placeholder="City">
+                            <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
+                            <span id="AdminCityErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">State</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="State" type="text" class="form-control has-feedback-left" placeholder="State">
+                            <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
+                            <span id="AdminStateErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">ZipCode</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="ZipCode" type="text" class="form-control has-feedback-left" placeholder="ZipCode">
+                            <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
+                            <span id="AdminZipErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Date of Birth</label>
+                        <div class="col-md-69 col-sm-6 col-xs-9">
+                            <input asp-for="DOB" type="date" class="form-control has-feedback-left" data-inputmask="'mask': '99/99/9999'" placeholder="##/##/####">
+                            <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                            <span id="AdminDOBErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12  parsley-error">
+                            Password <span class="required">*</span>
+                        </label>
+
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="Password" type="password" class="form-control has-feedback-left" placeholder="Password">
+                            <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                            <span id="AdminPasswordErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="CancelCreateAdmin" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" id="CreateAdmin" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @section scripts
-{
+    {
+    <!--Administrator functions-->
+    <script type="text/javascript" src="~/js/Administrator.js"></script>
 
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
@@ -78,5 +211,18 @@
             });
         });
     </script>
-}
 
+    <!-- Datatables -->
+    <script src="../vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="../vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="../vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="../vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="../vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="../vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="../vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="../vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="../vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+}

@@ -55,8 +55,8 @@ namespace BrainNotFound.Paper.Controllers
         public async Task<IActionResult> Administrators()
         {
             var allAdministrators = (await _userManager.GetUsersInRoleAsync("Admin")).OrderBy(o => o.FirstName).ToList();
-
-            return View(allAdministrators);
+            ViewBag.adminList = allAdministrators;
+            return View();
         }
 
         /// <summary>
