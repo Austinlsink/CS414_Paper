@@ -94,19 +94,19 @@
                         </label>
 
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input asp-for="FirstName" type="text" class="form-control has-feedback-left" placeholder="First Name">
+                            <input  id="FirstNameInput" asp-for="FirstName" type="text" class="form-control has-feedback-left" placeholder="First Name">
                             <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                             <span id="AdminFirstNameErrorMessage" class="text-danger"></span>
 
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
+                        <label  class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
                             Last Name <span class="required">*</span>
                         </label>
 
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input asp-for="LastName" type="text" class="form-control has-feedback-left" placeholder="Last Name">
+                            <input id="LastNameInput" asp-for="LastName" type="text" class="form-control has-feedback-left" placeholder="Last Name">
                             <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                             <span id="AdminLastNameErrorMessage" class="text-danger"></span>
 
@@ -116,7 +116,7 @@
                     <div class="form-group">
                         <label for="dept-name" class="control-label col-md-3 col-sm-3 col-xs-12">Email </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input asp-for="Email" type="text" class="form-control has-feedback-left" placeholder="Email">
+                            <input id="EmailInput" asp-for="Email" type="text" class="form-control has-feedback-left" placeholder="Email">
                             <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
                             <span id="AdminEmailErrorMessage" class="text-danger"></span>
                         </div>
@@ -125,7 +125,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-3">Phone Number</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input asp-for="PhoneNumber" type="text" class="form-control has-feedback-left" placeholder="Phone">
+                            <input id="PhoneInput" asp-for="PhoneNumber" type="text" class="form-control has-feedback-left" placeholder="Phone">
                             <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
                             <span id="AdminPhoneErrorMessage" class="text-danger"></span>
                         </div>
@@ -134,7 +134,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-3">Address</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input asp-for="Address" type="text" class="form-control has-feedback-left" placeholder="Address">
+                            <input id ="AddressInput" asp-for="Address" type="text" class="form-control has-feedback-left" placeholder="Address">
                             <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
                             <span id="AdminAddressErrorMessage" class="text-danger"></span>
                         </div>
@@ -143,7 +143,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-3">City</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input asp-for="City" type="text" class="form-control has-feedback-left" placeholder="City">
+                            <input id="CityInput" asp-for="City" type="text" class="form-control has-feedback-left" placeholder="City">
                             <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
                             <span id="AdminCityErrorMessage" class="text-danger"></span>
                         </div>
@@ -152,7 +152,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-3">State</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input asp-for="State" type="text" class="form-control has-feedback-left" placeholder="State">
+                            <input id="StateInput" asp-for="State" type="text" class="form-control has-feedback-left" placeholder="State">
                             <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
                             <span id="AdminStateErrorMessage" class="text-danger"></span>
                         </div>
@@ -161,7 +161,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-3">ZipCode</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input asp-for="ZipCode" type="text" class="form-control has-feedback-left" placeholder="ZipCode">
+                            <input id="ZipInput" asp-for="ZipCode" type="text" class="form-control has-feedback-left" placeholder="ZipCode">
                             <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
                             <span id="AdminZipErrorMessage" class="text-danger"></span>
                         </div>
@@ -170,7 +170,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-3">Date of Birth</label>
                         <div class="col-md-69 col-sm-6 col-xs-9">
-                            <input asp-for="DOB" type="date" class="form-control has-feedback-left" data-inputmask="'mask': '99/99/9999'" placeholder="##/##/####">
+                            <input id="DOBInput" asp-for="DOB" value="1999-12-01" type="date" class="form-control has-feedback-left" data-inputmask="'mask': '99/99/9999'" placeholder="##/##/####">
                             <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                             <span id="AdminDOBErrorMessage" class="text-danger"></span>
                         </div>
@@ -181,7 +181,7 @@
                         </label>
 
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input asp-for="Password" type="password" class="form-control has-feedback-left" placeholder="Password">
+                            <input id="PasswordInput" asp-for="Password" type="password" class="form-control has-feedback-left" placeholder="Password">
                             <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                             <span id="AdminPasswordErrorMessage" class="text-danger"></span>
                         </div>
