@@ -33,6 +33,10 @@ namespace BrainNotFound.Paper.api
 
         #endregion Initialize Controllers
 
+        // TODO Lacy - create controller actions for each type of question: TF, MC, Matching, FitB, Essay; QUESTION is my model
+
+        // T&F - receives section id, answer, point value, content, inde
+
         [HttpPost, Route("CreateTestSection")]
         public JsonResult CreateTestSection(long TestId, string QuestionTypeName)
         {
