@@ -41,40 +41,86 @@ namespace BrainNotFound.Paper.api
         /// <param name="jsonData">The object that contains all of the question information</param>
         /// <returns>The question that was created</returns>        
         [HttpPost, Route("TrueFalse")]
-        public JsonResult GetTrueFalse([FromBody] JObject jsonData)
+        public async Task<JsonResult> GetTrueFalse([FromBody] JObject jsonData)
         {
             dynamic json = jsonData;
 
-            // Create a new question and add it to the DB
-            TrueFalse TFQuestion = new TrueFalse();
-            TFQuestion.Content = json.Content;
-            TFQuestion.Index = int.Parse((string) json.Index);
-            TFQuestion.PointValue = int.Parse((string) json.PointValue);
-            TFQuestion.TestSectionId = long.Parse((string) json.TestSectionId);
-            TFQuestion.TrueFalseAnswer = bool.Parse((string) json.TrueFalseAnswer);
-            TFQuestion.QuestionType = QuestionType.TrueFalse;
+            // Verify that the user logged in matches the instructor's id on the testId on the sectionId
+            var instructor = _context.TestSections.Include(s => s.Test).ThenInclude(t => t.applicationUser).First();
+            ApplicationUser activeInstructor = await _userManager.GetUserAsync(HttpContext.User);
 
-            _context.Questions.Add(TFQuestion);
-            _context.SaveChanges();         
+            if (instructor.Test.applicationUser.Id == activeInstructor.Id)
+            {
+                // Create a new question and add it to the DB
+                TrueFalse TFQuestion = new TrueFalse();
+                TFQuestion.Content = json.Content;
+                TFQuestion.Index = int.Parse((string)json.Index);
+                TFQuestion.PointValue = int.Parse((string)json.PointValue);
+                TFQuestion.TestSectionId = long.Parse((string)json.TestSectionId);
+                TFQuestion.TrueFalseAnswer = bool.Parse((string)json.TrueFalseAnswer);
+                TFQuestion.QuestionType = QuestionType.TrueFalse;
+
+                _context.Questions.Add(TFQuestion);
+                _context.SaveChanges();
+
+                return Json(new { success = true, question = TFQuestion });
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
             
-            return Json(new { success = true, question = TFQuestion });
         }
 
+        /// <summary>
+        /// Bima says that this method gets a multiple choice question, saves it to the DB, and returns the question
+        /// </summary>
+        /// <param name="jsonData">The object that contains all of the question information</param>
+        /// <returns>The question that was createds</returns>
         [HttpPost, Route("MultipleChoice")]
-        public JsonResult GetMultipleChoice([FromBody] JObject jsonData)
+        public async Task<JsonResult> GetMultipleChoice([FromBody] JObject jsonData)
         {
             dynamic json = jsonData;
             JArray MCAnswers = json.MultipleChoiceAnswers;
+            long testSectionId = long.Parse(json.TestSectionId);
 
+            // Verify that the user logged in matches the instructor's id on the testId on the sectionId
+            var instructor = _context.TestSections.Include(s => s.Test).ThenInclude(t => t.applicationUser).First();
+            ApplicationUser activeInstructor = await _userManager.GetUserAsync(HttpContext.User);
 
-            Question MCQuestion = new Question();
-            MCQuestion.Content = json.Content;
-            MCQuestion.Index = int.Parse((string)json.Index);
-            MCQuestion.PointValue = int.Parse((string)json.PointValue);
-            MCQuestion.TestSectionId = long.Parse((string)json.TestSectionId);
-            MCQuestion.QuestionType = QuestionType.MultipleChoice;
+            // If the instructorId on the question's section's testId matches the instructor logged on,
+            // Add the question to the database
+            if (instructor.Test.applicationUser.Id == activeInstructor.Id)
+            {
+                Question MCQuestion = new Question();
+                MCQuestion.Content = json.Content;
+                MCQuestion.Index = int.Parse((string)json.Index);
+                MCQuestion.PointValue = int.Parse((string)json.PointValue);
+                MCQuestion.TestSectionId = long.Parse((string)json.TestSectionId);
+                MCQuestion.QuestionType = QuestionType.MultipleChoice;
 
-            return Json(new { success = true });
+                List<MultipleChoiceAnswer> MCAList = new List<MultipleChoiceAnswer>();
+
+                foreach (JObject x in MCAnswers)
+                {
+                    dynamic mca = x;
+                    MCAList.Add(new MultipleChoiceAnswer()
+                    {
+                        MultipleChoiceAnswerOption = mca.MultipleChoiceAnswerOption,
+                        IsCorrect = bool.Parse(mca.IsCorrect)
+                    });
+
+                }
+
+                MCQuestion.MultipleChoiceAnswers = MCAList;
+                _context.Questions.Add(MCQuestion);
+                _context.SaveChanges();
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
         }
 
         /// <summary>
