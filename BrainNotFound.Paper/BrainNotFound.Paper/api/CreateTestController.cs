@@ -33,7 +33,7 @@ namespace BrainNotFound.Paper.api
 
         #endregion Initialize Controllers
 
-        // TODO Lacy - create controller actions for each type of question: Matching, FitB
+        // TODO Lacy - Create controller for the matching question
 
         /// <summary>
         /// Bima says that this method gets a true false questions, saves it to the DB, and returns the question
@@ -77,7 +77,7 @@ namespace BrainNotFound.Paper.api
         /// Bima says that this method gets a multiple choice question, saves it to the DB, and returns the question
         /// </summary>
         /// <param name="jsonData">The object that contains all of the question information</param>
-        /// <returns>The question that was createds</returns>
+        /// <returns>The question that was created</returns>
         [HttpPost, Route("MultipleChoice")]
         public async Task<JsonResult> GetMultipleChoice([FromBody] JObject jsonData)
         {
@@ -110,7 +110,6 @@ namespace BrainNotFound.Paper.api
                         MultipleChoiceAnswerOption = mca.MultipleChoiceAnswerOption,
                         IsCorrect = bool.Parse(mca.IsCorrect)
                     });
-
                 }
 
                 MCQuestion.MultipleChoiceAnswers = MCAList;
@@ -125,10 +124,10 @@ namespace BrainNotFound.Paper.api
         }
 
         /// <summary>
-        /// Bima says that this method gets an essay question, saves it to the DB, and returns the question
+        /// Bima says that this method gets a Fill In The Blank question, saves it to the DB, and returns the question
         /// </summary>
-        /// <param name="jsonData">The object that contains all of the essay question information</param>
-        /// <returns>The essay question that was createds</returns>
+        /// <param name="jsonData">The object that contains all of the fill in the blank question information</param>
+        /// <returns>The fill in the blank question that was created</returns>
         [HttpPost, Route("Essay")]
         public async Task<JsonResult> GetEssay([FromBody] JObject jsonData)
         {
@@ -155,6 +154,45 @@ namespace BrainNotFound.Paper.api
                 _context.Questions.Add(EssayQuestion);
                 _context.SaveChanges();
                 return Json(new { success = true, question = EssayQuestion });
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
+
+        }
+
+        [HttpPost, Route("FillInTheBlank")]
+        public async Task<JsonResult> GetFillInTheBlank([FromBody] JObject jsonData)
+        {
+            dynamic json = jsonData;
+            JArray getAnswers = json.FillInTheBlankAnswer;
+            String answers = String.Empty;
+            long testSectionId = long.Parse(json.TestSectionId);
+
+            // Verify that the user logged in matches the instructor's id on the testId on the sectionId
+            var instructor = _context.TestSections.Include(s => s.Test).ThenInclude(t => t.applicationUser).Where(x => x.TestSectionId == testSectionId).First();
+            ApplicationUser activeInstructor = await _userManager.GetUserAsync(HttpContext.User);
+
+            // If the instructorId on the question's section's testId matches the instructor logged on,
+            // Add the question to the database
+            if (instructor.Test.applicationUser.Id == activeInstructor.Id)
+            {
+                FillInTheBlank FITBQuestion = new FillInTheBlank();
+                FITBQuestion.Content = json.Content;
+                FITBQuestion.Index = int.Parse((string)json.Index);
+                FITBQuestion.PointValue = int.Parse((string)json.PointValue);
+                FITBQuestion.TestSectionId = long.Parse((string)json.TestSectionId);
+                FITBQuestion.QuestionType = QuestionType.FillInTheBlank;
+
+                foreach(JObject x in answers)
+                {
+                    answers += x.ToString() + " ";
+                }
+
+                _context.Questions.Add(FITBQuestion);
+                _context.SaveChanges();
+                return Json(new { success = true, question = FITBQuestion });
             }
             else
             {
