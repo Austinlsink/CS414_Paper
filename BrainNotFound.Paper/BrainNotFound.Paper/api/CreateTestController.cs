@@ -71,6 +71,7 @@ namespace BrainNotFound.Paper.api
             DateTime parsedStartDateTime = DateTime.ParseExact(startDateTime, "MM/dd/yyyy hh:mm tt", new CultureInfo("en-US"), DateTimeStyles.None);
             DateTime parsedEndDateTime   = DateTime.ParseExact(endDateTime,   "MM/dd/yyyy hh:mm tt", new CultureInfo("en-US"), DateTimeStyles.None);
 
+            // Create the new Schedule
             var newTestSchedule = new TestSchedule()
             {
                 StartTime = parsedStartDateTime,
@@ -80,9 +81,8 @@ namespace BrainNotFound.Paper.api
                 IsTimeUnlimited = isTimeUnlimited
             };
 
+            // Assigns all the students in the section to that  
             newTestSchedule.StudentTestAssignments = new List<StudentTestAssignment>();
-
-
 
             // Get all students in sections
             foreach (long sectionId in sectionIds)
@@ -96,7 +96,6 @@ namespace BrainNotFound.Paper.api
                     });
                 }
             }
-
 
             _context.TestSchedules.Add(newTestSchedule);
             _context.SaveChanges();
