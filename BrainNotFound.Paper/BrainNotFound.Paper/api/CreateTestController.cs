@@ -33,7 +33,7 @@ namespace BrainNotFound.Paper.api
 
         #endregion Initialize Controllers
 
-        // TODO Lacy - create controller actions for each type of question: TF, MC, Matching, FitB, Essay; QUESTION is my model
+        // TODO Lacy - create controller actions for each type of question: Matching, FitB
 
         /// <summary>
         /// Bima says that this method gets a true false questions, saves it to the DB, and returns the question
@@ -44,9 +44,10 @@ namespace BrainNotFound.Paper.api
         public async Task<JsonResult> GetTrueFalse([FromBody] JObject jsonData)
         {
             dynamic json = jsonData;
+            long testSectionId = long.Parse(json.TestSectionId);
 
             // Verify that the user logged in matches the instructor's id on the testId on the sectionId
-            var instructor = _context.TestSections.Include(s => s.Test).ThenInclude(t => t.applicationUser).First();
+            var instructor = _context.TestSections.Include(s => s.Test).ThenInclude(t => t.applicationUser).Where(x => x.TestSectionId == testSectionId).First();
             ApplicationUser activeInstructor = await _userManager.GetUserAsync(HttpContext.User);
 
             if (instructor.Test.applicationUser.Id == activeInstructor.Id)
@@ -85,7 +86,7 @@ namespace BrainNotFound.Paper.api
             long testSectionId = long.Parse(json.TestSectionId);
 
             // Verify that the user logged in matches the instructor's id on the testId on the sectionId
-            var instructor = _context.TestSections.Include(s => s.Test).ThenInclude(t => t.applicationUser).First();
+            var instructor = _context.TestSections.Include(s => s.Test).ThenInclude(t => t.applicationUser).Where(x => x.TestSectionId == testSectionId).First();
             ApplicationUser activeInstructor = await _userManager.GetUserAsync(HttpContext.User);
 
             // If the instructorId on the question's section's testId matches the instructor logged on,
@@ -115,12 +116,51 @@ namespace BrainNotFound.Paper.api
                 MCQuestion.MultipleChoiceAnswers = MCAList;
                 _context.Questions.Add(MCQuestion);
                 _context.SaveChanges();
-                return Json(new { success = true });
+                return Json(new { success = true, question = MCQuestion });
             }
             else
             {
                 return Json(new { success = false });
             }
+        }
+
+        /// <summary>
+        /// Bima says that this method gets an essay question, saves it to the DB, and returns the question
+        /// </summary>
+        /// <param name="jsonData">The object that contains all of the essay question information</param>
+        /// <returns>The essay question that was createds</returns>
+        [HttpPost, Route("Essay")]
+        public async Task<JsonResult> GetEssay([FromBody] JObject jsonData)
+        {
+            dynamic json = jsonData;
+
+            long testSectionId = long.Parse(json.TestSectionId);
+
+            // Verify that the user logged in matches the instructor's id on the testId on the sectionId
+            var instructor = _context.TestSections.Include(s => s.Test).ThenInclude(t => t.applicationUser).Where(x => x.TestSectionId == testSectionId).First();
+            ApplicationUser activeInstructor = await _userManager.GetUserAsync(HttpContext.User);
+
+            // If the instructorId on the question's section's testId matches the instructor logged on,
+            // Add the question to the database
+            if (instructor.Test.applicationUser.Id == activeInstructor.Id)
+            {
+                Essay EssayQuestion = new Essay();
+                EssayQuestion.Content = json.Content;
+                EssayQuestion.Index = int.Parse((string)json.Index);
+                EssayQuestion.PointValue = int.Parse((string)json.PointValue);
+                EssayQuestion.TestSectionId = long.Parse((string)json.TestSectionId);
+                EssayQuestion.QuestionType = QuestionType.Essay;
+                EssayQuestion.ExpectedEssayAnswer = json.ExpectedEssayAnswer;
+
+                _context.Questions.Add(EssayQuestion);
+                _context.SaveChanges();
+                return Json(new { success = true, question = EssayQuestion });
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
+
         }
 
         /// <summary>
