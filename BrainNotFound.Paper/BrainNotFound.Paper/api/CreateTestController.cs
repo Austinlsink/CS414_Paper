@@ -33,23 +33,223 @@ namespace BrainNotFound.Paper.api
 
         #endregion Initialize Controllers
 
-        [HttpPost, Route("CreateTestSection")]
-        public JsonResult CreateTestSection(long TestId, string QuestionTypeName)
+        // TODO Lacy - Create controller for the matching question
+
+        /// <summary>
+        /// Bima says that this method gets a true false questions, saves it to the DB, and returns the question
+        /// </summary>
+        /// <param name="jsonData">The object that contains all of the question information</param>
+        /// <returns>The question that was created</returns>        
+        [HttpPost, Route("TrueFalse")]
+        public async Task<JsonResult> GetTrueFalse([FromBody] JObject jsonData)
         {
-            var test = _context.Tests.Find(TestId);
-            var questionType = _context.QuestionTypes.Where(qt => qt.Name == QuestionTypeName).First();
+            dynamic json = jsonData;
+            long testSectionId = long.Parse(json.TestSectionId);
+
+            // Verify that the user logged in matches the instructor's id on the testId on the sectionId
+            var instructor = _context.TestSections.Include(s => s.Test).ThenInclude(t => t.applicationUser).Where(x => x.TestSectionId == testSectionId).First();
+            ApplicationUser activeInstructor = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (instructor.Test.applicationUser.Id == activeInstructor.Id)
+            {
+                // Create a new question and add it to the DB
+                TrueFalse TFQuestion = new TrueFalse();
+                TFQuestion.Content = json.Content;
+                TFQuestion.Index = int.Parse((string)json.Index);
+                TFQuestion.PointValue = int.Parse((string)json.PointValue);
+                TFQuestion.TestSectionId = long.Parse((string)json.TestSectionId);
+                TFQuestion.TrueFalseAnswer = bool.Parse((string)json.TrueFalseAnswer);
+                TFQuestion.QuestionType = QuestionType.TrueFalse;
+
+                _context.Questions.Add(TFQuestion);
+                _context.SaveChanges();
+
+                return Json(new { success = true, question = TFQuestion });
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
+            
+        }
+
+        /// <summary>
+        /// Bima says that this method gets a multiple choice question, saves it to the DB, and returns the question
+        /// </summary>
+        /// <param name="jsonData">The object that contains all of the question information</param>
+        /// <returns>The question that was created</returns>
+        [HttpPost, Route("MultipleChoice")]
+        public async Task<JsonResult> GetMultipleChoice([FromBody] JObject jsonData)
+        {
+            dynamic json = jsonData;
+            JArray MCAnswers = json.MultipleChoiceAnswers;
+            long testSectionId = long.Parse(json.TestSectionId);
+
+            // Verify that the user logged in matches the instructor's id on the testId on the sectionId
+            var instructor = _context.TestSections.Include(s => s.Test).ThenInclude(t => t.applicationUser).Where(x => x.TestSectionId == testSectionId).First();
+            ApplicationUser activeInstructor = await _userManager.GetUserAsync(HttpContext.User);
+
+            // If the instructorId on the question's section's testId matches the instructor logged on,
+            // Add the question to the database
+            if (instructor.Test.applicationUser.Id == activeInstructor.Id)
+            {
+                Question MCQuestion = new Question();
+                MCQuestion.Content = json.Content;
+                MCQuestion.Index = int.Parse((string)json.Index);
+                MCQuestion.PointValue = int.Parse((string)json.PointValue);
+                MCQuestion.TestSectionId = long.Parse((string)json.TestSectionId);
+                MCQuestion.QuestionType = QuestionType.MultipleChoice;
+
+                List<MultipleChoiceAnswer> MCAList = new List<MultipleChoiceAnswer>();
+
+                foreach (JObject x in MCAnswers)
+                {
+                    dynamic mca = x;
+                    MCAList.Add(new MultipleChoiceAnswer()
+                    {
+                        MultipleChoiceAnswerOption = mca.MultipleChoiceAnswerOption,
+                        IsCorrect = bool.Parse(mca.IsCorrect)
+                    });
+                }
+
+                MCQuestion.MultipleChoiceAnswers = MCAList;
+                _context.Questions.Add(MCQuestion);
+                _context.SaveChanges();
+                return Json(new { success = true, question = MCQuestion });
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
+        }
+
+        /// <summary>
+        /// Bima says that this method gets a Fill In The Blank question, saves it to the DB, and returns the question
+        /// </summary>
+        /// <param name="jsonData">The object that contains all of the fill in the blank question information</param>
+        /// <returns>The fill in the blank question that was created</returns>
+        [HttpPost, Route("Essay")]
+        public async Task<JsonResult> GetEssay([FromBody] JObject jsonData)
+        {
+            dynamic json = jsonData;
+
+            long testSectionId = long.Parse(json.TestSectionId);
+
+            // Verify that the user logged in matches the instructor's id on the testId on the sectionId
+            var instructor = _context.TestSections.Include(s => s.Test).ThenInclude(t => t.applicationUser).Where(x => x.TestSectionId == testSectionId).First();
+            ApplicationUser activeInstructor = await _userManager.GetUserAsync(HttpContext.User);
+
+            // If the instructorId on the question's section's testId matches the instructor logged on,
+            // Add the question to the database
+            if (instructor.Test.applicationUser.Id == activeInstructor.Id)
+            {
+                Essay EssayQuestion = new Essay();
+                EssayQuestion.Content = json.Content;
+                EssayQuestion.Index = int.Parse((string)json.Index);
+                EssayQuestion.PointValue = int.Parse((string)json.PointValue);
+                EssayQuestion.TestSectionId = long.Parse((string)json.TestSectionId);
+                EssayQuestion.QuestionType = QuestionType.Essay;
+                EssayQuestion.ExpectedEssayAnswer = json.ExpectedEssayAnswer;
+
+                _context.Questions.Add(EssayQuestion);
+                _context.SaveChanges();
+                return Json(new { success = true, question = EssayQuestion });
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
+
+        }
+
+        [HttpPost, Route("FillInTheBlank")]
+        public async Task<JsonResult> GetFillInTheBlank([FromBody] JObject jsonData)
+        {
+            dynamic json = jsonData;
+            JArray getAnswers = json.FillInTheBlankAnswer;
+            String answers = String.Empty;
+            long testSectionId = long.Parse(json.TestSectionId);
+
+            // Verify that the user logged in matches the instructor's id on the testId on the sectionId
+            var instructor = _context.TestSections.Include(s => s.Test).ThenInclude(t => t.applicationUser).Where(x => x.TestSectionId == testSectionId).First();
+            ApplicationUser activeInstructor = await _userManager.GetUserAsync(HttpContext.User);
+
+            // If the instructorId on the question's section's testId matches the instructor logged on,
+            // Add the question to the database
+            if (instructor.Test.applicationUser.Id == activeInstructor.Id)
+            {
+                FillInTheBlank FITBQuestion = new FillInTheBlank();
+                FITBQuestion.Content = json.Content;
+                FITBQuestion.Index = int.Parse((string)json.Index);
+                FITBQuestion.PointValue = int.Parse((string)json.PointValue);
+                FITBQuestion.TestSectionId = long.Parse((string)json.TestSectionId);
+                FITBQuestion.QuestionType = QuestionType.FillInTheBlank;
+
+                foreach(JObject x in answers)
+                {
+                    answers += x.ToString() + " ";
+                }
+
+                _context.Questions.Add(FITBQuestion);
+                _context.SaveChanges();
+                return Json(new { success = true, question = FITBQuestion });
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
+
+        }
+
+        /// <summary>
+        /// Bima says that this method gets all of the true false questions in a section
+        /// </summary>
+        /// <param name="testSectionId">Specifies which questions need to be grabbed</param>
+        /// <returns>All of the questions in that test section</returns>
+        [HttpGet, Route("GetQuestionsInSection/{testSectionId}")]
+        public JsonResult GetQuestionsInSection(long testSectionId)
+        {
+            var questions = _context.Questions.Where(q => q.TestSectionId == testSectionId).ToList();
+
+            return Json(questions);
+        }
+
+
+        [HttpPost, Route("CreateTestSection")]
+        public JsonResult CreateTestSection([FromBody]JObject jsonData)
+        {
+            // Converting the data from the json object to variables
+            dynamic json = jsonData;
+            long testId = json.TestId;
+            string questionType = json.QuestionType;
+
+            // TODO: Check if test really belongs to the current teacher
+
+            // Find the test and create a section in it
+            
+            var test = _context.Tests.Find(testId);
+            test.TestSections = new List<TestSection>();
+            
             var NewSection = new TestSection()
             {
                 QuestionType = questionType,
                 IsQuestionSection = true,
-                SectionInstructions = DefaultInstruction.TrueFalse
             };
 
+            // Sets the Instuction to the section
+            switch(questionType)
+            {
+                case QuestionType.TrueFalse:
+                    NewSection.SectionInstructions = DefaultInstruction.TrueFalse;
+                    break;
+            }
+            
             test.TestSections.Add(NewSection);
             _context.SaveChanges();
 
-            return Json(NewSection);
+            return Json(new { success = true, section = NewSection });
         }
+
 
         // Creates a new Test Schedule
         [HttpPost, Route("NewTestSchedule")]
@@ -99,9 +299,6 @@ namespace BrainNotFound.Paper.api
 
             _context.TestSchedules.Add(newTestSchedule);
             _context.SaveChanges();
-
-
-
 
             return Json(new { success = true });
         }

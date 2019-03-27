@@ -25,7 +25,6 @@ namespace BrainNotFound.Paper
         //public DbSet<StudentMinor> StudentMinors { get; set; }
         public DbSet<SystemInfo> SystemInfos { get; set; }
         public DbSet<Question> Questions { get; set; }
-        public DbSet<QuestionType> QuestionTypes { get; set; }
         public DbSet<TrueFalse> TrueFalses { get; set; }
         public DbSet<Essay> Essays { get; set; }
         public DbSet<FillInTheBlank> FillInTheBlanks { get; set; }

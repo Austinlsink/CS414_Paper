@@ -70,8 +70,8 @@ function UpdateAssignmentTables() {
         var template = Handlebars.compile(SectionsAssignedToTableRowTemplate);
         var rendered = "";
         for (var index = 0; index * 2 < SectionsAssigned.length; index++) {
-            
-            var templateInfo = {RowNumber:(index + 1), SectionNumbers: SectionsAssigned[(index * 2) + 1], SectionId: SectionsAssigned[(index * 2)]}
+
+            var templateInfo = { RowNumber: (index + 1), SectionNumbers: SectionsAssigned[(index * 2) + 1], SectionId: SectionsAssigned[(index * 2)] }
             rendered += template(templateInfo);
         }
         $("#SectionsAssignedTest > tbody").html(rendered);
@@ -90,7 +90,7 @@ function UpdateAssignmentTables() {
         var rendered = "";
         for (var index = 0; index * 4 < IndivisualsAssigned.length; index++) {
 
-            var templateInfo = { SectionNumber: IndivisualsAssigned[(index * 4)], StudentId: IndivisualsAssigned[((index * 4) + 1)], FirstName: IndivisualsAssigned[((index * 4) + 2)], LastName: IndivisualsAssigned[((index * 4) + 3)]  }
+            var templateInfo = { SectionNumber: IndivisualsAssigned[(index * 4)], StudentId: IndivisualsAssigned[((index * 4) + 1)], FirstName: IndivisualsAssigned[((index * 4) + 2)], LastName: IndivisualsAssigned[((index * 4) + 3)] }
             rendered += template(templateInfo);
         }
         $("#StudentsAssignedTest > tbody").html(rendered);
@@ -153,12 +153,12 @@ $('select#SelectSection').change(function () {
                     student.LastName,
                 ]);
             })
-            
+
             // Hides no section select message
             $("div#SectionNotSelectedContainer").removeClass("show").addClass("hidden");
             $("div#StudentsInSectionTableContainer").removeClass("hidden").addClass("show");
 
-            
+
         }
     });
 });
@@ -203,7 +203,7 @@ $("button#AssignEntireSection").click(function () {
     var sectionNumber = $("#SelectSection option:selected").text();
 
     // Checks if section has already been assigned.
-    if (sectionId != null && !SectionsAssigned.includes( sectionId, sectionNumber )) {
+    if (sectionId != null && !SectionsAssigned.includes(sectionId, sectionNumber)) {
         SectionsAssigned.push(sectionId, sectionNumber);
         UpdateAssignmentTables();
     }
@@ -218,7 +218,7 @@ $("button#AssignSelectedStudents").click(function () {
             if (!IndivisualsAssigned.includes(studentId)) {
                 var index = studentsInSelectedSection.findIndex(s => s.Id == studentId);
                 IndivisualsAssigned.push(
-                    sectionNumber.replace("Section ",""),
+                    sectionNumber.replace("Section ", ""),
                     studentsInSelectedSection[index].Id,
                     studentsInSelectedSection[index].FirstName,
                     studentsInSelectedSection[index].LastName
@@ -229,13 +229,14 @@ $("button#AssignSelectedStudents").click(function () {
     UpdateAssignmentTables();
 })
 
+// Send the information about a new schedule to the server and updates the view
 $("#NewTestSchedule").click(function () {
     var TestId = $("#TestId").val();
     var StartEndDateTime = $("#testScheduleDateTime").val();
     var IsTimeUnlimited = $("#UnlimitedTimeCheckBox").is(':checked');
     var TimeLimit = $("#TimeLimit").val();
     var Students = [];
-    var Sections =[];
+    var Sections = [];
 
     // Get the id for each selected section
     for (var index = 0; index * 2 < SectionsAssigned.length; index++) {
@@ -266,10 +267,21 @@ $("#NewTestSchedule").click(function () {
                 $("div#ErrorModal").modal("toggle");
             }
         },
-
     })
-
 })
+
+// Adds a Generic Section to a Test
+$("#AddTestSectionBtn").click(function () {
+    var rendered = "";
+    var GenericTestSection = $("#GenericTestSectionTemplate").html();
+    var template = Handlebars.compile(GenericTestSection);
+
+    rendered += template();
+
+    $("#TestSections").append(rendered);
+})
+
+
 
 // Removes a section from the assigment table
 $("table#SectionsAssignedTest").on("click", ".deleteEntireSectionAssignment", function () {
@@ -277,7 +289,7 @@ $("table#SectionsAssignedTest").on("click", ".deleteEntireSectionAssignment", fu
 
     SectionsAssigned.splice(SectionsAssigned.indexOf(SectionId), 2);
     UpdateAssignmentTables();
-    
+
 })
 
 // Remove a student from the assignment table
@@ -286,8 +298,49 @@ $("table#StudentsAssignedTest").on("click", ".deleteStudentAssigment", function 
     IndivisualsAssigned.splice(IndivisualsAssigned.indexOf(StudentId) - 1, 4);
 
     UpdateAssignmentTables();
-    
+
 })
+
+// Cancels the new section 
+$("#TestSections").on("click", "button#cancelQuestionType", function () {
+    $(this).parents(".SectionContainer").remove();
+})
+
+// Sets the test section to the chosen question type
+$("#TestSections").on("click", "button#setQuestionType", function () {
+    // Get the Section type chooser container
+    var SectionTypeContainer = $(this).parents(".SectionContainer");
+
+    // Get the data
+    var QuestionType = $(this).prev().find("#questionType").val();
+    var TestId = $("#TestId").val();
+    var JsonData = JSON.stringify({ "TestId": TestId, "QuestionType": QuestionType });
+
+    $.ajax({
+        url: "/api/CreateTest/CreateTestSection",
+        type: "POST",
+        contentType: 'application/json; charset=utf-8',
+        data: JsonData,
+        success: function (result) {
+            if (result.success) {
+
+                var rendered = "";
+                var TestSection = $("#TestSectionTemplate").html();
+                var template = Handlebars.compile(TestSection);
+
+                rendered += template({ SectionType: "True / False", Instructions: "Theis is supper nice instruction for a test section. " });
+                console.log(this);
+                $(SectionTypeContainer).before(rendered);
+                $(SectionTypeContainer).remove();
+
+            }
+            else {
+                console.log(result.errors)
+            }
+        },
+    })
+})
+
 // Handles all forms submition buttons
 $(function () {
     $('.post-using-ajax').each(function () {

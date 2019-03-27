@@ -4,14 +4,16 @@ using BrainNotFound.Paper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BrainNotFound.Paper.Migrations
 {
     [DbContext(typeof(PaperDbContext))]
-    partial class PaperDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190326210122_removedQuestionTypeTable")]
+    partial class removedQuestionTypeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -247,9 +249,9 @@ namespace BrainNotFound.Paper.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("IsCorrect");
+                    b.Property<string>("CorrectMultipleChoiceAnswer");
 
-                    b.Property<string>("MultipleChoiceAnswerOption");
+                    b.Property<bool>("IsCorrect");
 
                     b.Property<long>("QuestionId");
 

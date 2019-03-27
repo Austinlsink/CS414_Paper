@@ -39,7 +39,7 @@ namespace BrainNotFound.Paper.api
             _context.Courses.Add(course);
             _context.SaveChanges();
 
-            return Json(new { sucess = true });
+            return Json(new { success = true });
         }
 
         [HttpPost, Route("Delete")]
@@ -51,7 +51,7 @@ namespace BrainNotFound.Paper.api
             if (_context.Sections.Where(ac => ac.CourseId == course.CourseId).Any())
             {
                 var ErrorMessage = course.CourseCode + "-" + course.Name + " could not be deleted. Please delete all associated sections.";
-                return Json(new { sucess = false, message = ErrorMessage });
+                return Json(new { success = false, message = ErrorMessage });
             }
 
             _context.Courses.Remove(course);

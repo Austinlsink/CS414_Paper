@@ -7,18 +7,20 @@
 }
 <!--Page Content-->
 <div id="TestSections">
-
+    
 </div>
 
-
-<div class="row">
-    <div class="col-md-12 col-xs-12">
-        <div class="clearfix"></div>
-        <div class="text-center">
-            <button type="button" id="AddTestSection" class="btn btn-round btn-primary"><i class="fa fa-plus"></i> &nbsp;Add Section</button>
+<div id="AddTestSection">
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="clearfix"></div>
+            <div class="text-center">
+                <button type="button" id="AddTestSectionBtn" class="btn btn-round btn-primary"><i class="fa fa-plus"></i> &nbsp;Add Section</button>
+            </div>
         </div>
     </div>
 </div>
+
 <!-- /page content -->
 
 
@@ -54,27 +56,27 @@
                         <form id="new-department" data-parsley-validate class="form-horizontal form-label-left">
                             <label class="control-label col-md-2 col-sm-2 col-xs-12">Question Type</label>
                             <div class="col-md-4 col-sm-4 col-xs-12">
-                                <select class="form-control">
+                                <select id="questionType" class="form-control">
                                     <option>Choose option</option>
-                                    <option>True/False</option>
-                                    <option>Multiple Choice</option>
-                                    <option>Fill In The Blank</option>
-                                    <option>Matching</option>
-                                    <option>Essay</option>
+                                    <option value="trueFalse">True/False</option>
+                                    <option value="multipleChoice">Multiple Choice</option>
+                                    <option value="fillInTheBlank">Fill In The Blank</option>
+                                    <option value="matching">Matching</option>
+                                    <option value="essay">Essay</option>
                                 </select>
                             </div>
                             <button id="setQuestionType" type="button" class="btn btn-primary">Set Question Type</button>
                             <button id="cancelQuestionType" type="button" class="btn btn-danger">Cancel</button>
                             <!--<label class="control-label col-md-3 col-sm-2 col-xs-12">Question Point Value</label>
-    <div class="col-md-1">
-        <input type="text" placeholder="#" class="form-control"><br>
-    </div>-->
+                            <div class="col-md-1">
+                                <input type="text" placeholder="#" class="form-control"><br>
+                            </div>-->
                             <br>
                             <!--<div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12 form-group">
-            <input type="text" placeholder="Enter question here." class="form-control">
-        </div>
-    </div>-->
+                                <div class="col-md-12 col-sm-12 col-xs-12 form-group">
+                                    <input type="text" placeholder="Enter question here." class="form-control">
+                                </div>
+                            </div>-->
                         </form>
                     </div>
                 </div>

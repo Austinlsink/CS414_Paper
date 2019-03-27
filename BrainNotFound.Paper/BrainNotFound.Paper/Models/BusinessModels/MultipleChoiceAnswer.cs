@@ -13,7 +13,7 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         [ForeignKey("QuestionId")]
         public Question Question { get; set; }
 		
-		public string CorrectMultipleChoiceAnswer  { get; set; }
+		public string MultipleChoiceAnswerOption  { get; set; }
 		public bool IsCorrect { get; set; }
 
         public List<StudentMultipleChoiceAnswer> StudentMultipleChoiceAnswers { get; set; }
