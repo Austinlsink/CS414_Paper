@@ -247,7 +247,7 @@ namespace BrainNotFound.Paper.api
             test.TestSections.Add(NewSection);
             _context.SaveChanges();
 
-            return Json(NewSection);
+            return Json(new { success = true, section = NewSection });
         }
 
 

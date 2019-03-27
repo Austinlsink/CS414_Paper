@@ -325,7 +325,7 @@
 
     <!--Section Type Start-->
     <script type="text/x-handlebars-template" id="GenericTestSectionTemplate">
-        <div class="row newSectionContainer">
+        <div class="row SectionContainer">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div id="genericSection" class="x_panel">
                     <!-- top of section header -->
@@ -336,7 +336,7 @@
                     <!-- end of section header -->
                     <div class="x_content">
                         <div class="row">
-                            <form id="new-test-Section" class="form-horizontal form-label-left">
+                            <div class="form-horizontal form-label-left">
                                 <label class="control-label col-md-2 col-sm-2 col-xs-12">Question Type</label>
                                 <div class="col-md-4 col-sm-4 col-xs-12 ">
                                     <select id="questionType" class="form-control col-md-4 col-sm-4 col-xs-12">
@@ -351,12 +351,96 @@
                                 <button id="setQuestionType" type="button" class="btn btn-primary">Set Question Type</button>
                                 <button id="cancelQuestionType" class="btn btn-danger">Cancel</button>
                                 <br>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </script>
+
+    <!--Test Section Template Start-->
+    <script type="text/x-handlebars-template" id="TestSectionTemplate">
+        <!--Test Section Start-->
+        <div class="row SectionContainer">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2><i class="fa fa-info-circle"></i> | {{SectionType}}</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                            <li><a class="deleteSection" value="{{SectionId}}"><i class="fa fa-trash-o"></i></a></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="editInstructions" value="{{SectionId}}">Edit Instructions</a></li>
+                                    <li><a class="editQuestionValues" value="{{SectionId}}">Edit Questions Value</a></li>
+                                </ul>
+                            </li>
+                            <li><a ><i class="fa fa-arrow-up"></i></a></li>
+                            <li><a ><i class="fa fa-arrow-down"></i></a></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <p><b>Instructions:</b> {{Instructions}}</p>
+                            </div>
+                        </div>
+                        <!--Edit Instructions Start-->
+                        <div class="row well hidden editInstructionsContainer">
+                            <input class="originalInstructions" type="hidden" value="{{Instructions}}" />
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-md-1 col-sm-1 col-xs-3">
+                                    <p><b>Instructions:</b></p>
+                                </div>
+                                <div class="form-group col-md-8 col-sm-8 col-xs-12">
+                                    <input type="text" placeholder="Enter question text here" value="{{Instructions}}" class="form-control">
+                                </div>
+                                <div class="form-group col-md-3 col-sm-3 col-xs-12">
+                                </div>
+                                <div class="form-group col-md-3 col-sm-3 col-xs-12">
+                                    <button type="button" class="pull-right btn btn-primary btn-md saveEditedInstructions">Save</button>
+                                    <button type="button" class="pull-right btn btn-danger btn-md cancelEditInstructions">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Edit Instructions End-->
+                        <!--Edit Questions Value Start-->
+                        <div id="EditQuestionsValue" class="well hidden">
+                            <form asp-action="PartialEditNameAndCourse" asp-controller="Instructor" asp-route-TestId="" id="new-department" data-parsley-validate class="form-horizontal form-label-left">
+                                <div class="col-md-9 col-xs-12">
+                                    <label class="control-label">Edit Questions Value</label>
+                                    <input type="text" placeholder="pt(s)" class="form-control col-md-3">
+                                </div>
+                                <div class="col-md-3 col-sm-12">
+                                    <label class="control-label">&emsp;</label>
+                                    <table>
+                                        <tr>
+                                            <td><a onclick="Cancel('#EditQuestionsValue')" class="pull-right btn btn-danger btn-md">Cancel</a>
+                                            <td> <button type="submit" class="pull-right btn btn-primary btn-md">Assign</button></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+                        <!--Edit Questions Value End-->
+                        <!--Question Start-->
+                        <div id="QuestionContainer"></div>
+                        <!--Question End-->
+                        <!--Edit Question Start-->
+                        <div id="EditQuestionContainer"></div>
+                        <!--Edit Question End-->
+
+                        <div class="text-right">
+                            <button type="button" class="btn btn-round btn-info"><i class="fa fa-plus"></i> &nbsp;Add Question</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Test Section End-->
     </script>
     <!--Section Type End-->
 }
