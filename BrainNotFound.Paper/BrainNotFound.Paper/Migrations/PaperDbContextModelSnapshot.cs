@@ -247,9 +247,9 @@ namespace BrainNotFound.Paper.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CorrectMultipleChoiceAnswer");
-
                     b.Property<bool>("IsCorrect");
+
+                    b.Property<string>("MultipleChoiceAnswerOption");
 
                     b.Property<long>("QuestionId");
 
