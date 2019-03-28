@@ -73,7 +73,7 @@ function Update_TestAssignmentTable() {
                 var Row = $("#ScheduleTableRowTemplate").html();
                 var template = Handlebars.compile(Row);
                 
-                result.shedules.forEach(function (schedule) {
+                result.schedules.forEach(function (schedule) {
                     rendered += template(schedule);
                 })
                 
@@ -81,6 +81,7 @@ function Update_TestAssignmentTable() {
                 $("#TestAssignmentTable > tbody").html(rendered);
                 $("table#TestAssignmentTable").removeClass("hidden");
 
+                
             }
             else {
                 console.log(result.errors)
