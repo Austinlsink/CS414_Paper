@@ -232,11 +232,18 @@ namespace BrainNotFound.Paper.api
             string sectionInfo = json.SectionInstructions;
 
             var testSection = _context.TestSections.Where(x => x.TestSectionId == testSectionId).First();
-            testSection.SectionInstructions = sectionInfo;
-            _context.TestSections.Update(testSection);
-            _context.SaveChanges();
+            if (testSection != null)
+            {
+                testSection.SectionInstructions = sectionInfo;
+                _context.TestSections.Update(testSection);
+                _context.SaveChanges();
 
-            return Json(new { success = true });
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
         }
 
         [HttpGet, Route("GetQuestionsInSection/{testSectionId}")]
