@@ -74,6 +74,13 @@ namespace BrainNotFound.Paper.api
             
         }
 
+        [HttpPost, Route("Matching")]
+        public async Task<IActionResult> GetMatching([FromBody] JObject jsonData)
+        {
+
+            return Json(new { success = true });
+        }
+
         /// <summary>
         /// Bima says that this method gets a multiple choice question, saves it to the DB, and returns the question
         /// </summary>
@@ -127,7 +134,7 @@ namespace BrainNotFound.Paper.api
         /// <summary>
         /// Bima says that this method gets a Fill In The Blank question, saves it to the DB, and returns the question
         /// </summary>
-        /// <param name="jsonData">The object that contains all of the fill in the blank question information</param>
+        /// <param name="jsonData">The object that contains all of the essay question information</param>
         /// <returns>The fill in the blank question that was created</returns>
         [HttpPost, Route("Essay")]
         public async Task<JsonResult> GetEssay([FromBody] JObject jsonData)
@@ -163,6 +170,11 @@ namespace BrainNotFound.Paper.api
 
         }
 
+        /// <summary>
+        /// Bima says that this method gets a Fill in the Blank questions, saves it to the DB, and returns the question
+        /// </summary>
+        /// <param name="jsonData">The object that contains all of the fill in the blank question information</param>
+        /// <returns>The fill in the blank question that was created</returns>
         [HttpPost, Route("FillInTheBlank")]
         public async Task<JsonResult> GetFillInTheBlank([FromBody] JObject jsonData)
         {
