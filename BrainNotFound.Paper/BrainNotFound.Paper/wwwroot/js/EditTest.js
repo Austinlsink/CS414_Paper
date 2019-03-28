@@ -77,7 +77,6 @@ function Update_TestAssignmentTable() {
                     rendered += template(schedule);
                 })
                 
-                console.log(rendered);
                 $("#TestAssignmentTable > tbody").html(rendered);
                 $("table#TestAssignmentTable").removeClass("hidden");
 
@@ -241,6 +240,7 @@ $("button#AssignEntireSection").click(function () {
     }
 })
 
+
 $("button#AssignSelectedStudents").click(function () {
     var sectionNumber = $("#SelectSection option:selected").text();
     studentsDataTable.$('.selectedStudent').each(function () {
@@ -370,6 +370,14 @@ $("#TestSections").on("click", "button#setQuestionType", function () {
     })
 })
 
+// Displays section Editable instruction Box
+$("#TestSections").on("click", "a.editInstructions", function () {
+    var sectionId = $(this).attr('id');
+
+    
+    var selector = ".editInstructionsContainer #" + sectionId;
+    $(selector).removeClass("hidden");
+})
 // Handles all forms submition buttons
 $(function () {
     $('.post-using-ajax').each(function () {
