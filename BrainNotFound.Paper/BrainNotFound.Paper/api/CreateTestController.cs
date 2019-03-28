@@ -281,7 +281,14 @@ namespace BrainNotFound.Paper.api
             return Json(new { success = true, sectionId = NewSection.TestSectionId, instructions = NewSection.SectionInstructions, questionType = NewSection.QuestionType, header = sectionHeader});
         }
 
-
+        /// <summary>
+        /// Bima says he needs error checking: 1) if the assigned test date is passed assign error message, 
+        /// 2) If the test time limit is negative or 0, assign error message
+        /// 3) if no sections or students assigned, return error message
+        /// 4) INdividual students cannot be assigned 
+        /// </summary>
+        /// <param name="jsonData"></param>
+        /// <returns></returns>
         // Creates a new Test Schedule
         [HttpPost, Route("NewTestSchedule")]
         public JsonResult NewTestSchedule([FromBody]JObject jsonData)
@@ -338,12 +345,19 @@ namespace BrainNotFound.Paper.api
         [HttpGet, Route("GetTestSchedules/{testId}")]
         public JsonResult GetTestSchedules(long testId)
         {
+            // Find the instructor who is creating the test
             var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
+            // Find the test that the instructor has selected
             var test = _context.Tests.Find(testId);
+
             var testSchedules = _context.TestSchedules.Include(ts => ts.StudentTestAssignments).Where(ts => ts.TestId == testId).ToList();
             var sections = _context.Sections.Include(s => s.Enrollments).Where(s => s.InstructorId == instructor.Id && s.CourseId == test.CourseId).ToList();
-            List<JObject> shedules = new List<JObject>();
-            // Creates return data and checks if schedule was assigned to entire sections
+
+            
+            List<JObject> schedules = new List<JObject>();
+
+            // Create and return the sections and students that area assigned to the test, and elminate the students who are not
             foreach (var testSchedule in testSchedules)
             {
                 var StudentsAssignedIds = testSchedule.StudentTestAssignments.Select(sta => sta.StudentId).ToList();
@@ -352,7 +366,7 @@ namespace BrainNotFound.Paper.api
                 testScheduleJObject.Availability = string.Format("MM / dd / yyyy hh: mm tt", testSchedule.StartTime) + " - " + string.Format("MM / dd / yyyy hh: mm tt", testSchedule.EndTime);
                 testScheduleJObject.TimeLimit = testSchedule.IsTimeUnlimited ? "Unlimited" : testSchedule.TimeLimit.ToString() + " minutes";
 
-                // Checks is all students from a section were assigned
+                // Checks if all students from a section were assigned
                 List<int> entireSectionsAssigned = new List<int>();
                 foreach (Section section in sections)
                 {
@@ -371,12 +385,12 @@ namespace BrainNotFound.Paper.api
                     testScheduleJObject.Assigmnet += "Sections " + String.Join(", ", entireSectionsAssigned.ToArray());
                 }
 
-                shedules.Add(testScheduleJObject);
+                schedules.Add(testScheduleJObject);
             }
 
             
             
-            return Json(new {success = true, shedules });
+            return Json(new {success = true, schedules });
         }
         // Gets all the students in a section
         [HttpGet, Route("GetStudentsInSection/{SectionId}")]
