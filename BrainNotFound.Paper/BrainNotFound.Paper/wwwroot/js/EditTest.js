@@ -373,10 +373,8 @@ $("#TestSections").on("click", "button#setQuestionType", function () {
 // Displays section Editable instruction Box
 $("#TestSections").on("click", "a.editInstructions", function () {
     var sectionId = $(this).attr('id');
-
-    
-    var selector = ".editInstructionsContainer #" + sectionId;
-    $(selector).removeClass("hidden");
+    var currentInstructions = $()
+    $(".editInstructionsContainer[value='" + sectionId +"']").removeClass("hidden");
 })
 // Handles all forms submition buttons
 $(function () {

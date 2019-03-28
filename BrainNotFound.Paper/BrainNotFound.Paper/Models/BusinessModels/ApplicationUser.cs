@@ -32,9 +32,9 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         public string City { get; set; }
         [PersonalData]
         public string State { get; set; }
-        [Required(ErrorMessage = "Please enter your birth date.")]
+
         [PersonalData]
-        public DateTime DOB { get; set; }
+        public DateTime? DOB { get; set; }
         [PersonalData]
         public string ZipCode { get; set; }
 
