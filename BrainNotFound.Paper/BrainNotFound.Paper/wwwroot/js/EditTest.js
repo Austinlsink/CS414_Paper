@@ -292,7 +292,10 @@ $("button#SaveNewTestSchedule").click(function () {
         success: function (result) {
             if (result.success) {
                 Update_TestAssignmentTable();
-                resetNewSchedule();
+                // resetNewSchedule();
+            }
+            else {
+                console.log(result);
             }
             // TODO: Display if Sections were already assigned
         },

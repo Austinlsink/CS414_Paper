@@ -36,6 +36,7 @@ namespace BrainNotFound.Paper.api
 
         // TODO Lacy - Create controller for the matching question
 
+        #region get different question types
         /// <summary>
         /// Bima says that this method gets a true false questions, saves it to the DB, and returns the question
         /// </summary>
@@ -213,12 +214,31 @@ namespace BrainNotFound.Paper.api
             }
 
         }
+        #endregion get different question types
 
         /// <summary>
         /// Bima says that this method gets all of the true false questions in a section
         /// </summary>
         /// <param name="testSectionId">Specifies which questions need to be grabbed</param>
         /// <returns>All of the questions in that test section</returns>
+
+        ///Update section instruction - receive a section id, instrucions, and update the system
+        ///return success true or false
+        [HttpPost, Route("UpdateSectionInstruction")]
+        public JsonResult GetUpdateSectionInstruction([FromBody] JObject jsonData)
+        {
+            dynamic json = jsonData;
+            long testSectionId = json.TestSectionId;
+            string sectionInfo = json.SectionInstructions;
+
+            var testSection = _context.TestSections.Where(x => x.TestSectionId == testSectionId).First();
+            testSection.SectionInstructions = sectionInfo;
+            _context.TestSections.Update(testSection);
+            _context.SaveChanges();
+
+            return Json(new { success = true });
+        }
+
         [HttpGet, Route("GetQuestionsInSection/{testSectionId}")]
         public JsonResult GetQuestionsInSection(long testSectionId)
         {
@@ -289,7 +309,6 @@ namespace BrainNotFound.Paper.api
         /// </summary>
         /// <param name="jsonData"></param>
         /// <returns></returns>
-        // Creates a new Test Schedule
         [HttpPost, Route("NewTestSchedule")]
         public JsonResult NewTestSchedule([FromBody]JObject jsonData)
         {
@@ -301,7 +320,6 @@ namespace BrainNotFound.Paper.api
             int timeLimit = json.TimeLimit;
             JArray studentIds = json.Students;
             JArray sectionIds = json.Sections;
-
 
             // Parsing the date
             string startDateTime = startEndDateTime.Substring(0, startEndDateTime.IndexOf(" - "));
@@ -351,13 +369,13 @@ namespace BrainNotFound.Paper.api
             // Find the test that the instructor has selected
             var test = _context.Tests.Find(testId);
 
+            // Find all of the test schedules associated with this test
             var testSchedules = _context.TestSchedules.Include(ts => ts.StudentTestAssignments).Where(ts => ts.TestId == testId).ToList();
             var sections = _context.Sections.Include(s => s.Enrollments).Where(s => s.InstructorId == instructor.Id && s.CourseId == test.CourseId).ToList();
 
-            
             List<JObject> schedules = new List<JObject>();
 
-            // Create and return the sections and students that area assigned to the test, and elminate the students who are not
+            // Create and return the sections and students that are assigned to the test, and elminate the students who are not
             foreach (var testSchedule in testSchedules)
             {
                 var StudentsAssignedIds = testSchedule.StudentTestAssignments.Select(sta => sta.StudentId).ToList();
@@ -366,21 +384,20 @@ namespace BrainNotFound.Paper.api
                 testScheduleJObject.Availability = string.Format("MM / dd / yyyy hh: mm tt", testSchedule.StartTime) + " - " + string.Format("MM / dd / yyyy hh: mm tt", testSchedule.EndTime);
                 testScheduleJObject.TimeLimit = testSchedule.IsTimeUnlimited ? "Unlimited" : testSchedule.TimeLimit.ToString() + " minutes";
 
-                // Checks if all students from a section were assigned
-                List<int> entireSectionsAssigned = new List<int>();
+               // Checks if all students from a section were assigned
+               List<int> entireSectionsAssigned = new List<int>();
                 foreach (Section section in sections)
                 {
                     var sectionStudentsIds = section.Enrollments.Select(e => e.StudentId).ToList();
-
+                    
                     if(StudentsAssignedIds.Intersect(sectionStudentsIds).Count() == sectionStudentsIds.Count())
                     {
-                        
                         entireSectionsAssigned.Add(section.SectionNumber);
                         StudentsAssignedIds = StudentsAssignedIds.Except(sectionStudentsIds).ToList();
                     }
                 }
 
-                if(entireSectionsAssigned.Any())
+                if (entireSectionsAssigned.Any())
                 {
                     testScheduleJObject.Assigmnet += "Sections " + String.Join(", ", entireSectionsAssigned.ToArray());
                 }
