@@ -281,7 +281,12 @@ $("button#SaveNewTestSchedule").click(function () {
     }
 
     var JsonData = JSON.stringify({
-        "TestId": TestId, "StartEndDateTime": StartEndDateTime, "IsTimeUnlimited": IsTimeUnlimited, "TimeLimit": TimeLimit, "Students": Students, "Sections": Sections
+        "TestId": TestId,
+        "StartEndDateTime": StartEndDateTime,
+        "IsTimeUnlimited": IsTimeUnlimited,
+        "TimeLimit": TimeLimit,
+        "Students": Students,
+        "Sections": Sections
     });
 
     $.ajax({
@@ -372,9 +377,12 @@ $("#TestSections").on("click", "button#setQuestionType", function () {
 
 // Displays section Editable instruction Box
 $("#TestSections").on("click", "a.editInstructions", function () {
-    var sectionId = $(this).attr('id');
-    var currentInstructions = $()
-    $(".editInstructionsContainer[value='" + sectionId +"']").removeClass("hidden");
+    var sectionId = $(this).val();
+    console.log("The Section id is: " + sectionId);
+
+    var currentInstructions = $("span.instructions-" + sectionId).text();
+    console.log("Current Instructions: " + currentInstructions);
+    //$(".editInstructionsContainer[value='" + sectionId +"']").removeClass("hidden");
 })
 // Handles all forms submition buttons
 $(function () {
