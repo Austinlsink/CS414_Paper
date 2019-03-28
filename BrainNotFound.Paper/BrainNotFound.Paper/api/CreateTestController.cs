@@ -8,6 +8,7 @@ using BrainNotFound.Paper.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -18,7 +19,7 @@ namespace BrainNotFound.Paper.api
     {
         #region Initialize controllers
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly PaperDbContext _context;
+        private readonly PaperDbContext _context; 
         /// <summary>
         /// Constructor 
         /// </summary>
@@ -321,6 +322,50 @@ namespace BrainNotFound.Paper.api
             return Json(new { success = true });
         }
 
+        // Get all the Test Schedules for a test
+        [HttpGet, Route("GetTestSchedules/{testId}")]
+        public JsonResult GetTestSchedules(long testId)
+        {
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            var test = _context.Tests.Find(testId);
+            var testSchedules = _context.TestSchedules.Include(ts => ts.StudentTestAssignments).Where(ts => ts.TestId == testId).ToList();
+            var sections = _context.Sections.Include(s => s.Enrollments).Where(s => s.InstructorId == instructor.Id && s.CourseId == test.CourseId).ToList();
+            List<JObject> shedules = new List<JObject>();
+            // Creates return data and checks if schedule was assigned to entire sections
+            foreach (var testSchedule in testSchedules)
+            {
+                var StudentsAssignedIds = testSchedule.StudentTestAssignments.Select(sta => sta.StudentId).ToList();
+
+                dynamic testScheduleJObject = new JObject();
+                testScheduleJObject.Availability = string.Format("MM / dd / yyyy hh: mm tt", testSchedule.StartTime) + " - " + string.Format("MM / dd / yyyy hh: mm tt", testSchedule.EndTime);
+                testScheduleJObject.TimeLimit = testSchedule.IsTimeUnlimited ? "Unlimited" : testSchedule.TimeLimit.ToString() + " minutes";
+
+                // Checks is all students from a section were assigned
+                List<int> entireSectionsAssigned = new List<int>();
+                foreach (Section section in sections)
+                {
+                    var sectionStudentsIds = section.Enrollments.Select(e => e.StudentId).ToList();
+
+                    if(StudentsAssignedIds.Intersect(sectionStudentsIds).Count() == sectionStudentsIds.Count())
+                    {
+                        
+                        entireSectionsAssigned.Add(section.SectionNumber);
+                        StudentsAssignedIds = StudentsAssignedIds.Except(sectionStudentsIds).ToList();
+                    }
+                }
+
+                if(entireSectionsAssigned.Any())
+                {
+                    testScheduleJObject.Assigmnet += "Sections " + String.Join(", ", entireSectionsAssigned.ToArray());
+                }
+
+                shedules.Add(testScheduleJObject);
+            }
+
+            
+            
+            return Json(new {success = true, shedules });
+        }
         // Gets all the students in a section
         [HttpGet, Route("GetStudentsInSection/{SectionId}")]
         public JsonResult GetSection(long SectionId)

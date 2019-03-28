@@ -19,6 +19,7 @@ var studentsInSelectedSection;
 init_daterangepicker_TestSchedule();
 init_students_datatable();
 Update_TestStatistics();
+Update_TestAssignmentTable();
 
 // Starts the Datatables for the edit test
 function init_students_datatable() {
@@ -57,6 +58,35 @@ function Update_TestStatistics() {
     $("#TotalPointsStats").text(TotalPoints);
     $("#TotalQuestionsStats").text(NumberOfQuestions);
     $("#TotalSectionsStats").text(NumberOfSections);
+}
+
+// Updates the test assignment table
+function Update_TestAssignmentTable() {
+    var testId = $("#TestId").val();
+    $.ajax({
+        url: "/api/CreateTest/GetTestSchedules/" + testId,
+        type: "GET",
+        success: function (result) {
+            if (result.success) {
+
+                var rendered = "";
+                var Row = $("#ScheduleTableRowTemplate").html();
+                var template = Handlebars.compile(Row);
+                
+                result.shedules.forEach(function (schedule) {
+                    rendered += template(schedule);
+                })
+                
+                console.log(rendered);
+                $("#TestAssignmentTable > tbody").html(rendered);
+                $("table#TestAssignmentTable").removeClass("hidden");
+
+            }
+            else {
+                console.log(result.errors)
+            }
+        },
+    })
 }
 
 // Updates the tables showing witch sections and students are assigned to the test
@@ -231,7 +261,7 @@ $("button#AssignSelectedStudents").click(function () {
 })
 
 // Send the information about a new schedule to the server and updates the view
-$("#NewTestSchedule").click(function () {
+$("button#SaveNewTestSchedule").click(function () {
     var TestId = $("#TestId").val();
     var StartEndDateTime = $("#testScheduleDateTime").val();
     var IsTimeUnlimited = $("#UnlimitedTimeCheckBox").is(':checked');
@@ -260,13 +290,10 @@ $("#NewTestSchedule").click(function () {
         data: JsonData,
         success: function (result) {
             if (result.success) {
-                console.log(result);
+                Update_TestAssignmentTable();
+                resetNewSchedule();
             }
-            else {
-                // Displays the error message to the user
-                $("#errorMessagePlaceHolder").text(result.message)
-                $("div#ErrorModal").modal("toggle");
-            }
+            // TODO: Display if Sections were already assigned
         },
     })
 })

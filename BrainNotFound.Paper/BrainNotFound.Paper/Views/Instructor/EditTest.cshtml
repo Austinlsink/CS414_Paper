@@ -89,17 +89,19 @@
                     <p>This test has not been scheduled yet.</p>
                     <hr />
                 </div>
-                <table class="table table-striped hidden">
+                <table id="TestAssignmentTable" class="table table-striped">
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>Availability</th>
-                            <th>TimeLimit</th>
+                            <th>Time Limit</th>
                             <th>Students Assigned</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody>
+
+                    </tbody>
                 </table>
                 <!-- END: Schedule -->
                 <!-- START: New Test Schedule -->
@@ -243,7 +245,7 @@
                     <table class="alignright">
                         <tr>
                             <td><a id="CancelNewSchedule" class="btn btn-danger">Cancel</a>
-                            <td><button id="NewTestSchedule" type="button" class="btn btn-primary">Save New Schedule</button></td>
+                            <td><button id="SaveNewTestSchedule" type="button" class="btn btn-primary">Save New Schedule</button></td>
                         </tr>
                     </table>
                     <div class="clearfix"></div>
@@ -304,15 +306,16 @@
             <td>  <button value="{{StudentId}}" class="btn btn-danger btn-xs deleteStudentAssigment"><i class="fa fa-trash-o"></i> Remove </button></td>
         </tr>
     </script>
+
     <!-- Row template from schedule table -->
     <script type="text/x-handlebars-template" id="ScheduleTableRowTemplate">
         <tr>
             <th scope="row">{{counter}}</th>
             <td>
-                <p><i class="fa fa-calendar"></i> {{StartDateTime}} - {{EndDateTime}}</p>
+                <p><i class="fa fa-calendar"></i> {{Availability}}</p>
             </td>
             <td>{{TimeLimit}}</td>
-            <td>{{Sections}}</td>
+            <td>{{Assigmnet}}</td>
             <td>
                 <form asp-controller="Admin" asp-action="DeleteCourse">
                     <button asp-controller="Instructor" asp-action="EditTest" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </button>
