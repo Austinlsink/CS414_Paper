@@ -222,7 +222,7 @@ namespace BrainNotFound.Paper.api
             dynamic json = jsonData;
             long testId = json.TestId;
             string questionType = json.QuestionType;
-
+            string sectionHeader = string.Empty;
             // TODO: Check if test really belongs to the current teacher
 
             // Find the test and create a section in it
@@ -240,14 +240,32 @@ namespace BrainNotFound.Paper.api
             switch(questionType)
             {
                 case QuestionType.TrueFalse:
-                    NewSection.SectionInstructions = DefaultInstruction.TrueFalse;
+                    NewSection.SectionInstructions = DefaultTestSectionText.Instruction.TrueFalse;
+                    sectionHeader = DefaultTestSectionText.Header.TrueFalse;
+                    break;
+                case QuestionType.Matching:
+                    NewSection.SectionInstructions = DefaultTestSectionText.Instruction.Matching;
+                    sectionHeader = DefaultTestSectionText.Header.Matching;
+                    break;
+                case QuestionType.FillInTheBlank:
+                    NewSection.SectionInstructions = DefaultTestSectionText.Instruction.FillInTheBlank;
+                    sectionHeader = DefaultTestSectionText.Header.FillInTheBlank;
+                    break;
+                case QuestionType.MultipleChoice:
+                    NewSection.SectionInstructions = DefaultTestSectionText.Instruction.MultipleChoice;
+                    sectionHeader = DefaultTestSectionText.Header.MultipleChoice;
+                    break;
+                case QuestionType.Essay:
+                    NewSection.SectionInstructions = DefaultTestSectionText.Instruction.Essay;
+                    sectionHeader = DefaultTestSectionText.Header.Essay;
                     break;
             }
             
             test.TestSections.Add(NewSection);
             _context.SaveChanges();
 
-            return Json(new { success = true, section = NewSection });
+
+            return Json(new { success = true, sectionId = NewSection.TestSectionId, instructions = NewSection.SectionInstructions, questionType = NewSection.QuestionType, header = sectionHeader});
         }
 
 

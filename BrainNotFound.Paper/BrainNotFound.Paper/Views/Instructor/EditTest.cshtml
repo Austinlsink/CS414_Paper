@@ -366,7 +366,7 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2><i class="fa fa-info-circle"></i> | {{SectionType}}</h2>
+                        <h2><i class="fa fa-info-circle"></i> {{Header}}</h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                             <li><a class="deleteSection" value="{{SectionId}}"><i class="fa fa-trash-o"></i></a></li>
@@ -389,7 +389,7 @@
                             </div>
                         </div>
                         <!--Edit Instructions Start-->
-                        <div class="row well hidden editInstructionsContainer">
+                        <div class="row well hidden editInstructionsContainer" id="{{SectionId}}">
                             <input class="originalInstructions" type="hidden" value="{{Instructions}}" />
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 <div class="col-md-1 col-sm-1 col-xs-3">

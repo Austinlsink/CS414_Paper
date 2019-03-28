@@ -1,5 +1,6 @@
-﻿// Variables for this Page
+﻿//Constants
 
+// Variables for this Page
 var TotalPoints = 180;
 var NumberOfQuestions = 50;
 var NumberOfSections = 4;
@@ -328,8 +329,8 @@ $("#TestSections").on("click", "button#setQuestionType", function () {
                 var TestSection = $("#TestSectionTemplate").html();
                 var template = Handlebars.compile(TestSection);
 
-                rendered += template({ SectionType: "True / False", Instructions: "Theis is supper nice instruction for a test section. " });
-                console.log(this);
+                rendered += template({ Instructions: result.instructions, SectionId : result.sectionId, SectionType : result.sectionType, Header : result.header });
+                
                 $(SectionTypeContainer).before(rendered);
                 $(SectionTypeContainer).remove();
 
