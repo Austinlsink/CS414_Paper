@@ -71,7 +71,9 @@ namespace BrainNotFound.Paper.api
                 return Json(new { success = true });
             }
             else
-            { return Json(new { success = true });
+            {
+                return Json(new { success = true });
+            }
         }
     }
 }

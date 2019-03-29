@@ -32,14 +32,14 @@ function init_testSections()
         success: function (result) {
             if (result.success) {
                 
-                var rendered = "";
                 var TestSection = $("#TestSectionTemplate").html();
                 var template = Handlebars.compile(TestSection);
                 result.testSections.forEach(function (testSection) {
                     //console.log(testSection);
-                    rendered += template(testSection);
+                    $("#TestSections").append(template(testSection));
+
+
                 })
-                $("#TestSections").append(rendered);
             }
             else {
                 console.log(result.errors)
@@ -323,7 +323,7 @@ $("button#SaveNewTestSchedule").click(function () {
         success: function (result) {
             if (result.success) {
                 Update_TestAssignmentTable();
-                // resetNewSchedule();
+                resetNewSchedule();
             }
             else {
                 console.log(result);

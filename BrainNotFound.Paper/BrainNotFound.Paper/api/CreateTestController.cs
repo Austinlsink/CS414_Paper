@@ -459,7 +459,7 @@ namespace BrainNotFound.Paper.api
                 var StudentsAssignedIds = testSchedule.StudentTestAssignments.Select(sta => sta.StudentId).ToList();
 
                 dynamic testScheduleJObject = new JObject();
-                testScheduleJObject.Availability = string.Format("MM / dd / yyyy hh: mm tt", testSchedule.StartTime) + " - " + string.Format("MM / dd / yyyy hh: mm tt", testSchedule.EndTime);
+                testScheduleJObject.Availability = testSchedule.StartTime.ToString("MM / dd / yyyy hh: mm tt") + " - " + testSchedule.EndTime.ToString("MM / dd / yyyy hh: mm tt");
                 testScheduleJObject.TimeLimit = testSchedule.IsTimeUnlimited ? "Unlimited" : testSchedule.TimeLimit.ToString() + " minutes";
 
                // Checks if all students from a section were assigned
@@ -542,8 +542,24 @@ namespace BrainNotFound.Paper.api
             {
                 return Json(new { success = false, error = "Instructor not alowed" });
             }
-            
-            
+        }
+
+        // Get all questions in a section
+        [HttpGet, Route("GetTestSectionQuestions/{TestSectionId}")]
+        public JsonResult GetTestSectionQuestions(long TestSectionId)
+        {
+            var testSection = _context.TestSections.Find(TestSectionId);
+
+            switch(testSection.QuestionType)
+            {
+                
+                case QuestionType.TrueFalse:
+                    var questions = _context.TrueFalses.Where(q => q.TestSectionId == testSection.TestSectionId).ToList();
+                    return Json(new { success = true, questions});
+            }
+
+                
+            return Json(new { success = true });
         }
     }
 }
