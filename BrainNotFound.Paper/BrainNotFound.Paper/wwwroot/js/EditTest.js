@@ -238,7 +238,7 @@ $("button#AssignEntireSection").click(function () {
     }
 })
 
-
+// Assigneds the currently selected section 
 $("button#AssignSelectedStudents").click(function () {
     var sectionNumber = $("#SelectSection option:selected").text();
     studentsDataTable.$('.selectedStudent').each(function () {
@@ -461,11 +461,33 @@ $("#TestSections").on("click", "button.saveNewQuestion", function () {
     var questionType = $(this).attr("data-questionType");
     var uuid = $(this).attr("data-uuid");
 
+    // Getting question data from the view
     var questionContent = $("#TrueFalseContent-" + uuid).val();
+    var pointValue = $("#TFPointValue-" + uuid).val();
+    var answer = $("input[name='TFRadioButton-" + uuid + "']:checked").val();
 
     if (questionContent.length == 0) {
+        $("#TFContentError-" + uuid).removeClass("hidden");
+    } else {
+        var JsonData = JSON.stringify({ TestSectionId: sectionId, Content: questionContent, PointValue: pointValue, TrueFalseAnswer: answer });
 
+        console.log(JsonData);
+        $.ajax({
+            url: "/api/CreateTest/NewTrueFalseQuestion",
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            data: JsonData,
+            success: function (result) {
+                if (result.success) {
+                    console.log(result)
+                }
+                else {
+                    console.log(result)
+                }
+            },
+        })
     }
+
 })
 // Handles all forms submition buttons
 $(function () {

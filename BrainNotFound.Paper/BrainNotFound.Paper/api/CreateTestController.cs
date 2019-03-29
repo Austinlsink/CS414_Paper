@@ -43,16 +43,19 @@ namespace BrainNotFound.Paper.api
         /// <param name="jsonData">The object that contains all of the question information</param>
         /// <returns>The question that was created</returns>        
         [HttpPost, Route("NewTrueFalseQuestion")]
-        public async Task<JsonResult> NewTrueFalseQuestion([FromBody] JObject jsonData)
+        public JsonResult NewTrueFalseQuestion([FromBody] JObject jsonData)
         {
             dynamic json = jsonData;
-            long testSectionId = long.Parse(json.TestSectionId);
+            long testSectionId = json.TestSectionId;
+            var testSection = _context.TestSections.Include(s => s.Test).Where(x => x.TestSectionId == testSectionId).First();
 
-            // Verify that the user logged in matches the instructor's id on the testId on the sectionId
-            var instructor = _context.TestSections.Include(s => s.Test).ThenInclude(t => t.applicationUser).Where(x => x.TestSectionId == testSectionId).First();
-            ApplicationUser activeInstructor = await _userManager.GetUserAsync(HttpContext.User);
-
-            if (instructor.Test.applicationUser.Id == activeInstructor.Id)
+            // Find the instructor who is creating the test
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            if (testSection.Test.InstructorId != instructor.Id)
+            {
+                return Json(new { success = false, error = "Instructor not alowed" });
+            }
+            else
             {
                 // Create a new question and add it to the DB
                 TrueFalse TFQuestion = new TrueFalse();
@@ -67,10 +70,6 @@ namespace BrainNotFound.Paper.api
                 _context.SaveChanges();
 
                 return Json(new { success = true, question = TFQuestion });
-            }
-            else
-            {
-                return Json(new { success = false });
             }
             
         }
