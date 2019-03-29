@@ -75,7 +75,7 @@ namespace BrainNotFound.Paper.api
         }
 
         [HttpPost, Route("Matching")]
-        public async Task<IActionResult> GetMatching([FromBody] JObject jsonData)
+        public IActionResult NewMatching([FromBody] JObject jsonData)
         {
 
             return Json(new { success = true });
@@ -87,19 +87,20 @@ namespace BrainNotFound.Paper.api
         /// <param name="jsonData">The object that contains all of the question information</param>
         /// <returns>The question that was created</returns>
         [HttpPost, Route("MultipleChoice")]
-        public async Task<JsonResult> GetMultipleChoice([FromBody] JObject jsonData)
+        public JsonResult NewMultipleChoice([FromBody] JObject jsonData)
         {
             dynamic json = jsonData;
-            JArray MCAnswers = json.MultipleChoiceAnswers;
             long testSectionId = long.Parse(json.TestSectionId);
+            var testSection = _context.TestSections.Include(s => s.Test).Where(x => x.TestSectionId == testSectionId).First();
+            JArray MCAnswers = json.MultipleChoiceAnswers;
 
-            // Verify that the user logged in matches the instructor's id on the testId on the sectionId
-            var instructor = _context.TestSections.Include(s => s.Test).ThenInclude(t => t.applicationUser).Where(x => x.TestSectionId == testSectionId).First();
-            ApplicationUser activeInstructor = await _userManager.GetUserAsync(HttpContext.User);
-
-            // If the instructorId on the question's section's testId matches the instructor logged on,
-            // Add the question to the database
-            if (instructor.Test.applicationUser.Id == activeInstructor.Id)
+            // Find the instructor who is creating the test
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            if (testSection.Test.InstructorId != instructor.Id)
+            {
+                return Json(new { success = false, error = "Instructor not alowed" });
+            }
+            else
             {
                 Question MCQuestion = new Question();
                 MCQuestion.Content = json.Content;
@@ -125,10 +126,6 @@ namespace BrainNotFound.Paper.api
                 _context.SaveChanges();
                 return Json(new { success = true, question = MCQuestion });
             }
-            else
-            {
-                return Json(new { success = false });
-            }
         }
 
         /// <summary>
@@ -137,20 +134,21 @@ namespace BrainNotFound.Paper.api
         /// <param name="jsonData">The object that contains all of the essay question information</param>
         /// <returns>The fill in the blank question that was created</returns>
         [HttpPost, Route("Essay")]
-        public async Task<JsonResult> GetEssay([FromBody] JObject jsonData)
+        public JsonResult NewEssay([FromBody] JObject jsonData)
         {
+
             dynamic json = jsonData;
-
             long testSectionId = long.Parse(json.TestSectionId);
+            var testSection = _context.TestSections.Include(s => s.Test).Where(x => x.TestSectionId == testSectionId).First();
 
-            // Verify that the user logged in matches the instructor's id on the testId on the sectionId
-            var instructor = _context.TestSections.Include(s => s.Test).ThenInclude(t => t.applicationUser).Where(x => x.TestSectionId == testSectionId).First();
-            ApplicationUser activeInstructor = await _userManager.GetUserAsync(HttpContext.User);
-
-            // If the instructorId on the question's section's testId matches the instructor logged on,
-            // Add the question to the database
-            if (instructor.Test.applicationUser.Id == activeInstructor.Id)
+            // Find the instructor who is creating the test
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            if (testSection.Test.InstructorId != instructor.Id)
             {
+                return Json(new { success = false, error = "Instructor not alowed" });
+            }
+            else
+            { 
                 Essay EssayQuestion = new Essay();
                 EssayQuestion.Content = json.Content;
                 EssayQuestion.Index = int.Parse((string)json.Index);
@@ -163,11 +161,6 @@ namespace BrainNotFound.Paper.api
                 _context.SaveChanges();
                 return Json(new { success = true, question = EssayQuestion });
             }
-            else
-            {
-                return Json(new { success = false });
-            }
-
         }
 
         /// <summary>
@@ -176,20 +169,21 @@ namespace BrainNotFound.Paper.api
         /// <param name="jsonData">The object that contains all of the fill in the blank question information</param>
         /// <returns>The fill in the blank question that was created</returns>
         [HttpPost, Route("FillInTheBlank")]
-        public async Task<JsonResult> GetFillInTheBlank([FromBody] JObject jsonData)
+        public JsonResult NewFillInTheBlank([FromBody] JObject jsonData)
         {
             dynamic json = jsonData;
+            long testSectionId = long.Parse(json.TestSectionId);
+            var testSection = _context.TestSections.Include(s => s.Test).Where(x => x.TestSectionId == testSectionId).First();
             JArray getAnswers = json.FillInTheBlankAnswer;
             String answers = String.Empty;
-            long testSectionId = long.Parse(json.TestSectionId);
 
-            // Verify that the user logged in matches the instructor's id on the testId on the sectionId
-            var instructor = _context.TestSections.Include(s => s.Test).ThenInclude(t => t.applicationUser).Where(x => x.TestSectionId == testSectionId).First();
-            ApplicationUser activeInstructor = await _userManager.GetUserAsync(HttpContext.User);
-
-            // If the instructorId on the question's section's testId matches the instructor logged on,
-            // Add the question to the database
-            if (instructor.Test.applicationUser.Id == activeInstructor.Id)
+            // Find the instructor who is creating the test
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            if (testSection.Test.InstructorId != instructor.Id)
+            {
+                return Json(new { success = false, error = "Instructor not alowed" });
+            }
+            else
             {
                 FillInTheBlank FITBQuestion = new FillInTheBlank();
                 FITBQuestion.Content = json.Content;
@@ -207,11 +201,6 @@ namespace BrainNotFound.Paper.api
                 _context.SaveChanges();
                 return Json(new { success = true, question = FITBQuestion });
             }
-            else
-            {
-                return Json(new { success = false });
-            }
-
         }
         #endregion get different question types
 
