@@ -51,8 +51,9 @@ namespace BrainNotFound.Paper.api
         }
 
         [HttpPost, Route("New")]
-        public async Task<IActionResult> New([FromBody] ApplicationUser user)
+        public async Task<IActionResult> New([FromBody] JsonObject jsonData)
         {
+            dynamic user = jsonData;
             user.UserName = user.FirstName + user.LastName;
             var admin = await _userManager.FindByIdAsync(user.Id);
 
@@ -69,12 +70,12 @@ namespace BrainNotFound.Paper.api
                     //Add Admin role to created Application User
                     await _userManager.AddToRoleAsync(CreatedUser, "Admin");
 
-                    return RedirectToAction("Administrators", "Admin");
+                    return Json(new { success = true });
 
                 }
             }
 
-            return Json(new { success = true });
+            return Json(new { success = false });
         }
     }
 }

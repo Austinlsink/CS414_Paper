@@ -40,7 +40,7 @@
                                         <input type="checkbox" class="flat" name="table_records">
                                     </td>
                                     <td class=" ">@test.TestName</td>
-                                    @{ 
+                                    @{
                                         string DepartmentCodeAndCourseCode;
                                         List<Course> courses = ViewBag.Courses;
                                         List<Department> departments = ViewBag.Departments;
@@ -51,13 +51,9 @@
                                     }
                                     <td class=" ">@DepartmentCodeAndCourseCode</td>
                                     <td class=" last">
-                                        <form asp-controller="Admin" asp-action="DeleteCourse">
-                                            <a  class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                            <a asp-controller="Instructor" asp-action="EditTest" asp-route-DepartmentCode="@currentDepartment.DepartmentCode"  asp-route-CourseCode="@currentCourse.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                            <input type="hidden" name="CourseId" value="@test.TestId" />
-                                            <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
-                                        </form>
-
+                                        <a class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                        <a asp-controller="Instructor" asp-action="EditTest" asp-route-DepartmentCode="@currentDepartment.DepartmentCode" asp-route-CourseCode="@currentCourse.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                        <button  type="submit" data-target="#ConfirmModal" data-testId="@test.TestId" class="btn btn-danger btn-xs confirmDelete"><i class="fa fa-trash-o"></i> Delete </button>
                                     </td>
                                 </tr>
                             }
@@ -69,3 +65,47 @@
         </div>
     </div>
 </div>
+
+<!-- Confirm Deleting Modal-->
+<div id="ConfirmModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel2">Warning: Deleting Test</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this test?</p>
+                <div class="modal-footer">
+                    <button id="YesDelete" type="button" class="btn btn-default">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Message Modal-->
+<div id="ErrorModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel2">Delete Test Error</h4>
+            </div>
+            <div class="modal-body">
+                <p id="errorMessagePlaceHolder"></p>
+                <div class="modal-footer">
+                    <button id="MessageClose" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts
+    {
+    <!--CreateTest functions-->
+    <script type="text/javascript" src="~/js/Tests.js"></script>
+}
