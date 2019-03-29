@@ -216,6 +216,39 @@ namespace BrainNotFound.Paper.api
         }
         #endregion get different question types
 
+        ///Bima says: receiving TestSectionId, delete it return true or false
+        [HttpPost, Route("DeleteSectionTestId")]
+        public async Task<JsonResult> DeleteSectionTestId([FromBody] JObject jsonData)
+        {
+            dynamic json = jsonData;
+            long sectionTestId = long.Parse(json.SectionTestId);
+            long testId = long.Parse(json.TestId);
+
+            // Verify that the user logged in matches the instructor's id on the testId on the sectionId
+            var instructor = _context.TestSections.Include(s => s.Test).ThenInclude(t => t.applicationUser).Where(x => x.TestSectionId == testId).First();
+            ApplicationUser activeInstructor = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (instructor.Test.applicationUser.Id == activeInstructor.Id)
+            {
+                return Json(new { success = false });
+            }
+
+            var testSection = _context.TestSections.Find(sectionTestId);
+
+            if (testSection != null)
+            {
+                _context.TestSections.Remove(testSection);
+                _context.SaveChanges();
+
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
+            
+        }
+
         /// <summary>
         /// Bima says that this method gets all of the true false questions in a section
         /// </summary>
@@ -225,13 +258,21 @@ namespace BrainNotFound.Paper.api
         ///Update section instruction - receive a section id, instrucions, and update the system
         ///return success true or false
         [HttpPost, Route("UpdateSectionInstruction")]
-        public JsonResult GetUpdateSectionInstruction([FromBody] JObject jsonData)
+        public async Task<JsonResult> GetUpdateSectionInstruction([FromBody] JObject jsonData)
         {
             dynamic json = jsonData;
             long testSectionId = json.TestSectionId;
             string sectionInfo = json.SectionInstructions;
 
-            var testSection = _context.TestSections.Where(x => x.TestSectionId == testSectionId).First();
+            // Verify that the user logged in matches the instructor's id on the testId on the sectionId
+            var instructor = _context.TestSections.Include(s => s.Test).ThenInclude(t => t.applicationUser).Where(x => x.TestSectionId == testSectionId).First();
+            ApplicationUser activeInstructor = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (instructor.Test.applicationUser.Id == activeInstructor.Id)
+            {
+                return Json(new { success = false });
+            }
+                var testSection = _context.TestSections.Where(x => x.TestSectionId == testSectionId).First();
             if (testSection != null)
             {
                 testSection.SectionInstructions = sectionInfo;
@@ -253,7 +294,6 @@ namespace BrainNotFound.Paper.api
 
             return Json(questions);
         }
-
 
         [HttpPost, Route("CreateTestSection")]
         public JsonResult CreateTestSection([FromBody]JObject jsonData)
@@ -323,10 +363,35 @@ namespace BrainNotFound.Paper.api
             dynamic json = jsonData;
             long testId = json.TestId;
             string startEndDateTime = json.StartEndDateTime;
+            DateTime testDate = Convert.ToDateTime(startEndDateTime.Split(" ").First());
             bool isTimeUnlimited = bool.Parse((string) json.IsTimeUnlimited);
             int timeLimit = json.TimeLimit;
             JArray studentIds = json.Students;
             JArray sectionIds = json.Sections;
+
+            // Error checking variables
+            JObject errorMessages = new JObject();
+            int errorCount = 0;
+
+            if (testDate < DateTime.Now)
+            {
+                errorMessages.Add( new JProperty("DateTimeError", "The test date must be set to today's date or further."));
+                errorCount++;
+            }
+            if (timeLimit <= 0)
+            {
+                errorMessages.Add(new JProperty("TimeLimitError", "The test time must be set and must be greater than 0. "));
+                errorCount++;
+            }
+            if (studentIds.Count <= 0 && sectionIds.Count <= 0)
+            {
+                errorMessages.Add(new JProperty("StudentSectionErrorMessage", "The test must be assigned at least one section or at least one student" ));
+                errorCount++;
+            }
+            if (errorCount > 0)
+            {
+                return Json(new { success = false, ErrorMessage = errorMessages });
+            }
 
             // Parsing the date
             string startDateTime = startEndDateTime.Substring(0, startEndDateTime.IndexOf(" - "));
