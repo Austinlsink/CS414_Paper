@@ -20,7 +20,7 @@ $("button#YesDelete").click(function () {
         data: testId,
         success: function (result) {
             if (result.success) {
-                $("#errorMessagePlaceHolder").text(result.SuccessMessage);
+                $("#errorMessagePlaceHolder").text(result.message);
                 $("h4#MessageModal").text("Success!");
                 $("div#ErrorModal").modal("toggle");
                 console.log(result.messages);
@@ -28,9 +28,8 @@ $("button#YesDelete").click(function () {
             else {
                 // Displays the error message to the user
                 $("h4#MessageModal").text("Error!");
-                $("#errorMessagePlaceHolder").text(result.ProgressMessage, result.PastMessage);
+                $("#errorMessagePlaceHolder").text(result.error);
                 $("div#ErrorModal").modal("toggle");
-                console.log(result.messages);
 
             }
         },

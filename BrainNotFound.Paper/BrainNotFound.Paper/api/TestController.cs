@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using BrainNotFound.Paper.Models.BusinessModels;
@@ -44,35 +45,30 @@ namespace BrainNotFound.Paper.api
             var test = _context.Tests.Find(testId);
             int countError = 0;
             var testSectionSchedules = _context.TestSchedules.Where(ts => ts.TestId == test.TestId).ToList();
-            string ProgressErrorMessage = String.Empty;
+            string ProgressMessage = String.Empty;
+            string PastMessage = String.Empty;
             string SuccessMessage = String.Empty;
-            string PastErrorMessage = String.Empty;
+
+           
 
             foreach (TestSchedule schedule in testSectionSchedules)
             {
-                if (schedule.StartTime.CompareTo(DateTime.Now) < 0)
+                // Parsing the date
+                if (schedule.StartTime < DateTime.Now)
                 {
-                    PastErrorMessage = "For record purposes, previously taken tests cannot be deleted.";
-                    countError++;
-                }
-                if (schedule.StartTime.CompareTo(DateTime.Now) > 0)
-                {
-                    SuccessMessage = "The test was successfully deleted.";
-                }
-                if (schedule.StartTime.CompareTo(DateTime.Now) == 0)
-                {
-                    ProgressErrorMessage = "The test is currently in progress and cannot be deleted.";
+                    PastMessage = " For record purposes, previously taken tests cannot be deleted.";
                     countError++;
                 }
             }
-
             if (countError == 0)
             {
-                return Json(new { success = true });
+                _context.Tests.Remove(test);
+                _context.SaveChanges();
+                return Json(new { success = true, message = "The test was successfully deleted"});
             }
             else
             {
-                return Json(new { success = true });
+                return Json(new { success = false, error = ProgressMessage + PastMessage});
             }
         }
     }
