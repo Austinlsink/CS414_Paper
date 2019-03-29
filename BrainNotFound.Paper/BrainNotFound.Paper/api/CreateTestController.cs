@@ -42,35 +42,34 @@ namespace BrainNotFound.Paper.api
         /// </summary>
         /// <param name="jsonData">The object that contains all of the question information</param>
         /// <returns>The question that was created</returns>        
-        [HttpPost, Route("TrueFalse")]
-        public async Task<JsonResult> GetTrueFalse([FromBody] JObject jsonData)
+        [HttpPost, Route("NewTrueFalseQuestion")]
+        public JsonResult NewTrueFalseQuestion([FromBody] JObject jsonData)
         {
             dynamic json = jsonData;
-            long testSectionId = long.Parse(json.TestSectionId);
+            long testSectionId = json.TestSectionId;
+            var testSection = _context.TestSections.Include(s => s.Test).Where(x => x.TestSectionId == testSectionId).First();
 
-            // Verify that the user logged in matches the instructor's id on the testId on the sectionId
-            var instructor = _context.TestSections.Include(s => s.Test).ThenInclude(t => t.applicationUser).Where(x => x.TestSectionId == testSectionId).First();
-            ApplicationUser activeInstructor = await _userManager.GetUserAsync(HttpContext.User);
-
-            if (instructor.Test.applicationUser.Id == activeInstructor.Id)
+            // Find the instructor who is creating the test
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            if (testSection.Test.InstructorId != instructor.Id)
+            {
+                return Json(new { success = false, error = "Instructor not alowed" });
+            }
+            else
             {
                 // Create a new question and add it to the DB
                 TrueFalse TFQuestion = new TrueFalse();
                 TFQuestion.Content = json.Content;
-                TFQuestion.Index = int.Parse((string)json.Index);
+                //TFQuestion.Index = int.Parse((string)json.Index);
                 TFQuestion.PointValue = int.Parse((string)json.PointValue);
-                TFQuestion.TestSectionId = long.Parse((string)json.TestSectionId);
+                TFQuestion.TestSectionId = testSectionId;
                 TFQuestion.TrueFalseAnswer = bool.Parse((string)json.TrueFalseAnswer);
                 TFQuestion.QuestionType = QuestionType.TrueFalse;
 
-                _context.Questions.Add(TFQuestion);
+                _context.TrueFalses.Add(TFQuestion);
                 _context.SaveChanges();
 
                 return Json(new { success = true, question = TFQuestion });
-            }
-            else
-            {
-                return Json(new { success = false });
             }
             
         }
@@ -218,23 +217,21 @@ namespace BrainNotFound.Paper.api
 
         ///Bima says: receiving TestSectionId, delete it return true or false
         [HttpPost, Route("DeleteSectionTestId")]
-        public async Task<JsonResult> DeleteSectionTestId([FromBody] JObject jsonData)
+        public JsonResult DeleteSectionTestId([FromBody] JObject jsonData)
         {
             dynamic json = jsonData;
-            long sectionTestId = long.Parse(json.SectionTestId);
+            long testSectionId = long.Parse(json.SectionTestId);
             long testId = long.Parse(json.TestId);
 
-            // Verify that the user logged in matches the instructor's id on the testId on the sectionId
-            var instructor = _context.TestSections.Include(s => s.Test).ThenInclude(t => t.applicationUser).Where(x => x.TestSectionId == testId).First();
-            ApplicationUser activeInstructor = await _userManager.GetUserAsync(HttpContext.User);
+            var testSection = _context.TestSections.Include(s => s.Test).Where(x => x.TestSectionId == testSectionId).First();
 
-            if (instructor.Test.applicationUser.Id == activeInstructor.Id)
+            // Find the instructor who is creating the test
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            if (testSection.Test.InstructorId != instructor.Id)
             {
-                return Json(new { success = false });
+                return Json(new { success = false, error = "Instructor not alowed" });
             }
-
-            var testSection = _context.TestSections.Find(sectionTestId);
-
+            
             if (testSection != null)
             {
                 _context.TestSections.Remove(testSection);
@@ -258,7 +255,7 @@ namespace BrainNotFound.Paper.api
         ///Update section instruction - receive a section id, instrucions, and update the system
         ///return success true or false
         [HttpPost, Route("UpdateSectionInstruction")]
-        public async Task<JsonResult> UpdateSectionInstruction([FromBody] JObject jsonData)
+        public JsonResult UpdateSectionInstruction([FromBody] JObject jsonData)
         {
             dynamic json = jsonData;
             long testSectionId = json.TestSectionId;
@@ -347,7 +344,7 @@ namespace BrainNotFound.Paper.api
             _context.SaveChanges();
 
 
-            return Json(new { success = true, sectionId = NewSection.TestSectionId, instructions = NewSection.SectionInstructions, questionType = NewSection.QuestionType, header = sectionHeader});
+            return Json(new { success = true, sectionId = NewSection.TestSectionId, instructions = NewSection.SectionInstructions, sectionType = NewSection.QuestionType, header = sectionHeader});
         }
 
         /// <summary>

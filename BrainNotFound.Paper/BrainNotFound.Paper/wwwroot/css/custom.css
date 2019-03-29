@@ -2418,12 +2418,15 @@ a.btn-danger {
 }
 textarea {
     padding: 10px;
+    height: 2.8em;
+    width:100%;
+    resize: none;
     vertical-align: top;
-    width: 200px
 }
 textarea:focus {
     outline-style: solid;
-    outline-width: 2px
+    color:gray;
+
 }
 .btn_ {
     display: inline-block;
@@ -4242,13 +4245,13 @@ table thead .checkbox.radio { margin-top:-7px;margin-top:-21px; }
 }
 /** /bootstrap-datetimepicker **/
 
-bg-red-light {
+.bg-red-light {
     background: #f9edeb;
     padding: 8px;
     border-radius: 5px;
     border: 1px solid #cc3333;
 }
-bg-green-light {
+.bg-green-light {
     background: #eff8f5;
     padding: 8px;
     border-radius: 5px;
