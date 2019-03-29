@@ -45,45 +45,36 @@ namespace BrainNotFound.Paper.api
             var test = _context.Tests.Find(testId);
             int countError = 0;
             var testSectionSchedules = _context.TestSchedules.Where(ts => ts.TestId == test.TestId).ToList();
-            string ProgressErrorMessage = String.Empty;
+            string ProgressMessage = String.Empty;
+            string PastMessage = String.Empty;
             string SuccessMessage = String.Empty;
-            string PastErrorMessage = String.Empty;
 
            
 
             foreach (TestSchedule schedule in testSectionSchedules)
             {
                 // Parsing the date
-                string startEndDateTime = schedule.StartTime.ToString();
-                string startDateTime = startEndDateTime.Substring(0, startEndDateTime.IndexOf(" - "));
-                string endDateTime = startEndDateTime.Substring(startEndDateTime.IndexOf(" - ") + 3);
-                DateTime parsedStartDateTime = DateTime.ParseExact(startDateTime, "MM/dd/yyyy hh:mm tt", new CultureInfo("en-US"), DateTimeStyles.None);
-                DateTime parsedEndDateTime = DateTime.ParseExact(endDateTime, "MM/dd/yyyy hh:mm tt", new CultureInfo("en-US"), DateTimeStyles.None);
-
-                if (parsedStartDateTime < DateTime.Now)
+                if (schedule.StartTime < DateTime.Now)
                 {
-                    PastErrorMessage = "For record purposes, previously taken tests cannot be deleted.";
+                    PastMessage = " For record purposes, previously taken tests cannot be deleted.";
                     countError++;
                 }
-                if (parsedEndDateTime > DateTime.Now)
+                if (schedule.StartTime.Day == DateTime.Now.Day && schedule.EndTime.Hour == DateTime.Now.Hour)
                 {
-                    SuccessMessage = "The test was successfully deleted.";
-                }
-                if (parsedStartDateTime.Day == DateTime.Now.Day && parsedStartDateTime.Hour == DateTime.Now.Hour)
-                {
-                    ProgressErrorMessage = "The test is currently in progress and cannot be deleted.";
+                    ProgressMessage = " The test is currently in progress and cannot be deleted.";
                     countError++;
                 }
             }
-
             if (countError == 0)
             {
                 _context.Tests.Remove(test);
                 _context.SaveChanges();
-                return Json(new { success = true });
+                return Json(new { success = true, message = "The test was successfully deleted"});
             }
             else
-            { return Json(new { success = true });
+            {
+                return Json(new { success = false, error = ProgressMessage + PastMessage});
+            }
         }
     }
 }
