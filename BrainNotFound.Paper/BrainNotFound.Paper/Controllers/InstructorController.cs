@@ -271,6 +271,7 @@ namespace BrainNotFound.Paper.Controllers
 
                 }
             }
+
             ViewBag.CoursesTaught = coursesTaught;
             return View();
         }
@@ -303,11 +304,14 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("Tests/Edit/{DepartmentCode}/{CourseCode}/{URLSafeName}")]
         public IActionResult EditTest(string DepartmentCode, string CourseCode, string URLSafeName)
         {
+            var Instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
             var department = _context.Departments.Where(d => d.DepartmentCode == DepartmentCode).First();
             var course = _context.Courses.Where(c => c.DepartmentId == department.DepartmentId && c.CourseCode == CourseCode).First();
             var test = _context.Tests.Where(t => t.URLSafeName == URLSafeName && t.CourseId == course.CourseId).First();
             course.DepartmentCode = department.DepartmentCode;
+            var sections = _context.Sections.Where(s => s.InstructorId == Instructor.Id && s.CourseId == course.CourseId).ToList();
 
+            ViewBag.Sections = sections;
             ViewBag.Test = test;
             ViewBag.Course = course;
          
@@ -316,32 +320,6 @@ namespace BrainNotFound.Paper.Controllers
         #endregion Test Actions
 
         #region Create Test Partials
-
-        // Gets the partial view being displayed
-        [HttpGet, Route("Tests/Partials/EditNameAndCourse/{TestId}")]
-        public ActionResult PartialEditNameAndCourse(long TestId)
-        {
-            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
-            var departments = _context.Departments;
-            List<Course> coursesTaught = new List<Course>();
-            var sectionsTaught = _context.Sections.Where(S => S.InstructorId == instructor.Id);
-            
-            var test = _context.Tests.Find(TestId);
-            ViewBag.Test = test;
-
-            foreach (var section in sectionsTaught)
-            {
-                var currentCourse = _context.Courses.Where(c => c.CourseId == section.CourseId).First();
-                if (coursesTaught.Contains(currentCourse) == false)
-                {
-                    currentCourse.DepartmentCode = (departments.Where(d => d.DepartmentId == currentCourse.DepartmentId).First()).DepartmentCode;
-                    coursesTaught.Add(currentCourse);
-                }
-            }
-
-            ViewBag.CoursesTaught = coursesTaught;
-            return PartialView("~/Views/Instructor/CreateTestPartials/_EditNameAndCourse.cshtml");
-        }
 
         // When you press save on the information, this happens
        [HttpPost, Route("Tests/Partials/EditNameAndCourse")]
@@ -369,72 +347,6 @@ namespace BrainNotFound.Paper.Controllers
            return RedirectToAction("EditTest", "Instructor", new { DepartmentCode = department.DepartmentCode, CourseCode = course.CourseCode, URLSafeName = dbTest.URLSafeName });
        }
 
-        // Gets the partial view New Schedule
-        [HttpGet, Route("Tests/Partials/NewSchedule/{TestId}")]
-        public ActionResult PartialNewSchedule(long TestId)
-        {
-            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
-            var test = _context.Tests.Find(TestId);
-            var sections = _context.Sections.Where(s => s.CourseId == test.CourseId).ToList();
-
-            ViewBag.Sections = sections;
-            ViewBag.TestId = test.TestId;
-            // ViewBag.Sections = sections;
-            return PartialView("~/Views/Instructor/CreateTestPartials/_NewTestSchedule.cshtml");
-        }
-
-        [HttpGet, Route("Tests/Partials/StudentInSectionTable/{SectionId}")]
-        public ActionResult PartialStudentInSectionTable(long SectionId)
-        {
-            var enrollments = _context.Enrollments.Where(e => e.SectionId == SectionId).Include(e => e.ApplicationUser);
-            var students = new List<ApplicationUser>();
-            
-            foreach(Enrollment e in enrollments)
-            {
-                students.Add(e.ApplicationUser);
-            }
-
-            ViewBag.Students = students;
-            return PartialView("~/Views/Instructor/CreateTestPartials/_StudentInSectionTable.cshtml");
-            
-        }
-
-
-        [HttpGet, Route("Tests/Partials/ViewSectionAndStudentsAssigned/{TestId}")]
-        public ActionResult PartialViewSectionAndStudentsAssigned(long TestId)
-        {
-
-            ViewBag.Students = _context.ApplicationUsers.Take(5).ToList();
-            ViewBag.Sections = new List<Section>();
-
-            return PartialView("~/Views/Instructor/CreateTestPartials/_ViewSectionAndStudentsAssigned.cshtml");
-        }
-
-        [HttpPost, Route("Tests/Partials/ViewSectionAndStudentsAssigned")]
-        //public ActionResult PartialViewSectionAndStudentsAssigned([FromBody] List<long> SectionIds, [FromBody] List<string> StudentIds)
-        public IActionResult PartialViewSectionAndStudentsAssigned(List<long> SectionIds, List<string> StudentIds )
-        {
-           
-            
-
-            
-            List<Section> sections = new List<Section>();
-            List<ApplicationUser> students = new List<ApplicationUser>();
-
-            for(int index = 0; index <= SectionIds.Count; index++)
-            {
-                sections.Add(_context.Sections.Find(SectionIds[index]));
-            }
-
-            for (int index = 0; index <= StudentIds.Count; index++)
-            {
-                students.Add(_context.ApplicationUsers.Find(StudentIds[index]));
-            }
-            ViewBag.Students = students;
-            ViewBag.Sections = sections;
-
-            return PartialView("~/Views/Instructor/CreateTestPartials/_ViewSectionAndStudentsAssigned.cshtml");
-        }
         #endregion Create Test Partials
 
     }

@@ -12,17 +12,17 @@ namespace BrainNotFound.Paper.Models.BusinessModels
     {
         [Key] // Primary key
         public long CourseId { get; set; }
-        [Required]
-        [Range(1, 8, ErrorMessage = "Please enter a credit hour.")]
+        [Required(ErrorMessage = "Please enter a Credit Hour.")]
+        [Range(1, 8, ErrorMessage = "Credit Hours must be between 1 and 8.")]
         public int CreditHours { get; set; }
-        [Required]
-        [Range(100, 999, ErrorMessage = "Please enter a course number (example: 101, 202).")]
+        [Required(ErrorMessage = "Please enter a Course Code")]
+        [Range(100, 999, ErrorMessage = "Course Code examples: 101, 202.")]
         public string CourseCode { get; set; } //should this be an int?
-        [Required]
-        [StringLength(128, MinimumLength = 1, ErrorMessage = "Please enter a course name (example: Intro To Biology, New Testament Survey).")]
+        [Required(ErrorMessage = "Please enter a Course Name")]
+        [StringLength(128, MinimumLength = 1, ErrorMessage = "Course name examples: Intro To Biology, New Testament Survey.")]
         public string Name { get; set; }
-        [Required]
-        [StringLength(1024, MinimumLength = 1, ErrorMessage = "Please enter a course description.")]
+        [Required(ErrorMessage = "Please enter the Course Description")]
+        [StringLength(1024, MinimumLength = 10, ErrorMessage = "Description must be a minimum of 10 characters.")]
         public string Description { get; set; }
 
         // Properties not mapped

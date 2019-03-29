@@ -46,7 +46,7 @@
 
     <hr />
     <!-- Start: Left -->
-    <div class=" col-md-6 col-sm-12 col-xs-12">
+    <div class=" col-md-8 col-sm-12 col-xs-12">
         <div class="x_panel">
             <div class="x_title">
                 <h4><i class="fa fa-users"></i> Assign</h4>
@@ -60,6 +60,9 @@
                         <option value="@classSection.SectionId">Section @classSection.SectionNumber</option>
                     }
                 </select>
+                <br />
+                <div class="clearfix"></div>
+                <button onclick="AssignEntireSection()" type="button" class="btn btn-sm btn-primary alignright"><i class="fa fa-pie-chart"></i> Entire Section</button>
                 <div class="clearfix"></div>
                 <hr />
 
@@ -69,8 +72,7 @@
 
                 <hr />
 
-                <button onclick="AssignEntireSection()" type="button" class="btn btn-sm btn-primary alignright"><i class="fa fa-pie-chart"></i> Entire Section</button>
-                <button type="button" class="btn btn-sm btn-primary alignright"><i class="fa fa-users"></i> Selected Students</button>
+                <button onclick="AssignToSelectedStudents()" type="button" class="btn btn-sm btn-primary alignright"><i class="fa fa-users"></i> Selected Students</button>
                 <div class="clearfix"></div>
             </div>
 
@@ -80,7 +82,7 @@
     </div>
 
     <!-- Start: Right -->
-    <div class="col-md-6 col-sm-12 col-xs-12">
+    <div class="col-md-4 col-sm-12 col-xs-12">
         <div id="AssignedTablePlaceHolder">
             <div class="x_panel">
                 <div class="x_title">
@@ -118,7 +120,7 @@
     <div class="clearfix"></div>
     <table class="alignright">
         <tr>
-            <td><a onclick="Cancel('#NewSchedule')" class="btn btn-danger">Cancel</a>
+            <td><a id="NewScheduleCancelButton" onclick="Cancel('#NewSchedule', this)" class="btn btn-danger">Cancel</a>
             <td><button type="button" class="btn btn-primary">Save New Schedule</button></td>
         </tr>
     </table>

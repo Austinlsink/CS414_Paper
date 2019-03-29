@@ -35,7 +35,7 @@ namespace BrainNotFound.Paper.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<DateTime>("DOB");
+                    b.Property<DateTime?>("DOB");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);
@@ -247,9 +247,9 @@ namespace BrainNotFound.Paper.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CorrectMultipleChoiceAnswer");
-
                     b.Property<bool>("IsCorrect");
+
+                    b.Property<string>("MultipleChoiceAnswerOption");
 
                     b.Property<long>("QuestionId");
 
@@ -299,30 +299,16 @@ namespace BrainNotFound.Paper.Migrations
 
                     b.Property<int>("PointValue");
 
-                    b.Property<long>("QuestionTypeId");
+                    b.Property<string>("QuestionType")
+                        .IsRequired();
 
                     b.Property<long>("TestSectionId");
 
                     b.HasKey("QuestionId");
 
-                    b.HasIndex("QuestionTypeId");
-
                     b.ToTable("Questions");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Question");
-                });
-
-            modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.QuestionType", b =>
-                {
-                    b.Property<long>("QuestionTypeId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("QuestionTypeId");
-
-                    b.ToTable("QuestionTypes");
                 });
 
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.Section", b =>
@@ -476,13 +462,13 @@ namespace BrainNotFound.Paper.Migrations
 
                     b.Property<bool>("Submitted");
 
-                    b.Property<long>("TestId");
+                    b.Property<long>("TestScheduleId");
 
                     b.HasKey("StudentTestAssignmentId");
 
                     b.HasIndex("StudentId");
 
-                    b.HasIndex("TestId");
+                    b.HasIndex("TestScheduleId");
 
                     b.ToTable("StudentTestAssignments");
                 });
@@ -537,6 +523,8 @@ namespace BrainNotFound.Paper.Migrations
 
                     b.Property<DateTime>("EndTime");
 
+                    b.Property<bool>("IsTimeUnlimited");
+
                     b.Property<DateTime>("StartTime");
 
                     b.Property<long>("TestId");
@@ -559,6 +547,8 @@ namespace BrainNotFound.Paper.Migrations
                     b.Property<int>("Index");
 
                     b.Property<bool>("IsQuestionSection");
+
+                    b.Property<string>("QuestionType");
 
                     b.Property<string>("SectionInstructions");
 
@@ -814,14 +804,6 @@ namespace BrainNotFound.Paper.Migrations
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.Question", b =>
-                {
-                    b.HasOne("BrainNotFound.Paper.Models.BusinessModels.QuestionType")
-                        .WithMany("Questions")
-                        .HasForeignKey("QuestionTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.Section", b =>
                 {
                     b.HasOne("BrainNotFound.Paper.Models.BusinessModels.Course", "Course")
@@ -908,9 +890,9 @@ namespace BrainNotFound.Paper.Migrations
                         .WithMany("StudentTestAssignments")
                         .HasForeignKey("StudentId");
 
-                    b.HasOne("BrainNotFound.Paper.Models.BusinessModels.Test", "Test")
+                    b.HasOne("BrainNotFound.Paper.Models.BusinessModels.TestSchedule", "TestSchedule")
                         .WithMany("StudentTestAssignments")
-                        .HasForeignKey("TestId")
+                        .HasForeignKey("TestScheduleId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

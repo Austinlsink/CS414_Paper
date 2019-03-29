@@ -9,9 +9,9 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 		[Key]
 		public long StudentTestAssignmentId {get; set;}
 		
-		public long TestId { get; set; }
-        [ForeignKey("TestId")]
-		public Test Test { get; set; }
+		public long TestScheduleId { get; set; }
+        [ForeignKey("TestScheduleId")]
+		public TestSchedule TestSchedule { get; set; }
 		
 		public string StudentId { get; set; }
         [ForeignKey("StudentId")]

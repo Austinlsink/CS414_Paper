@@ -1,127 +1,448 @@
 @using BrainNotFound.Paper.Models.BusinessModels
+@model Test;
 @{
-    ViewData["Title"] = "Edit test_name - Instructor";
+    Test test = ViewBag.Test;
+    List<Section> sections = ViewBag.Sections;
+
+    ViewData["Title"] = "Edit " + test.TestName + " - Instructor";
 }
 
 <div class="row" id="TestInformationSection">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
             <div class="x_title">
-                <h2><i class="fa fa-file-text-o"></i> @(ViewBag.Course.DepartmentCode + ViewBag.Course.CourseCode) - @(" " + ViewBag.Test.TestName)</h2>
+                <h2><i class="fa fa-file-text-o"></i> @(ViewBag.Course.DepartmentCode + ViewBag.Course.CourseCode) - @(" " + test.TestName)</h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a onclick="EditTestNameAndCourse(@ViewBag.Test.TestId)">Edit name and course</a></li>
+                            <li><a id="EditTestName">Edit name</a></li>
                             <li><a href="#">Delete</a></li>
                         </ul>
                     </li>
                 </ul>
                 <div class="clearfix"></div>
             </div>
-            <div id="x_c-infoSection" class="x_content">
+            <div class="x_content">
+
+                <!-- START: Edit test name section-->
+                <input type="hidden" id="TestId" value="@test.TestId" />
+                <div id="EditNameContainer" class="well hidden">
+                    <form asp-action="PartialEditNameAndCourse" asp-controller="Instructor" asp-route-TestId="" id="new-department" data-parsley-validate class="form-horizontal form-label-left">
+                        <div class="col-md-9 col-xs-12">
+                            <label for="TestName" class="control-label">Edit Test Name</label>
+                            <input type="text" asp-for="TestName" placeholder="Enter test name" class="form-control" value="@test.TestName">
+                            <input asp-for="TestId" type="hidden" value="@test.TestId" />
+                            <input asp-for="CourseId" type="hidden" value="@test.CourseId" />
+                        </div>
+                        <div class="col-md-3 col-sm-12">
+                            <label class="control-label">&emsp;</label>
+                            <table>
+                                <tr>
+                                    <td><a id="cancelEditTestName" class="btn btn-danger">Cancel</a>
+                                    <td> <button type="submit" class="btn btn-primary">Save</button></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+                <!-- END: Edit test name section-->
+                <!-- START: Statistics -->
                 <h3>General</h3>
                 <hr />
-                <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="animated flipInY col-md-4 col-sm-12 col-xs-12">
                     <div class="tile-stats">
                         <div class="icon">
                             <i class="fa fa-dot-circle-o"></i>
                         </div>
-                        <div class="count">179</div>
+                        <div id="TotalPointsStats" class="count"></div>
                         <h3>Total Points</h3>
                     </div>
                 </div>
-                <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="animated flipInY  col-md-4 col-sm-12 col-xs-12">
                     <div class="tile-stats">
                         <div class="icon">
                             <i class="fa fa-question"></i>
                         </div>
-                        <div class="count">52</div>
+                        <div id="TotalQuestionsStats" class="count"></div>
                         <h3>Questions</h3>
                     </div>
                 </div>
-                <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="animated flipInY col-md-4 col-sm-12 col-xs-12">
                     <div class="tile-stats">
                         <div class="icon">
                             <i class="fa fa-sort-alpha-asc"></i>
                         </div>
-                        <div class="count">4</div>
+                        <div id="TotalSectionsStats" class="count"></div>
                         <h3>Sections</h3>
                     </div>
                 </div>
-                <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="tile-stats">
-                        <div class="icon">
-                            <a><i class="fa fa-check"></i></a>
-                        </div>
-                        <div class="count">Live</div>
-                        <h3>Test Published</h3>
-                    </div>
-                </div>
                 <div class="clearfix"></div>
+
+                <!-- END: Statistics -->
+                <!-- START: Schedule -->
                 <h3>Schedule</h3>
                 <hr />
-                <table class="table table-striped">
+
+                <div id="NoScheduledTestContainer" class="text-center">
+                    <p>This test has not been scheduled yet.</p>
+                    <hr />
+                </div>
+                <table id="TestAssignmentTable" class="table table-striped">
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>Availability</th>
-                            <th>TimeLimit</th>
+                            <th>Time Limit</th>
                             <th>Students Assigned</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>
-                                <p><i class="fa fa-calendar"></i> 01/01/2016 12:00 AM - 01/25/2016 12:00 AM</p>
-                            </td>
-                            <td>50 Minutes</td>
-                            <td>Section 1 and 2 Students</td>
-                            <td>
-                                <form asp-controller="Admin" asp-action="DeleteCourse">
-                                    <a asp-controller="Instructor" asp-action="EditTest" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                    <input type="hidden" name="CourseId" value="d" />
-                                    <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
-                                </form>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>
-                                <p><i class="fa fa-calendar"></i> 01/01/2016 12:00 AM - 01/25/2016 12:00 AM</p>
-                            </td>
-                            <td>50 Minutes</td>
-                            <td>Section 2</td>
-                            <td>
-                                <form asp-controller="Admin" asp-action="DeleteCourse">
-                                    <a asp-controller="Instructor" asp-action="EditTest" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                    <input type="hidden" name="CourseId" value="d" />
-                                    <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
-                                </form>
-                            </td>
-                        </tr>
-                    </tbody>
+                    <tbody></tbody>
                 </table>
-                <div id="EditSchedulePlaceHolde"></div>
+                <!-- END: Schedule -->
+                <!-- START: New Test Schedule -->
+                <div id="NewScheduleContainer" class="well hidden">
+                    <h4><i class="fa fa-calendar"></i> New Schedule</h4>
+                    <hr />
+
+                    <div class="col-md-8 col-sm-12">
+                        Test Availability
+                        <fieldset>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <div class="input-prepend input-group">
+                                        <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+                                        <input type="text" name="testScheduleDateTime" id="testScheduleDateTime" class="form-control" value="01/01/2016 - 01/25/2016">
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+
+                    <div class="col-md-2 col-sm-8 col-xs-12">
+                        Time Limit (Minutes)
+                        <input type="number" id="TimeLimit" class="form-control" name="TimeLimit" required="" value="50">
+
+                    </div>
+                    <div class="col-md-2 col-sm-4 col-xs-12">
+                        <div class="checkbox">
+                            &emsp;
+                            <div class="control-group">
+                                <label for="UnlimitedTimeCheckBox">
+                                    <input type="checkbox" name="UnlimitedTimeCheckBox" id="UnlimitedTimeCheckBox" />  Unlimited
+                                </label>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <!-- Start: Student Test Assignmnet -->
+
+                    <hr />
+                    <!-- Start: Left -->
+                    <div class=" col-md-8 col-sm-12 col-xs-12">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h4><i class="fa fa-users"></i> Assign</h4>
+                            </div>
+                            <div class="x_content">
+                                Select a section:
+                                <select id="SelectSection" class="form-control" required="">
+                                    <option selected disabled="disabled">-- Choose a Section --</option>
+                                    @foreach (Section classSection in sections)
+                                    {
+                                        <option value="@classSection.SectionId">Section @classSection.SectionNumber</option>
+                                    }
+                                </select>
+                                <br />
+                                <div class="clearfix"></div>
+                                <button id="AssignEntireSection" type="button" class="btn btn-sm btn-primary alignright"><i class="fa fa-pie-chart"></i> Entire Section</button>
+                                <div class="clearfix"></div>
+                                <hr />
+
+                                <div id="SectionNotSelectedContainer">
+                                    <div class="text-center"><p>Please select a section</p></div>
+                                </div>
+
+                                <div id="StudentsInSectionTableContainer" class="hidden">
+                                    <table id="StudentsInSectionTable" class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>First Name</th>
+                                                <th>Last Name</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <hr />
+
+                                <button Id="AssignSelectedStudents" type="button" class="btn btn-sm btn-primary alignright"><i class="fa fa-users"></i> Selected Students</button>
+                                <div class="clearfix"></div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                    <!-- Start: Right -->
+                    <div class="col-md-4 col-sm-12 col-xs-12">
+                        <div id="AssignedTablePlaceHolder">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h4><i class="fa fa-users"></i> Assigned</h4>
+                                </div>
+                                <div class="x_content">
+                                    <i class="fa fa-pie-chart"></i> Sections
+
+                                    &emsp;
+                                    <p id="NoSectionsAssignedTest" class="">There are no entire section assigned.</p>
+
+                                    <!--Sections assigned table-->
+                                    <table id="SectionsAssignedTest" class="table table-striped hidden">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Section</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+
+                                    <hr />
+                                    <i class="fa fa-user"></i>  Individual Students
+
+                                    <p id="NoStudentsAssignedTest">There are no indivisual students assigned.</p>
+                                    <table id="StudentsAssignedTest" class="table table-striped hidden">
+                                        <thead>
+                                            <tr>
+                                                <th>Section</th>
+                                                <th>First Name</th>
+                                                <th>Last Name</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- End: Student Test Assignmnet-->
+
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr />
+                    <table class="alignright">
+                        <tr>
+                            <td><a id="CancelNewSchedule" class="btn btn-danger">Cancel</a>
+                            <td><button id="SaveNewTestSchedule" type="button" class="btn btn-primary">Save New Schedule</button></td>
+                        </tr>
+                    </table>
+                    <div class="clearfix"></div>
+                </div>
+                <!-- END: New Test Schedule -->
                 <div class="text-right">
-                    <button type="button" onclick="NewTestSchedule(@ViewBag.Test.TestId)" class="btn btn-round btn-info">New Schedule</button>  
+                    <a id="NewSchedule" class="btn btn-round btn-info">New Schedule</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row">
-    <div class="text-center">
-        <button type="button" onclick="NewTestSchedule(@ViewBag.Test.TestId)" class="btn btn-round btn-info"><i class="fa fa-plus"></i> Add Section</button>
+<div id="TestSections">
+
+</div>
+
+<div id="AddTestSection">
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="clearfix"></div>
+            <div class="text-center">
+                <button type="button" id="AddTestSectionBtn" class="btn btn-round btn-primary"><i class="fa fa-plus"></i> &nbsp;Add Section</button>
+            </div>
+        </div>
     </div>
 </div>
 
 
+
 @section Scripts
     {
+    <script type="text/javascript" src="~/vendors/handlebars/handlebars-v4.1.1.js"></script>
     <script type="text/javascript" src="~/js/EditTest.js"></script>
 }
+
+<!-- Template Snippets -->
+@section TemplateSnippets
+    {
+
+    <!-- Row template for assigned sections to test -->
+    <script type="text/x-handlebars-template" id="SectionAssigmentTableRowTemplate">
+        <tr>
+            <td>{{RowNumber}}</td>
+            <td>{{SectionNumbers}}</td>
+            <td>
+                <button value="{{SectionId}}" class="btn btn-danger btn-xs deleteEntireSectionAssignment"><i class="fa fa-trash-o"></i> Remove </button>
+            </td>
+        </tr>
+    </script>
+
+
+    <script type="text/x-handlebars-template" id="StudentAssignmnetRowTemplate">
+        <tr>
+            <td>{{SectionNumber}}</td>
+            <td>{{FirstName}}</td>
+            <td>{{LastName}}</td>
+            <td>  <button value="{{StudentId}}" class="btn btn-danger btn-xs deleteStudentAssigment"><i class="fa fa-trash-o"></i> Remove </button></td>
+        </tr>
+    </script>
+
+    <!-- Row template from schedule table -->
+    <script type="text/x-handlebars-template" id="ScheduleTableRowTemplate">
+        <tr>
+            <th scope="row">{{counter}}</th>
+            <td>
+                <p><i class="fa fa-calendar"></i> {{Availability}}</p>
+            </td>
+            <td>{{TimeLimit}}</td>
+            <td>{{Assigmnet}}</td>
+            <td>
+                <form asp-controller="Admin" asp-action="DeleteCourse">
+                    <button asp-controller="Instructor" asp-action="EditTest" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </button>
+                    <input type="hidden" name="CourseId" value="d" />
+                    <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
+                </form>
+            </td>
+        </tr>
+    </script>
+
+    <!--Section Type Start-->
+    <script type="text/x-handlebars-template" id="GenericTestSectionTemplate">
+        <div class="row SectionContainer">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div id="genericSection" class="x_panel">
+                    <!-- top of section header -->
+                    <div class="x_title">
+                        <h2 id="Titlefff"><i class="fa fa-question"></i> New test section</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <!-- end of section header -->
+                    <div class="x_content">
+                        <div class="row">
+                            <div class="form-horizontal form-label-left">
+                                <label class="control-label col-md-2 col-sm-2 col-xs-12">Question Type</label>
+                                <div class="col-md-4 col-sm-4 col-xs-12 ">
+                                    <select id="questionType" class="form-control col-md-4 col-sm-4 col-xs-12">
+                                        <option value="null" selected disabled="disabled">-- Choose option --</option>
+                                        <option value="TrueFalse">True/False</option>
+                                        <option value="MultipleChoice">Multiple Choice</option>
+                                        <option value="FillInTheBlank">Fill In The Blank</option>
+                                        <option value="Matching">Matching</option>
+                                        <option value="Essay">Essay</option>
+                                    </select>
+                                </div>
+                                <button id="setQuestionType" type="button" class="btn btn-primary">Set Question Type</button>
+                                <button id="cancelQuestionType" class="btn btn-danger">Cancel</button>
+                                <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <!--Test Section Template Start-->
+    <script type="text/x-handlebars-template" id="TestSectionTemplate">
+        <!--Test Section Start-->
+        <div class="row SectionContainer">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2><i class="fa fa-info-circle"></i> {{Header}}</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                            <li><a class="deleteSection" value="{{SectionId}}"><i class="fa fa-trash-o"></i></a></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="editInstructions" data-sectionId="{{SectionId}}">Edit Instructions</a></li>
+                                    <li><a class="editQuestionValues" value="{{SectionId}}">Edit Questions Value</a></li>
+                                </ul>
+                            </li>
+                            <li><a><i class="fa fa-arrow-up"></i></a></li>
+                            <li><a><i class="fa fa-arrow-down"></i></a></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <p><b>Instructions: </b><span id="currentInstructions-{{SectionId}}">{{Instructions}}</span></p>
+                            </div>
+                        </div>
+                        <!--Edit Instructions Start-->
+                        <div class="row well hidden" id="editInstructionsContainer-{{SectionId}}">
+                            <input class="originalInstructions" type="hidden" value="{{Instructions}}" />
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-md-1 col-sm-1 col-xs-3">
+                                    <p><b>Instructions:</b></p>
+                                </div>
+                                <div class="form-group col-md-8 col-sm-8 col-xs-12">
+                                    <input type="text" placeholder="Enter section" id="editSectionInstruction-{{SectionId}}" class="form-control editSectionInstructions-{{sectionId}}">
+                                </div>
+                                <div class="form-group col-md-3 col-sm-3 col-xs-12">
+                                </div>
+                                <div class="form-group col-md-3 col-sm-3 col-xs-12">
+                                    <button type="button" class="pull-right btn btn-primary btn-md saveEditedSectionInstruction" data-sectionId="{{SectionId}}">Save</button>
+                                    <button type="button" class="pull-right btn btn-danger btn-md cancelEditSectionInstruction" data-sectionId="{{SectionId}}">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Edit Instructions End-->
+                        <!--Edit Questions Value Start-->
+                        <div id="EditQuestionsValue" class="well hidden">
+                            <form asp-action="PartialEditNameAndCourse" asp-controller="Instructor" asp-route-TestId="" id="new-department" data-parsley-validate class="form-horizontal form-label-left">
+                                <div class="col-md-9 col-xs-12">
+                                    <label class="control-label">Edit Questions Value</label>
+                                    <input type="text" placeholder="pt(s)" class="form-control col-md-3">
+                                </div>
+                                <div class="col-md-3 col-sm-12">
+                                    <label class="control-label">&emsp;</label>
+                                    <table>
+                                        <tr>
+                                            <td><a onclick="Cancel('#EditQuestionsValue')" class="pull-right btn btn-danger btn-md">Cancel</a>
+                                            <td> <button type="submit" class="pull-right btn btn-primary btn-md">Assign</button></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+                        <!--Edit Questions Value End-->
+                        <!--Question Start-->
+                        <div id="QuestionContainer"></div>
+                        <!--Question End-->
+                        <!--Edit Question Start-->
+                        <div id="EditQuestionContainer"></div>
+                        <!--Edit Question End-->
+
+                        <div class="text-right">
+                            <button type="button" class="btn btn-round btn-info"><i class="fa fa-plus"></i> &nbsp;Add Question</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Test Section End-->
+    </script>
+    <!--Section Type End-->
+
+        }

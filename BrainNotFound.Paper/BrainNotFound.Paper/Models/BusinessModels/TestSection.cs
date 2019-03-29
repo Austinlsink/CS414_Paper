@@ -14,10 +14,10 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 		public int Index {get; set;}
 		public string SectionInstructions {get; set;}
 		public List<Image> Images {get; set;}
-		
-		// Foreign keys
-		public long TestId {get; set;}
+        public string QuestionType { get; set; }
+        // Foreign keys
+        public long TestId {get; set;}
         [ForeignKey("TestId")]
 		public Test Test {get; set;}
-   }
+    }
 }
