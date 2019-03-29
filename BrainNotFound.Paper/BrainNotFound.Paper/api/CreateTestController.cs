@@ -53,7 +53,7 @@ namespace BrainNotFound.Paper.api
             var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
             if (testSection.Test.InstructorId != instructor.Id)
             {
-                return Json(new { success = false, error = "Instructor not alowed" });
+                return Json(new { success = false, error = "Instructor not allowed" });
             }
             else
             {
@@ -98,7 +98,7 @@ namespace BrainNotFound.Paper.api
             var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
             if (testSection.Test.InstructorId != instructor.Id)
             {
-                return Json(new { success = false, error = "Instructor not alowed" });
+                return Json(new { success = false, error = "Instructor not allowed" });
             }
             else
             {
@@ -145,7 +145,7 @@ namespace BrainNotFound.Paper.api
             var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
             if (testSection.Test.InstructorId != instructor.Id)
             {
-                return Json(new { success = false, error = "Instructor not alowed" });
+                return Json(new { success = false, error = "Instructor not allowed" });
             }
             else
             { 
@@ -181,7 +181,7 @@ namespace BrainNotFound.Paper.api
             var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
             if (testSection.Test.InstructorId != instructor.Id)
             {
-                return Json(new { success = false, error = "Instructor not alowed" });
+                return Json(new { success = false, error = "Instructor not allowed" });
             }
             else
             {
@@ -203,6 +203,18 @@ namespace BrainNotFound.Paper.api
             }
         }
         #endregion get different question types
+        
+        /// <summary>
+        /// Allows the instructor to delete a test
+        /// </summary>
+        /// <param name="jsonData">The TestId</param>
+        /// <returns></returns>
+        [HttpPost, Route("DeleteTest")]
+        public JsonResult DeleteTest([FromBody] JObject jsonData)
+        {
+
+            return Json(new { success = true });
+        }
 
         ///Bima says: receiving TestSectionId, delete it return true or false
         [HttpPost, Route("DeleteSectionTestId")]
@@ -218,7 +230,7 @@ namespace BrainNotFound.Paper.api
             var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
             if (testSection.Test.InstructorId != instructor.Id)
             {
-                return Json(new { success = false, error = "Instructor not alowed" });
+                return Json(new { success = false, error = "Instructor not allowed" });
             }
             
             if (testSection != null)
@@ -258,7 +270,7 @@ namespace BrainNotFound.Paper.api
 
             if (testSection.Test.InstructorId != instructor.Id)
             {
-                return Json(new { success = false, error = "Instructor not alowed" });
+                return Json(new { success = false, error = "Instructor not allowed" });
             }
             
             if (testSection != null)
