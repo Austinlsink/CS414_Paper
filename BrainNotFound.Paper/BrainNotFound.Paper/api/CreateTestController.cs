@@ -48,9 +48,9 @@ namespace BrainNotFound.Paper.api
             dynamic json = jsonData;
             long testSectionId = json.TestSectionId;
             var testSection = _context.TestSections.Include(s => s.Test).Where(x => x.TestSectionId == testSectionId).First();
-
             // Find the instructor who is creating the test
             var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
             if (testSection.Test.InstructorId != instructor.Id)
             {
                 return Json(new { success = false, error = "Instructor not allowed" });
@@ -69,7 +69,13 @@ namespace BrainNotFound.Paper.api
                 _context.TrueFalses.Add(TFQuestion);
                 _context.SaveChanges();
 
-                return Json(new { success = true, question = TFQuestion });
+                dynamic question = new JObject();
+                question.PointValue = TFQuestion.PointValue;
+                question.Content = TFQuestion.Content;
+                question.Answer = TFQuestion.TrueFalseAnswer;
+                question.QuestionId = TFQuestion.QuestionId;
+
+                return Json(new { success = true, question });
             }
             
         }
@@ -363,17 +369,22 @@ namespace BrainNotFound.Paper.api
             dynamic json = jsonData;
             long testId = json.TestId;
             string startEndDateTime = json.StartEndDateTime;
-            DateTime testDate = Convert.ToDateTime(startEndDateTime.Split(" ").First());
             bool isTimeUnlimited = bool.Parse((string) json.IsTimeUnlimited);
             int timeLimit = json.TimeLimit;
             JArray studentIds = json.Students;
             JArray sectionIds = json.Sections;
 
+            // Parsing the date
+            string startDateTime = startEndDateTime.Substring(0, startEndDateTime.IndexOf(" - "));
+            string endDateTime = startEndDateTime.Substring(startEndDateTime.IndexOf(" - ") + 3);
+            DateTime parsedStartDateTime = DateTime.ParseExact(startDateTime, "MM/dd/yyyy hh:mm tt", new CultureInfo("en-US"), DateTimeStyles.None);
+            DateTime parsedEndDateTime = DateTime.ParseExact(endDateTime, "MM/dd/yyyy hh:mm tt", new CultureInfo("en-US"), DateTimeStyles.None);
+
             // Error checking variables
             JObject errorMessages = new JObject();
             int errorCount = 0;
 
-            if (testDate < DateTime.Now)
+            if (parsedStartDateTime < DateTime.Now)
             {
                 errorMessages.Add( new JProperty("DateTimeError", "The test date must be set to today's date or further."));
                 errorCount++;
@@ -392,12 +403,7 @@ namespace BrainNotFound.Paper.api
             {
                 return Json(new { success = false, ErrorMessage = errorMessages });
             }
-
-            // Parsing the date
-            string startDateTime = startEndDateTime.Substring(0, startEndDateTime.IndexOf(" - "));
-            string endDateTime = startEndDateTime.Substring(startEndDateTime.IndexOf(" - ") + 3);
-            DateTime parsedStartDateTime = DateTime.ParseExact(startDateTime, "MM/dd/yyyy hh:mm tt", new CultureInfo("en-US"), DateTimeStyles.None);
-            DateTime parsedEndDateTime   = DateTime.ParseExact(endDateTime,   "MM/dd/yyyy hh:mm tt", new CultureInfo("en-US"), DateTimeStyles.None);
+            
 
             // Create the new Schedule
             var newTestSchedule = new TestSchedule()
@@ -481,6 +487,7 @@ namespace BrainNotFound.Paper.api
             
             return Json(new {success = true, schedules });
         }
+
         // Gets all the students in a section
         [HttpGet, Route("GetStudentsInSection/{SectionId}")]
         public JsonResult GetSection(long SectionId)
@@ -499,6 +506,44 @@ namespace BrainNotFound.Paper.api
             }
 
             return Json(students);
-        }       
+        }
+
+        // Gets all test Section of a test
+        [HttpGet, Route("GetTestSections/{TestId}")]
+        public JsonResult GetTestSections(long TestId)
+        {
+            // Gets the test
+            var test = _context.Tests.Include(t => t.TestSections).Where(t => t.TestId == TestId).First();
+
+            // Find the instructor who is creating the test
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
+            // Check if the test belongs to the logged in instructor
+            if (test.InstructorId == instructor.Id)
+            {
+                var testSections = test.TestSections;
+                List<JObject> jTestSections = new List<JObject>();
+
+                foreach(var testSection in testSections)
+                {
+                    dynamic jTestSection = new JObject();
+                    jTestSection.sectionId = testSection.TestSectionId;
+                    jTestSection.instructions = testSection.SectionInstructions;
+                    jTestSection.sectionType = testSection.QuestionType;
+                    jTestSection.header = DefaultTestSectionText.Header.Get(testSection.QuestionType);
+
+                    jTestSections.Add(jTestSection);
+                }
+                
+                return Json(new { success = true, testSections = jTestSections });
+
+            }
+            else
+            {
+                return Json(new { success = false, error = "Instructor not alowed" });
+            }
+            
+            
+        }
     }
 }

@@ -367,16 +367,16 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2><i class="fa fa-info-circle"></i> {{Header}}</h2>
+                        <h2><i class="fa fa-info-circle"></i> {{header}}</h2>
 
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                            <li><a class="deleteSection" value="{{SectionId}}"><i class="fa fa-trash-o"></i></a></li>
+                            <li><a class="deleteSection" value="{{sectionId}}"><i class="fa fa-trash-o"></i></a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a class="editInstructions" data-sectionId="{{SectionId}}">Edit Instructions</a></li>
-                                    <li><a class="editQuestionValues" value="{{SectionId}}">Edit Questions Value</a></li>
+                                    <li><a class="editInstructions" data-sectionId="{{sectionId}}">Edit Instructions</a></li>
+                                    <li><a class="editQuestionValues" value="{{sectionId}}">Edit Questions Value</a></li>
                                 </ul>
                             </li>
                             <li><a><i class="fa fa-arrow-up"></i></a></li>
@@ -387,24 +387,24 @@
                     <div class="x_content">
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                <p><b>Instructions: </b><span id="currentInstructions-{{SectionId}}">{{Instructions}}</span></p>
+                                <p><b>Instructions: </b><span id="currentInstructions-{{sectionId}}">{{instructions}}</span></p>
                             </div>
                         </div>
                         <!--Edit Instructions Start-->
-                        <div class="row well hidden" id="editInstructionsContainer-{{SectionId}}">
-                            <input class="originalInstructions" type="hidden" value="{{Instructions}}" />
+                        <div class="row well hidden" id="editInstructionsContainer-{{sectionId}}">
+                            <input class="originalInstructions" type="hidden" value="{{instructions}}" />
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 <div class="col-md-1 col-sm-1 col-xs-3">
                                     <p><b>Instructions:</b></p>
                                 </div>
                                 <div class="form-group col-md-8 col-sm-8 col-xs-12">
-                                    <input type="text" placeholder="Enter section" id="editSectionInstruction-{{SectionId}}" class="form-control editSectionInstructions-{{sectionId}}">
+                                    <input type="text" placeholder="Enter section" id="editSectionInstruction-{{sectionId}}" class="form-control editSectionInstructions-{{sectionId}}">
                                 </div>
                                 <div class="form-group col-md-3 col-sm-3 col-xs-12">
                                 </div>
                                 <div class="form-group col-md-3 col-sm-3 col-xs-12">
-                                    <button type="button" class="pull-right btn btn-primary btn-md saveEditedSectionInstruction" data-sectionId="{{SectionId}}">Save</button>
-                                    <button type="button" class="pull-right btn btn-danger btn-md cancelEditSectionInstruction" data-sectionId="{{SectionId}}">Cancel</button>
+                                    <button type="button" class="pull-right btn btn-primary btn-md saveEditedSectionInstruction" data-sectionId="{{sectionId}}">Save</button>
+                                    <button type="button" class="pull-right btn btn-danger btn-md cancelEditSectionInstruction" data-sectionId="{{sectionId}}">Cancel</button>
                                 </div>
                             </div>
                         </div>
@@ -429,16 +429,16 @@
                         </div>
                         <!--Edit Questions Value End-->
                         <!--Question Start-->
-                        <div id="questionsContainer-{{SectionId}}">
+                        <div id="questionsContainer-{{sectionId}}">
 
                         </div>
                         <!--Question End-->
                         <!--Edit Question Start-->
-                        <div id="newQuestionContainer-{{SectionId}}"></div>
+                        <div id="newQuestionContainer-{{sectionId}}"></div>
                         <!--Edit Question End-->
 
                         <div class="text-right">
-                            <button type="button" class="btn btn-round btn-info addQuestionToSection" data-sectionId="{{SectionId}}" data-sectionType="{{SectionType}}"><i class="fa fa-plus"></i> &nbsp;Add Question</button>
+                            <button type="button" class="btn btn-round btn-info addQuestionToSection" data-sectionId="{{sectionId}}" data-sectionType="{{sectionType}}"><i class="fa fa-plus"></i> &nbsp;Add Question</button>
                         </div>
                     </div>
                 </div>
@@ -480,29 +480,31 @@
     </script>
 
     <script type="text/x-handlebars-template" id="TrueFalseQuestionTemplate">
-        <div class="TrueFalse"
-        <!--True False Question Start-->
-        <div class="ln_solid"></div>
-        <div class="row">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="col-md-1 col-sm-1 col-xs-3">
-                    <input type="text" placeholder="pts" value="{{PointValue}}" class="form-group form-control">
-                </div>
-                <div class="col-md-8 col-sm-8 col-xs-11">
-                    <p>{{Content}}</p>
-                </div>
-                <div class="form-group col-md-3 col-sm-3 col-xs-12">
-                    {{#if TrueFalseAnswer}}
-                    <span style="color:white" class="label label-success">True</span>
-                    {{else}}
-                    <span style="color:white" class="label label-danger">False</span>
-                    {{/if}}
-                    <ul class="nav navbar-right panel_toolbox">
-                        <li><a class=""><i class="fa fa-trash-o"></i></a></li>
-                        <li><a class=""><i class="fa fa-edit"></i></a></li>
-                        <li><a class=""><i class="fa fa-chevron-up"></i></a></li>
-                        <li><a class=""><i class="fa fa-chevron-down"></i></a></li>
-                    </ul>
+        <div class="TrueFalseContainer-{{QuestionId}}">
+            <!--True False Question Start-->
+            <div class="ln_solid"></div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-md-1 col-sm-1 col-xs-3">
+                        <input type="text" placeholder="pts" value="{{PointValue}}" class="form-group form-control">
+                    </div>
+                    <div class="col-md-8 col-sm-8 col-xs-11">
+                        <p>{{Content}}</p>
+                    </div>
+                    <div class="form-group col-md-3 col-sm-3 col-xs-12">
+                        {{#if Answer}}
+                        <span style="color:white" class="label label-success">True</span>
+                        {{else}}
+                        <span style="color:white" class="label label-danger">False</span>
+                        {{/if}}
+
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class=""><i class="fa fa-trash-o"></i></a></li>
+                            <li><a class=""><i class="fa fa-edit"></i></a></li>
+                            <li><a class=""><i class="fa fa-chevron-up"></i></a></li>
+                            <li><a class=""><i class="fa fa-chevron-down"></i></a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

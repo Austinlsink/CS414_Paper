@@ -20,6 +20,34 @@ init_daterangepicker_TestSchedule();
 init_students_datatable();
 Update_TestStatistics();
 Update_TestAssignmentTable();
+init_testSections();
+
+// Fetches all testSections
+function init_testSections()
+{
+    var testId = $("#TestId").val();
+    $.ajax({
+        url: "/api/CreateTest/GetTestSections/" + testId,
+        type: "GET",
+        success: function (result) {
+            if (result.success) {
+                
+                var rendered = "";
+                var TestSection = $("#TestSectionTemplate").html();
+                var template = Handlebars.compile(TestSection);
+                result.testSections.forEach(function (testSection) {
+                    //console.log(testSection);
+                    rendered += template(testSection);
+                })
+                $("#TestSections").append(rendered);
+            }
+            else {
+                console.log(result.errors)
+            }
+        },
+    })
+    
+}
 
 // Starts the Datatables for the edit test
 function init_students_datatable() {
@@ -363,11 +391,10 @@ $("#TestSections").on("click", "button#setQuestionType", function () {
                 var TestSection = $("#TestSectionTemplate").html();
                 var template = Handlebars.compile(TestSection);
 
-                rendered += template({ Instructions: result.instructions, SectionId: result.sectionId, SectionType: result.sectionType, Header: result.header });
+                rendered += template({ instructions: result.instructions, sectionId: result.sectionId, sectionType: result.sectionType, header: result.header });
 
                 $(SectionTypeContainer).before(rendered);
                 $(SectionTypeContainer).remove();
-
             }
             else {
                 console.log(result.errors)
@@ -465,10 +492,13 @@ $("#TestSections").on("click", "button.saveNewQuestion", function () {
     var questionContent = $("#TrueFalseContent-" + uuid).val();
     var pointValue = $("#TFPointValue-" + uuid).val();
     var answer = $("input[name='TFRadioButton-" + uuid + "']:checked").val();
+    var newQuestionContainer = $(this).parents(".newQuestionContainer");
 
+    // Error checking on question content
     if (questionContent.length == 0) {
         $("#TFContentError-" + uuid).removeClass("hidden");
     } else {
+        // Submits the data to the server
         var JsonData = JSON.stringify({ TestSectionId: sectionId, Content: questionContent, PointValue: pointValue, TrueFalseAnswer: answer });
 
         console.log(JsonData);
@@ -479,7 +509,14 @@ $("#TestSections").on("click", "button.saveNewQuestion", function () {
             data: JsonData,
             success: function (result) {
                 if (result.success) {
-                    console.log(result)
+                    var rendered = "";
+                    var TrueFalseQuestionTemplate = $("#TrueFalseQuestionTemplate").html();
+                    var template = Handlebars.compile(TrueFalseQuestionTemplate);
+
+                    rendered += template(result.question);
+
+                    $("#questionsContainer-" + sectionId).append(rendered);
+                    $(newQuestionContainer).remove();
                 }
                 else {
                     console.log(result)
