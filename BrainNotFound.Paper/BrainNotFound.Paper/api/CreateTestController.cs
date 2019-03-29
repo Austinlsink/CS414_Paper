@@ -57,13 +57,13 @@ namespace BrainNotFound.Paper.api
                 // Create a new question and add it to the DB
                 TrueFalse TFQuestion = new TrueFalse();
                 TFQuestion.Content = json.Content;
-                TFQuestion.Index = int.Parse((string)json.Index);
+                //TFQuestion.Index = int.Parse((string)json.Index);
                 TFQuestion.PointValue = int.Parse((string)json.PointValue);
                 TFQuestion.TestSectionId = long.Parse((string)json.TestSectionId);
                 TFQuestion.TrueFalseAnswer = bool.Parse((string)json.TrueFalseAnswer);
                 TFQuestion.QuestionType = QuestionType.TrueFalse;
 
-                _context.Questions.Add(TFQuestion);
+                _context.TrueFalses.Add(TFQuestion);
                 _context.SaveChanges();
 
                 return Json(new { success = true, question = TFQuestion });
