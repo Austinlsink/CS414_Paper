@@ -551,6 +551,20 @@ window.onpopstate = function () {
 }; history.pushState({}, '');
 
 
-$("button.Delete-Section-Schedule").click(function () {
-    var sectionScheduleId = $(this).val();
+$("button#DeleteSectionSchedule").click(function () {
+    var sectionScheduleId = $(this).attr(data - testScheduleId);
+    $.ajas({
+        url: "/api/CreateTest/DeleteSectionSchedule",
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        data: sectionScheduleId,
+        success: function (result) {
+            if (result.success) {
+                console.log(result.message);
+            }
+            else {
+                console.log(result.error);
+            }
+        }
+    })
 })

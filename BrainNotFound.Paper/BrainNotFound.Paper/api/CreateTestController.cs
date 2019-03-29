@@ -567,5 +567,25 @@ namespace BrainNotFound.Paper.api
                 return Json(new { success = false, error = "Instructor not alowed" });
             }
         }
+
+        [HttpPost, Route("DeleteSectionSchedule")]
+        public JsonResult DeleteSectionSchedule([FromBody] long sectionScheduleId)
+        {
+            var sectionSchedule = _context.TestSchedules.Find(sectionScheduleId);
+
+            // Find the instructor who is creating the test
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
+            if (sectionSchedule.Test.InstructorId != instructor.Id)
+            {
+                return Json(new { success = false, error = "Instructor not allowed" });
+            }
+            else
+            {
+                _context.TestSchedules.Remove(sectionSchedule);
+                _context.SaveChanges();
+                return Json(new { success = true, message = "successful" });
+            }
+        }
     }
 }
