@@ -42,8 +42,8 @@ namespace BrainNotFound.Paper.api
         /// </summary>
         /// <param name="jsonData">The object that contains all of the question information</param>
         /// <returns>The question that was created</returns>        
-        [HttpPost, Route("TrueFalse")]
-        public async Task<JsonResult> GetTrueFalse([FromBody] JObject jsonData)
+        [HttpPost, Route("NewTrueFalseQuestion")]
+        public async Task<JsonResult> NewTrueFalseQuestion([FromBody] JObject jsonData)
         {
             dynamic json = jsonData;
             long testSectionId = long.Parse(json.TestSectionId);
@@ -57,13 +57,13 @@ namespace BrainNotFound.Paper.api
                 // Create a new question and add it to the DB
                 TrueFalse TFQuestion = new TrueFalse();
                 TFQuestion.Content = json.Content;
-                TFQuestion.Index = int.Parse((string)json.Index);
+                //TFQuestion.Index = int.Parse((string)json.Index);
                 TFQuestion.PointValue = int.Parse((string)json.PointValue);
-                TFQuestion.TestSectionId = long.Parse((string)json.TestSectionId);
+                TFQuestion.TestSectionId = testSectionId;
                 TFQuestion.TrueFalseAnswer = bool.Parse((string)json.TrueFalseAnswer);
                 TFQuestion.QuestionType = QuestionType.TrueFalse;
 
-                _context.Questions.Add(TFQuestion);
+                _context.TrueFalses.Add(TFQuestion);
                 _context.SaveChanges();
 
                 return Json(new { success = true, question = TFQuestion });
@@ -345,7 +345,7 @@ namespace BrainNotFound.Paper.api
             _context.SaveChanges();
 
 
-            return Json(new { success = true, sectionId = NewSection.TestSectionId, instructions = NewSection.SectionInstructions, questionType = NewSection.QuestionType, header = sectionHeader});
+            return Json(new { success = true, sectionId = NewSection.TestSectionId, instructions = NewSection.SectionInstructions, sectionType = NewSection.QuestionType, header = sectionHeader});
         }
 
         /// <summary>

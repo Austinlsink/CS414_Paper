@@ -79,8 +79,6 @@ function Update_TestAssignmentTable() {
 
                 $("#TestAssignmentTable > tbody").html(rendered);
                 $("table#TestAssignmentTable").removeClass("hidden");
-
-
             }
             else {
                 console.log(result.errors)
@@ -390,12 +388,14 @@ $("#TestSections").on("click", "a.editInstructions", function () {
 
 // Cancels the Edit Section Instruction
 $("#TestSections").on("click", "button.cancelEditSectionInstruction", function () {
+
     var sectionId = $(this).attr("data-sectionId");
     $("div#editInstructionsContainer-" + sectionId).addClass("hidden");
 })
 
 // Saves the Edited Section instructions
 $("#TestSections").on("click", "button.saveEditedSectionInstruction", function () {
+
     var sectionId = $(this).attr("data-sectionId");
     var currentSectionInstructions = $("span#currentInstructions-" + sectionId).text();
     var newSectionInstructios = $("input#editSectionInstruction-" + sectionId).val();
@@ -419,12 +419,54 @@ $("#TestSections").on("click", "button.saveEditedSectionInstruction", function (
             },
         })
     }
-
-
-
-
 })
 
+// Removes new question container
+$("#TestSections").on("click", "button.cancelNewQuestion", function () {
+    $(this).parents(".newQuestionContainer").remove();
+})
+// Adds a question to a section
+$("#TestSections").on("click", "button.addQuestionToSection", function () {
+    var sectionId   = $(this).attr("data-sectionId");
+    var sectionType = $(this).attr("data-sectionType");
+    var rendered = "";
+    var templateId = "";
+
+    switch (sectionType) {
+        case "TrueFalse":
+            templateId = "#NewTrueFalseQuestionTemplate";
+            break;
+
+    }    
+    console.log("SectionId: " + sectionId);
+    console.log("SectionType: " + sectionType);
+    console.log("templateId: " + templateId);
+
+    var timestamp = new Date().getUTCMilliseconds();
+    var newQuestion = $(templateId).html();
+    var template = Handlebars.compile(newQuestion);
+    rendered += template({ SectionId: sectionId, timeStamp: timestamp, QuestionType: sectionType });
+
+    $("#newQuestionContainer-" + sectionId).append(rendered);
+
+    $('input.flat').iCheck({
+        checkboxClass: 'icheckbox_flat-green',
+        radioClass: 'iradio_flat-green'
+    });
+})
+
+// Saves a newly created question
+$("#TestSections").on("click", "button.saveNewQuestion", function () {
+    var sectionId = $(this).attr("data-sectionId");
+    var questionType = $(this).attr("data-questionType");
+    var uuid = $(this).attr("data-uuid");
+
+    var questionContent = $("#TrueFalseContent-" + uuid).val();
+
+    if (questionContent.length == 0) {
+
+    }
+})
 // Handles all forms submition buttons
 $(function () {
     $('.post-using-ajax').each(function () {
