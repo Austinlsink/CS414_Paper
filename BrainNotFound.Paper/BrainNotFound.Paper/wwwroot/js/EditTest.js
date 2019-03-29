@@ -549,3 +549,8 @@ $(function () {
 window.onpopstate = function () {
     window.location.href = "/Instructor/Tests";
 }; history.pushState({}, '');
+
+
+$("button.Delete-Section-Schedule").click(function () {
+    var sectionScheduleId = $(this).val();
+})
