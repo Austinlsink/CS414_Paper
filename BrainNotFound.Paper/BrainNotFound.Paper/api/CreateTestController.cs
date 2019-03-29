@@ -572,11 +572,12 @@ namespace BrainNotFound.Paper.api
         public JsonResult DeleteSectionSchedule([FromBody] long sectionScheduleId)
         {
             var sectionSchedule = _context.TestSchedules.Find(sectionScheduleId);
+            var test = _context.Tests.Find(sectionSchedule.TestId);
 
             // Find the instructor who is creating the test
             var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
 
-            if (sectionSchedule.Test.InstructorId != instructor.Id)
+            if (test.InstructorId != instructor.Id)
             {
                 return Json(new { success = false, error = "Instructor not allowed" });
             }
