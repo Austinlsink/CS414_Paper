@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using BrainNotFound.Paper.Models.BusinessModels;
@@ -48,18 +49,27 @@ namespace BrainNotFound.Paper.api
             string SuccessMessage = String.Empty;
             string PastErrorMessage = String.Empty;
 
+           
+
             foreach (TestSchedule schedule in testSectionSchedules)
             {
-                if (schedule.StartTime.CompareTo(DateTime.Now) < 0)
+                // Parsing the date
+                string startEndDateTime = schedule.StartTime.ToString();
+                string startDateTime = startEndDateTime.Substring(0, startEndDateTime.IndexOf(" - "));
+                string endDateTime = startEndDateTime.Substring(startEndDateTime.IndexOf(" - ") + 3);
+                DateTime parsedStartDateTime = DateTime.ParseExact(startDateTime, "MM/dd/yyyy hh:mm tt", new CultureInfo("en-US"), DateTimeStyles.None);
+                DateTime parsedEndDateTime = DateTime.ParseExact(endDateTime, "MM/dd/yyyy hh:mm tt", new CultureInfo("en-US"), DateTimeStyles.None);
+
+                if (parsedStartDateTime < DateTime.Now)
                 {
                     PastErrorMessage = "For record purposes, previously taken tests cannot be deleted.";
                     countError++;
                 }
-                if (schedule.StartTime.CompareTo(DateTime.Now) > 0)
+                if (parsedEndDateTime > DateTime.Now)
                 {
                     SuccessMessage = "The test was successfully deleted.";
                 }
-                if (schedule.StartTime.CompareTo(DateTime.Now) == 0)
+                if (parsedStartDateTime.Day == DateTime.Now.Day && parsedStartDateTime.Hour == DateTime.Now.Hour)
                 {
                     ProgressErrorMessage = "The test is currently in progress and cannot be deleted.";
                     countError++;
@@ -68,6 +78,8 @@ namespace BrainNotFound.Paper.api
 
             if (countError == 0)
             {
+                _context.Tests.Remove(test);
+                _context.SaveChanges();
                 return Json(new { success = true });
             }
             else
