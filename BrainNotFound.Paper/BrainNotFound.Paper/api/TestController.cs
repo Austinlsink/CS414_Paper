@@ -59,11 +59,6 @@ namespace BrainNotFound.Paper.api
                     PastMessage = " For record purposes, previously taken tests cannot be deleted.";
                     countError++;
                 }
-                if (schedule.StartTime.Day == DateTime.Now.Day && schedule.EndTime.Hour == DateTime.Now.Hour)
-                {
-                    ProgressMessage = " The test is currently in progress and cannot be deleted.";
-                    countError++;
-                }
             }
             if (countError == 0)
             {
