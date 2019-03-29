@@ -314,12 +314,10 @@
             </td>
             <td>{{TimeLimit}}</td>
             <td>{{Assigmnet}}</td>
-            <td>
-                <form asp-controller="Admin" asp-action="DeleteCourse">
-                    <button asp-controller="Instructor" asp-action="EditTest" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </button>
-                    <input type="hidden" name="CourseId" value="d" />
-                    <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
-                </form>
+            <td>                
+                <button asp-controller="Instructor" asp-action="EditTest" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </button>
+                <input type="hidden" name="CourseId" value="d" />
+                <button type="button" data-testScheduleId="{{TestScheduleId}}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
             </td>
         </tr>
     </script>
@@ -480,19 +478,19 @@
     </script>
 
     <script type="text/x-handlebars-template" id="TrueFalseQuestionTemplate">
-        <div class="TrueFalseContainer-{{QuestionId}}">
+        <div class="TrueFalseContainer-{{questionId}}">
             <!--True False Question Start-->
             <div class="ln_solid"></div>
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="col-md-1 col-sm-1 col-xs-3">
-                        <input type="text" placeholder="pts" value="{{PointValue}}" class="form-group form-control">
+                        <input type="text" placeholder="pts" value="{{pointValue}}" class="form-group form-control">
                     </div>
                     <div class="col-md-8 col-sm-8 col-xs-11">
-                        <p>{{Content}}</p>
+                        <p>{{content}}</p>
                     </div>
                     <div class="form-group col-md-3 col-sm-3 col-xs-12">
-                        {{#if Answer}}
+                        {{#if answer}}
                         <span style="color:white" class="label label-success">True</span>
                         {{else}}
                         <span style="color:white" class="label label-danger">False</span>
