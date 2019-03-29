@@ -72,15 +72,15 @@ function Update_TestAssignmentTable() {
                 var rendered = "";
                 var Row = $("#ScheduleTableRowTemplate").html();
                 var template = Handlebars.compile(Row);
-                
+
                 result.schedules.forEach(function (schedule) {
                     rendered += template(schedule);
                 })
-                
+
                 $("#TestAssignmentTable > tbody").html(rendered);
                 $("table#TestAssignmentTable").removeClass("hidden");
 
-                
+
             }
             else {
                 console.log(result.errors)
@@ -365,8 +365,8 @@ $("#TestSections").on("click", "button#setQuestionType", function () {
                 var TestSection = $("#TestSectionTemplate").html();
                 var template = Handlebars.compile(TestSection);
 
-                rendered += template({ Instructions: result.instructions, SectionId : result.sectionId, SectionType : result.sectionType, Header : result.header });
-                
+                rendered += template({ Instructions: result.instructions, SectionId: result.sectionId, SectionType: result.sectionType, Header: result.header });
+
                 $(SectionTypeContainer).before(rendered);
                 $(SectionTypeContainer).remove();
 
@@ -380,13 +380,51 @@ $("#TestSections").on("click", "button#setQuestionType", function () {
 
 // Displays section Editable instruction Box
 $("#TestSections").on("click", "a.editInstructions", function () {
-    var sectionId = $(this).val();
-    console.log("The Section id is: " + sectionId);
+    var sectionId = $(this).attr("data-sectionId");
 
-    var currentInstructions = $("span.instructions-" + sectionId).text();
-    console.log("Current Instructions: " + currentInstructions);
-    //$(".editInstructionsContainer[value='" + sectionId +"']").removeClass("hidden");
+    var currentSectionInstructions = $("span#currentInstructions-" + sectionId).text();
+    $("input#editSectionInstruction-" + sectionId).val(currentSectionInstructions);
+    $("div#editInstructionsContainer-" + sectionId).removeClass("hidden");
+
 })
+
+// Cancels the Edit Section Instruction
+$("#TestSections").on("click", "button.cancelEditSectionInstruction", function () {
+    var sectionId = $(this).attr("data-sectionId");
+    $("div#editInstructionsContainer-" + sectionId).addClass("hidden");
+})
+
+// Saves the Edited Section instructions
+$("#TestSections").on("click", "button.saveEditedSectionInstruction", function () {
+    var sectionId = $(this).attr("data-sectionId");
+    var currentSectionInstructions = $("span#currentInstructions-" + sectionId).text();
+    var newSectionInstructios = $("input#editSectionInstruction-" + sectionId).val();
+
+
+    if (currentSectionInstructions != newSectionInstructios) {
+        var JsonData = JSON.stringify({ TestSectionId: sectionId, SectionInstructions: newSectionInstructios });
+        $.ajax({
+            url: "/api/CreateTest/UpdateSectionInstruction",
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            data: JsonData,
+            success: function (result) {
+                if (result.success) {
+                    $("span#currentInstructions-" + sectionId).text(newSectionInstructios);
+                    $("div#editInstructionsContainer-" + sectionId).addClass("hidden");
+                }
+                else {
+                    console.log(result)
+                }
+            },
+        })
+    }
+
+
+
+
+})
+
 // Handles all forms submition buttons
 $(function () {
     $('.post-using-ajax').each(function () {

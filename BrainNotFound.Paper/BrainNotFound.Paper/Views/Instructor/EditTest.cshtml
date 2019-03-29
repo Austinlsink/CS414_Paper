@@ -99,9 +99,7 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-
-                    </tbody>
+                    <tbody></tbody>
                 </table>
                 <!-- END: Schedule -->
                 <!-- START: New Test Schedule -->
@@ -343,7 +341,7 @@
                                 <label class="control-label col-md-2 col-sm-2 col-xs-12">Question Type</label>
                                 <div class="col-md-4 col-sm-4 col-xs-12 ">
                                     <select id="questionType" class="form-control col-md-4 col-sm-4 col-xs-12">
-                                        <option selected disabled="disabled">-- Choose option --</option>
+                                        <option value="null" selected disabled="disabled">-- Choose option --</option>
                                         <option value="TrueFalse">True/False</option>
                                         <option value="MultipleChoice">Multiple Choice</option>
                                         <option value="FillInTheBlank">Fill In The Blank</option>
@@ -376,19 +374,19 @@
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a class="editInstructions" value="{{SectionId}}">Edit Instructions</a></li>
+                                    <li><a class="editInstructions" data-sectionId="{{SectionId}}">Edit Instructions</a></li>
                                     <li><a class="editQuestionValues" value="{{SectionId}}">Edit Questions Value</a></li>
                                 </ul>
                             </li>
-                            <li><a ><i class="fa fa-arrow-up"></i></a></li>
-                            <li><a ><i class="fa fa-arrow-down"></i></a></li>
+                            <li><a><i class="fa fa-arrow-up"></i></a></li>
+                            <li><a><i class="fa fa-arrow-down"></i></a></li>
                         </ul>
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                <p><b>Instructions:</b><span id="currentInstructions-{{sectionId}}"> {{Instructions}}</span></p>
+                                <p><b>Instructions: </b><span id="currentInstructions-{{SectionId}}">{{Instructions}}</span></p>
                             </div>
                         </div>
                         <!--Edit Instructions Start-->
@@ -399,13 +397,13 @@
                                     <p><b>Instructions:</b></p>
                                 </div>
                                 <div class="form-group col-md-8 col-sm-8 col-xs-12">
-                                    <input type="text" placeholder="Enter section" id="editInstruction-{{SectionId}}" class="form-control editSectionInstructions-{{sectionId}}">
+                                    <input type="text" placeholder="Enter section" id="editSectionInstruction-{{SectionId}}" class="form-control editSectionInstructions-{{sectionId}}">
                                 </div>
                                 <div class="form-group col-md-3 col-sm-3 col-xs-12">
                                 </div>
                                 <div class="form-group col-md-3 col-sm-3 col-xs-12">
-                                    <button type="button" class="pull-right btn btn-primary btn-md saveEditedInstructions">Save</button>
-                                    <button type="button" class="pull-right btn btn-danger btn-md cancelEditInstructions">Cancel</button>
+                                    <button type="button" class="pull-right btn btn-primary btn-md saveEditedSectionInstruction" data-sectionId="{{SectionId}}">Save</button>
+                                    <button type="button" class="pull-right btn btn-danger btn-md cancelEditSectionInstruction" data-sectionId="{{SectionId}}">Cancel</button>
                                 </div>
                             </div>
                         </div>
@@ -446,4 +444,5 @@
         <!--Test Section End-->
     </script>
     <!--Section Type End-->
-}
+
+        }

@@ -258,21 +258,23 @@ namespace BrainNotFound.Paper.api
         ///Update section instruction - receive a section id, instrucions, and update the system
         ///return success true or false
         [HttpPost, Route("UpdateSectionInstruction")]
-        public async Task<JsonResult> GetUpdateSectionInstruction([FromBody] JObject jsonData)
+        public async Task<JsonResult> UpdateSectionInstruction([FromBody] JObject jsonData)
         {
             dynamic json = jsonData;
             long testSectionId = json.TestSectionId;
             string sectionInfo = json.SectionInstructions;
 
             // Verify that the user logged in matches the instructor's id on the testId on the sectionId
-            var instructor = _context.TestSections.Include(s => s.Test).ThenInclude(t => t.applicationUser).Where(x => x.TestSectionId == testSectionId).First();
-            ApplicationUser activeInstructor = await _userManager.GetUserAsync(HttpContext.User);
+            var testSection = _context.TestSections.Include(s => s.Test).Where(x => x.TestSectionId == testSectionId).First();
 
-            if (instructor.Test.applicationUser.Id == activeInstructor.Id)
+            // Find the instructor who is creating the test
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
+            if (testSection.Test.InstructorId != instructor.Id)
             {
-                return Json(new { success = false });
+                return Json(new { success = false, error = "Instructor not alowed" });
             }
-                var testSection = _context.TestSections.Where(x => x.TestSectionId == testSectionId).First();
+            
             if (testSection != null)
             {
                 testSection.SectionInstructions = sectionInfo;
