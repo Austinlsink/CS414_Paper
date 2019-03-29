@@ -20,17 +20,24 @@ $("button#YesDelete").click(function () {
         data: testId,
         success: function (result) {
             if (result.success) {
-                $("#errorMessagePlaceHolder").text(result.messages);
+                $("#errorMessagePlaceHolder").text(result.SuccessMessage);
                 $("h4#MessageModal").text("Success!");
                 $("div#ErrorModal").modal("toggle");
+                console.log(result.messages);
             }
             else {
                 // Displays the error message to the user
                 $("h4#MessageModal").text("Error!");
-                $("#errorMessagePlaceHolder").text(result.messages);
+                $("#errorMessagePlaceHolder").text(result.ProgressMessage, result.PastMessage);
                 $("div#ErrorModal").modal("toggle");
-                console.log(result.ErrorMessage);
+                console.log(result.messages);
+
             }
         },
     })
+})
+
+// Reloads the page when a department is successfully deleted
+$("#MessageClose").click(function () {
+    location.reload();
 })

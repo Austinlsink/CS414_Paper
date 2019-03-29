@@ -55,11 +55,11 @@ namespace BrainNotFound.Paper.api
                     PastErrorMessage = "For record purposes, previously taken tests cannot be deleted.";
                     countError++;
                 }
-                else if (schedule.StartTime.CompareTo(DateTime.Now) > 0)
+                if (schedule.StartTime.CompareTo(DateTime.Now) > 0)
                 {
                     SuccessMessage = "The test was successfully deleted.";
                 }
-                else if (schedule.StartTime.Day == DateTime.Now.Day && schedule.StartTime > DateTime.Now)
+                if (schedule.StartTime.CompareTo(DateTime.Now) == 0)
                 {
                     ProgressErrorMessage = "The test is currently in progress and cannot be deleted.";
                     countError++;
@@ -68,13 +68,10 @@ namespace BrainNotFound.Paper.api
 
             if (countError == 0)
             {
-                return Json(new { success = true, messages = ProgressErrorMessage + SuccessMessage + PastErrorMessage });
+                return Json(new { success = true });
             }
             else
-            {
-                return Json(new { success = true, messages = ProgressErrorMessage + SuccessMessage + PastErrorMessage });
-
-            }
+            { return Json(new { success = true });
         }
     }
 }
