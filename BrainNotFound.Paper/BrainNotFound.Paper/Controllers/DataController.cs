@@ -375,27 +375,30 @@ namespace BrainNotFound.Paper.Controllers
                 // Choose 4-7 random courses/sections
                 for (int classCounter = 0; classCounter < numberOfClasses; classCounter++)
                 {
-                    // Get a random course
-                    Course selectedCourse = new Course();
-
-                    // Select a random section in the selectedCourse and make sure it doesn't conflict with classes
-                    // the student is already enrolled in
                     bool isBeingTaken = false; // Used to check if the student is already taking a section in that course
-                    bool doesNotConflict = false; // Used in check in main do while
+                    bool conflicts = false; // Used to check if the student is taking a section at that time
+                    Course selectedCourse = new Course();
                     Section selectedSection = new Section();
+
                     do
                     {
-                        // Choose a course with sections in it
+                        // Choose a random course with secctions
                         do
                         {
                             selectedCourse = allCourses.ElementAt(rand.Next(0, allCourses.Count));
-                        } while (allSections.Where(S => S.CourseId == selectedCourse.CourseId).Count() <= 0); 
+                        } while (allSections.Where(S => S.CourseId == selectedCourse.CourseId).Count() <= 0);
+
+                        // Reset check values
+                        isBeingTaken = false;
+                        conflicts = true;
 
                         // Make sure the student isn't already taking a section in this course
-                        foreach (var studentEnrollment in enrollments.Where(E => E.StudentId == student.Id))
+                        foreach (var studentEnrollment in enrollments.Where(E => E.StudentId == student.Id)) // Get the student's enrollments
                         {
+                            // Get the sections the student is enrolled in
                             foreach (var enrolledSection in allSections.Where(S => S.SectionId == studentEnrollment.SectionId))
                             {
+                                // Check if another section in the course is already being taken
                                 if (enrolledSection.CourseId == selectedCourse.CourseId)
                                 {
                                     isBeingTaken = true;
@@ -406,12 +409,14 @@ namespace BrainNotFound.Paper.Controllers
                         // If the student is not already enrolled in a section in that course
                         if (isBeingTaken == false)
                         {
+                            // Get a random section in that course
                             selectedSection = allSections.Where(S => S.CourseId == selectedCourse.CourseId).ElementAt(rand.Next(0, allSections.Where(S => S.CourseId == selectedCourse.CourseId).Count()));
 
-                            if (enrollments.Where(E => E.StudentId == student.Id && E.SectionId == selectedSection.SectionId).Count() <= 0)
+                            // If the student isn't already taking the section
+                            if (enrollments.Where(E => E.StudentId == student.Id).Where(E => E.SectionId == selectedSection.SectionId).Count() <= 0)
                             {
-                                doesNotConflict = true; // Reset to "true" in case a new section needed to be selected
                                 List<SectionMeetingTime> concurrentSectionMeetingTimes = new List<SectionMeetingTime>();
+                                conflicts = false;
                                 foreach (var enrollment in enrollments.Where(E => E.StudentId == student.Id))
                                 {
                                     // The times that the student already has classes at
@@ -425,14 +430,14 @@ namespace BrainNotFound.Paper.Controllers
                                                    || (selectedSectionMeetingTime.StartTime <= enrolledSectionMeetingTime.StartTime // If it starts before or at...
                                                        && selectedSectionMeetingTime.EndTime >= enrolledSectionMeetingTime.EndTime))) // ... and ends after or at...
                                             {
-                                                doesNotConflict = false;
+                                                conflicts = true;
                                             }
                                         }
                                     }
                                 }
                             }
                         }
-                    } while (doesNotConflict == false);
+                    } while (conflicts == true);
 
                     Enrollment newEnrollment = new Enrollment
                     {
