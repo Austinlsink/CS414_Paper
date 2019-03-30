@@ -48,7 +48,7 @@ $("button#CreateAdmin").click(function () {
         data: JSON.stringify(admin),
         success: function (result) {
             // Close the modal window
-            console.log(result);
+            console.log(result.message);
             location.reload();
         },
         error: function (xhr, status, error) {

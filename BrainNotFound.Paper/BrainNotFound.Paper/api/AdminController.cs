@@ -51,9 +51,8 @@ namespace BrainNotFound.Paper.api
         }
 
         [HttpPost, Route("New")]
-        public async Task<IActionResult> New([FromBody] JsonObject jsonData)
+        public async Task<IActionResult> New([FromBody] ApplicationUser user)
         {
-            dynamic user = jsonData;
             user.UserName = user.FirstName + user.LastName;
             var admin = await _userManager.FindByIdAsync(user.Id);
 
@@ -61,7 +60,6 @@ namespace BrainNotFound.Paper.api
             {
                 //Create a new Application User
                 var result = await _userManager.CreateAsync(user, user.Password);
-
                 if (result.Succeeded)
                 {
                     //Fetch created user
@@ -70,12 +68,12 @@ namespace BrainNotFound.Paper.api
                     //Add Admin role to created Application User
                     await _userManager.AddToRoleAsync(CreatedUser, "Admin");
 
-                    return Json(new { success = true });
+                    return Json(new { success = true, message = "Admin successfully created" });
 
                 }
             }
 
-            return Json(new { success = false });
+            return Json(new { success = false, error = "Could not create new admin." });
         }
     }
 }
