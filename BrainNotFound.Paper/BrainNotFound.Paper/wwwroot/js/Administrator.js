@@ -1,33 +1,78 @@
-﻿
+﻿// Global variables
+var adminId;
 
 // Displays the admin form to edit a specific admin
 $("button#EditAdmin").click(function () {
     var username = $(this).val();
 
     $.ajax({
-        url: "/api/admin/edit/" + username,
+        url: "/api/admin/Edit/" + username,
         type: "POST",
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(username),
         success: function (result) {
-            document.getElementById("SalutationInput").value = result.salutation;
-            document.getElementById("FirstNameInput").value = result.firstName;
-            document.getElementById("LastNameInput").value = result.lastName;
-            document.getElementById("EmailInput").value = result.email;
-            document.getElementById("PhoneInput").value = result.phone;
-            document.getElementById("AddressInput").value = result.address;
-            document.getElementById("CityInput").value = result.city;
-            document.getElementById("StateInput").value = result.state;
-            document.getElementById("ZipInput").value = result.zip;
-            document.getElementById("DOBInput").value = result.dob;
+            document.getElementById("EditSalutationInput").value = result.salutation;
+            document.getElementById("EditFirstNameInput").value = result.firstName;
+            document.getElementById("EditLastNameInput").value = result.lastName;
+            document.getElementById("EditEmailInput").value = result.email;
+            document.getElementById("EditPhoneInput").value = result.phone;
+            document.getElementById("EditAddressInput").value = result.address;
+            document.getElementById("EditCityInput").value = result.city;
+            document.getElementById("EditStateInput").value = result.state;
+            document.getElementById("EditZipInput").value = result.zip;
+            document.getElementById("EditDOBInput").value = result.dob;
 
-            document.getElementById("CreateAdmin").value = result.firstName;
 
-            $("#NewAdminModal").modal("show");
+            $("#EditAdminModal").modal("show");
         }
     })
 });
 
+// Saves the changes on the edit form
+$("button#EditSaveChanges").click(function () {
+    var editAdminForm = $("form#EditAdminForm");
+    var username = $(this).val();
+    // Gets the values of the form, and creates an object to be sent to the server
+    var admin = {};
+    $.each(editAdminForm.serializeArray(), function (i, field) {
+        admin[field.name] = field.value;
+        console.log(admin[field.name]);
+    });
+
+    // Creates, submits, and responds to Ajax Call
+    $.ajax({
+        url: "/api/Admin/SaveChanges/",
+        type: "POST",
+        contentType: "application/json",
+        // Data fetched from the form
+        data: JSON.stringify(admin, username),
+        success: function (result) {
+            // Close the modal window
+            console.log(result.message);
+            location.reload();
+        },
+        error: function (xhr, status, error) {
+            console.log(xhr.responseText);
+            var err = JSON.parse(xhr.responseText);
+
+            // Places validation on the First Name Field
+            if (typeof err.errors.FirstName === "undefined") {
+                $("#EditAdminFirstNameErrorMessage").empty();
+            }
+            else {
+                $("#EditAdminFirstNameErrorMessage").html(err.errors.FirstName[0]);
+            }
+
+            // Places validation on the Last Name Field
+            if (typeof err.errors.LastName === "undefined") {
+                $("#EditAdminLastNameErrorMessage").empty();
+            }
+            else {
+                $("#EditAdminLastNameErrorMessage").html(err.errors.LastName[0]);
+            }
+        }
+    })
+})
 
 // Submits the form information to the server
 $("button#CreateAdmin").click(function () {
@@ -103,3 +148,40 @@ $("button#CancelCreateAdmin").click(function () {
     document.getElementById("DOBInput").value = "";
     document.getElementById("PasswordInput").value = "";
 });
+
+// Display a confirmation modal if the user wants to delete a department
+$("button#ConfirmDelete").click(function () {
+    adminId = $(this).val();
+    $("#ConfirmModal").modal("toggle");
+})
+
+// Delete a Department if the user specifies yes on the confirmation modal
+$("button#YesDelete").click(function () {
+    // Gets the department Id to be deleted
+    $("#ConfirmModal").modal("hide");
+
+    $.ajax({
+        url: "/api/Admin/Delete/",
+        type: "POST",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(adminId),
+        success: function (result) {
+            if (result.success) {
+                $("#errorMessagePlaceHolder").text(result.message)
+                $("h4#MessageModal").text("Success!");
+                $("div#ErrorModal").modal("toggle");
+            }
+            else {
+                // Displays the error message to the user
+                $("h4#MessageModal").text("Error!");
+                $("#errorMessagePlaceHolder").text(result.message)
+                $("div#ErrorModal").modal("toggle");
+            }
+        }
+    })
+})
+
+// Reloads the page when a Course is successfully deleted
+$("#MessageClose").click(function () {
+    location.reload();
+})

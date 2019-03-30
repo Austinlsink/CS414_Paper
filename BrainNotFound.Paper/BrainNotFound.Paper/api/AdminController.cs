@@ -33,6 +33,28 @@ namespace BrainNotFound.Paper.api
 
         #endregion Initialize Controllers
 
+        [HttpPost, Route("Delete")]
+        public async Task<IActionResult> Delete([FromBody]string adminId)
+        {
+            
+            var admin = await _userManager.FindByIdAsync(adminId);
+            if (admin.UserName != User.Identity.Name)
+            {
+                await _userManager.DeleteAsync(admin);
+                return Json(new { success = true, message = "Admin successfully deleted." });
+            }
+            else
+            {
+                return Json(new { success = false, message = "Sorry, but you can't remove yourself." });
+
+            }
+        }
+
+        /// <summary>
+        /// Allows you to edit an administrator
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         [HttpPost, Route("Edit/{username}")]
         public async Task<IActionResult> Edit([FromBody]string username)
         {
@@ -50,6 +72,39 @@ namespace BrainNotFound.Paper.api
                                              dob = admin.DOB});
         }
 
+        [HttpPost, Route("SaveChanges")]
+        public async Task<IActionResult> SaveChanges([FromBody] ApplicationUser user, string username)
+        {
+            var updateAdmin = await _userManager.FindByNameAsync(username);
+            if (updateAdmin != null)
+            {
+                updateAdmin.Address = user.Address;
+                updateAdmin.State = user.State;
+                updateAdmin.City = user.City;
+                updateAdmin.ZipCode = user.ZipCode;
+                updateAdmin.FirstName = user.FirstName;
+                updateAdmin.LastName = user.LastName;
+                updateAdmin.UserName = updateAdmin.FirstName + updateAdmin.LastName;
+                updateAdmin.PhoneNumber = user.PhoneNumber;
+                updateAdmin.Email = user.Email;
+                updateAdmin.Salutation = user.Salutation;
+                updateAdmin.Password = updateAdmin.Password;
+
+                await _userManager.UpdateAsync(updateAdmin);
+
+                return Json(new { success = true, message = "Admin successfully updated." });
+            }
+            else
+            {
+                return Json(new { success = false, error = "Could not update admin." });
+            }
+        }
+
+        /// <summary>
+        /// Create a new administrator
+        /// </summary>
+        /// <param name="user">Admin information</param>
+        /// <returns></returns>
         [HttpPost, Route("New")]
         public async Task<IActionResult> New([FromBody] ApplicationUser user)
         {

@@ -100,19 +100,7 @@ namespace BrainNotFound.Paper.Controllers
             return RedirectToAction("Administrators", "Admin");
         }
 
-        ///<summary>
-        /// Finds a specified instructor and deletes him from the _userManager - It does work!
-        ///</summary>
-        ///<param name="UserName">Selected instructor's email</param>
-        [HttpPost, Route("DeleteAdministrator")]
-        public async Task<IActionResult> DeleteAdministrator(String UserName)
-        {
-            var admin = await _userManager.FindByNameAsync(UserName);
-            await _userManager.DeleteAsync(admin);
-
-            return RedirectToAction("Administrators", "Admin");
-        }
-        #endregion create administrator controllers
+       #endregion create administrator controllers
 
         #region create instructor controllers
         /// <summary>

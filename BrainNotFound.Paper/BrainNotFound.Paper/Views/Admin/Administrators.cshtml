@@ -48,8 +48,8 @@
                                     <td class=" ">@admin.Email</td>
                                     <td>
                                         <a asp-controller="Admin" asp-action="ViewAdministrator" asp-route-UserName="@admin.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                        <button type="button" id="EditAdmin" value="@admin.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </button>
-                                        <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
+                                        <button type="button" id="EditAdmin" data-target="#EditAdminModal" value="@admin.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </button>
+                                        <button id="ConfirmDelete" type="submit" data-target="#ConfirmModal" value="@admin.Id" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
                                     </td>
                                 </tr>
                             }
@@ -58,6 +58,125 @@
                     </table>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!--Edit Admin Modal-->
+<div id="EditAdminModal" class="modal fade edit-admin-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="EditAdminForm" class="form-horizontal form-label-left input_mask">
+                <div class="modal-header">
+                    <h3 class="modal-title"><i class="fa fa-mortar-board"></i> Edit Administrator</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Salutation</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select id="EditSalutationInput" asp-for="Salutation" class="select2_single form-control" tabindex="1">
+                                <option value="mr">Mr.</option>
+                                <option value="mrs">Mrs.</option>
+                                <option value="ms">Ms.</option>
+                                <option value="miss">Miss</option>
+                                <option value="dr">Dr.</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
+                            First Name <span class="required">*</span>
+                        </label>
+
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="EditFirstNameInput" asp-for="FirstName" type="text" class="form-control has-feedback-left" placeholder="First Name">
+                            <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                            <span id="EditAdminFirstNameErrorMessage" class="text-danger"></span>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
+                            Last Name <span class="required">*</span>
+                        </label>
+
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="EditLastNameInput" asp-for="LastName" type="text" class="form-control has-feedback-left" placeholder="Last Name">
+                            <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                            <span id="EditAdminLastNameErrorMessage" class="text-danger"></span>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dept-name" class="control-label col-md-3 col-sm-3 col-xs-12">Email </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="EditEmailInput" asp-for="Email" type="text" class="form-control has-feedback-left" placeholder="Email">
+                            <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
+                            <span id="EditAdminEmailErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Phone Number</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="EditPhoneInput" asp-for="PhoneNumber" type="text" class="form-control has-feedback-left" placeholder="Phone">
+                            <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
+                            <span id="EditAdminPhoneErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Address</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="EditAddressInput" asp-for="Address" type="text" class="form-control has-feedback-left" placeholder="Address">
+                            <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
+                            <span id="EditAdminAddressErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">City</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="EditCityInput" asp-for="City" type="text" class="form-control has-feedback-left" placeholder="City">
+                            <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
+                            <span id="EditAdminCityErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">State</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="EditStateInput" asp-for="State" type="text" class="form-control has-feedback-left" placeholder="State">
+                            <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
+                            <span id="EditAdminStateErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">ZipCode</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="EditZipInput" asp-for="ZipCode" type="text" class="form-control has-feedback-left" placeholder="ZipCode">
+                            <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
+                            <span id="EditAdminZipErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Date of Birth</label>
+                        <div class="col-md-69 col-sm-6 col-xs-9">
+                            <input id="EditDOBInput" asp-for="DOB" type="date" class="form-control has-feedback-left" data-inputmask="'mask': '99/99/9999'" placeholder="##/##/####">
+                            <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                            <span id="EditAdminDOBErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="CancelEditAdmin" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" id="EditSaveChanges" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -91,14 +210,14 @@
                         </label>
 
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input  id="FirstNameInput" asp-for="FirstName" type="text" class="form-control has-feedback-left" placeholder="First Name">
+                            <input id="FirstNameInput" asp-for="FirstName" type="text" class="form-control has-feedback-left" placeholder="First Name">
                             <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                             <span id="AdminFirstNameErrorMessage" class="text-danger"></span>
 
                         </div>
                     </div>
                     <div class="form-group">
-                        <label  class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
                             Last Name <span class="required">*</span>
                         </label>
 
@@ -131,7 +250,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-3">Address</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input id ="AddressInput" asp-for="Address" type="text" class="form-control has-feedback-left" placeholder="Address">
+                            <input id="AddressInput" asp-for="Address" type="text" class="form-control has-feedback-left" placeholder="Address">
                             <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
                             <span id="AdminAddressErrorMessage" class="text-danger"></span>
                         </div>
@@ -193,8 +312,45 @@
     </div>
 </div>
 
+<!-- Confirm Deleting Modal-->
+<div id="ConfirmModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel2">Warning: Deleting Admin</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this admin?</p>
+                <div class="modal-footer">
+                    <button id="YesDelete" type="button" class="btn btn-default">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Message Modal-->
+<div id="ErrorModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel2">Delete Admin Error</h4>
+            </div>
+            <div class="modal-body">
+                <p id="errorMessagePlaceHolder"></p>
+                <div class="modal-footer">
+                    <button id="MessageClose" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section scripts
-{
+    {
     <!--Administrator functions-->
     <script type="text/javascript" src="~/js/Administrator.js"></script>
 
