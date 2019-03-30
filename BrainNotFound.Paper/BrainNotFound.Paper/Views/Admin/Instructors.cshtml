@@ -1,5 +1,5 @@
 @using BrainNotFound.Paper.Models.BusinessModels;
-@model List<ApplicationUser>;
+@model ApplicationUser;
 
 @{
     ViewData["Title"] = "Manage Instructors - Admin";
@@ -22,7 +22,7 @@
                 <h2><i class="fa fa-users"></i> Instructors</h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                    <li><a asp-controller="Admin" asp-action="NewInstructor"><i class="fa fa-plus"></i> New Instructor</a></li>
+                    <li><a id="newInstructorButton" data-toggle="modal" data-target="#NewInstructorModal"><i class="fa fa-plus"></i> New Instructor</a></li>
                 </ul>
                 <div class="clearfix"></div>
             </div>
@@ -47,7 +47,7 @@
                         </thead>
 
                         <tbody>
-                            @foreach (ApplicationUser instructor in Model)
+                            @foreach (ApplicationUser instructor in ViewBag.allInstructors)
                             {
                                 <tr class="odd pointer">
                                     <td class=" ">@instructor.FirstName</td>
@@ -58,7 +58,7 @@
 
                                         <form asp-action="DeleteInstructor" asp-controller="Admin">
                                             <a asp-controller="Admin" asp-action="ViewInstructor" asp-route-UserName="@instructor.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                            <a asp-controller="Admin" asp-action="EditInstructor" asp-route-UserName="@instructor.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                            <a id="EditInstructor" asp-controller="Admin" asp-action="EditInstructor" asp-route-UserName="@instructor.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
                                             <input type="hidden" name="UserName" value="@instructor.UserName" />
                                             <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
                                         </form>
@@ -74,8 +74,177 @@
     </div>
 </div>
 
+<!--New Instructor modal-->
+<div id="NewInstructorModal" class="modal fade new-Instructor-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="NewInstructorForm" class="form-horizontal form-label-left input_mask">
+                <div class="modal-header">
+                    <h3 class="modal-title"><i class="fa fa-mortar-board"></i> New Instructor</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Salutation</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select id="InstructorSalutationInput" asp-for="Salutation" class="select2_single form-control" tabindex="1">
+                                <option value="mr">Mr.</option>
+                                <option value="mrs">Mrs.</option>
+                                <option value="ms">Ms.</option>
+                                <option value="miss">Miss</option>
+                                <option value="dr">Dr.</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
+                            First Name <span class="required">*</span>
+                        </label>
+
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="InstructorFirstNameInput" asp-for="FirstName" type="text" class="form-control has-feedback-left" placeholder="First Name">
+                            <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                            <span id="InstructorFirstNameErrorMessage" class="text-danger"></span>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
+                            Last Name <span class="required">*</span>
+                        </label>
+
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="InstructorLastNameInput" asp-for="LastName" type="text" class="form-control has-feedback-left" placeholder="Last Name">
+                            <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                            <span id="InstructorLastNameErrorMessage" class="text-danger"></span>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dept-name" class="control-label col-md-3 col-sm-3 col-xs-12">Email </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="InstructorEmailInput" asp-for="Email" type="text" class="form-control has-feedback-left" placeholder="Email">
+                            <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
+                            <span id="InstructorEmailErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Phone Number</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="InstructorPhoneInput" asp-for="PhoneNumber" type="text" class="form-control has-feedback-left" placeholder="Phone">
+                            <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
+                            <span id="InstructorPhoneErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Address</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="InstructorAddressInput" asp-for="Address" type="text" class="form-control has-feedback-left" placeholder="Address">
+                            <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
+                            <span id="InstructorAddressErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">City</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="InstructorCityInput" asp-for="City" type="text" class="form-control has-feedback-left" placeholder="City">
+                            <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
+                            <span id="InstructorCityErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">State</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="InstructorStateInput" asp-for="State" type="text" class="form-control has-feedback-left" placeholder="State">
+                            <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
+                            <span id="InstructorStateErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">ZipCode</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="InstructorZipInput" asp-for="ZipCode" type="text" class="form-control has-feedback-left" placeholder="ZipCode">
+                            <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
+                            <span id="InstructorZipErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Date of Birth</label>
+                        <div class="col-md-69 col-sm-6 col-xs-9">
+                            <input id="InstructorDOBInput" asp-for="DOB" type="date" class="form-control has-feedback-left" data-inputmask="'mask': '99/99/9999'" placeholder="##/##/####">
+                            <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                            <span id="InstructorDOBErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12  parsley-error">
+                            Password <span class="required">*</span>
+                        </label>
+
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="InstructorPasswordInput" asp-for="Password" type="password" class="form-control has-feedback-left" placeholder="Password">
+                            <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                            <span id="InstructorPasswordErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="CancelCreateInstructor" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" id="CreateInstructor" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Confirm Deleting Modal-->
+<div id="ConfirmModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel2">Warning: Deleting Instructor</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this Instructor?</p>
+                <div class="modal-footer">
+                    <button id="YesDelete" type="button" class="btn btn-default">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Message Modal-->
+<div id="ErrorModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel2">Delete Instructor Error</h4>
+            </div>
+            <div class="modal-body">
+                <p id="errorMessagePlaceHolder"></p>
+                <div class="modal-footer">
+                    <button id="MessageClose" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 @section scripts
-    {
+{
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
             $('#instructorTable').DataTable({
@@ -85,6 +254,9 @@
                 ]
             });
     </script>
+
+    <script type="text/javascript" src="~/js/Instructor.js"></script>
+
 
     <!-- Datatables -->
     <script src="../vendors/datatables.net/js/jquery.dataTables.min.js"></script>

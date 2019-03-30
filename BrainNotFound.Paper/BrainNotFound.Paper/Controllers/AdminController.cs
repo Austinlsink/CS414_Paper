@@ -116,7 +116,8 @@ namespace BrainNotFound.Paper.Controllers
             {
                 ViewBag.message = TempData["message"].ToString();
             }
-            return View(allInstructors);
+            ViewBag.allInstructors = allInstructors;
+            return View();
         }
 
         ///<summary>
