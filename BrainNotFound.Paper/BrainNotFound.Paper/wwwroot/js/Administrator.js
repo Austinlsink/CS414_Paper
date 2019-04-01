@@ -1,5 +1,6 @@
 ﻿// Global variables
 var adminId;
+var username;
 
 // Displays the admin form to edit a specific admin
 $("button#EditAdmin").click(function () {
@@ -31,7 +32,6 @@ $("button#EditAdmin").click(function () {
 // Saves the changes on the edit form
 $("button#EditSaveChanges").click(function () {
     var editAdminForm = $("form#EditAdminForm");
-    var username = $(this).val();
     // Gets the values of the form, and creates an object to be sent to the server
     var admin = {};
     $.each(editAdminForm.serializeArray(), function (i, field) {
@@ -155,7 +155,7 @@ $("button#ConfirmDelete").click(function () {
     $("#ConfirmModal").modal("toggle");
 })
 
-// Delete a Department if the user specifies yes on the confirmation modal
+// Delete an administrator if the user specifies yes on the confirmation modal
 $("button#YesDelete").click(function () {
     // Gets the department Id to be deleted
     $("#ConfirmModal").modal("hide");

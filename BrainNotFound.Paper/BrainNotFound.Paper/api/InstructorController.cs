@@ -41,12 +41,12 @@ namespace BrainNotFound.Paper.api
 
             if (_context.Sections.Where(s => s.InstructorId == instructor.Id).Any())
             {
-                return Json(new { success = false, message = "Error: Please delete all associated sections before deleting " + instructor.FirstName + " " + instructor.LastName });
+                return Json(new { success = false, message = "Please delete all associated sections before deleting " + instructor.FirstName + " " + instructor.LastName });
             }
             else
             {
                 await _userManager.DeleteAsync(instructor);
-                return Json(new { success = true, message = "instructor successfully deleted." });
+                return Json(new { success = true, message = "Instructor successfully deleted." });
             }
         }
 
@@ -58,18 +58,18 @@ namespace BrainNotFound.Paper.api
         [HttpPost, Route("Edit/{username}")]
         public async Task<IActionResult> Edit([FromBody]string username)
         {
-            ApplicationUser admin = await _userManager.FindByNameAsync(username);
+            ApplicationUser instructor = await _userManager.FindByNameAsync(username);
 
-            return Json(new { success = true, firstName = admin.FirstName,
-                                             lastName = admin.LastName,
-                                             salutation = admin.Salutation,
-                                             phone = admin.PhoneNumber,
-                                             email = admin.Email,
-                                             address = admin.Address,
-                                             city = admin.City,
-                                             state = admin.State,
-                                             zip = admin.ZipCode,
-                                             dob = admin.DOB});
+            return Json(new { success = true, firstName = instructor.FirstName,
+                                             lastName = instructor.LastName,
+                                             salutation = instructor.Salutation,
+                                             phone = instructor.PhoneNumber,
+                                             email = instructor.Email,
+                                             address = instructor.Address,
+                                             city = instructor.City,
+                                             state = instructor.State,
+                                             zip = instructor.ZipCode,
+                                             dob = instructor.DOB});
         }
 
         [HttpPost, Route("SaveChanges")]

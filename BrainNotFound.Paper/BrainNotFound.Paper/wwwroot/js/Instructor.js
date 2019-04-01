@@ -127,7 +127,7 @@ $("button#CreateInstructor").click(function () {
     })
 })
 
-// Resets the new admin form modal if the user cancels it
+// Resets the new instructor form modal if the user cancels it
 $("button#CancelCreateInstructor").click(function () {
     var newInstructorForm = $('form#NewInstructorForm');
     newInstructorForm.trigger("reset");
@@ -155,9 +155,8 @@ $("button#ConfirmDelete").click(function () {
     $("#ConfirmModal").modal("toggle");
 })
 
-// Delete a Department if the user specifies yes on the confirmation modal
+// Delete an instructor if the user specifies yes on the confirmation modal
 $("button#YesDelete").click(function () {
-    // Gets the department Id to be deleted
     $("#ConfirmModal").modal("hide");
 
     $.ajax({
@@ -182,6 +181,6 @@ $("button#YesDelete").click(function () {
 })
 
 // Reloads the page when a Course is successfully deleted
-$("#MessageClose").click(function () {
+$("button#MessageClose").click(function () {
     location.reload();
 })
