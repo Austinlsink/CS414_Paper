@@ -2,32 +2,17 @@
 var adminId;
 var username;
 
+
 // Displays the admin form to edit a specific admin
 $("button#EditAdmin").click(function () {
     var username = $(this).val();
-
     $.ajax({
-        url: "/api/admin/Edit/" + username,
-        type: "POST",
-        contentType: "application/json; charset=utf-8",
-        data: JSON.stringify(username),
+        url: "/Admin/Administrators/Edit/" + username,
         success: function (result) {
-            document.getElementById("EditSalutationInput").value = result.salutation;
-            document.getElementById("EditFirstNameInput").value = result.firstName;
-            document.getElementById("EditLastNameInput").value = result.lastName;
-            document.getElementById("EditEmailInput").value = result.email;
-            document.getElementById("EditPhoneInput").value = result.phone;
-            document.getElementById("EditAddressInput").value = result.address;
-            document.getElementById("EditCityInput").value = result.city;
-            document.getElementById("EditStateInput").value = result.state;
-            document.getElementById("EditZipInput").value = result.zip;
-            document.getElementById("EditDOBInput").value = result.dob;
-
-
-            $("#EditAdminModal").modal("show");
+            $("#EditAdminPlaceholder").html(result);
         }
-    })
-});
+    });
+})
 
 // Saves the changes on the edit form
 $("button#EditSaveChanges").click(function () {

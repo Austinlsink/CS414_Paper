@@ -76,7 +76,7 @@ namespace BrainNotFound.Paper.Controllers
         {
             ApplicationUser admin = await _userManager.FindByNameAsync(UserName);
             ViewBag.admin = admin;
-            return View();
+            return PartialView();
         }
 
         [HttpPost, Route("Administrators/Edit/{UserName}")]
