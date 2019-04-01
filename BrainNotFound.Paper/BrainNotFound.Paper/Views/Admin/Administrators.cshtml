@@ -47,7 +47,7 @@
                                     <td class=" ">@admin.PhoneNumber</td>
                                     <td class=" ">@admin.Email</td>
                                     <td>
-                                        <a asp-controller="Admin" asp-action="ViewAdministrator" asp-route-UserName="@admin.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                        <button type="button" id="ViewAdmin" data-target="#ViewAdminModal" value="@admin.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </button>
                                         <button type="button" id="EditAdmin" data-target="#EditAdminModal" value="@admin.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </button>
                                         <button id="ConfirmDelete" type="submit" data-target="#ConfirmModal" value="@admin.Id" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
                                     </td>
@@ -348,6 +348,29 @@
         </div>
     </div>
 </div>
+
+<!--View Administrator-->
+<div id="ViewAdminModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel2">View Admin Details</h4>
+            </div>
+            <div class="modal-body">
+                <p id="name"></p>
+                <p id="address"></p>
+                <p id="email"></p>
+                <p id="phoneNumber"></p>
+                <p id="dob"></p>
+                <div class="modal-footer">
+                    <button id="MessageClose" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @section scripts
     {
