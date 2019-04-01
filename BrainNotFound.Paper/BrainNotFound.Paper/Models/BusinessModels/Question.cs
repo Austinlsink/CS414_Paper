@@ -20,7 +20,7 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 
         public long TestSectionId  { get; set; }
 		[ForeignKey("TestSectionId")]
-		public TestSection  TestSection;
+		public TestSection TestSection { get; set; }
 
        
 

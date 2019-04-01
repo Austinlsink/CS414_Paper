@@ -19,5 +19,7 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         public long TestId {get; set;}
         [ForeignKey("TestId")]
 		public Test Test {get; set;}
+
+        public List<Question> Questions { get; set; }
     }
 }
