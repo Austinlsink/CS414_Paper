@@ -45,15 +45,26 @@
                                     <td class=" ">@student.PhoneNumber</td>
                                     <td class=" ">@student.Email</td>
                                     <td>
-                                            <a asp-controller="Admin" asp-action="ViewStudent" asp-route-UserName="@student.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                            <a asp-controller="Admin" asp-action="EditStudent" asp-route-UserName="@student.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                            <button id="ConfirmDelete" data-target="#ConfirmModal" value="@student.Id" type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
+                                        <a asp-controller="Admin" asp-action="ViewStudent" asp-route-UserName="@student.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                        <button type="button" id="EditStudent" value="@student.UserName" data-toggle="modal" data-target="#EditStudentModal" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </button>
+                                        <button id="ConfirmDelete" data-target="#ConfirmModal" value="@student.Id" type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
                                     </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal for editing a student-->
+<div id="EditStudentModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body" id="EditStudentPlaceholder">
+
             </div>
         </div>
     </div>
@@ -227,7 +238,7 @@
 </div>
 
 @section scripts
-{
+    {
     <script type="text/javascript" src="~/js/Student.js"></script>
 
     <script type="text/javascript" charset="utf8">
