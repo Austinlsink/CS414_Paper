@@ -5,16 +5,6 @@
     ViewData["Title"] = "Manage Instructors - Admin";
 }
 
-<!--Error message for deleting a department-->
-@if (ViewBag.message != null)
-{
-    <script type="text/javascript">
-        window.onload = function () {
-            alert("@ViewBag.message");
-        };
-    </script>
-}
-
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
@@ -56,12 +46,9 @@
                                     <td class=" ">@instructor.Email</td>
                                     <td>
 
-                                        <form asp-action="DeleteInstructor" asp-controller="Admin">
-                                            <a asp-controller="Admin" asp-action="ViewInstructor" asp-route-UserName="@instructor.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                            <a id="EditInstructor" asp-controller="Admin" asp-action="EditInstructor" asp-route-UserName="@instructor.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                            <input type="hidden" name="UserName" value="@instructor.UserName" />
-                                            <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
-                                        </form>
+                                        <a asp-controller="Admin" asp-action="ViewInstructor" asp-route-UserName="@instructor.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                        <a id="EditInstructor" asp-controller="Admin" asp-action="EditInstructor" asp-route-UserName="@instructor.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                        <button id="ConfirmDelete" type="submit" data-target="#ConfirmModal" value="@instructor.Id" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
                                     </td>
                                 </tr>
                             }
@@ -229,7 +216,7 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel2">Delete Instructor Error</h4>
+                <h4 class="modal-title" id="MessageModal"></h4>
             </div>
             <div class="modal-body">
                 <p id="errorMessagePlaceHolder"></p>
@@ -245,6 +232,8 @@
 
 @section scripts
 {
+    <script type="text/javascript" src="~/js/Instructor.js"></script>
+
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
             $('#instructorTable').DataTable({
@@ -254,9 +243,6 @@
                 ]
             });
     </script>
-
-    <script type="text/javascript" src="~/js/Instructor.js"></script>
-
 
     <!-- Datatables -->
     <script src="../vendors/datatables.net/js/jquery.dataTables.min.js"></script>
@@ -272,4 +258,3 @@
     <script src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
     <script src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
 }
-

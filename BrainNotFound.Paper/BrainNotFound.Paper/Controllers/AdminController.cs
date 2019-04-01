@@ -120,75 +120,6 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        ///<summary>
-        /// Finds a specified instructor and deletes him from the _userManager - It does work!
-        ///</summary>
-        ///<param name="user">Selected instructor's email</param>
-        [HttpPost, Route("DeleteInstructor")]
-        public async Task<IActionResult> DeleteInstructor(String UserName)
-        {
-            var instructor = await _userManager.FindByNameAsync(UserName);
-            if (_context.Sections.Where(s => s.InstructorId == instructor.Id).Any())
-            {
-                TempData["message"] = "Error: Please delete all associated sections before deleting " + instructor.FirstName + " " + instructor.LastName;
-                return RedirectToAction("Instructors", "Admin");
-            }
-            else
-            {
-                await _userManager.DeleteAsync(instructor);
-            }
-            TempData["message"] = instructor.FirstName + " " + instructor.LastName + "was deleted.";
-            return RedirectToAction("Instructors", "Admin");
-        }
-
-        [HttpGet, Route("Instructors/New")]
-        public IActionResult NewInstructor()
-        {
-            return View();
-        }
-
-        [HttpPost, Route("Instructors/New")]
-        public async Task<IActionResult> NewInstructor(ApplicationUser model)
-        {
-            if (model.FirstName == null || model.LastName == null || model.Password == null)
-            {
-                return View(model);
-            }
-
-            model.UserName = model.FirstName + model.LastName;
-
-            if (await _userManager.FindByNameAsync(model.UserName) == null)
-            {
-                //Create a new Application User
-                var result = await _userManager.CreateAsync(model, model.Password);
-
-                if (result.Succeeded)
-                {
-                    //Fetch created user
-                    var CreatedUser = await _userManager.FindByNameAsync(model.UserName);
-
-                    //Add instructor role to created Application User
-                    await _userManager.AddToRoleAsync(CreatedUser, "Instructor");
-
-                    return RedirectToAction("Instructors", "Admin");
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ViewData["Message"] += error.Description;
-                    }
-                }
-            }
-            else
-            {
-                ViewBag.UserError = "That user already exists.";
-            }
-
-            ViewData["message"] += model.Email;
-            return View(model);
-        }
-
         [HttpGet, Route("Instructors/{UserName}")]
         public async Task<IActionResult> ViewInstructor(String username)
         {
@@ -300,76 +231,8 @@ namespace BrainNotFound.Paper.Controllers
             {
                 ViewBag.message = TempData["message"].ToString();
             }
-            return View(allStudents);
-        }
-
-        ///<summary>
-        /// Finds a specified student and deletes him from the _userManager
-        ///</summary>
-        ///<param name="UserName">Selected student's username</param>
-        [HttpPost, Route("DeleteStudent")]
-        public async Task<IActionResult> DeleteStudent(String UserName)
-        {
-            var student = await _userManager.FindByNameAsync(UserName);
-            if (_context.Enrollments.Where(e => e.StudentId == student.Id).Any())
-            {
-                TempData["message"] = "Error: Please remove " + student.FirstName + " " + student.LastName + " from corresponding sections before deleting.";
-                return RedirectToAction("Students", "Admin");
-            }
-            else
-            {
-                await _userManager.DeleteAsync(student);
-            }
-            TempData["message"] = student.FirstName + " " + student.LastName + "was deleted.";
-            return RedirectToAction("Students", "Admin");
-        }
-
-        [HttpGet, Route("Students/New")]
-        public IActionResult NewStudent()
-        {
+            ViewBag.allStudents = allStudents;
             return View();
-        }
-
-        [HttpPost, Route("Students/New")]
-        public async Task<IActionResult> NewStudent(ApplicationUser model)
-        {
-            if (model.FirstName == null || model.LastName == null || model.Password == null)
-            {
-                return View(model);
-            }
-
-            model.UserName = model.FirstName + model.LastName;
-
-            if (await _userManager.FindByNameAsync(model.UserName) == null)
-            {
-                //Create a new Application User
-                var result = await _userManager.CreateAsync(model, model.Password);
-
-                if (result.Succeeded)
-                {
-                    //Fetch created user
-                    var CreatedUser = await _userManager.FindByNameAsync(model.UserName);
-
-                    //Add instructor role to created Application User
-                    await _userManager.AddToRoleAsync(CreatedUser, "Student");
-
-                    return RedirectToAction("Students", "Admin");
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ViewData["Message"] += error.Description;
-                    }
-                }
-            }
-            else
-            {
-                ViewBag.UserError = "That user already exists.";
-            }
-
-            ViewData["message"] += model.Email;
-            return View(model);
         }
 
         [HttpGet, Route("Students/{UserName}")]

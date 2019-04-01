@@ -34,19 +34,19 @@ namespace BrainNotFound.Paper.api
         #endregion Initialize Controllers
 
         [HttpPost, Route("Delete")]
-        public async Task<IActionResult> Delete([FromBody]string adminId)
+        public async Task<IActionResult> Delete([FromBody]string instructorId)
         {
             
-            var admin = await _userManager.FindByIdAsync(adminId);
-            if (admin.UserName != User.Identity.Name)
+            var instructor = await _userManager.FindByIdAsync(instructorId);
+
+            if (_context.Sections.Where(s => s.InstructorId == instructor.Id).Any())
             {
-                await _userManager.DeleteAsync(admin);
-                return Json(new { success = true, message = "instructor successfully deleted." });
+                return Json(new { success = false, message = "Please delete all associated sections before deleting " + instructor.FirstName + " " + instructor.LastName });
             }
             else
             {
-                return Json(new { success = false, message = "Sorry, but you can't remove yourself." });
-
+                await _userManager.DeleteAsync(instructor);
+                return Json(new { success = true, message = "Instructor successfully deleted." });
             }
         }
 
@@ -58,39 +58,39 @@ namespace BrainNotFound.Paper.api
         [HttpPost, Route("Edit/{username}")]
         public async Task<IActionResult> Edit([FromBody]string username)
         {
-            ApplicationUser admin = await _userManager.FindByNameAsync(username);
+            ApplicationUser instructor = await _userManager.FindByNameAsync(username);
 
-            return Json(new { success = true, firstName = admin.FirstName,
-                                             lastName = admin.LastName,
-                                             salutation = admin.Salutation,
-                                             phone = admin.PhoneNumber,
-                                             email = admin.Email,
-                                             address = admin.Address,
-                                             city = admin.City,
-                                             state = admin.State,
-                                             zip = admin.ZipCode,
-                                             dob = admin.DOB});
+            return Json(new { success = true, firstName = instructor.FirstName,
+                                             lastName = instructor.LastName,
+                                             salutation = instructor.Salutation,
+                                             phone = instructor.PhoneNumber,
+                                             email = instructor.Email,
+                                             address = instructor.Address,
+                                             city = instructor.City,
+                                             state = instructor.State,
+                                             zip = instructor.ZipCode,
+                                             dob = instructor.DOB});
         }
 
         [HttpPost, Route("SaveChanges")]
         public async Task<IActionResult> SaveChanges([FromBody] ApplicationUser user, string username)
         {
-            var updateAdmin = await _userManager.FindByNameAsync(username);
-            if (updateAdmin != null)
+            var updateInstructor = await _userManager.FindByNameAsync(username);
+            if (updateInstructor != null)
             {
-                updateAdmin.Address = user.Address;
-                updateAdmin.State = user.State;
-                updateAdmin.City = user.City;
-                updateAdmin.ZipCode = user.ZipCode;
-                updateAdmin.FirstName = user.FirstName;
-                updateAdmin.LastName = user.LastName;
-                updateAdmin.UserName = updateAdmin.FirstName + updateAdmin.LastName;
-                updateAdmin.PhoneNumber = user.PhoneNumber;
-                updateAdmin.Email = user.Email;
-                updateAdmin.Salutation = user.Salutation;
-                updateAdmin.Password = updateAdmin.Password;
+                updateInstructor.Address = user.Address;
+                updateInstructor.State = user.State;
+                updateInstructor.City = user.City;
+                updateInstructor.ZipCode = user.ZipCode;
+                updateInstructor.FirstName = user.FirstName;
+                updateInstructor.LastName = user.LastName;
+                updateInstructor.UserName = updateInstructor.FirstName + updateInstructor.LastName;
+                updateInstructor.PhoneNumber = user.PhoneNumber;
+                updateInstructor.Email = user.Email;
+                updateInstructor.Salutation = user.Salutation;
+                updateInstructor.Password = updateInstructor.Password;
 
-                await _userManager.UpdateAsync(updateAdmin);
+                await _userManager.UpdateAsync(updateInstructor);
 
                 return Json(new { success = true, message = "Instructor successfully updated." });
             }

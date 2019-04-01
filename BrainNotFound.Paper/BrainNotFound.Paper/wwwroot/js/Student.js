@@ -1,13 +1,13 @@
 ﻿// Global variables
-var adminId;
+var studentId;
 var username;
 
 // Displays the admin form to edit a specific admin
-$("button#EditAdmin").click(function () {
+$("button#EditStudent").click(function () {
     var username = $(this).val();
 
     $.ajax({
-        url: "/api/admin/Edit/" + username,
+        url: "/api/Student/Edit/" + username,
         type: "POST",
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(username),
@@ -24,28 +24,28 @@ $("button#EditAdmin").click(function () {
             document.getElementById("EditDOBInput").value = result.dob;
 
 
-            $("#EditAdminModal").modal("show");
+            $("#EditStudentnModal").modal("show");
         }
     })
 });
 
 // Saves the changes on the edit form
 $("button#EditSaveChanges").click(function () {
-    var editAdminForm = $("form#EditAdminForm");
+    var editStudentForm = $("form#EditStudentForm");
     // Gets the values of the form, and creates an object to be sent to the server
-    var admin = {};
-    $.each(editAdminForm.serializeArray(), function (i, field) {
-        admin[field.name] = field.value;
+    var student = {};
+    $.each(editStudentForm.serializeArray(), function (i, field) {
+        student[field.name] = field.value;
         console.log(admin[field.name]);
     });
 
     // Creates, submits, and responds to Ajax Call
     $.ajax({
-        url: "/api/Admin/SaveChanges/",
+        url: "/api/Student/SaveChanges/",
         type: "POST",
         contentType: "application/json",
         // Data fetched from the form
-        data: JSON.stringify(admin, username),
+        data: JSON.stringify(student, username),
         success: function (result) {
             // Close the modal window
             console.log(result.message);
@@ -57,40 +57,40 @@ $("button#EditSaveChanges").click(function () {
 
             // Places validation on the First Name Field
             if (typeof err.errors.FirstName === "undefined") {
-                $("#EditAdminFirstNameErrorMessage").empty();
+                $("#EditStudentFirstNameErrorMessage").empty();
             }
             else {
-                $("#EditAdminFirstNameErrorMessage").html(err.errors.FirstName[0]);
+                $("#EditStudentFirstNameErrorMessage").html(err.errors.FirstName[0]);
             }
 
             // Places validation on the Last Name Field
             if (typeof err.errors.LastName === "undefined") {
-                $("#EditAdminLastNameErrorMessage").empty();
+                $("#EditStudentLastNameErrorMessage").empty();
             }
             else {
-                $("#EditAdminLastNameErrorMessage").html(err.errors.LastName[0]);
+                $("#EditStudentLastNameErrorMessage").html(err.errors.LastName[0]);
             }
         }
     })
 })
 
 // Submits the form information to the server
-$("button#CreateAdmin").click(function () {
-    var newAdminForm = $("form#NewAdminForm");
+$("button#CreateStudent").click(function () {
+    var newStudentForm = $("form#NewStudentForm");
 
     // Gets the values of the form, and creates an object to be sent to the server
-    var admin = {};
-    $.each(newAdminForm.serializeArray(), function (i, field) {
-        admin[field.name] = field.value;
+    var student = {};
+    $.each(newStudentForm.serializeArray(), function (i, field) {
+        student[field.name] = field.value;
     });
 
     // Creates, submits, and responds to Ajax Call
     $.ajax({
-        url: "/api/Admin/New/",
+        url: "/api/Student/New/",
         type: "POST",
         contentType: "application/json",
         // Data fetched from the form
-        data: JSON.stringify(admin),
+        data: JSON.stringify(student),
         success: function (result) {
             // Close the modal window
             console.log(result.message);
@@ -102,39 +102,39 @@ $("button#CreateAdmin").click(function () {
 
             // Places validation on the First Name Field
             if (typeof err.errors.FirstName === "undefined") {
-                $("#AdminFirstNameErrorMessage").empty();
+                $("#StudentFirstNameErrorMessage").empty();
             }
             else {
-                $("#AdminFirstNameErrorMessage").html(err.errors.FirstName[0]);
+                $("#StudentFirstNameErrorMessage").html(err.errors.FirstName[0]);
             }
 
             // Places validation on the Last Name Field
             if (typeof err.errors.LastName === "undefined") {
-                $("#AdminLastNameErrorMessage").empty();
+                $("#StudentLastNameErrorMessage").empty();
             }
             else {
-                $("#AdminLastNameErrorMessage").html(err.errors.LastName[0]);
+                $("#StudentLastNameErrorMessage").html(err.errors.LastName[0]);
             }
 
             // Places validation on the Password Field
             if (typeof err.errors.Password === "undefined") {
-                $("#AdminPasswordErrorMessage").empty();
+                $("#StudentPasswordErrorMessage").empty();
             }
             else {
-                $("#AdminPasswordErrorMessage").html(err.errors.Password[0]);
+                $("#StudentPasswordErrorMessage").html(err.errors.Password[0]);
             }
         }
     })
 })
 
 // Resets the new admin form modal if the user cancels it
-$("button#CancelCreateAdmin").click(function () {
-    var newAdminForm = $('form#NewAdminForm');
+$("button#CancelCreateStudent").click(function () {
+    var newAdminForm = $('form#NewStudentForm');
     newAdminForm.trigger("reset");
     // Reseting span elements
-    $("#AdminFirstNameErrorMessage").empty();
-    $("#AdminLastNameErrorMessage").empty();
-    $("#AdminPasswordErrorMessage").empty();
+    $("#StudentFirstNameErrorMessage").empty();
+    $("#StudentLastNameErrorMessage").empty();
+    $("#StudentPasswordErrorMessage").empty();
 
     // Reseting input elements
     document.getElementById("FirstNameInput").value = "";
@@ -161,7 +161,7 @@ $("button#YesDelete").click(function () {
     $("#ConfirmModal").modal("hide");
 
     $.ajax({
-        url: "/api/Admin/Delete/",
+        url: "/api/Student/Delete/",
         type: "POST",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify(adminId),
