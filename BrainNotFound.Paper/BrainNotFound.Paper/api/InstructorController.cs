@@ -38,15 +38,15 @@ namespace BrainNotFound.Paper.api
         {
             
             var instructor = await _userManager.FindByIdAsync(instructorId);
-            if (instructor.UserName != User.Identity.Name)
+
+            if (_context.Sections.Where(s => s.InstructorId == instructor.Id).Any())
             {
-                await _userManager.DeleteAsync(instructor);
-                return Json(new { success = true, message = "instructor successfully deleted." });
+                return Json(new { success = false, message = "Error: Please delete all associated sections before deleting " + instructor.FirstName + " " + instructor.LastName });
             }
             else
             {
-                return Json(new { success = false, message = "Sorry, but you can't remove yourself." });
-
+                await _userManager.DeleteAsync(instructor);
+                return Json(new { success = true, message = "instructor successfully deleted." });
             }
         }
 
