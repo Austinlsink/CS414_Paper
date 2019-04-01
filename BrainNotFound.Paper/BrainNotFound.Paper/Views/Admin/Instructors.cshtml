@@ -56,12 +56,9 @@
                                     <td class=" ">@instructor.Email</td>
                                     <td>
 
-                                        <form asp-action="DeleteInstructor" asp-controller="Admin">
                                             <a asp-controller="Admin" asp-action="ViewInstructor" asp-route-UserName="@instructor.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                             <a id="EditInstructor" asp-controller="Admin" asp-action="EditInstructor" asp-route-UserName="@instructor.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                            <input type="hidden" name="UserName" value="@instructor.UserName" />
-                                            <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
-                                        </form>
+                                            <button id="ConfirmDelete" type="submit" data-target="#ConfirmModal" value="@instructor.Id" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
                                     </td>
                                 </tr>
                             }
@@ -272,4 +269,3 @@
     <script src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
     <script src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
 }
-

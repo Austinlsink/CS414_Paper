@@ -34,13 +34,13 @@ namespace BrainNotFound.Paper.api
         #endregion Initialize Controllers
 
         [HttpPost, Route("Delete")]
-        public async Task<IActionResult> Delete([FromBody]string adminId)
+        public async Task<IActionResult> Delete([FromBody]string instructorId)
         {
             
-            var admin = await _userManager.FindByIdAsync(adminId);
-            if (admin.UserName != User.Identity.Name)
+            var instructor = await _userManager.FindByIdAsync(instructorId);
+            if (instructor.UserName != User.Identity.Name)
             {
-                await _userManager.DeleteAsync(admin);
+                await _userManager.DeleteAsync(instructor);
                 return Json(new { success = true, message = "instructor successfully deleted." });
             }
             else
@@ -75,22 +75,22 @@ namespace BrainNotFound.Paper.api
         [HttpPost, Route("SaveChanges")]
         public async Task<IActionResult> SaveChanges([FromBody] ApplicationUser user, string username)
         {
-            var updateAdmin = await _userManager.FindByNameAsync(username);
-            if (updateAdmin != null)
+            var updateInstructor = await _userManager.FindByNameAsync(username);
+            if (updateInstructor != null)
             {
-                updateAdmin.Address = user.Address;
-                updateAdmin.State = user.State;
-                updateAdmin.City = user.City;
-                updateAdmin.ZipCode = user.ZipCode;
-                updateAdmin.FirstName = user.FirstName;
-                updateAdmin.LastName = user.LastName;
-                updateAdmin.UserName = updateAdmin.FirstName + updateAdmin.LastName;
-                updateAdmin.PhoneNumber = user.PhoneNumber;
-                updateAdmin.Email = user.Email;
-                updateAdmin.Salutation = user.Salutation;
-                updateAdmin.Password = updateAdmin.Password;
+                updateInstructor.Address = user.Address;
+                updateInstructor.State = user.State;
+                updateInstructor.City = user.City;
+                updateInstructor.ZipCode = user.ZipCode;
+                updateInstructor.FirstName = user.FirstName;
+                updateInstructor.LastName = user.LastName;
+                updateInstructor.UserName = updateInstructor.FirstName + updateInstructor.LastName;
+                updateInstructor.PhoneNumber = user.PhoneNumber;
+                updateInstructor.Email = user.Email;
+                updateInstructor.Salutation = user.Salutation;
+                updateInstructor.Password = updateInstructor.Password;
 
-                await _userManager.UpdateAsync(updateAdmin);
+                await _userManager.UpdateAsync(updateInstructor);
 
                 return Json(new { success = true, message = "Instructor successfully updated." });
             }

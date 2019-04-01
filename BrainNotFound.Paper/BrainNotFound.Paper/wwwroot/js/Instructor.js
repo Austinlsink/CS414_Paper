@@ -1,12 +1,12 @@
 ﻿// Global variables
-var adminId;
+var instructorId;
 
 // Displays the instructor form to edit a specific admin
 $("button#EditInstructor").click(function () {
     var username = $(this).val();
 
     $.ajax({
-        url: "/api/admin/Edit/" + username,
+        url: "/api/Instructor/Edit/" + username,
         type: "POST",
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(username),
@@ -30,22 +30,22 @@ $("button#EditInstructor").click(function () {
 
 // Saves the changes on the edit form
 $("button#EditSaveChanges").click(function () {
-    var editAdminForm = $("form#EditAdminForm");
+    var editInstructorForm = $("form#EditInstructorForm");
     var username = $(this).val();
     // Gets the values of the form, and creates an object to be sent to the server
-    var admin = {};
-    $.each(editAdminForm.serializeArray(), function (i, field) {
-        admin[field.name] = field.value;
-        console.log(admin[field.name]);
+    var instructor = {};
+    $.each(editInstructorForm.serializeArray(), function (i, field) {
+        instructor[field.name] = field.value;
+        console.log(instructor[field.name]);
     });
 
     // Creates, submits, and responds to Ajax Call
     $.ajax({
-        url: "/api/Admin/SaveChanges/",
+        url: "/api/Instructor/SaveChanges/",
         type: "POST",
         contentType: "application/json",
         // Data fetched from the form
-        data: JSON.stringify(admin, username),
+        data: JSON.stringify(instructor, username),
         success: function (result) {
             // Close the modal window
             console.log(result.message);
@@ -57,18 +57,18 @@ $("button#EditSaveChanges").click(function () {
 
             // Places validation on the First Name Field
             if (typeof err.errors.FirstName === "undefined") {
-                $("#EditAdminFirstNameErrorMessage").empty();
+                $("#EditInstructorFirstNameErrorMessage").empty();
             }
             else {
-                $("#EditAdminFirstNameErrorMessage").html(err.errors.FirstName[0]);
+                $("#EditInstructorFirstNameErrorMessage").html(err.errors.FirstName[0]);
             }
 
             // Places validation on the Last Name Field
             if (typeof err.errors.LastName === "undefined") {
-                $("#EditAdminLastNameErrorMessage").empty();
+                $("#EditInstructorLastNameErrorMessage").empty();
             }
             else {
-                $("#EditAdminLastNameErrorMessage").html(err.errors.LastName[0]);
+                $("#EditInstructorLastNameErrorMessage").html(err.errors.LastName[0]);
             }
         }
     })
@@ -129,8 +129,8 @@ $("button#CreateInstructor").click(function () {
 
 // Resets the new admin form modal if the user cancels it
 $("button#CancelCreateInstructor").click(function () {
-    var newAdminForm = $('form#NewInstructorForm');
-    newAdminForm.trigger("reset");
+    var newInstructorForm = $('form#NewInstructorForm');
+    newInstructorForm.trigger("reset");
     // Reseting span elements
     $("#InstructorFirstNameErrorMessage").empty();
     $("#InstructorLastNameErrorMessage").empty();
@@ -151,7 +151,7 @@ $("button#CancelCreateInstructor").click(function () {
 
 // Display a confirmation modal if the user wants to delete a department
 $("button#ConfirmDelete").click(function () {
-    adminId = $(this).val();
+    instructorId = $(this).val();
     $("#ConfirmModal").modal("toggle");
 })
 
@@ -161,10 +161,10 @@ $("button#YesDelete").click(function () {
     $("#ConfirmModal").modal("hide");
 
     $.ajax({
-        url: "/api/Admin/Delete/",
+        url: "/api/Instructor/Delete/",
         type: "POST",
         contentType: 'application/json; charset=utf-8',
-        data: JSON.stringify(adminId),
+        data: JSON.stringify(instructorId),
         success: function (result) {
             if (result.success) {
                 $("#errorMessagePlaceHolder").text(result.message)
