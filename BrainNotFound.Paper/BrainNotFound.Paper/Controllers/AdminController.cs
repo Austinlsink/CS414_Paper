@@ -158,7 +158,7 @@ namespace BrainNotFound.Paper.Controllers
         {
             ApplicationUser instructor = await _userManager.FindByNameAsync(UserName);
             ViewBag.instructor = instructor;
-            return View();
+            return PartialView();
         }
 
         [HttpPost, Route("Instructors/Edit/{UserName}")]

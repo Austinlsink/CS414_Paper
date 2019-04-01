@@ -47,7 +47,7 @@
                                     <td>
 
                                         <a asp-controller="Admin" asp-action="ViewInstructor" asp-route-UserName="@instructor.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                        <a id="EditInstructor" asp-controller="Admin" asp-action="EditInstructor" asp-route-UserName="@instructor.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                        <button type="button" id="EditInstructor" data-toggle="modal" data-target="#EditInstructorModal" value="@instructor.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </button>
                                         <button id="ConfirmDelete" type="submit" data-target="#ConfirmModal" value="@instructor.Id" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
                                     </td>
                                 </tr>
@@ -56,6 +56,18 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Modal for editing an instructor-->
+<div id="EditInstructorModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body" id="EditInstructorPlaceholder">
+
             </div>
         </div>
     </div>
@@ -231,7 +243,7 @@
 
 
 @section scripts
-{
+    {
     <script type="text/javascript" src="~/js/Instructor.js"></script>
 
     <script type="text/javascript" charset="utf8">
