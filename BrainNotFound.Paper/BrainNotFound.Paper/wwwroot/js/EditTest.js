@@ -1,9 +1,9 @@
 ﻿//Constants
 
 // Variables for this Page
-var TotalPoints = 180;
-var NumberOfQuestions = 50;
-var NumberOfSections = 4;
+var TotalPoints = 0;
+var NumberOfQuestions = 0;
+var NumberOfSections = 0;
 
 // Tracks the assigment
 var SectionsAssigned = [];
@@ -23,30 +23,45 @@ Update_TestAssignmentTable();
 init_testSections();
 
 // Fetches all testSections
-function init_testSections()
-{
+function init_testSections() {
     var testId = $("#TestId").val();
     $.ajax({
         url: "/api/CreateTest/GetTestSections/" + testId,
         type: "GET",
         success: function (result) {
             if (result.success) {
-                
+
                 var TestSection = $("#TestSectionTemplate").html();
                 var template = Handlebars.compile(TestSection);
                 result.testSections.forEach(function (testSection) {
                     //console.log(testSection);
                     $("#TestSections").append(template(testSection));
+                    NumberOfSections += 1;
 
+                    // Adds each question to its section
+                    testSection.questions.forEach(function (question) {
+                        var rendered = "";
+                        var TrueFalseQuestionTemplate = $("#TrueFalseQuestionTemplate").html();
+                        var template = Handlebars.compile(TrueFalseQuestionTemplate);
 
+                        rendered += template(question);
+
+                        $("#questionsContainer-" + testSection.sectionId).append(rendered);
+
+                        TotalPoints += question.pointValue;
+                        NumberOfQuestions += 1;
+                        Update_TestStatistics();
+                    });
                 })
+
+                Update_TestStatistics();
             }
             else {
                 console.log(result.errors)
             }
         },
     })
-    
+
 }
 
 // Starts the Datatables for the edit test
@@ -97,16 +112,25 @@ function Update_TestAssignmentTable() {
         success: function (result) {
             if (result.success) {
 
-                var rendered = "";
-                var Row = $("#ScheduleTableRowTemplate").html();
-                var template = Handlebars.compile(Row);
+                // There are any test schedules display them
+                if (result.schedules != 'none') {
+                    var rendered = "";
+                    var Row = $("#ScheduleTableRowTemplate").html();
+                    var template = Handlebars.compile(Row);
 
-                result.schedules.forEach(function (schedule) {
-                    rendered += template(schedule);
-                })
+                    result.schedules.forEach(function (schedule) {
+                        rendered += template(schedule);
+                    })
 
-                $("#TestAssignmentTable > tbody").html(rendered);
-                $("table#TestAssignmentTable").removeClass("hidden");
+                    $("#TestAssignmentTable > tbody").html(rendered);
+                    $("table#TestAssignmentTable").removeClass("hidden");
+                    $("div#NoScheduledTestContainer").addClass("hidden");
+                }
+                else {
+                    $("table#TestAssignmentTable").addClass("hidden");
+                    $("div#NoScheduledTestContainer").removeClass("hidden");
+                }
+
             }
             else {
                 console.log(result.errors)
@@ -188,6 +212,42 @@ function resetNewSchedule() {
 }
 
 // -- Event Handlers
+
+// input fiels change event
+
+// Updates the point value in the database for every question
+$("#TestSections").on("change", ".pointValue", function () {
+    // Gets the infotmetion about the question
+    var questionId = $(this).attr("data-questionId");
+    var currentPointValue = $(this).attr("data-currentPointValue");
+    $(this).attr("data-currentPointValue", pointValue);
+    var pointValue = $(this).val();
+
+    var JsonData = JSON.stringify({ questionId: questionId, pointValue: pointValue })
+    //console.log(JsonData);
+    // send the information to the server
+    $.ajax({
+        url: "/api/CreateTest/UpdateQuestionPointValue",
+        type: "POST",
+        contentType: 'application/json; charset=utf-8',
+        data: JsonData,
+        success: function (result) {
+            if (result.success) {
+
+                TotalPoints -= parseInt(result.oldPointValue);
+                TotalPoints += parseInt(pointValue);
+
+                Update_TestStatistics();
+            }
+            else {
+                console.log(result);
+            }
+            // TODO: Display if Sections were already assigned
+        },
+    })
+
+
+})
 
 // Dropdowns
 // Fetched the list of students from the server
@@ -395,6 +455,9 @@ $("#TestSections").on("click", "button#setQuestionType", function () {
 
                 $(SectionTypeContainer).before(rendered);
                 $(SectionTypeContainer).remove();
+
+                NumberOfSections += 1;
+                Update_TestStatistics();
             }
             else {
                 console.log(result.errors)
@@ -454,7 +517,7 @@ $("#TestSections").on("click", "button.cancelNewQuestion", function () {
 })
 // Adds a question to a section
 $("#TestSections").on("click", "button.addQuestionToSection", function () {
-    var sectionId   = $(this).attr("data-sectionId");
+    var sectionId = $(this).attr("data-sectionId");
     var sectionType = $(this).attr("data-sectionType");
     var rendered = "";
     var templateId = "";
@@ -464,11 +527,7 @@ $("#TestSections").on("click", "button.addQuestionToSection", function () {
             templateId = "#NewTrueFalseQuestionTemplate";
             break;
 
-    }    
-    console.log("SectionId: " + sectionId);
-    console.log("SectionType: " + sectionType);
-    console.log("templateId: " + templateId);
-
+    }
     var timestamp = new Date().getUTCMilliseconds();
     var newQuestion = $(templateId).html();
     var template = Handlebars.compile(newQuestion);
@@ -491,7 +550,7 @@ $("#TestSections").on("click", "button.saveNewQuestion", function () {
     // Getting question data from the view
     var questionContent = $("#TrueFalseContent-" + uuid).val();
     var pointValue = $("#TFPointValue-" + uuid).val();
-    var answer = $("input[name='TFRadioButton-" + uuid + "']:checked").val();
+    var questionAnswer = $("input[name='TFRadioButton-" + uuid + "']:checked").val();
     var newQuestionContainer = $(this).parents(".newQuestionContainer");
 
     // Error checking on question content
@@ -499,9 +558,8 @@ $("#TestSections").on("click", "button.saveNewQuestion", function () {
         $("#TFContentError-" + uuid).removeClass("hidden");
     } else {
         // Submits the data to the server
-        var JsonData = JSON.stringify({ TestSectionId: sectionId, Content: questionContent, PointValue: pointValue, TrueFalseAnswer: answer });
+        var JsonData = JSON.stringify({ testSectionId: sectionId, content: questionContent, pointValue: pointValue, answer: questionAnswer });
 
-        console.log(JsonData);
         $.ajax({
             url: "/api/CreateTest/NewTrueFalseQuestion",
             type: "POST",
@@ -517,6 +575,9 @@ $("#TestSections").on("click", "button.saveNewQuestion", function () {
 
                     $("#questionsContainer-" + sectionId).append(rendered);
                     $(newQuestionContainer).remove();
+                    TotalPoints += result.question.pointValue;
+                    NumberOfQuestions += 1;
+                    Update_TestStatistics();
                 }
                 else {
                     console.log(result)
@@ -526,6 +587,113 @@ $("#TestSections").on("click", "button.saveNewQuestion", function () {
     }
 
 })
+
+// Deletes a Question from a section
+$("#TestSections").on("click", ".deleteQuestion", function () {
+    var questionId = $(this).attr("data-questionId");
+    var JsonData = JSON.stringify({ questionId: questionId });
+
+    $('#confirm-deletion-modal .modal-body').html("<p>Are you sure you want to delete this question?</p>");
+    $("#confirmDeletion").data("questionId", questionId);
+    $("#confirmDeletion").removeData("sectionId");
+
+    $('#confirm-deletion-modal').modal('toggle');
+
+})
+
+// Deletes a test Section
+$("#TestSections").on("click", ".deleteSection", function () {
+    var testSectionId = $(this).attr("data-testSectionId");
+
+    $('#confirm-deletion-modal .modal-body').html("<p>Are you sure you want to delete this section?</p>");
+    $("#confirmDeletion").data("sectionId", testSectionId);
+
+    $('#confirm-deletion-modal').modal('toggle');
+})
+
+// Confirmes the deletion of a section or question
+$("#confirmDeletion").click(function () {
+    if (typeof $("#confirmDeletion").data('sectionId') !== 'undefined') {
+        var sectionId = $(this).data("sectionId");
+        var JsonData = JSON.stringify({ sectionId: sectionId });
+
+        $.ajax({
+            url: "/api/CreateTest/DeleteTestSection",
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            data: JsonData,
+            success: function (result) {
+                if (result.success) {
+                    $(".sectionContainer-" + sectionId).remove();
+                    $('#confirm-deletion-modal').modal('toggle');
+                    // ADD-NOTIFICATION
+                }
+                else {
+                    console.log(result)
+                }
+            }
+        })
+    }
+    else {
+        var questionId = $(this).data("questionId");
+        var JsonData = JSON.stringify({ questionId: questionId });
+        $.ajax({
+            url: "/api/CreateTest/DeleleQuestion",
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            data: JsonData,
+            success: function (result) {
+                if (result.success) {
+                    $("#questionContainer-" + questionId).remove();
+
+                    $('#confirm-deletion-modal').modal('toggle');
+
+                    // ADD-NOTIFICATION
+                }
+                else {
+                    console.log(result)
+                }
+            }
+        })
+    }
+})
+
+// Displays the edit box for a question
+$("#TestSections").on("click", ".editQuestion", function () {
+
+    var questionId = $(this).attr("data-questionId");
+    var pointValue = $("#pointValue-" + questionId).val();
+    var answer = $("#TrueFalseAnswer-" + questionId).text();
+    var content = $("#content-" + questionId).text();
+
+    // Fetch the template
+    var rendered = "";
+    var editQuestionTemplate = $("#EditTrueFalseQuestionTemplate").html();
+    var template = Handlebars.compile(editQuestionTemplate);
+
+    //Apply template
+    rendered += template({ questionId: questionId, pointValue: pointValue, answer: answer, content: content });
+    
+    $("#questionContainer-" + questionId).before(rendered);
+    $("#questionContainer-" + questionId).addClass("hidden");
+
+    // Initialize rdio buttons
+    $('input.flat').iCheck({
+        checkboxClass: 'icheckbox_flat-green',
+        radioClass: 'iradio_flat-green'
+    });
+
+})
+
+$("#TestSections").on("click", ".cancelEditQuestion", function () {
+    var questionId = $(this).attr("data-questionId");
+
+    $(this).parents(".editQuestionContainer").remove();
+    $("#questionContainer-" + questionId).removeClass("hidden");
+
+
+})
+
 // Handles all forms submition buttons
 $(function () {
     $('.post-using-ajax').each(function () {
@@ -560,8 +728,7 @@ $("table#TestAssignmentTable").on("click", ".DeleteSectionSchedule", function ()
         data: sectionScheduleId,
         success: function (result) {
             if (result.success) {
-                console.log(result.message);
-                location.reload();
+                Update_TestAssignmentTable();
             }
             else {
                 console.log(result.error);

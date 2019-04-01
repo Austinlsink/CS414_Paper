@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using BrainNotFound.Paper.Models.BusinessModels;
 using BrainNotFound.Paper.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace BrainNotFound.Paper.api
@@ -46,7 +43,7 @@ namespace BrainNotFound.Paper.api
         public JsonResult NewTrueFalseQuestion([FromBody] JObject jsonData)
         {
             dynamic json = jsonData;
-            long testSectionId = json.TestSectionId;
+            long testSectionId = json.testSectionId;
             var testSection = _context.TestSections.Include(s => s.Test).Where(x => x.TestSectionId == testSectionId).First();
             // Find the instructor who is creating the test
             var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
@@ -58,22 +55,24 @@ namespace BrainNotFound.Paper.api
             else
             {
                 // Create a new question and add it to the DB
-                TrueFalse TFQuestion = new TrueFalse();
-                TFQuestion.Content = json.Content;
-                //TFQuestion.Index = int.Parse((string)json.Index);
-                TFQuestion.PointValue = int.Parse((string)json.PointValue);
-                TFQuestion.TestSectionId = testSectionId;
-                TFQuestion.TrueFalseAnswer = bool.Parse((string)json.TrueFalseAnswer);
-                TFQuestion.QuestionType = QuestionType.TrueFalse;
+                TrueFalse TFQuestion = new TrueFalse
+                {
+                    Content = json.content,
+                    // Index = int.Parse((string)json.Index);
+                    PointValue = int.Parse((string)json.pointValue),
+                    TestSectionId = testSectionId,
+                    TrueFalseAnswer = bool.Parse((string)json.answer),
+                    QuestionType = QuestionType.TrueFalse
+                };
 
                 _context.TrueFalses.Add(TFQuestion);
                 _context.SaveChanges();
 
                 dynamic question = new JObject();
-                question.PointValue = TFQuestion.PointValue;
-                question.Content = TFQuestion.Content;
-                question.Answer = TFQuestion.TrueFalseAnswer;
-                question.QuestionId = TFQuestion.QuestionId;
+                question.pointValue = TFQuestion.PointValue;
+                question.content = TFQuestion.Content;
+                question.answer = TFQuestion.TrueFalseAnswer;
+                question.questionId = TFQuestion.QuestionId;
 
                 return Json(new { success = true, question });
             }
@@ -345,6 +344,8 @@ namespace BrainNotFound.Paper.api
                     NewSection.SectionInstructions = DefaultTestSectionText.Instruction.Essay;
                     sectionHeader = DefaultTestSectionText.Header.Essay;
                     break;
+                default:
+                    return Json(new { success = false, error = "Please select a course" });
             }
 
             test.TestSections.Add(NewSection);
@@ -484,11 +485,12 @@ namespace BrainNotFound.Paper.api
                 testScheduleJObject.TestScheduleId = testSchedule.TestScheduleId;
 
                 schedules.Add(testScheduleJObject);
+                return Json(new { success = true, schedules });
             }
 
+            
 
-
-            return Json(new { success = true, schedules });
+            return Json(new { success = true, schedules = "none" });
         }
 
         // Gets all the students in a section
@@ -546,10 +548,10 @@ namespace BrainNotFound.Paper.api
                             foreach (var question in questions)
                             {
                                 dynamic jquestion = new JObject();
-                                jquestion.QuestionId = question.QuestionId;
-                                jquestion.QuestionId = question.PointValue;
-                                jquestion.QuestionId = question.Content;
-                                jquestion.QuestionId = question.TrueFalseAnswer;
+                                jquestion.questionId = question.QuestionId;
+                                jquestion.pointValue = question.PointValue;
+                                jquestion.content = question.Content;
+                                jquestion.answer = question.TrueFalseAnswer;
 
                                 jquestios.Add(jquestion);
                             }
@@ -585,8 +587,97 @@ namespace BrainNotFound.Paper.api
             {
                 _context.TestSchedules.Remove(sectionSchedule);
                 _context.SaveChanges();
-                return Json(new { success = true, message = "successful" });
+                return Json(new { success = true });
             }
+        }
+
+        // Updates a point poitvalue for a question
+        [HttpPost, Route("UpdateQuestionPointValue")]
+        public JsonResult UpdateQuestionPointValue([FromBody] JObject jsonData)
+        {
+            // Receiving the data
+            dynamic json = jsonData;
+            long questionId = (long) json.questionId;
+            int pointValue = (int) json.pointValue;
+
+            // load the question and instructor
+            var question = _context.Questions.Include(q => q.TestSection).ThenInclude(ts => ts.Test).Where(q => q.QuestionId == questionId).First();
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            var oldPointValue = question.PointValue;
+            // Check if the question belongs to the instructor
+            if (instructor.Id == question.TestSection.Test.InstructorId)
+            {
+                if(pointValue >= 1)
+                {
+                    question.PointValue = pointValue;
+                    _context.SaveChanges();
+                    return Json(new { success = true, oldPointValue });
+                }
+                else
+                {
+                    return Json(new { success = false, error = "The point value must be grater or equal to one" });
+                }
+            }
+            else
+            {
+                return Json(new { success = false, error = "Anathorized action" });
+            }
+        }
+
+        // Deletes a question from a section
+        [HttpPost, Route("DeleleQuestion")]
+        public JsonResult DeleleQuestion([FromBody] JObject jsonData)
+        {
+            // Receiving the data
+            dynamic json = jsonData;
+            long questionId = (long)json.questionId;
+
+            // load the question and instructor
+            var question = _context.Questions.Include(q => q.TestSection).ThenInclude(ts => ts.Test).Where(q => q.QuestionId == questionId).First();
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
+            if (instructor.Id == question.TestSection.Test.InstructorId)
+            {
+                _context.Questions.Remove(question);
+                _context.SaveChanges();
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { success = false, error = "Anathorized action" });
+            }
+            
+        }
+
+        [HttpPost, Route("DeleteTestSection")]
+        public JsonResult DeleteTestSection([FromBody] JObject jsonData)
+        {
+            // Receiving the data
+            dynamic json = jsonData;
+            long sectionId = (long)json.sectionId;
+
+            var section = _context.TestSections
+                .Include(ts => ts.Questions)
+                .Include(ts => ts.Test)
+                .Where(ts => ts.TestSectionId == sectionId)
+                .First();
+
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
+            if (instructor.Id == section.Test.InstructorId)
+            {
+                _context.Questions.RemoveRange(section.Questions);
+                _context.TestSections.Remove(section);
+                _context.SaveChanges();
+
+                return Json(new { success = true });
+            }
+            else
+            {
+
+                return Json(new { success = false, error = "Anathorized action" });
+            }
+           
         }
     }
 }
