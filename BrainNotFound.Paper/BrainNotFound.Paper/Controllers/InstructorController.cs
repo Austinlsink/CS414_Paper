@@ -176,6 +176,15 @@ namespace BrainNotFound.Paper.Controllers
             var sectionsectionMeetingTimeList = _context.SectionMeetingTimes.ToList();
             ViewBag.sectionMeetingTimeList = sectionsectionMeetingTimeList;
 
+            // Find all of the tests for this course
+            var instructorTests = _context.TestSchedules.Include(x => x.Test).ThenInclude(x => x.applicationUser).Where(x => x.Test.applicationUser.Id == instructor.Id).ToList();
+
+            var upcomingTests = instructorTests.Where(x => x.StartTime > DateTime.Now).ToList();
+            var previousTests = instructorTests.Where(x => x.StartTime < DateTime.Now).ToList();
+
+            ViewBag.UpcomingTests = upcomingTests;
+            ViewBag.PreviousTests = previousTests;
+
             return View();
         }
 
@@ -201,8 +210,8 @@ namespace BrainNotFound.Paper.Controllers
             ViewBag.section = section;
 
             // Find all of the instructors and add them to the ViewBag
-            var instructor = await _userManager.GetUsersInRoleAsync("Instructor");
-            ViewBag.instructorList = instructor;
+            var instructorList = await _userManager.GetUsersInRoleAsync("Instructor");
+            ViewBag.instructorList = instructorList;
 
             // Find all of the students and add them to the ViewBag
             var students = await _userManager.GetUsersInRoleAsync("Student");
