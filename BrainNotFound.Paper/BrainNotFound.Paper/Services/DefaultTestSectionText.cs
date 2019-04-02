@@ -23,7 +23,28 @@ namespace BrainNotFound.Paper.Services
             public const string Matching = "Matching";
             public const string FillInTheBlank = "Fill in the Blank";
             public const string Essay = "Essay";
+
+            public static string Get(string questionType)
+            {
+                switch (questionType)
+                {
+                    case QuestionType.TrueFalse:
+                        return TrueFalse;
+                    case QuestionType.Matching:
+                        return Matching;
+                    case QuestionType.FillInTheBlank:
+                        return FillInTheBlank;
+                    case QuestionType.MultipleChoice:
+                        return MultipleChoice;
+                    case QuestionType.Essay:
+                        return Essay;
+                }
+
+                return null;
+            }
         }
+
+
 
     }
 }

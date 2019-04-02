@@ -4,14 +4,16 @@ using BrainNotFound.Paper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BrainNotFound.Paper.Migrations
 {
     [DbContext(typeof(PaperDbContext))]
-    partial class PaperDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190327000134_fixnamemultiplechoiceanswer")]
+    partial class fixnamemultiplechoiceanswer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,7 +37,7 @@ namespace BrainNotFound.Paper.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<DateTime?>("DOB");
+                    b.Property<DateTime>("DOB");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);
@@ -305,8 +307,6 @@ namespace BrainNotFound.Paper.Migrations
                     b.Property<long>("TestSectionId");
 
                     b.HasKey("QuestionId");
-
-                    b.HasIndex("TestSectionId");
 
                     b.ToTable("Questions");
 
@@ -804,14 +804,6 @@ namespace BrainNotFound.Paper.Migrations
                     b.HasOne("BrainNotFound.Paper.Models.BusinessModels.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.Question", b =>
-                {
-                    b.HasOne("BrainNotFound.Paper.Models.BusinessModels.TestSection", "TestSection")
-                        .WithMany("Questions")
-                        .HasForeignKey("TestSectionId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.Section", b =>

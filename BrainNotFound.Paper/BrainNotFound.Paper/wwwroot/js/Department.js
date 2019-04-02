@@ -104,7 +104,6 @@ $("button#CreateDepartment").click(function () {
             else {
                 $("#departmentNameErrorMessage").html(err.errors.DepartmentName[0]);
             }
-
         }
     })
 })

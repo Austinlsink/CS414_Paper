@@ -1,35 +1,35 @@
 ﻿// Global variables
-var instructorId;
+var studentId;
+var username;
 
-// Displays the instructor form to edit a specific admin
-$("button#EditInstructor").click(function () {
+// Displays the admin form to edit a specific admin
+$("button#EditStudent").click(function () {
     var username = $(this).val();
     $.ajax({
-        url: "/Admin/Instructors/Edit/" + username,
+        url: "/Admin/Students/Edit/" + username,
         success: function (result) {
-            $("#EditInstructorPlaceholder").html(result);
+            $("#EditStudentPlaceholder").html(result);
         }
     });
 });
 
 // Saves the changes on the edit form
 $("button#EditSaveChanges").click(function () {
-    var editInstructorForm = $("form#EditInstructorForm");
-    var username = $(this).val();
+    var editStudentForm = $("form#EditStudentForm");
     // Gets the values of the form, and creates an object to be sent to the server
-    var instructor = {};
-    $.each(editInstructorForm.serializeArray(), function (i, field) {
-        instructor[field.name] = field.value;
-        console.log(instructor[field.name]);
+    var student = {};
+    $.each(editStudentForm.serializeArray(), function (i, field) {
+        student[field.name] = field.value;
+        console.log(admin[field.name]);
     });
 
     // Creates, submits, and responds to Ajax Call
     $.ajax({
-        url: "/api/Instructor/SaveChanges/",
+        url: "/api/Student/SaveChanges/",
         type: "POST",
         contentType: "application/json",
         // Data fetched from the form
-        data: JSON.stringify(instructor, username),
+        data: JSON.stringify(student, username),
         success: function (result) {
             // Close the modal window
             console.log(result.message);
@@ -41,40 +41,40 @@ $("button#EditSaveChanges").click(function () {
 
             // Places validation on the First Name Field
             if (typeof err.errors.FirstName === "undefined") {
-                $("#EditInstructorFirstNameErrorMessage").empty();
+                $("#EditStudentFirstNameErrorMessage").empty();
             }
             else {
-                $("#EditInstructorFirstNameErrorMessage").html(err.errors.FirstName[0]);
+                $("#EditStudentFirstNameErrorMessage").html(err.errors.FirstName[0]);
             }
 
             // Places validation on the Last Name Field
             if (typeof err.errors.LastName === "undefined") {
-                $("#EditInstructorLastNameErrorMessage").empty();
+                $("#EditStudentLastNameErrorMessage").empty();
             }
             else {
-                $("#EditInstructorLastNameErrorMessage").html(err.errors.LastName[0]);
+                $("#EditStudentLastNameErrorMessage").html(err.errors.LastName[0]);
             }
         }
     })
 })
 
 // Submits the form information to the server
-$("button#CreateInstructor").click(function () {
-    var newInstructorForm = $("form#NewInstructorForm");
+$("button#CreateStudent").click(function () {
+    var newStudentForm = $("form#NewStudentForm");
 
     // Gets the values of the form, and creates an object to be sent to the server
-    var instructor = {};
-    $.each(newInstructorForm.serializeArray(), function (i, field) {
-        instructor[field.name] = field.value;
+    var student = {};
+    $.each(newStudentForm.serializeArray(), function (i, field) {
+        student[field.name] = field.value;
     });
 
     // Creates, submits, and responds to Ajax Call
     $.ajax({
-        url: "/api/Instructor/New/",
+        url: "/api/Student/New/",
         type: "POST",
         contentType: "application/json",
         // Data fetched from the form
-        data: JSON.stringify(instructor),
+        data: JSON.stringify(student),
         success: function (result) {
             // Close the modal window
             console.log(result.message);
@@ -86,68 +86,69 @@ $("button#CreateInstructor").click(function () {
 
             // Places validation on the First Name Field
             if (typeof err.errors.FirstName === "undefined") {
-                $("#InstructorFirstNameErrorMessage").empty();
+                $("#StudentFirstNameErrorMessage").empty();
             }
             else {
-                $("#InstructorFirstNameErrorMessage").html(err.errors.FirstName[0]);
+                $("#StudentFirstNameErrorMessage").html(err.errors.FirstName[0]);
             }
 
             // Places validation on the Last Name Field
             if (typeof err.errors.LastName === "undefined") {
-                $("#InstructorLastNameErrorMessage").empty();
+                $("#StudentLastNameErrorMessage").empty();
             }
             else {
-                $("#InstructorLastNameErrorMessage").html(err.errors.LastName[0]);
+                $("#StudentLastNameErrorMessage").html(err.errors.LastName[0]);
             }
 
             // Places validation on the Password Field
             if (typeof err.errors.Password === "undefined") {
-                $("#InstructorPasswordErrorMessage").empty();
+                $("#StudentPasswordErrorMessage").empty();
             }
             else {
-                $("#InstructorPasswordErrorMessage").html(err.errors.Password[0]);
+                $("#StudentPasswordErrorMessage").html(err.errors.Password[0]);
             }
         }
     })
 })
 
-// Resets the new instructor form modal if the user cancels it
-$("button#CancelCreateInstructor").click(function () {
-    var newInstructorForm = $('form#NewInstructorForm');
-    newInstructorForm.trigger("reset");
+// Resets the new admin form modal if the user cancels it
+$("button#CancelCreateStudent").click(function () {
+    var newAdminForm = $('form#NewStudentForm');
+    newAdminForm.trigger("reset");
     // Reseting span elements
-    $("#InstructorFirstNameErrorMessage").empty();
-    $("#InstructorLastNameErrorMessage").empty();
-    $("#InstructorPasswordErrorMessage").empty();
+    $("#StudentFirstNameErrorMessage").empty();
+    $("#StudentLastNameErrorMessage").empty();
+    $("#StudentPasswordErrorMessage").empty();
 
     // Reseting input elements
-    document.getElementById("InstructorFirstNameInput").value = "";
-    document.getElementById("InstructorLastNameInput").value = "";
-    document.getElementById("InstructorEmailInput").value = "";
-    document.getElementById("InstructorPhoneInput").value = "";
-    document.getElementById("InstructorAddressInput").value = "";
-    document.getElementById("InstructorCityInput").value = "";
-    document.getElementById("InstructorStateInput").value = "";
-    document.getElementById("InstructorZipInput").value = "";
-    document.getElementById("InstructorDOBInput").value = "";
-    document.getElementById("InstructorPasswordInput").value = "";
+    document.getElementById("FirstNameInput").value = "";
+    document.getElementById("LastNameInput").value = "";
+    document.getElementById("EmailInput").value = "";
+    document.getElementById("PhoneInput").value = "";
+    document.getElementById("AddressInput").value = "";
+    document.getElementById("CityInput").value = "";
+    document.getElementById("StateInput").value = "";
+    document.getElementById("ZipInput").value = "";
+    document.getElementById("DOBInput").value = "";
+    document.getElementById("PasswordInput").value = "";
 });
 
 // Display a confirmation modal if the user wants to delete a department
 $("button#ConfirmDelete").click(function () {
-    instructorId = $(this).val();
+    adminId = $(this).val();
     $("#ConfirmModal").modal("toggle");
 })
 
-// Delete an instructor if the user specifies yes on the confirmation modal
+// Delete an administrator if the user specifies yes on the confirmation modal
 $("button#YesDelete").click(function () {
+    // Gets the department Id to be deleted
     $("#ConfirmModal").modal("hide");
 
     $.ajax({
-        url: "/api/Instructor/Delete/",
+        url: "/api/Student/Delete/",
         type: "POST",
         contentType: 'application/json; charset=utf-8',
-        data: JSON.stringify(instructorId),
+        data: JSON.stringify(adminId),
         success: function (result) {
             if (result.success) {
                 $("#errorMessagePlaceHolder").text(result.message)
@@ -165,6 +166,6 @@ $("button#YesDelete").click(function () {
 })
 
 // Reloads the page when a Course is successfully deleted
-$("button#MessageClose").click(function () {
+$("#MessageClose").click(function () {
     location.reload();
 })

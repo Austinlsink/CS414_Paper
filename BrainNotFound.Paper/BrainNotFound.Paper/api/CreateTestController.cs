@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using BrainNotFound.Paper.Models.BusinessModels;
 using BrainNotFound.Paper.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace BrainNotFound.Paper.api
@@ -19,7 +16,7 @@ namespace BrainNotFound.Paper.api
     {
         #region Initialize controllers
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly PaperDbContext _context; 
+        private readonly PaperDbContext _context;
         /// <summary>
         /// Constructor 
         /// </summary>
@@ -46,36 +43,44 @@ namespace BrainNotFound.Paper.api
         public JsonResult NewTrueFalseQuestion([FromBody] JObject jsonData)
         {
             dynamic json = jsonData;
-            long testSectionId = json.TestSectionId;
+            long testSectionId = json.testSectionId;
             var testSection = _context.TestSections.Include(s => s.Test).Where(x => x.TestSectionId == testSectionId).First();
-
             // Find the instructor who is creating the test
             var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
             if (testSection.Test.InstructorId != instructor.Id)
             {
-                return Json(new { success = false, error = "Instructor not alowed" });
+                return Json(new { success = false, error = "Instructor not allowed" });
             }
             else
             {
                 // Create a new question and add it to the DB
-                TrueFalse TFQuestion = new TrueFalse();
-                TFQuestion.Content = json.Content;
-                //TFQuestion.Index = int.Parse((string)json.Index);
-                TFQuestion.PointValue = int.Parse((string)json.PointValue);
-                TFQuestion.TestSectionId = testSectionId;
-                TFQuestion.TrueFalseAnswer = bool.Parse((string)json.TrueFalseAnswer);
-                TFQuestion.QuestionType = QuestionType.TrueFalse;
+                TrueFalse TFQuestion = new TrueFalse
+                {
+                    Content = json.content,
+                    // Index = int.Parse((string)json.Index);
+                    PointValue = int.Parse((string)json.pointValue),
+                    TestSectionId = testSectionId,
+                    TrueFalseAnswer = bool.Parse((string)json.answer),
+                    QuestionType = QuestionType.TrueFalse
+                };
 
                 _context.TrueFalses.Add(TFQuestion);
                 _context.SaveChanges();
 
-                return Json(new { success = true, question = TFQuestion });
+                dynamic question = new JObject();
+                question.pointValue = TFQuestion.PointValue;
+                question.content = TFQuestion.Content;
+                question.answer = TFQuestion.TrueFalseAnswer;
+                question.questionId = TFQuestion.QuestionId;
+
+                return Json(new { success = true, question });
             }
-            
+
         }
 
         [HttpPost, Route("Matching")]
-        public async Task<IActionResult> GetMatching([FromBody] JObject jsonData)
+        public IActionResult NewMatching([FromBody] JObject jsonData)
         {
 
             return Json(new { success = true });
@@ -87,19 +92,20 @@ namespace BrainNotFound.Paper.api
         /// <param name="jsonData">The object that contains all of the question information</param>
         /// <returns>The question that was created</returns>
         [HttpPost, Route("MultipleChoice")]
-        public async Task<JsonResult> GetMultipleChoice([FromBody] JObject jsonData)
+        public JsonResult NewMultipleChoice([FromBody] JObject jsonData)
         {
             dynamic json = jsonData;
-            JArray MCAnswers = json.MultipleChoiceAnswers;
             long testSectionId = long.Parse(json.TestSectionId);
+            var testSection = _context.TestSections.Include(s => s.Test).Where(x => x.TestSectionId == testSectionId).First();
+            JArray MCAnswers = json.MultipleChoiceAnswers;
 
-            // Verify that the user logged in matches the instructor's id on the testId on the sectionId
-            var instructor = _context.TestSections.Include(s => s.Test).ThenInclude(t => t.applicationUser).Where(x => x.TestSectionId == testSectionId).First();
-            ApplicationUser activeInstructor = await _userManager.GetUserAsync(HttpContext.User);
-
-            // If the instructorId on the question's section's testId matches the instructor logged on,
-            // Add the question to the database
-            if (instructor.Test.applicationUser.Id == activeInstructor.Id)
+            // Find the instructor who is creating the test
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            if (testSection.Test.InstructorId != instructor.Id)
+            {
+                return Json(new { success = false, error = "Instructor not allowed" });
+            }
+            else
             {
                 Question MCQuestion = new Question();
                 MCQuestion.Content = json.Content;
@@ -125,10 +131,6 @@ namespace BrainNotFound.Paper.api
                 _context.SaveChanges();
                 return Json(new { success = true, question = MCQuestion });
             }
-            else
-            {
-                return Json(new { success = false });
-            }
         }
 
         /// <summary>
@@ -137,19 +139,20 @@ namespace BrainNotFound.Paper.api
         /// <param name="jsonData">The object that contains all of the essay question information</param>
         /// <returns>The fill in the blank question that was created</returns>
         [HttpPost, Route("Essay")]
-        public async Task<JsonResult> GetEssay([FromBody] JObject jsonData)
+        public JsonResult NewEssay([FromBody] JObject jsonData)
         {
+
             dynamic json = jsonData;
-
             long testSectionId = long.Parse(json.TestSectionId);
+            var testSection = _context.TestSections.Include(s => s.Test).Where(x => x.TestSectionId == testSectionId).First();
 
-            // Verify that the user logged in matches the instructor's id on the testId on the sectionId
-            var instructor = _context.TestSections.Include(s => s.Test).ThenInclude(t => t.applicationUser).Where(x => x.TestSectionId == testSectionId).First();
-            ApplicationUser activeInstructor = await _userManager.GetUserAsync(HttpContext.User);
-
-            // If the instructorId on the question's section's testId matches the instructor logged on,
-            // Add the question to the database
-            if (instructor.Test.applicationUser.Id == activeInstructor.Id)
+            // Find the instructor who is creating the test
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            if (testSection.Test.InstructorId != instructor.Id)
+            {
+                return Json(new { success = false, error = "Instructor not allowed" });
+            }
+            else
             {
                 Essay EssayQuestion = new Essay();
                 EssayQuestion.Content = json.Content;
@@ -163,11 +166,6 @@ namespace BrainNotFound.Paper.api
                 _context.SaveChanges();
                 return Json(new { success = true, question = EssayQuestion });
             }
-            else
-            {
-                return Json(new { success = false });
-            }
-
         }
 
         /// <summary>
@@ -176,20 +174,21 @@ namespace BrainNotFound.Paper.api
         /// <param name="jsonData">The object that contains all of the fill in the blank question information</param>
         /// <returns>The fill in the blank question that was created</returns>
         [HttpPost, Route("FillInTheBlank")]
-        public async Task<JsonResult> GetFillInTheBlank([FromBody] JObject jsonData)
+        public JsonResult NewFillInTheBlank([FromBody] JObject jsonData)
         {
             dynamic json = jsonData;
+            long testSectionId = long.Parse(json.TestSectionId);
+            var testSection = _context.TestSections.Include(s => s.Test).Where(x => x.TestSectionId == testSectionId).First();
             JArray getAnswers = json.FillInTheBlankAnswer;
             String answers = String.Empty;
-            long testSectionId = long.Parse(json.TestSectionId);
 
-            // Verify that the user logged in matches the instructor's id on the testId on the sectionId
-            var instructor = _context.TestSections.Include(s => s.Test).ThenInclude(t => t.applicationUser).Where(x => x.TestSectionId == testSectionId).First();
-            ApplicationUser activeInstructor = await _userManager.GetUserAsync(HttpContext.User);
-
-            // If the instructorId on the question's section's testId matches the instructor logged on,
-            // Add the question to the database
-            if (instructor.Test.applicationUser.Id == activeInstructor.Id)
+            // Find the instructor who is creating the test
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            if (testSection.Test.InstructorId != instructor.Id)
+            {
+                return Json(new { success = false, error = "Instructor not allowed" });
+            }
+            else
             {
                 FillInTheBlank FITBQuestion = new FillInTheBlank();
                 FITBQuestion.Content = json.Content;
@@ -198,7 +197,7 @@ namespace BrainNotFound.Paper.api
                 FITBQuestion.TestSectionId = long.Parse((string)json.TestSectionId);
                 FITBQuestion.QuestionType = QuestionType.FillInTheBlank;
 
-                foreach(JObject x in answers)
+                foreach (JObject x in answers)
                 {
                     answers += x.ToString() + " ";
                 }
@@ -207,13 +206,20 @@ namespace BrainNotFound.Paper.api
                 _context.SaveChanges();
                 return Json(new { success = true, question = FITBQuestion });
             }
-            else
-            {
-                return Json(new { success = false });
-            }
-
         }
         #endregion get different question types
+
+        /// <summary>
+        /// Allows the instructor to delete a test
+        /// </summary>
+        /// <param name="jsonData">The TestId</param>
+        /// <returns></returns>
+        [HttpPost, Route("DeleteTest")]
+        public JsonResult DeleteTest([FromBody] JObject jsonData)
+        {
+
+            return Json(new { success = true });
+        }
 
         ///Bima says: receiving TestSectionId, delete it return true or false
         [HttpPost, Route("DeleteSectionTestId")]
@@ -229,9 +235,9 @@ namespace BrainNotFound.Paper.api
             var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
             if (testSection.Test.InstructorId != instructor.Id)
             {
-                return Json(new { success = false, error = "Instructor not alowed" });
+                return Json(new { success = false, error = "Instructor not allowed" });
             }
-            
+
             if (testSection != null)
             {
                 _context.TestSections.Remove(testSection);
@@ -243,7 +249,7 @@ namespace BrainNotFound.Paper.api
             {
                 return Json(new { success = false });
             }
-            
+
         }
 
         /// <summary>
@@ -269,9 +275,9 @@ namespace BrainNotFound.Paper.api
 
             if (testSection.Test.InstructorId != instructor.Id)
             {
-                return Json(new { success = false, error = "Instructor not alowed" });
+                return Json(new { success = false, error = "Instructor not allowed" });
             }
-            
+
             if (testSection != null)
             {
                 testSection.SectionInstructions = sectionInfo;
@@ -305,10 +311,10 @@ namespace BrainNotFound.Paper.api
             // TODO: Check if test really belongs to the current teacher
 
             // Find the test and create a section in it
-            
+
             var test = _context.Tests.Find(testId);
             test.TestSections = new List<TestSection>();
-            
+
             var NewSection = new TestSection()
             {
                 QuestionType = questionType,
@@ -316,7 +322,7 @@ namespace BrainNotFound.Paper.api
             };
 
             // Sets the Instuction to the section
-            switch(questionType)
+            switch (questionType)
             {
                 case QuestionType.TrueFalse:
                     NewSection.SectionInstructions = DefaultTestSectionText.Instruction.TrueFalse;
@@ -338,13 +344,15 @@ namespace BrainNotFound.Paper.api
                     NewSection.SectionInstructions = DefaultTestSectionText.Instruction.Essay;
                     sectionHeader = DefaultTestSectionText.Header.Essay;
                     break;
+                default:
+                    return Json(new { success = false, error = "Please select a course" });
             }
-            
+
             test.TestSections.Add(NewSection);
             _context.SaveChanges();
 
 
-            return Json(new { success = true, sectionId = NewSection.TestSectionId, instructions = NewSection.SectionInstructions, sectionType = NewSection.QuestionType, header = sectionHeader});
+            return Json(new { success = true, sectionId = NewSection.TestSectionId, instructions = NewSection.SectionInstructions, sectionType = NewSection.QuestionType, header = sectionHeader });
         }
 
         /// <summary>
@@ -362,19 +370,24 @@ namespace BrainNotFound.Paper.api
             dynamic json = jsonData;
             long testId = json.TestId;
             string startEndDateTime = json.StartEndDateTime;
-            DateTime testDate = Convert.ToDateTime(startEndDateTime.Split(" ").First());
-            bool isTimeUnlimited = bool.Parse((string) json.IsTimeUnlimited);
+            bool isTimeUnlimited = bool.Parse((string)json.IsTimeUnlimited);
             int timeLimit = json.TimeLimit;
             JArray studentIds = json.Students;
             JArray sectionIds = json.Sections;
+
+            // Parsing the date
+            string startDateTime = startEndDateTime.Substring(0, startEndDateTime.IndexOf(" - "));
+            string endDateTime = startEndDateTime.Substring(startEndDateTime.IndexOf(" - ") + 3);
+            DateTime parsedStartDateTime = DateTime.ParseExact(startDateTime, "MM/dd/yyyy hh:mm tt", new CultureInfo("en-US"), DateTimeStyles.None);
+            DateTime parsedEndDateTime = DateTime.ParseExact(endDateTime, "MM/dd/yyyy hh:mm tt", new CultureInfo("en-US"), DateTimeStyles.None);
 
             // Error checking variables
             JObject errorMessages = new JObject();
             int errorCount = 0;
 
-            if (testDate < DateTime.Now)
+            if (parsedStartDateTime < DateTime.Now)
             {
-                errorMessages.Add( new JProperty("DateTimeError", "The test date must be set to today's date or further."));
+                errorMessages.Add(new JProperty("DateTimeError", "The test date must be set to today's date or further."));
                 errorCount++;
             }
             if (timeLimit <= 0)
@@ -384,7 +397,7 @@ namespace BrainNotFound.Paper.api
             }
             if (studentIds.Count <= 0 && sectionIds.Count <= 0)
             {
-                errorMessages.Add(new JProperty("StudentSectionErrorMessage", "The test must be assigned at least one section or at least one student" ));
+                errorMessages.Add(new JProperty("StudentSectionErrorMessage", "The test must be assigned at least one section or at least one student"));
                 errorCount++;
             }
             if (errorCount > 0)
@@ -392,11 +405,6 @@ namespace BrainNotFound.Paper.api
                 return Json(new { success = false, ErrorMessage = errorMessages });
             }
 
-            // Parsing the date
-            string startDateTime = startEndDateTime.Substring(0, startEndDateTime.IndexOf(" - "));
-            string endDateTime = startEndDateTime.Substring(startEndDateTime.IndexOf(" - ") + 3);
-            DateTime parsedStartDateTime = DateTime.ParseExact(startDateTime, "MM/dd/yyyy hh:mm tt", new CultureInfo("en-US"), DateTimeStyles.None);
-            DateTime parsedEndDateTime   = DateTime.ParseExact(endDateTime,   "MM/dd/yyyy hh:mm tt", new CultureInfo("en-US"), DateTimeStyles.None);
 
             // Create the new Schedule
             var newTestSchedule = new TestSchedule()
@@ -452,16 +460,16 @@ namespace BrainNotFound.Paper.api
                 var StudentsAssignedIds = testSchedule.StudentTestAssignments.Select(sta => sta.StudentId).ToList();
 
                 dynamic testScheduleJObject = new JObject();
-                testScheduleJObject.Availability = string.Format("MM / dd / yyyy hh: mm tt", testSchedule.StartTime) + " - " + string.Format("MM / dd / yyyy hh: mm tt", testSchedule.EndTime);
+                testScheduleJObject.Availability = testSchedule.StartTime.ToString("MM / dd / yyyy hh: mm tt") + " - " + testSchedule.EndTime.ToString("MM / dd / yyyy hh: mm tt");
                 testScheduleJObject.TimeLimit = testSchedule.IsTimeUnlimited ? "Unlimited" : testSchedule.TimeLimit.ToString() + " minutes";
 
-               // Checks if all students from a section were assigned
-               List<int> entireSectionsAssigned = new List<int>();
+                // Checks if all students from a section were assigned
+                List<int> entireSectionsAssigned = new List<int>();
                 foreach (Section section in sections)
                 {
                     var sectionStudentsIds = section.Enrollments.Select(e => e.StudentId).ToList();
-                    
-                    if(StudentsAssignedIds.Intersect(sectionStudentsIds).Count() == sectionStudentsIds.Count())
+
+                    if (StudentsAssignedIds.Intersect(sectionStudentsIds).Count() == sectionStudentsIds.Count())
                     {
                         entireSectionsAssigned.Add(section.SectionNumber);
                         StudentsAssignedIds = StudentsAssignedIds.Except(sectionStudentsIds).ToList();
@@ -473,13 +481,18 @@ namespace BrainNotFound.Paper.api
                     testScheduleJObject.Assigmnet += "Sections " + String.Join(", ", entireSectionsAssigned.ToArray());
                 }
 
+                // Sets TestScheduleId
+                testScheduleJObject.TestScheduleId = testSchedule.TestScheduleId;
+
                 schedules.Add(testScheduleJObject);
+                return Json(new { success = true, schedules });
             }
 
             
-            
-            return Json(new {success = true, schedules });
+
+            return Json(new { success = true, schedules = "none" });
         }
+
         // Gets all the students in a section
         [HttpGet, Route("GetStudentsInSection/{SectionId}")]
         public JsonResult GetSection(long SectionId)
@@ -488,7 +501,7 @@ namespace BrainNotFound.Paper.api
             var enrollments = _context.Enrollments.Include(e => e.ApplicationUser).Where(e => e.SectionId == SectionId).ToList();
             List<JObject> students = new List<JObject>();
 
-            foreach(Enrollment enrollment in enrollments)
+            foreach (Enrollment enrollment in enrollments)
             {
                 dynamic student = new JObject();
                 student.FirstName = enrollment.ApplicationUser.FirstName;
@@ -498,6 +511,173 @@ namespace BrainNotFound.Paper.api
             }
 
             return Json(students);
-        }       
+        }
+
+        // Gets all test Section of a test
+        [HttpGet, Route("GetTestSections/{TestId}")]
+        public JsonResult GetTestSections(long TestId)
+        {
+            // Gets the test
+            var test = _context.Tests.Include(t => t.TestSections).Where(t => t.TestId == TestId).First();
+
+            // Find the instructor who is creating the test
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
+            // Check if the test belongs to the logged in instructor
+            if (test.InstructorId == instructor.Id)
+            {
+                var testSections = test.TestSections;
+                List<JObject> jTestSections = new List<JObject>();
+
+                foreach (var testSection in testSections)
+                {
+                    dynamic jTestSection = new JObject();
+                    jTestSection.sectionId = testSection.TestSectionId;
+                    jTestSection.instructions = testSection.SectionInstructions;
+                    jTestSection.sectionType = testSection.QuestionType;
+                    jTestSection.header = DefaultTestSectionText.Header.Get(testSection.QuestionType);
+
+                    //  Fetch the questions for each test section
+
+                    switch (testSection.QuestionType)
+                    {
+                        case QuestionType.TrueFalse:
+                            var questions = _context.TrueFalses.Where(q => q.TestSectionId == testSection.TestSectionId).ToList();
+                            JArray jquestios = new JArray();
+
+                            foreach (var question in questions)
+                            {
+                                dynamic jquestion = new JObject();
+                                jquestion.questionId = question.QuestionId;
+                                jquestion.pointValue = question.PointValue;
+                                jquestion.content = question.Content;
+                                jquestion.answer = question.TrueFalseAnswer;
+
+                                jquestios.Add(jquestion);
+                            }
+
+                            jTestSection.questions = jquestios;
+                            break;
+                    }
+                    jTestSections.Add(jTestSection);
+                }
+
+                return Json(new { success = true, testSections = jTestSections });
+            }
+            else
+            {
+                return Json(new { success = false, error = "Instructor not alowed" });
+            }
+        }
+
+        [HttpPost, Route("DeleteSectionSchedule")]
+        public JsonResult DeleteSectionSchedule([FromBody] long sectionScheduleId)
+        {
+            var sectionSchedule = _context.TestSchedules.Find(sectionScheduleId);
+            var test = _context.Tests.Find(sectionSchedule.TestId);
+
+            // Find the instructor who is creating the test
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
+            if (test.InstructorId != instructor.Id)
+            {
+                return Json(new { success = false, error = "Instructor not allowed" });
+            }
+            else
+            {
+                _context.TestSchedules.Remove(sectionSchedule);
+                _context.SaveChanges();
+                return Json(new { success = true });
+            }
+        }
+
+        // Updates a point poitvalue for a question
+        [HttpPost, Route("UpdateQuestionPointValue")]
+        public JsonResult UpdateQuestionPointValue([FromBody] JObject jsonData)
+        {
+            // Receiving the data
+            dynamic json = jsonData;
+            long questionId = (long) json.questionId;
+            int pointValue = (int) json.pointValue;
+
+            // load the question and instructor
+            var question = _context.Questions.Include(q => q.TestSection).ThenInclude(ts => ts.Test).Where(q => q.QuestionId == questionId).First();
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            var oldPointValue = question.PointValue;
+            // Check if the question belongs to the instructor
+            if (instructor.Id == question.TestSection.Test.InstructorId)
+            {
+                if(pointValue >= 1)
+                {
+                    question.PointValue = pointValue;
+                    _context.SaveChanges();
+                    return Json(new { success = true, oldPointValue });
+                }
+                else
+                {
+                    return Json(new { success = false, error = "The point value must be grater or equal to one" });
+                }
+            }
+            else
+            {
+                return Json(new { success = false, error = "Anathorized action" });
+            }
+        }
+
+        // Deletes a question from a section
+        [HttpPost, Route("DeleleQuestion")]
+        public JsonResult DeleleQuestion([FromBody] JObject jsonData)
+        {
+            // Receiving the data
+            dynamic json = jsonData;
+            long questionId = (long)json.questionId;
+
+            // load the question and instructor
+            var question = _context.Questions.Include(q => q.TestSection).ThenInclude(ts => ts.Test).Where(q => q.QuestionId == questionId).First();
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
+            if (instructor.Id == question.TestSection.Test.InstructorId)
+            {
+                _context.Questions.Remove(question);
+                _context.SaveChanges();
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { success = false, error = "Anathorized action" });
+            }
+            
+        }
+
+        [HttpPost, Route("DeleteTestSection")]
+        public JsonResult DeleteTestSection([FromBody] JObject jsonData)
+        {
+            // Receiving the data
+            dynamic json = jsonData;
+            long sectionId = (long)json.sectionId;
+
+            var section = _context.TestSections
+                .Include(ts => ts.Questions)
+                .Include(ts => ts.Test)
+                .Where(ts => ts.TestSectionId == sectionId)
+                .First();
+
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
+            if (instructor.Id == section.Test.InstructorId)
+            {
+                _context.Questions.RemoveRange(section.Questions);
+                _context.TestSections.Remove(section);
+                _context.SaveChanges();
+
+                return Json(new { success = true });
+            }
+            else
+            {
+
+                return Json(new { success = false, error = "Anathorized action" });
+            }
+           
+        }
     }
 }
