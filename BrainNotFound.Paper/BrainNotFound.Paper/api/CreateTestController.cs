@@ -210,6 +210,48 @@ namespace BrainNotFound.Paper.api
         #endregion get different question types
 
         /// <summary>
+        /// Update the TrueFalse question
+        /// </summary>
+        /// <param name="questionId"></param>
+        /// <param name="pointValue"></param>
+        /// <param name="content"></param>
+        /// <param name="answer"></param>
+        /// <returns></returns>
+        [HttpPost, Route("UpdateTrueFalseQuestion")]
+        public JsonResult UpdateTrueFalseQuestion([FromBody] JObject jsonData)
+        {
+            dynamic json = jsonData;
+            long questionId = (long) json.questionId;
+            int pointValue = (int) json.pointValue;
+            string content = json.content;
+            bool answer = (bool) json.answer;
+
+            TrueFalse question = _context.TrueFalses
+                .Include(tf => tf.TestSection)
+                    .ThenInclude(ts => ts.Test)
+                .Where(tfq => tfq.QuestionId == questionId)
+                .First();
+
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
+            
+            if (question.TestSection.Test.InstructorId == instructor.Id)
+            {
+                question.PointValue = pointValue;
+                question.Content = content;
+                question.TrueFalseAnswer = answer;
+
+                _context.TrueFalses.Update(question);
+                _context.SaveChanges();
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { success = false, error = "Instructor invalid." });
+            }
+        }
+
+        /// <summary>
         /// Allows the instructor to delete a test
         /// </summary>
         /// <param name="jsonData">The TestId</param>

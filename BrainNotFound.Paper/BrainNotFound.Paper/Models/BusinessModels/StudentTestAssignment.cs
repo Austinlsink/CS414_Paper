@@ -17,7 +17,7 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         [ForeignKey("StudentId")]
 		public ApplicationUser ApplicationUser { get; set; }
 
-        //public bool ManualGradingRequired { get; set; } // Added by Kara 3/30
+        public bool ManualGradingRequired { get; set; } // Added by Kara 3/30
 		public bool Submitted { get; set; }
         public bool Signed { get; set; }
 		public float Grade { get; set; }

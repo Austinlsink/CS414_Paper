@@ -8,6 +8,7 @@ using BrainNotFound.Paper.Models;
 using Microsoft.AspNetCore.Authorization;
 using BrainNotFound.Paper.Models.BusinessModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace BrainNotFound.Paper.Controllers
 {
@@ -129,6 +130,18 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("Tests")]
         public IActionResult Tests()
         {
+            var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            var studentTestAssignments = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).Where(x => x.StudentId == student.Id).ToList();
+
+            var upcomingTests = studentTestAssignments.Where(sta => sta.TestSchedule.StartTime > DateTime.Now).Select(sta => sta.TestSchedule.Test).ToList();
+            var previousTests = studentTestAssignments.Where(sta => sta.TestSchedule.StartTime < DateTime.Now).Select(sta => sta.TestSchedule.Test).ToList();
+
+            var courses = _context.Courses.ToList();
+            var departments = _context.Departments.ToList();
+            ViewBag.UpcomingTests = upcomingTests;
+            ViewBag.PreviousTests = previousTests;
+            ViewBag.Courses = courses;
+            ViewBag.Departments = departments;
             return View();
         }
 

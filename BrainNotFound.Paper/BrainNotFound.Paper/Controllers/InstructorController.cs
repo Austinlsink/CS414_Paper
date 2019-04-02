@@ -239,12 +239,41 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("Tests")]
         public IActionResult Tests()
         {
-            
             var Instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
             var tests = _context.Tests.Where(t => t.InstructorId == Instructor.Id);
+            var testSchedules = _context.TestSchedules.ToList();
+
+            List<Test> previousTests = new List<Test>();
+            List<Test> upcomingTests = new List<Test>();
+
+            foreach(Test t in tests)
+            {
+                foreach(TestSchedule ts in testSchedules)
+                {
+                    if (t.TestId == ts.TestId)
+                    {
+                        if(ts.EndTime < DateTime.Now)
+                        {
+                            if (!previousTests.Contains(t))
+                            {
+                                previousTests.Add(t);
+                            }
+                        }
+                        else
+                        {
+                            if (!upcomingTests.Contains(t))
+                            {
+                                upcomingTests.Add(t);
+                            }
+                        }
+                    }
+                }
+            }
+
             var courses = _context.Courses.ToList();
             var departments = _context.Departments.ToList();
-
+            ViewBag.UpcomingTests = upcomingTests;
+            ViewBag.PreviousTests = previousTests;
             ViewBag.Tests = tests;
             ViewBag.Courses = courses;
             ViewBag.Departments = departments;

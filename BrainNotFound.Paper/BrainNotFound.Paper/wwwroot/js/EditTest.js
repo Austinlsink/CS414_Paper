@@ -663,9 +663,8 @@ $("#TestSections").on("click", ".editQuestion", function () {
 
     var questionId = $(this).attr("data-questionId");
     var pointValue = $("#pointValue-" + questionId).val();
-    var answer = $("#TrueFalseAnswer-" + questionId).text();
+    var answer = $("#TrueFalseAnswer-" + questionId).attr("data-answer") == "true";
     var content = $("#content-" + questionId).text();
-
     // Fetch the template
     var rendered = "";
     var editQuestionTemplate = $("#EditTrueFalseQuestionTemplate").html();
@@ -673,7 +672,7 @@ $("#TestSections").on("click", ".editQuestion", function () {
 
     //Apply template
     rendered += template({ questionId: questionId, pointValue: pointValue, answer: answer, content: content });
-    
+    console.log(answer);
     $("#questionContainer-" + questionId).before(rendered);
     $("#questionContainer-" + questionId).addClass("hidden");
 
@@ -685,15 +684,63 @@ $("#TestSections").on("click", ".editQuestion", function () {
 
 })
 
+// Closes the edit question state
 $("#TestSections").on("click", ".cancelEditQuestion", function () {
     var questionId = $(this).attr("data-questionId");
-
     $(this).parents(".editQuestionContainer").remove();
     $("#questionContainer-" + questionId).removeClass("hidden");
-
-
 })
 
+// Saves the edited information on the database
+$("#TestSections").on("click", ".saveEdittedTrueFalseQuestion", function () {
+    var questionId = $(this).attr("data-questionId");
+    var pointValue = $("#pointValue-" + questionId).val();
+    var content = $("#TrueFalseContent-" + questionId).val();
+    var saveButton = this;
+    var answer = $("input[name='TFRadioButton-" + questionId + "']:checked").val();
+
+    // Error checks for empty Question content
+    if (content.length > 0) {
+
+        var JsonData = JSON.stringify({ questionId: questionId, content: content, pointValue: pointValue, answer: answer });
+
+        console.log(JsonData);
+        $.ajax({
+            url: "/api/CreateTest/UpdateTrueFalseQuestion",
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            data: JsonData,
+            success: function (result) {
+                if (result.success) {
+                    $(saveButton).parents(".editQuestionContainer").remove();
+
+
+                    // Updates the question
+                    $("#questionContainer-" + questionId).removeClass("hidden");
+                    $("#pointValue-" + questionId).val(pointValue);
+                    $("#content-" + questionId).text(content);
+                    $("#TrueFalseAnswer-" + questionId).attr("data-answer", answer);
+                    if (answer == "true") {
+                        $("#TrueFalseAnswer-" + questionId).removeClass("label-danger").addClass("label-success").text("True");
+                    } else {
+                        $("#TrueFalseAnswer-" + questionId).removeClass("label-success").addClass("label-danger").text("False");
+                    }
+
+                    // ADD-NOTIFICATION
+                }
+                else {
+                    console.log(result)
+                }
+            }
+        })
+
+    } else {
+        $("TFContentError-" + questionId).removeClass("hidden");
+    }
+
+
+    // TODO: UpdateTrueFalseQuestion -> QuestionId, Point value, content, bool ansewer
+})
 // Handles all forms submition buttons
 $(function () {
     $('.post-using-ajax').each(function () {

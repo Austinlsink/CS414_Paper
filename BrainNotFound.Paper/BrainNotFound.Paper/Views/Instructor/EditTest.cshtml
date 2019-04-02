@@ -485,7 +485,7 @@
                     </div>
                     <div class="form-group col-md-3 col-sm-3 col-xs-12">
                         <p>&nbsp;</p>
-                        <button type="button" class="pull-right btn btn-primary btn-md saveNewQuestion" data-sectionId="{{SectionId}}" data-uuid="{{timeStamp}}" data-questionType="{{QuestionType}}">Save</button>
+                        <button type="button" class="pull-right btn btn-primary btn-md saveNewQuestion" data-sectionId="{{SectionId}}" data-uuid="{{timeStamp}}" data-questionType="{{QuestionType}}">Create</button>
                         <button type="button" class="pull-right btn btn-danger btn-md cancelNewQuestion">Cancel</button>
                     </div>
                 </div>
@@ -496,10 +496,10 @@
 
 
     <!-- Edit TrueFalse Question Template-->
-        <!-- Parameters: questionId, pointValue, content, answer-->
+    <!-- Parameters: questionId, pointValue, content, answer-->
+    <!--Edit True/False Question Start-->
     <script type="text/x-handlebars-template" id="EditTrueFalseQuestionTemplate">
         <div class="editQuestionContainer">
-            <!--Edit True/False Question Start-->
             <div class="ln_solid"></div>
             <div class="row well">
                 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -526,18 +526,17 @@
                     </div>
                     <div class="form-group col-md-3 col-sm-3 col-xs-12">
                         <p>&nbsp;</p>
-                        <button type="button" class="pull-right btn btn-primary btn-md saveEdittedQuestion" data-questionId="{{questionId}}">Save</button>
-                        <button type="button" class="pull-right btn btn-danger btn-md cancelEditQuestion"  data-questionId="{{questionId}}">Cancel</button>
+                        <button type="button" class="pull-right btn btn-primary btn-md saveEdittedQuestion" data-questionId="{{questionId}}">Update</button>
+                        <button type="button" class="pull-right btn btn-danger btn-md cancelEditQuestion" data-questionId="{{questionId}}">Cancel</button>
                     </div>
                 </div>
             </div>
         </div>
-        <!--Edit True/False Question End-->
     </script>
-
+    <!--Edit True/False Question End-->
+    <!--True False Question Start-->
     <script type="text/x-handlebars-template" id="TrueFalseQuestionTemplate">
         <div id="questionContainer-{{questionId}}">
-            <!--True False Question Start-->
             <div class="ln_solid"></div>
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -549,9 +548,9 @@
                     </div>
                     <div class="form-group col-md-3 col-sm-3 col-xs-12">
                         {{#if answer}}
-                        <span id="TrueFalseAnswer-{{questionId}}" style="color:white" class="label label-success">True</span>
+                        <span id="TrueFalseAnswer-{{questionId}}" data-answer="true" style="color:white" class="label label-success">True</span>
                         {{else}}
-                        <span id="TrueFalseAnswer-{{questionId}}" style="color:white" class="label label-danger">False</span>
+                        <span id="TrueFalseAnswer-{{questionId}}" data-answer="false" style="color:white" class="label label-danger">False</span>
                         {{/if}}
 
                         <ul class="nav navbar-right panel_toolbox">
@@ -564,6 +563,103 @@
                 </div>
             </div>
         </div>
-        <!--True False Question End-->
     </script>
+    <!--True False Question End-->
+    <!--Multiple Choice Question Start-->
+    <script type="text/x-handlebars-template" id="MultipleChoiceQuestionTemplate">
+        <div id="questionContainer-{{questionId}}">
+            <div class="ln_solid"></div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-md-1 col-sm-1 col-xs-3">
+                        <input type="number" id="pointValue-{{questionId}}" data-questionId="{{questionId}}" value="{{pointValue}}" min="1" class="form-group form-control pointValue">
+                    </div>
+                    <div class="col-md-9 col-sm-9 col-xs-11">
+                        <p id="content-{{questionId}}">{{content}}</p>
+                    </div>
+                    <div class="form-group col-md-2 col-sm-2 col-xs-12">
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="deleteQuestion" data-questionId="{{questionId}}"><i class="fa fa-trash-o"></i></a></li>
+                            <li><a class="editQuestion" data-questionId="{{questionId}}"><i class="fa fa-edit"></i></a></li>
+                            <li><a class=""><i class="fa fa-chevron-up"></i></a></li>
+                            <li><a class=""><i class="fa fa-chevron-down"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="multipleChoiceAnswersContainer-{{questionId}}">
+                <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                    <!--BIMA: make sure to not allow anything less than two options-->
+                    {{if isCorrect}}
+                    <p class="bg-green-light" id="content-{{questionId}}">{{content}}</p><br>
+                    {{else}}
+                    <p class="bg-red-light" id="content-{{questionId}}">{{content}}</p><br>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </script>
+    <!--Multiple Choice Question End-->
+    <!--Edit Multiple Choice Question Start-->
+    <script type="text/x-handlebars-template" id="EditMultipleChoiceQuestionTemplate">
+        <div id="questionContainer-{{questionId}}">
+            <div class="ln_solid"></div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-md-1 col-sm-1 col-xs-3">
+                        <p>Points:</p>
+                        <input type="number" placeholder="pts" min="1" class="form-group form-control" id="MCPointValue-{{questionId}}" value="{{pointValue}}">
+                    </div>
+                    <div class="form-group col-md-11 col-sm-11 col-xs-12">
+                        <p>Question: </p>
+                        <input type="text" placeholder="Enter question text" class="form-control " id="MultipleChoiceContent-{{questionId}}" value="{{content}}" />
+                        <span class="text-danger hidden" id="MCContentError-{{questionId}}">Please enter a question</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-md-1 col-sm-1 col-xs-1">
+                        <input style="margin-top:12px" class="pull-right form-check-input" type="checkbox" name="foo" value="" id="defaultCheck1">
+                    </div>
+                    <div class="form-group col-md-10 col-sm-10 col-xs-10">
+                        <input type="text" placeholder="Enter question text here" class="form-control">
+                    </div>
+                    <div class="form-group col-md-1 col-sm-1 col-xs-1">
+                        <a style="margin-top:8px" class="pull-right"><i class="fa fa-trash-o"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-md-1 col-sm-1 col-xs-1">
+                        <input style="margin-top:12px" class="pull-right form-check-input" type="checkbox" name="foo" value="" id="defaultCheck1">
+                    </div>
+                    <div class="form-group col-md-10 col-sm-10 col-xs-10">
+                        <input type="text" placeholder="Enter question text here" class="form-control">
+                    </div>
+                    <div class="form-group col-md-1 col-sm-1 col-xs-1">
+                        <a style="margin-top:8px" class="pull-right"><i class="fa fa-trash-o"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group col-md-11 col-sm-11 col-xs-11"></div>
+                    <div class="form-group col-md-1 col-sm-1 col-xs-1">
+                        <a style="margin-top:8px" class="pull-right"><i class="fa fa-plus"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="ln_solid"></div>
+            <div class="row">
+                <div class="form-group col-md-3 col-sm-3 col-xs-12">
+                    <p>&nbsp;</p>
+                    <button type="button" class="pull-right btn btn-primary btn-md saveEdittedQuestion" data-questionId="{{questionId}}">Update</button>
+                    <button type="button" class="pull-right btn btn-danger btn-md cancelEditQuestion" data-questionId="{{questionId}}">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </script>
+    <!--Edit Multiple Choice Question End-->
 }
