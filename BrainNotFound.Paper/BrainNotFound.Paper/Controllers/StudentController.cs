@@ -118,15 +118,20 @@ namespace BrainNotFound.Paper.Controllers
             var sectionMeetingTimeList = _context.SectionMeetingTimes.ToList();
             ViewBag.sectionMeetingTimeList = sectionMeetingTimeList;
 
+            // Find all of the tests for this course
+            var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            var studentTestAssignments = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).Where(x => x.StudentId == student.Id).ToList();
+
+            var upcomingTests = studentTestAssignments.Where(sta => sta.TestSchedule.StartTime > DateTime.Now).Select(sta => sta.TestSchedule.Test).Where(sta => sta.CourseId == course.CourseId).ToList();
+            var previousTests = studentTestAssignments.Where(sta => sta.TestSchedule.StartTime < DateTime.Now).Select(sta => sta.TestSchedule.Test).Where(sta => sta.CourseId == course.CourseId).ToList();
+
+            ViewBag.UpcomingTests = upcomingTests;
+            ViewBag.PreviousTests = previousTests;
+
             return View();
         }
 
-        [HttpGet, Route("Grades")]
-        public IActionResult Grades()
-        {
-            return View();
-        }
-
+        #region Test Controllers
         [HttpGet, Route("Tests")]
         public IActionResult Tests()
         {
@@ -161,6 +166,13 @@ namespace BrainNotFound.Paper.Controllers
 
         [HttpGet, Route("Tests/ReviewTest")]
         public IActionResult ReviewTest()
+        {
+            return View();
+        }
+        #endregion Test Controllers
+
+        [HttpGet, Route("Grades")]
+        public IActionResult Grades()
         {
             return View();
         }

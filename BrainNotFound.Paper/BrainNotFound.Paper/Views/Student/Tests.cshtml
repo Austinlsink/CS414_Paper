@@ -6,6 +6,7 @@
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
+
             <div class="x_title">
                 <h2><i class="fa fa-file-text"></i> Upcoming Tests</h2>
                 <ul class="nav navbar-right panel_toolbox">
@@ -13,29 +14,102 @@
                 </ul>
                 <div class="clearfix"></div>
             </div>
-            <div class="x_content">
-                <p>Click checkbox to select multiple courses.</p>
-                <div class="table-responsive">
-                    <table class="table table-striped jambo_table bulk_action ">
-                        <thead>
-                            <tr class="headings">
-                                <th>
-                                    <input type="checkbox" id="check-all" class="flat">
-                                </th>
-                                <th class="column-title">Name </th>
-                                <th class="column-title">Course</th>
-                                <th class="column-title">Time</th>
-                                <th class="column-title no-link last">
-                                    <span class="nobr">Action</span>
-                                </th>
-                                <th class="bulk-actions" colspan="7">
-                                    <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (Test test in ViewBag.UpcomingTests)
-                            {
+            @if (ViewBag.UpcomingTests.Count > 0)
+            {
+                <div class="x_content">
+                    <p>Click checkbox to select multiple courses.</p>
+                    <div class="table-responsive">
+                        <table class="table table-striped jambo_table bulk_action ">
+                            <thead>
+                                <tr class="headings">
+                                    <th>
+                                        <input type="checkbox" id="check-all" class="flat">
+                                    </th>
+                                    <th class="column-title">Name </th>
+                                    <th class="column-title">Course</th>
+                                    <th class="column-title">Time</th>
+                                    <th class="column-title no-link last">
+                                        <span class="nobr">Action</span>
+                                    </th>
+                                    <th class="bulk-actions" colspan="7">
+                                        <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (Test test in ViewBag.UpcomingTests)
+                                {
+                                    <tr class="odd pointer">
+                                        <td class="a-center ">
+                                            <input type="checkbox" class="flat" name="table_records">
+                                        </td>
+                                        <td class=" ">@test.TestName</td>
+                                        @{
+                                            string DepartmentCodeAndCourseCode;
+                                            List<Course> courses = ViewBag.Courses;
+                                            List<Department> departments = ViewBag.Departments;
+                                            Course currentCourse = courses.Where(c => c.CourseId == test.CourseId).First();
+                                            Department currentDepartment = departments.Where(d => d.DepartmentId == currentCourse.DepartmentId).First();
+                                            DepartmentCodeAndCourseCode = currentDepartment.DepartmentCode + " " + currentCourse.CourseCode;
+
+                                        }
+                                        <td class=" ">@DepartmentCodeAndCourseCode</td>
+                                        <td class=" ">@String.Format("{0:f}", test.TestSchedules.Select(x => x.StartTime).First())</td>
+                                        <td class=" last">
+                                            <a class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            }
+            else
+            {
+                <p>There are no upcoming tests to be displayed</p>
+            }
+        </div>
+    </div>
+</div>
+
+<!--View all previous tests-->
+<div class="x_panel">
+
+
+    <div class="x_title">
+        <h2><i class="fa fa-file-text"></i> Previous Tests</h2>
+        <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+    @if (ViewBag.PreviousTests.Count > 0)
+    {
+        <div class="x_content">
+            <p>Click checkbox to select multiple courses.</p>
+            <div class="table-responsive">
+                <table class="table table-striped jambo_table bulk_action ">
+                    <thead>
+                        <tr class="headings">
+                            <th>
+                                <input type="checkbox" id="check-all" class="flat">
+                            </th>
+                            <th class="column-title">Name </th>
+                            <th class="column-title">Course</th>
+                            <th class="column-title">Time</th>
+                            <th class="column-title no-link last">
+                                <span class="nobr">Action</span>
+                            </th>
+                            <th class="bulk-actions" colspan="7">
+                                <a class="antoo" style="color:#fff; if;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Test test in ViewBag.PreviousTests)
+                        {
                             <tr class="odd pointer">
                                 <td class="a-center ">
                                     <input type="checkbox" class="flat" name="table_records">
@@ -56,72 +130,15 @@
                                     <a class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                 </td>
                             </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-
+                        }
+                    </tbody>
+                </table>
             </div>
+
         </div>
-    </div>
-</div>
-
-<!--View all previous tests-->
-<div class="x_panel">
-    <div class="x_title">
-        <h2><i class="fa fa-file-text"></i> Previous Tests</h2>
-        <ul class="nav navbar-right panel_toolbox">
-            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-        </ul>
-        <div class="clearfix"></div>
-    </div>
-    <div class="x_content">
-        <p>Click checkbox to select multiple courses.</p>
-        <div class="table-responsive">
-            <table class="table table-striped jambo_table bulk_action ">
-                <thead>
-                    <tr class="headings">
-                        <th>
-                            <input type="checkbox" id="check-all" class="flat">
-                        </th>
-                        <th class="column-title">Name </th>
-                        <th class="column-title">Course</th>
-                        <th class="column-title">Time</th>
-                        <th class="column-title no-link last">
-                            <span class="nobr">Action</span>
-                        </th>
-                        <th class="bulk-actions" colspan="7">
-                            <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (Test test in ViewBag.PreviousTests)
-                    {
-                        <tr class="odd pointer">
-                            <td class="a-center ">
-                                <input type="checkbox" class="flat" name="table_records">
-                            </td>
-                            <td class=" ">@test.TestName</td>
-                            @{
-                                string DepartmentCodeAndCourseCode;
-                                List<Course> courses = ViewBag.Courses;
-                                List<Department> departments = ViewBag.Departments;
-                                Course currentCourse = courses.Where(c => c.CourseId == test.CourseId).First();
-                                Department currentDepartment = departments.Where(d => d.DepartmentId == currentCourse.DepartmentId).First();
-                                DepartmentCodeAndCourseCode = currentDepartment.DepartmentCode + " " + currentCourse.CourseCode;
-
-                            }
-                            <td class=" ">@DepartmentCodeAndCourseCode</td>
-                            <td class=" ">@String.Format("{0:f}", test.TestSchedules.Select(x => x.StartTime).First())</td>
-                            <td class=" last">
-                                <a class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-
-    </div>
+    }
+    else
+    {
+        <p>There are no previous tests to be displayed.</p>
+    }
 </div>
