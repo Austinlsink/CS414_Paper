@@ -225,6 +225,15 @@ namespace BrainNotFound.Paper.Controllers
             var sectionMeetingTimeList = _context.SectionMeetingTimes.ToList();
             ViewBag.sectionMeetingTimeList = sectionMeetingTimeList;
 
+            // Find all of the tests for this course
+            var instructor = await _userManager.GetUserAsync(HttpContext.User);
+            var instructorTests = _context.TestSchedules.Include(x => x.Test).ThenInclude(x => x.applicationUser).Where(x => x.Test.applicationUser.Id == instructor.Id).ToList();
+
+            var upcomingTests = instructorTests.Where(x => x.StartTime > DateTime.Now).ToList();
+            var previousTests = instructorTests.Where(x => x.StartTime < DateTime.Now).ToList();
+
+            ViewBag.UpcomingTests = upcomingTests;
+            ViewBag.PreviousTests = previousTests;
             return View();
         }
 
