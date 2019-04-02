@@ -92,12 +92,9 @@
 
                     <p>Click checkbox to select multiple Students.</p>
                     <div class="table-responsive">
-                        <table class="table table-striped jambo_table bulk_action ">
+                        <table id="StudentTable" class="table table-striped jambo_table bulk_action ">
                             <thead>
                                 <tr class="headings">
-                                    <th>
-                                        <input type="checkbox" id="check-all" class="flat">
-                                    </th>
                                     <th class="column-title">First Name </th>
                                     <th class="column-title">Last name </th>
                                     <th class="column-title">Classification </th>
@@ -119,9 +116,6 @@
                                         if (s.Id == e.StudentId && e.SectionId == ViewBag.section.SectionId)
                                         {
                                             <tr class="odd pointer">
-                                                <td class="a-center ">
-                                                    <input type="checkbox" class="flat" name="table_records">
-                                                </td>
                                                 <td class=" ">@s.FirstName </td>
                                                 <td class=" ">@s.LastName </td>
                                                 <td class=" ">@s.Classification </td>
@@ -143,3 +137,18 @@
     </div>
 </div>
 
+@section scripts
+    {
+    <script type="text/javascript" charset="utf8">
+        $(document).ready(function () {
+            $('#StudentTable').DataTable({
+                "order": [0, 'asc'],
+                "columnDefs": [
+                    { "orderable": false, "targets": [3] }
+                ],
+                "sScrollY": "500px"
+            });
+        });
+    </script>
+
+}
