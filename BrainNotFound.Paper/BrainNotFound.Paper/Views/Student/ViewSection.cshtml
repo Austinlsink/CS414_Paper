@@ -82,12 +82,9 @@
                 <div class="x_content">
                     <p>Click checkbox to select multiple courses.</p>
                     <div class="table-responsive">
-                        <table class="table table-striped jambo_table bulk_action ">
+                        <table id="UpcomingTestsTable" class="table table-striped jambo_table bulk_action ">
                             <thead>
                                 <tr class="headings">
-                                    <th>
-                                        <input type="checkbox" id="check-all" class="flat">
-                                    </th>
                                     <th class="column-title">Name </th>
                                     <th class="column-title">Course</th>
                                     <th class="column-title">Time</th>
@@ -103,9 +100,6 @@
                                 @foreach (Test test in ViewBag.UpcomingTests)
                                 {
                                     <tr class="odd pointer">
-                                        <td class="a-center ">
-                                            <input type="checkbox" class="flat" name="table_records">
-                                        </td>
                                         <td class=" ">@test.TestName</td>
 
                                         <td class=" ">@ViewBag.department.DepartmentCode @ViewBag.course.CourseCode</td>
@@ -143,12 +137,9 @@
         <div class="x_content">
             <p>Click checkbox to select multiple courses.</p>
             <div class="table-responsive">
-                <table class="table table-striped jambo_table bulk_action ">
+                <table id="PreviousTestsTable" class="table table-striped jambo_table bulk_action ">
                     <thead>
                         <tr class="headings">
-                            <th>
-                                <input type="checkbox" id="check-all" class="flat">
-                            </th>
                             <th class="column-title">Name </th>
                             <th class="column-title">Course</th>
                             <th class="column-title">Time</th>
@@ -164,9 +155,6 @@
                         @foreach (Test test in ViewBag.PreviousTests)
                         {
                             <tr class="odd pointer">
-                                <td class="a-center ">
-                                    <input type="checkbox" class="flat" name="table_records">
-                                </td>
                                 <td class=" ">@test.TestName</td>
                                 <td class=" ">@ViewBag.department.DepartmentCode @ViewBag.course.CourseCode</td>
                                 <td class=" ">@String.Format("{0:f}", test.TestSchedules.Select(x => x.StartTime).First())</td>
@@ -186,3 +174,30 @@
         <p>There are no previous tests to be displayed.</p>
     }
 </div>
+
+@section scripts
+    {
+    <!--Datatables to display the upcoming tests-->
+    <script type="text/javascript" charset="utf8">
+        $(document).ready(function () {
+            $('#UpcomingTestsTable').DataTable({
+                "order": [0, 'asc'],
+                "columnDefs": [
+                    { "orderable": false, "targets": [3] }
+                ],
+            });
+        });
+    </script>
+
+    <!--Datatables to display the previous tests-->
+    <script type="text/javascript" charset="utf8">
+        $(document).ready(function () {
+            $('#PreviousTestsTable').DataTable({
+                "order": [0, 'asc'],
+                "columnDefs": [
+                    { "orderable": false, "targets": [3] }
+                ],
+            });
+        });
+    </script>
+}

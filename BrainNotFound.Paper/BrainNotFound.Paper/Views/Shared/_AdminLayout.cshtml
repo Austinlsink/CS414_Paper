@@ -74,7 +74,7 @@
                             <ul class="nav side-menu">
                                 <li><a asp-controller="Admin" asp-action="Index"><i class="fa fa-dashboard"></i> Dashboard </a></li>
                                 <li>
-                                    <a  asp-controller="Admin" asp-action="Departments"><i class="fa fa-mortar-board"></i> Departments</a>
+                                    <a asp-controller="Admin" asp-action="Departments"><i class="fa fa-mortar-board"></i> Departments</a>
                                 </li>
                                 <li>
                                     <a asp-controller="Admin" asp-action="Courses"><i class="fa fa-book"></i> Courses</a>
@@ -246,8 +246,21 @@
     <script src="~/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="~/js/custom.min.js"></script>
+    <!-- DataTables -->
+    <script src="~/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="~/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="~/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="~/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="~/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="~/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
     <!-- View Specific JS Files -->
     @RenderSection("scripts", required: false)
-    
+
 </body>
 </html>
