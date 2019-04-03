@@ -471,7 +471,7 @@
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="col-md-1 col-sm-1 col-xs-3">
                         <p>Points:</p>
-                        <input type="number" placeholder="pts" min="1" class="form-group form-control" id="TFPointValue-{{timeStamp}}" value="1">
+                        <input type="number" placeholder="pts" min="1" class="form-group form-control" id="TrueFalsePointValue-{{timeStamp}}" value="1">
                     </div>
                     <div class="form-group col-md-5 col-sm-5 col-xs-12">
                         <p>Question: </p>
@@ -485,7 +485,7 @@
                     </div>
                     <div class="form-group col-md-3 col-sm-3 col-xs-12">
                         <p>&nbsp;</p>
-                        <button type="button" class="pull-right btn btn-primary btn-md saveNewQuestion" data-sectionId="{{SectionId}}" data-uuid="{{timeStamp}}" data-questionType="{{QuestionType}}">Create</button>
+                        <button type="button" class="pull-right btn btn-primary btn-md saveNewTrueFalseQuestion" data-sectionId="{{SectionId}}" data-uuid="{{timeStamp}}">Create</button>
                         <button type="button" class="pull-right btn btn-danger btn-md cancelNewQuestion">Cancel</button>
                     </div>
                 </div>
@@ -500,43 +500,46 @@
     <!--Edit True/False Question Start-->
     <script type="text/x-handlebars-template" id="EditTrueFalseQuestionTemplate">
         <div class="editQuestionContainer">
+            <!--Edit True/False Question Start-->
             <div class="ln_solid"></div>
             <div class="row well">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="col-md-1 col-sm-1 col-xs-3">
                         <p>Points:</p>
-                        <input type="number" placeholder="pts" min="1" class="form-group form-control" id="TFPointValue-{{questionId}}" value="{{pointValue}}">
+                        <input type="number" placeholder="pts" min="1" class="form-group form-control" id="pointValue-{{questionId}}" value="{{pointValue}}">
                     </div>
                     <div class="form-group col-md-5 col-sm-5 col-xs-12">
                         <p>Question: </p>
-                        <input type="text" placeholder="Enter question text" class="form-control " id="TrueFalseContent-{{questionId}}" value="{{content}}" />
+                        <input type="text" placeholder="Enter question text" class="form-control" id="TrueFalseContent-{{questionId}}" value="{{content}}" />
                         <span class="text-danger hidden" id="TFContentError-{{questionId}}">Please enter a question</span>
                     </div>
                     <div class="form-group col-md-3 col-sm-3 col-xs-12">
                         <p>&nbsp;</p>
 
                         {{#if answer}}
-                        <input type="radio" class="flat" checked="" name="TFRadioButton-{{questionId}}" value="true" style="position: absolute; opacity: 0;"> True
-                        <input type="radio" class="flat" name="TFRadioButton-{{questionId}}" value="false" style="position: absolute; opacity: 0;"> False
+                        <input type="radio" class="flat" checked="" name="TrueFalseRadioButton-{{questionId}}" value="true" style="position: absolute; opacity: 0;"> True
+                        <input type="radio" class="flat" name="TrueFalseRadioButton-{{questionId}}" value="false" style="position: absolute; opacity: 0;"> False
                         {{else}}
-                        <input type="radio" class="flat" name="TFRadioButton-{{questionId}}" value="true" style="position: absolute; opacity: 0;"> True
-                        <input type="radio" class="flat" checked="" name="TFRadioButton-{{questionId}}" value="false" style="position: absolute; opacity: 0;"> False
+                        <input type="radio" class="flat" name="TrueFalseRadioButton-{{questionId}}" value="true" style="position: absolute; opacity: 0;"> True
+                        <input type="radio" class="flat" checked="" name="TrueFalseRadioButton-{{questionId}}" value="false" style="position: absolute; opacity: 0;"> False
                         {{/if}}
 
                     </div>
                     <div class="form-group col-md-3 col-sm-3 col-xs-12">
                         <p>&nbsp;</p>
-                        <button type="button" class="pull-right btn btn-primary btn-md saveEdittedQuestion" data-questionId="{{questionId}}">Update</button>
+                        <button type="button" class="pull-right btn btn-primary btn-md saveEdittedTrueFalseQuestion" data-questionId="{{questionId}}">Update</button>
                         <button type="button" class="pull-right btn btn-danger btn-md cancelEditQuestion" data-questionId="{{questionId}}">Cancel</button>
                     </div>
                 </div>
             </div>
         </div>
+        <!--Edit True/False Question End-->
     </script>
     <!--Edit True/False Question End-->
     <!--True False Question Start-->
     <script type="text/x-handlebars-template" id="TrueFalseQuestionTemplate">
         <div id="questionContainer-{{questionId}}">
+            <!--True False Question Start-->
             <div class="ln_solid"></div>
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -563,103 +566,129 @@
                 </div>
             </div>
         </div>
+        <!--True False Question End-->
     </script>
-    <!--True False Question End-->
-    <!--Multiple Choice Question Start-->
-    <script type="text/x-handlebars-template" id="MultipleChoiceQuestionTemplate">
-        <div id="questionContainer-{{questionId}}">
-            <div class="ln_solid"></div>
-            <div class="row">
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="col-md-1 col-sm-1 col-xs-3">
-                        <input type="number" id="pointValue-{{questionId}}" data-questionId="{{questionId}}" value="{{pointValue}}" min="1" class="form-group form-control pointValue">
-                    </div>
-                    <div class="col-md-9 col-sm-9 col-xs-11">
-                        <p id="content-{{questionId}}">{{content}}</p>
-                    </div>
-                    <div class="form-group col-md-2 col-sm-2 col-xs-12">
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li><a class="deleteQuestion" data-questionId="{{questionId}}"><i class="fa fa-trash-o"></i></a></li>
-                            <li><a class="editQuestion" data-questionId="{{questionId}}"><i class="fa fa-edit"></i></a></li>
-                            <li><a class=""><i class="fa fa-chevron-up"></i></a></li>
-                            <li><a class=""><i class="fa fa-chevron-down"></i></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="row" id="multipleChoiceAnswersContainer-{{questionId}}">
-                <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                    <!--BIMA: make sure to not allow anything less than two options-->
-                    {{if isCorrect}}
-                    <p class="bg-green-light" id="content-{{questionId}}">{{content}}</p><br>
-                    {{else}}
-                    <p class="bg-red-light" id="content-{{questionId}}">{{content}}</p><br>
-                    {{/if}}
-                </div>
-            </div>
-        </div>
-    </script>
-    <!--Multiple Choice Question End-->
-    <!--Edit Multiple Choice Question Start-->
-    <script type="text/x-handlebars-template" id="EditMultipleChoiceQuestionTemplate">
-        <div id="questionContainer-{{questionId}}">
-            <div class="ln_solid"></div>
-            <div class="row">
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="col-md-1 col-sm-1 col-xs-3">
-                        <p>Points:</p>
-                        <input type="number" placeholder="pts" min="1" class="form-group form-control" id="MCPointValue-{{questionId}}" value="{{pointValue}}">
-                    </div>
-                    <div class="form-group col-md-11 col-sm-11 col-xs-12">
-                        <p>Question: </p>
-                        <input type="text" placeholder="Enter question text" class="form-control " id="MultipleChoiceContent-{{questionId}}" value="{{content}}" />
-                        <span class="text-danger hidden" id="MCContentError-{{questionId}}">Please enter a question</span>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="col-md-1 col-sm-1 col-xs-1">
-                        <input style="margin-top:12px" class="pull-right form-check-input" type="checkbox" name="foo" value="" id="defaultCheck1">
-                    </div>
-                    <div class="form-group col-md-10 col-sm-10 col-xs-10">
-                        <input type="text" placeholder="Enter question text here" class="form-control">
-                    </div>
-                    <div class="form-group col-md-1 col-sm-1 col-xs-1">
-                        <a style="margin-top:8px" class="pull-right"><i class="fa fa-trash-o"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="col-md-1 col-sm-1 col-xs-1">
-                        <input style="margin-top:12px" class="pull-right form-check-input" type="checkbox" name="foo" value="" id="defaultCheck1">
-                    </div>
-                    <div class="form-group col-md-10 col-sm-10 col-xs-10">
-                        <input type="text" placeholder="Enter question text here" class="form-control">
-                    </div>
-                    <div class="form-group col-md-1 col-sm-1 col-xs-1">
-                        <a style="margin-top:8px" class="pull-right"><i class="fa fa-trash-o"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="form-group col-md-11 col-sm-11 col-xs-11"></div>
-                    <div class="form-group col-md-1 col-sm-1 col-xs-1">
-                        <a style="margin-top:8px" class="pull-right"><i class="fa fa-plus"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="ln_solid"></div>
-            <div class="row">
-                <div class="form-group col-md-3 col-sm-3 col-xs-12">
-                    <p>&nbsp;</p>
-                    <button type="button" class="pull-right btn btn-primary btn-md saveEdittedQuestion" data-questionId="{{questionId}}">Update</button>
-                    <button type="button" class="pull-right btn btn-danger btn-md cancelEditQuestion" data-questionId="{{questionId}}">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </script>
-    <!--Edit Multiple Choice Question End-->
 }
+<!--True False Question End-->
+<!--Multiple Choice Question Start-->
+<script type="text/x-handlebars-template" id="MultipleChoiceQuestionTemplate">
+    <div id="questionContainer-{{questionId}}">
+        <div class="ln_solid"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="col-md-1 col-sm-1 col-xs-3">
+                    <input type="number" id="pointValue-{{questionId}}" data-questionId="{{questionId}}" value="{{pointValue}}" min="1" class="form-group form-control pointValue">
+                </div>
+                <div class="col-md-9 col-sm-9 col-xs-11">
+                    <p id="content-{{questionId}}">{{content}}</p>
+                </div>
+                <div class="form-group col-md-2 col-sm-2 col-xs-12">
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="deleteQuestion" data-questionId="{{questionId}}"><i class="fa fa-trash-o"></i></a></li>
+                        <li><a class="editQuestion" data-questionId="{{questionId}}"><i class="fa fa-edit"></i></a></li>
+                        <li><a class=""><i class="fa fa-chevron-up"></i></a></li>
+                        <li><a class=""><i class="fa fa-chevron-down"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="multipleChoiceAnswersContainer-{{questionId}}">
+            <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                <!--BIMA: make sure to not allow anything less than two options-->
+                {{if isCorrect}}
+                <p class="bg-green-light" id="content-{{questionId}}">{{content}}</p><br>
+                {{else}}
+                <p class="bg-red-light" id="content-{{questionId}}">{{content}}</p><br>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</script>
+<!--Multiple Choice Question End-->
+<!--Edit Multiple Choice Question Start-->
+<script type="text/x-handlebars-template" id="NewMultipleChoiceQuestionTemplate">
+    <div class="newQuestionContainer well">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="col-md-1 col-sm-1 col-xs-3">
+                    <p>Points:</p>
+                    <input type="number" placeholder="pts" min="1" class="form-group form-control" id="MultipleChoicePointValue-{{timeStamp}}" value="1">
+                </div>
+                <div class="form-group col-md-11 col-sm-11 col-xs-12">
+                    <p>Question: </p>
+                    <input type="text" placeholder="Question text" class="form-control " id="MultipleChoiceContent-{{timeStamp}}" />
+                    <span class="text-danger hidden" id="multipleChoiceContentError-{{timeStamp}}">Please enter a question</span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12 ">
+                <div class="col-md-1 col-sm-1 col-xs-3">
+                    <p>Is correct:</p>
+                </div>
+                <div class="col-md-11 col-sm-11 col-xs-12">
+                    <p>Options: </p>
+                </div>
+            </div>
+
+            <div id="MultipleChoiceOptionsContainer-{{timeStamp}}">
+                <div class="col-md-12 col-sm-12 col-xs-12 newMultipleChoiceOption-{{timeStamp}}">
+                    <div class="col-md-1 col-sm-1 col-xs-1 text-center">
+                        <input style="margin-top:12px" class="form-check-input isCorrect" type="checkbox">
+                    </div>
+                    <div class="form-group col-md-10 col-sm-10 col-xs-10">
+                        <input type="text" placeholder="Option text" class="form-control optionContent">
+                        <span class="text-danger hidden optionErrorMessage ">Option may not be empty</span>
+                    </div>
+                    <div class="form-group col-md-1 col-sm-1 col-xs-1">
+                        <a style="margin-top:8px" class="pull-right deleteMultipleChoiceOptionNewQuestion"><i class="fa fa-trash-o"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12 newMultipleChoiceOption-{{timeStamp}}">
+                    <div class="col-md-1 col-sm-1 col-xs-1 text-center">
+                        <input style="margin-top:12px" class="form-check-input isCorrect" type="checkbox">
+                    </div>
+                    <div class="form-group col-md-10 col-sm-10 col-xs-10">
+                        <input type="text" placeholder="Option text" class="form-control optionContent">
+                        <span class="text-danger hidden optionErrorMessage ">Option may not be empty</span>
+                    </div>
+                    <div class="form-group col-md-1 col-sm-1 col-xs-1">
+                        <a style="margin-top:8px" class="pull-right deleteMultipleChoiceOptionNewQuestion"><i class="fa fa-trash-o"></i></a>
+                    </div>
+                </div>
+            </div>
+            <ul>
+                <li id="MinimumNumberOfOptionErrorMessage-{{timeStamp}}">There must be at least two options</li>
+                <li id="MinimumNumberOfOptionErrorMessage-{{timeStamp}}">There must be at least two options</li>
+            </ul>
+            <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
+                <a style="margin-top:8px" class="pull-right addMultipleChoiceOptionNewQuestion" data-uuid="{{timeStamp}}"><i class="fa fa-plus"></i> Add Option</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-3 col-sm-3 col-xs-12 alignright">
+                <p>&nbsp;</p>
+                <button type="button" class="pull-right btn btn-primary btn-md saveNewMultipleChoiceQuestion" data-sectionId="{{SectionId}}" data-uuid="{{timeStamp}}">Create</button>
+                <button type="button" class="pull-right btn btn-danger btn-md cancelNewQuestion" data-questionId="{{timeStamp}}">Cancel</button>
+            </div>
+        </div>
+    </div>
+</script>
+
+<!-- Multiple choice option Text Box Template -->
+<script type="text/x-handlebars-template" id="MultipleChoiceOptionTextBoxTemplate">
+    <div class="col-md-12 col-sm-12 col-xs-12 newMultipleChoiceOption-{{timeStamp}}">
+        <div class="col-md-1 col-sm-1 col-xs-1 text-center">
+            <input style="margin-top:12px" class="form-check-input isCorrect" type="checkbox">
+        </div>
+        <div class="form-group col-md-10 col-sm-10 col-xs-10">
+            <input type="text" placeholder="Option text" class="form-control optionContent">
+            <span class="text-danger hidden optionErrorMessage ">Option may not be empty</span>
+        </div>
+        <div class="form-group col-md-1 col-sm-1 col-xs-1">
+            <a style="margin-top:8px" class="pull-right deleteMultipleChoiceOptionNewQuestion"><i class="fa fa-trash-o"></i></a>
+        </div>
+    </div>
+</script>
+<!--Edit Multiple Choice Question End-->
