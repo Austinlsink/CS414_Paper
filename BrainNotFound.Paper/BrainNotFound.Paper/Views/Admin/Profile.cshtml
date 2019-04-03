@@ -1,4 +1,3 @@
-@using System.Text.RegularExpressions;
 @model BrainNotFound.Paper.Models.BusinessModels.ApplicationUser;
 
 @{
@@ -30,7 +29,7 @@
                         <div class="profile_img">
                             <div id="crop-avatar">
                                 <!-- Current avatar -->
-                                <img class="img-responsive avatar-view" src="images/picture.jpg" alt="Avatar"
+                                <img class="img-responsive avatar-view" src="~/images/picture.jpg" alt="Avatar"
                                      title="Change the avatar">
                             </div>
                         </div>
@@ -51,7 +50,7 @@
                                 <i class="fa fa-user user-profile-icon"> @ViewBag.profile.UserName</i>
 
                             <li>
-                                <i class="fa fa-phone user-profile-icon"> @Regex.Replace(ViewBag.profile.PhoneNumber, @"(\d{3})(\d{3})(\d{4})", "($1) $2-$3")</i>
+                                <i class="fa fa-phone user-profile-icon"> @Convert.ToInt64(ViewBag.profile.PhoneNumber).ToString("###-###-####")</i>
                             </li>
 
                         </ul>

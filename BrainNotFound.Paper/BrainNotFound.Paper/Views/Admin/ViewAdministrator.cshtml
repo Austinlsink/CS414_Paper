@@ -29,7 +29,7 @@
                     <i class="fa fa-user user-profile-icon"> @ViewBag.admin.UserName</i>
 
                 <li>
-                    <i class="fa fa-phone user-profile-icon"> @ViewBag.admin.PhoneNumber </i>
+                    <i class="fa fa-phone user-profile-icon"> @Convert.ToInt64(ViewBag.admin.PhoneNumber).ToString("###-###-####")</i>
                 </li>
             </ul>
             <br />

@@ -38,7 +38,7 @@
                                 <tr class="odd pointer">
                                     <td class=" ">@instructor.FirstName</td>
                                     <td class=" ">@instructor.LastName</td>
-                                    <td class=" ">@instructor.PhoneNumber</td>
+                                    <td class=" ">@Convert.ToInt64(instructor.PhoneNumber).ToString("###-###-####")</td>
                                     <td class=" ">@instructor.Email</td>
                                     <td>
 
