@@ -33,18 +33,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (Test test in ViewBag.UpcomingTests)
+                            @foreach (TestSchedule test in ViewBag.UpcomingTests)
                             {
                                 <tr class="odd pointer">
                                     <td class="a-center ">
                                         <input type="checkbox" class="flat" name="table_records">
                                     </td>
-                                    <td class=" ">@test.TestName</td>
+                                    <td class=" ">@test.Test.TestName</td>
                                     @{
                                         string DepartmentCodeAndCourseCode;
                                         List<Course> courses = ViewBag.Courses;
                                         List<Department> departments = ViewBag.Departments;
-                                        Course currentCourse = courses.Where(c => c.CourseId == test.CourseId).First();
+                                        Course currentCourse = courses.Where(c => c.CourseId == test.Test.CourseId).First();
                                         Department currentDepartment = departments.Where(d => d.DepartmentId == currentCourse.DepartmentId).First();
                                         DepartmentCodeAndCourseCode = currentDepartment.DepartmentCode + " " + currentCourse.CourseCode;
 
@@ -52,8 +52,8 @@
                                     <td class=" ">@DepartmentCodeAndCourseCode</td>
                                     <td class=" last">
                                         <a class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                        <a asp-controller="Instructor" asp-action="EditTest" asp-route-DepartmentCode="@currentDepartment.DepartmentCode" asp-route-CourseCode="@currentCourse.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                        <button  type="submit" data-target="#ConfirmModal" data-testId="@test.TestId" class="btn btn-danger btn-xs confirmDelete"><i class="fa fa-trash-o"></i> Delete </button>
+                                        <a asp-controller="Instructor" asp-action="EditTest" asp-route-DepartmentCode="@currentDepartment.DepartmentCode" asp-route-CourseCode="@currentCourse.CourseCode" asp-route-URLSafeName="@test.Test.URLSafeName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                        <button type="submit" data-target="#ConfirmModal" data-testId="@test.TestId" class="btn btn-danger btn-xs confirmDelete"><i class="fa fa-trash-o"></i> Delete </button>
                                     </td>
                                 </tr>
                             }
@@ -65,6 +65,7 @@
         </div>
     </div>
 </div>
+
 <!--View all previous tests-->
 <div class="x_panel">
     <div class="x_title">
@@ -94,7 +95,67 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (Test test in ViewBag.PreviousTests)
+                    @foreach (TestSchedule test in ViewBag.PreviousTests)
+                    {
+                        <tr class="odd pointer">
+                            <td class="a-center ">
+                                <input type="checkbox" class="flat" name="table_records">
+                            </td>
+                            <td class=" ">@test.Test.TestName</td>
+                            @{
+                                string DepartmentCodeAndCourseCode;
+                                List<Course> courses = ViewBag.Courses;
+                                List<Department> departments = ViewBag.Departments;
+                                Course currentCourse = courses.Where(c => c.CourseId == test.Test.CourseId).First();
+                                Department currentDepartment = departments.Where(d => d.DepartmentId == currentCourse.DepartmentId).First();
+                                DepartmentCodeAndCourseCode = currentDepartment.DepartmentCode + " " + currentCourse.CourseCode;
+
+                            }
+                            <td class=" ">@DepartmentCodeAndCourseCode</td>
+                            <td class=" last">
+                                <a class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                <a asp-controller="Instructor" asp-action="EditTest" asp-route-DepartmentCode="@currentDepartment.DepartmentCode" asp-route-CourseCode="@currentCourse.CourseCode" asp-route-URLSafeName="@test.Test.URLSafeName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                <button type="submit" data-target="#ConfirmModal" data-testId="@test.Test.TestId" class="btn btn-danger btn-xs confirmDelete"><i class="fa fa-trash-o"></i> Delete </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<!--View all Unscheduled tests-->
+<div class="x_panel">
+    <div class="x_title">
+        <h2><i class="fa fa-file-text"></i> Unscheduled Tests</h2>
+        <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <p>Click checkbox to select multiple courses.</p>
+        <div class="table-responsive">
+            <table class="table table-striped jambo_table bulk_action ">
+                <thead>
+                    <tr class="headings">
+                        <th>
+                            <input type="checkbox" id="check-all" class="flat">
+                        </th>
+                        <th class="column-title">Name </th>
+                        <th class="column-title">Course</th>
+                        <th class="column-title no-link last">
+                            <span class="nobr">Action</span>
+                        </th>
+                        <th class="bulk-actions" colspan="7">
+                            <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Test test in ViewBag.UnscheduledTests)
                     {
                         <tr class="odd pointer">
                             <td class="a-center ">
@@ -124,6 +185,7 @@
 
     </div>
 </div>
+
 
 <!-- Confirm Deleting Modal-->
 <div id="ConfirmModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">

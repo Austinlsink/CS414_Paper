@@ -232,8 +232,13 @@ namespace BrainNotFound.Paper.Controllers
             var upcomingTests = instructorTests.Where(x => x.StartTime > DateTime.Now).ToList();
             var previousTests = instructorTests.Where(x => x.StartTime < DateTime.Now).ToList();
 
+            var unscheduledTests = instructorTests.Except(upcomingTests).Except(previousTests).ToList();
+
+          
             ViewBag.UpcomingTests = upcomingTests;
             ViewBag.PreviousTests = previousTests;
+            ViewBag.UnscheduledTests = unscheduledTests;
+
             return View();
         }
 
@@ -257,44 +262,28 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("Tests")]
         public IActionResult Tests()
         {
-            var Instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
-            var tests = _context.Tests.Where(t => t.InstructorId == Instructor.Id);
-            var testSchedules = _context.TestSchedules.ToList();
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+         
 
-            List<Test> previousTests = new List<Test>();
-            List<Test> upcomingTests = new List<Test>();
 
-            foreach(Test t in tests)
-            {
-                foreach(TestSchedule ts in testSchedules)
-                {
-                    if (t.TestId == ts.TestId)
-                    {
-                        if(ts.EndTime < DateTime.Now)
-                        {
-                            if (!previousTests.Contains(t))
-                            {
-                                previousTests.Add(t);
-                            }
-                        }
-                        else
-                        {
-                            if (!upcomingTests.Contains(t))
-                            {
-                                upcomingTests.Add(t);
-                            }
-                        }
-                    }
-                }
-            }
+            // Find all of the previous and upcoming tests for the instructor
+            var instructorScheduledTests = _context.TestSchedules.Include(x => x.Test).Where(x => x.Test.applicationUser.Id == instructor.Id).ToList();
+            var upcomingTests = instructorScheduledTests.Where(x => x.StartTime > DateTime.Now).ToList();
+            var previousTests = instructorScheduledTests.Where(x => x.StartTime < DateTime.Now).ToList();
 
+            // Find all unscheduled tests
+            var instructorTests = _context.Tests.Include(x => x.TestSchedules).Where(x => x.InstructorId == instructor.Id).ToList();
+            var unscheduledTests = instructorTests.Except(instructorScheduledTests.Select(x => x.Test)).ToList();
+
+            // Grab the courses and departments
             var courses = _context.Courses.ToList();
             var departments = _context.Departments.ToList();
-            ViewBag.UpcomingTests = upcomingTests;
-            ViewBag.PreviousTests = previousTests;
-            ViewBag.Tests = tests;
+
             ViewBag.Courses = courses;
             ViewBag.Departments = departments;
+            ViewBag.UpcomingTests = upcomingTests;
+            ViewBag.PreviousTests = previousTests;
+            ViewBag.UnscheduledTests = unscheduledTests;
             return View();
         }
 
