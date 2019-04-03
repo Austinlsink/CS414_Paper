@@ -2,6 +2,15 @@
 var adminId;
 var username;
 
+$("button#ViewAdmin").click(function () {
+    var username = $(this).val();
+    $.ajax({
+        url: "/Admin/Administrators/" + username,
+        success: function (result) {
+            $("#ViewAdminPlaceholder").html(result);
+        }
+    });
+})
 
 // Displays the admin form to edit a specific admin
 $("button#EditAdmin").click(function () {

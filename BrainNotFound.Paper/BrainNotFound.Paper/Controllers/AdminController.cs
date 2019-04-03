@@ -67,8 +67,9 @@ namespace BrainNotFound.Paper.Controllers
         public async Task<IActionResult> ViewAdministrator(String username)
         {
             var admin = await _userManager.FindByNameAsync(username);
+            ViewBag.admin = admin;
 
-            return View(admin);
+            return PartialView();
         }
 
         [HttpGet, Route("Administrators/Edit/{UserName}")]

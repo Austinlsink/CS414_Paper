@@ -3,13 +3,33 @@
     ViewData["Title"] = "View Administrator - Admin";
 }
 
+<div class="">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-user"></i> Administrator Information</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+
+                        <li class="dropdown">
+                            <a asp-controller="Admin" asp-action="EditAdministrator" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a href="#">Edit information</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
                 <div class="x_content">
                     <div class="col-md-2 col-sm-2 col-xs-12 profile_left">
                         <div class="profile_img">
                             <div id="crop-avatar">
                                 <!-- Current avatar -->
-                                <img class="img-responsive avatar-view" src="~/images/picture.jpg" alt="Avatar"
+                                <img class="img-responsive avatar-view" src="images/picture.jpg" alt="Avatar"
                                      title="Change the avatar">
                             </div>
                         </div>
@@ -22,11 +42,11 @@
                             </li>
 
                             <li>
-                                <i class="fa fa-at user-profile-icon"> @ViewBag.admin.Email</i>
+                                <i class="fa fa-at user-profile-icon">@ViewBag.admin.Email</i>
                             </li>
 
                             <li>
-                                <i class="fa fa-user user-profile-icon"> @ViewBag.admin.UserName</i>
+                                <i class="fa fa-user user-profile-icon">@ViewBag.admin.UserName</i>
 
                             <li>
                                 <i class="fa fa-phone user-profile-icon"> @ViewBag.admin.PhoneNumber </i>
@@ -36,3 +56,6 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>

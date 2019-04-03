@@ -47,7 +47,7 @@
                                     <td class=" ">@admin.PhoneNumber</td>
                                     <td class=" ">@admin.Email</td>
                                     <td>
-                                        <a asp-controller="Admin" asp-action="ViewAdministrator" asp-route-UserName="@admin.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                        <button type="button" id="ViewAdmin" data-target="#ViewAdminModal" data-toggle="modal" value="@admin.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </button>
                                         <button type="button" id="EditAdmin" value="@admin.UserName" data-toggle="modal" data-target="#EditAdminModal"  class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </button>
                                         <button id="ConfirmDelete" type="submit" data-target="#ConfirmModal" value="@admin.Id" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
                                     </td>
@@ -62,7 +62,23 @@
     </div>
 </div>
 
-<!--Modal for editing a admin-->
+<!--Modal for viewing an admin-->
+<div id="ViewAdminModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="myModalLabel2">Administrator Information</h3>
+            </div>
+            <div id="ViewAdminPlaceholder" class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal for editing an admin-->
 <div id="EditAdminModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
