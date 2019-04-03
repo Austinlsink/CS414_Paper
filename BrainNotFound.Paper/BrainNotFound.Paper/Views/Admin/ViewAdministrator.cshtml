@@ -3,36 +3,36 @@
     ViewData["Title"] = "View Administrator - Admin";
 }
 
-            <div class="x_panel">
-                <div class="x_content">
-                    <div class="col-md-2 col-sm-2 col-xs-12 profile_left">
-                        <div class="profile_img">
-                            <div id="crop-avatar">
-                                <!-- Current avatar -->
-                                <img class="img-responsive avatar-view" src="~/images/picture.jpg" alt="Avatar"
-                                     title="Change the avatar">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-10 col-sm-10 col-xs-12">
-                        <h3>@ViewBag.admin.FirstName @ViewBag.admin.LastName</h3>
-                        <ul class="list-unstyled user_data">
-                            <li>
-                                <i class="fa fa-map-marker user-profile-icon"></i> @ViewBag.admin.Address @ViewBag.admin.City @ViewBag.admin.State @ViewBag.admin.ZipCode
-                            </li>
-
-                            <li>
-                                <i class="fa fa-at user-profile-icon"> @ViewBag.admin.Email</i>
-                            </li>
-
-                            <li>
-                                <i class="fa fa-user user-profile-icon"> @ViewBag.admin.UserName</i>
-
-                            <li>
-                                <i class="fa fa-phone user-profile-icon"> @ViewBag.admin.PhoneNumber </i>
-                            </li>
-                        </ul>
-                        <br />
-                    </div>
+<div class="x_panel">
+    <div class="x_content">
+        <div class="col-md-2 col-sm-2 col-xs-12 profile_left">
+            <div class="profile_img">
+                <div id="crop-avatar">
+                    <!-- Current avatar -->
+                    <img class="img-responsive avatar-view" src="~/images/picture.jpg" alt="Avatar"
+                            title="Change the avatar">
                 </div>
             </div>
+        </div>
+        <div class="col-md-10 col-sm-10 col-xs-12">
+            <h3>@ViewBag.admin.FirstName @ViewBag.admin.LastName</h3>
+            <ul class="list-unstyled user_data">
+                <li>
+                    <i class="fa fa-map-marker user-profile-icon"></i> @ViewBag.admin.Address @ViewBag.admin.City @ViewBag.admin.State @ViewBag.admin.ZipCode
+                </li>
+
+                <li>
+                    <i class="fa fa-at user-profile-icon"> @ViewBag.admin.Email</i>
+                </li>
+
+                <li>
+                    <i class="fa fa-user user-profile-icon"> @ViewBag.admin.UserName</i>
+
+                <li>
+                    <i class="fa fa-phone user-profile-icon"> @ViewBag.admin.PhoneNumber </i>
+                </li>
+            </ul>
+            <br />
+        </div>
+    </div>
+</div>
