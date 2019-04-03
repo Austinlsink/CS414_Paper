@@ -229,8 +229,8 @@ namespace BrainNotFound.Paper.Controllers
             var instructor = await _userManager.GetUserAsync(HttpContext.User);
             var instructorTests = _context.TestSchedules.Include(x => x.Test).ThenInclude(x => x.applicationUser).Where(x => x.Test.applicationUser.Id == instructor.Id).ToList();
 
-            var upcomingTests = instructorTests.Where(x => x.StartTime > DateTime.Now).ToList();
-            var previousTests = instructorTests.Where(x => x.StartTime < DateTime.Now).ToList();
+            var upcomingTests = instructorTests.Where(x => x.EndTime > DateTime.Now).ToList();
+            var previousTests = instructorTests.Where(x => x.EndTime < DateTime.Now).ToList();
 
             var unscheduledTests = instructorTests.Except(upcomingTests).Except(previousTests).ToList();
 
@@ -268,8 +268,8 @@ namespace BrainNotFound.Paper.Controllers
 
             // Find all of the previous and upcoming tests for the instructor
             var instructorScheduledTests = _context.TestSchedules.Include(x => x.Test).Where(x => x.Test.applicationUser.Id == instructor.Id).ToList();
-            var upcomingTests = instructorScheduledTests.Where(x => x.StartTime > DateTime.Now).ToList();
-            var previousTests = instructorScheduledTests.Where(x => x.StartTime < DateTime.Now).ToList();
+            var upcomingTests = instructorScheduledTests.Where(x => x.EndTime > DateTime.Now).ToList();
+            var previousTests = instructorScheduledTests.Where(x => x.EndTime < DateTime.Now).ToList();
 
             // Find all unscheduled tests
             var instructorTests = _context.Tests.Include(x => x.TestSchedules).Where(x => x.InstructorId == instructor.Id).ToList();
