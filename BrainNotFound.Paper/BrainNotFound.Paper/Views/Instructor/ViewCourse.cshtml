@@ -48,7 +48,7 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <table class="table table-hover">
+                    <table id="SectionsTable" class="table table-hover">
                         <thead>
                             <tr>
                                 <th>Section Number</th>
@@ -107,7 +107,7 @@
                 <div class="x_content">
                     <p>Click checkbox to select multiple courses.</p>
                     <div class="table-responsive">
-                        <table class="table table-striped jambo_table bulk_action ">
+                        <table id="UpcomingTestsTable" class="table table-striped jambo_table bulk_action ">
                             <thead>
                                 <tr class="headings">
                                     <th>
@@ -168,7 +168,7 @@
         <div class="x_content">
             <p>Click checkbox to select multiple courses.</p>
             <div class="table-responsive">
-                <table class="table table-striped jambo_table bulk_action ">
+                <table id="PreviousTestsTable" class="table table-striped jambo_table bulk_action ">
                     <thead>
                         <tr class="headings">
                             <th>
@@ -211,3 +211,31 @@
         <p>There are no previous tests to be displayed.</p>
     }
 </div>
+
+@section scripts
+    {
+
+    <!--DataTable for the Upcoming tests-->
+    <script type="text/javascript" charset="utf8">
+        $(document).ready(function () {
+            $('#UpcomingTestsTable').DataTable({
+                "order": [1, 'asc'],
+                "columnDefs": [
+                    { "orderable": false, "targets": [0, 3] }
+                ],
+            });
+        });
+    </script>
+
+    <!--DataTable for the Previous tests-->
+    <script type="text/javascript" charset="utf8">
+        $(document).ready(function () {
+            $('#PreviousTestsTable').DataTable({
+                "order": [1, 'asc'],
+                "columnDefs": [
+                    { "orderable": false, "targets": [0, 3] }
+                ],
+            });
+        });
+    </script>
+}
