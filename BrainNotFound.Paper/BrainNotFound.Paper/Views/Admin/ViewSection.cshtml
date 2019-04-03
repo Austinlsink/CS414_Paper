@@ -110,7 +110,7 @@
                 <div class="x_content">
                     <p>Click checkbox to select multiple Students.</p>
                     <div class="table-responsive">
-                        <table id="studentTable" class="table table-striped jambo_table bulk_action ">
+                        <table id="studentsEnrolledTable" class="table table-striped jambo_table bulk_action ">
                             <thead>
                                 <tr class="headings">
                                     <th>
@@ -180,7 +180,7 @@
                 <div class="x_content">
                     <p>Click checkbox to select multiple Students.</p>
                     <div class="table-responsive">
-                        <table id="StudentsNotEnrolledTable" class="table table-striped jambo_table bulk_action ">
+                        <table id="studentsNotEnrolledTable" class="table table-striped jambo_table bulk_action ">
                             <thead>
                                 <tr class="headings">
                                     <th><input type="checkbox" id="check-all" class="flat"> </th>
@@ -238,26 +238,22 @@
     {
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
-            $("#studentTable").DataTable({
+            $("#studentsEnrolledTable").DataTable({
                 "order": [1, 'asc'],
                 "columnDefs": [
-                    { "orderable": false, "targets": [2] }
+                    { "orderable": false, "targets": [0, 4] }
                 ],
             });
         });
     </script>
-
-    <!-- Datatables -->
-    <script src="../vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="../vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-    <script src="../vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="../vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
-    <script src="../vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
-    <script src="../vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
-    <script src="../vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
-    <script src="../vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-    <script src="../vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
-    <script src="../vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-    <script src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+    <script type="text/javascript" charset="utf8">
+        $(document).ready(function () {
+            $("#studentsNotEnrolledTable").DataTable({
+                "order": [1, 'asc'],
+                "columnDefs": [
+                    { "orderable": false, "targets": [0, 4] }
+                ],
+            });
+        });
+    </script>
 }
