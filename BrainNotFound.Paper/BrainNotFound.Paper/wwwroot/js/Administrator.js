@@ -123,7 +123,7 @@ $("button#CreateAdmin").click(function () {
                 $("#AdminConfirmPasswordErrorMessage").empty();
             }
             else {
-                $("#AdminConfirmPasswordErrorMessage").html(err.errors.Password[0]);
+                $("#AdminConfirmPasswordErrorMessage").html(err.errors.ConfirmPassword[0]);
             }
         }
     })
