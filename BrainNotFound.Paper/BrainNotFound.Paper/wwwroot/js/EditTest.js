@@ -526,6 +526,9 @@ $("#TestSections").on("click", "button.addQuestionToSection", function () {
         case "TrueFalse":
             templateId = "#NewTrueFalseQuestionTemplate";
             break;
+        case "MultipleChoice":
+            templateId = "#NewMultipleChoiceQuestionTemplate";
+            break;
 
     }
     var timestamp = new Date().getUTCMilliseconds();
@@ -541,24 +544,24 @@ $("#TestSections").on("click", "button.addQuestionToSection", function () {
     });
 })
 
-// Saves a newly created question
-$("#TestSections").on("click", "button.saveNewQuestion", function () {
+// Saves a newly created true false question
+$("#TestSections").on("click", "button.saveNewTrueFalseQuestion", function () {
     var sectionId = $(this).attr("data-sectionId");
-    var questionType = $(this).attr("data-questionType");
     var uuid = $(this).attr("data-uuid");
 
     // Getting question data from the view
     var questionContent = $("#TrueFalseContent-" + uuid).val();
-    var pointValue = $("#TFPointValue-" + uuid).val();
-    var questionAnswer = $("input[name='TFRadioButton-" + uuid + "']:checked").val();
-    var newQuestionContainer = $(this).parents(".newQuestionContainer");
+    var pointValue = $("#TrueFalsePointValue-" + uuid).val();
+    var questionAnswer = $("input[name='TrueFalseRadioButton-" + uuid + "']:checked").val();
 
     // Error checking on question content
     if (questionContent.length == 0) {
         $("#TFContentError-" + uuid).removeClass("hidden");
-    } else {
+    }
+    else {
         // Submits the data to the server
         var JsonData = JSON.stringify({ testSectionId: sectionId, content: questionContent, pointValue: pointValue, answer: questionAnswer });
+        var newQuestionContainer = $(this).parents(".newQuestionContainer");
 
         $.ajax({
             url: "/api/CreateTest/NewTrueFalseQuestion",
@@ -586,6 +589,113 @@ $("#TestSections").on("click", "button.saveNewQuestion", function () {
         })
     }
 
+})
+
+// Saves a newly created Multiple choice question
+$("#TestSections").on("click", ".saveNewMultipleChoiceQuestion", function () {
+    var testSectionId = $(this).attr("data-sectionId");
+    var uuid = $(this).attr("data-uuid");
+    var questionContent = $.trim($("#MultipleChoiceContent-" + uuid).val());
+    var pointValue = $("#MultipleChoicePointValue-" + uuid).val();
+    var hasError = false;
+
+    // Checks if there is at least two options
+    if ($(".newMultipleChoiceOption-" + uuid).length < 2) {
+        hasError = true;
+        $("li#MinimumNumberOfOptionErrorMessage-" + uuid).removeClass("hidden");
+    }
+    else {
+        $("li#MinimumNumberOfOptionErrorMessage-" + uuid).addClass("hidden");
+    }
+
+
+
+    // gets the multiple choices options
+    var multipleChoiceAnswers = [];
+    var hasCorretOption = false;
+    $(".newMultipleChoiceOption-" + uuid).each(function () {
+
+        var isCorrect = $(this).find(".isCorrect").is(':checked');
+        var optionContent = $.trim($(this).find(".optionContent").val());
+
+        // Error check if options are empty
+        if (optionContent == "") {
+            hasError = true;
+            $(this).find(".optionErrorMessage").removeClass("hidden");
+        }
+        else {
+            $(this).find(".optionErrorMessage").addClass("hidden");
+        }
+
+        // Error Checking for correct 
+        if (isCorrect) {
+            hasCorretOption = true;
+        }
+
+        multipleChoiceAnswers.push({ isCorrect: isCorrect, optionContent: optionContent });
+    });
+
+    // Error Checking for correct 
+    if (!hasCorretOption) {
+        hasError = true;
+        $("li#SelectedCorrectOptionErrorMessage-" + uuid).removeClass("hidden");
+    } else {
+        $("li#SelectedCorrectOptionErrorMessage-" + uuid).addClass("hidden");
+    }
+
+    // Error check if content is empty
+    if (questionContent == "") {
+        hasError = true;
+        $("#multipleChoiceContentError-" + uuid).removeClass("hidden");
+    }
+    else {
+        $("#multipleChoiceContentError-" + uuid).addClass("hidden");
+    }
+
+    if (!hasError) {
+        var JsonData = JSON.stringify({ testSectionId: testSectionId, questionContent: questionContent, pointValue: pointValue, multipleChoiceAnswers: multipleChoiceAnswers });
+
+        $.ajax({
+            url: "/api/CreateTest/NewMultipleChoiceQuestion",
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            data: JsonData,
+            success: function (result) {
+                if (result.success) {
+
+
+                    console.log(result);
+                    // ADD-NOTIFICATION
+                }
+                else {
+                    console.log(result)
+                }
+            }
+        })
+    }
+
+
+
+})
+
+// Add a multiple choice option to a new multiple choice question
+$("#TestSections").on("click", ".addMultipleChoiceOptionNewQuestion", function () {
+    var uuid = $(this).attr("data-uuid");
+
+    rendered = "";
+    var multipleChoiceTemplate = $("#MultipleChoiceOptionTextBoxTemplate").html();
+    var template = Handlebars.compile(multipleChoiceTemplate);
+    rendered += template({ "timeStamp": uuid });
+
+    $("#MultipleChoiceOptionsContainer-" + uuid).append(rendered);
+})
+
+// Delets a multiple choice from Multiple choice new multiple choic
+$("#TestSections").on("click", ".deleteMultipleChoiceOptionNewQuestion", function () {
+    var uuid = $(this).attr("data-uuid");
+
+    $(this).parents(".newMultipleChoiceOption-" + uuid).remove();
+    
 })
 
 // Deletes a Question from a section

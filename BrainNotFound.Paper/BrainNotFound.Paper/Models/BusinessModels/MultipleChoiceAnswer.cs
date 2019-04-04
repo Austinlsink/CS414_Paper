@@ -16,6 +16,8 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 		public string MultipleChoiceAnswerOption  { get; set; }
 		public bool IsCorrect { get; set; }
 
+
+
         public List<StudentMultipleChoiceAnswer> StudentMultipleChoiceAnswers { get; set; }
 	}
 }
