@@ -117,6 +117,14 @@ $("button#CreateAdmin").click(function () {
             else {
                 $("#AdminPasswordErrorMessage").html(err.errors.Password[0]);
             }
+
+            // Places validation on the Password Field
+            if (typeof err.errors.ConfirmPassword === "undefined") {
+                $("#AdminConfirmPasswordErrorMessage").empty();
+            }
+            else {
+                $("#AdminConfirmPasswordErrorMessage").html(err.errors.ConfirmPassword[0]);
+            }
         }
     })
 })

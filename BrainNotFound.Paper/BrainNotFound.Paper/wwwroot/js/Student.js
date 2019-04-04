@@ -107,6 +107,14 @@ $("button#CreateStudent").click(function () {
             else {
                 $("#StudentPasswordErrorMessage").html(err.errors.Password[0]);
             }
+
+            // Places validation on the ConfirmPassword Field
+            if (typeof err.errors.ConfirmPassword === "undefined") {
+                $("#StudentConfirmPasswordErrorMessage").empty();
+            }
+            else {
+                $("#StudentConfirmPasswordErrorMessage").html(err.errors.ConfirmPassword[0]);
+            }
         }
     })
 })

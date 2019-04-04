@@ -44,7 +44,7 @@
                                 <tr class="odd pointer">
                                     <td class=" ">@admin.FirstName</td>
                                     <td class=" ">@admin.LastName</td>
-                                    <td class=" ">@Convert.ToInt64(admin.PhoneNumber).ToString("###-###-####")</td>
+                                    <td class=" ">@admin.PhoneNumber</td>
                                     <td class=" ">@admin.Email</td>
                                     <td>
                                         <button type="button" id="ViewAdmin" data-target="#ViewAdminModal" data-toggle="modal" value="@admin.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </button>
@@ -53,7 +53,6 @@
                                     </td>
                                 </tr>
                             }
-
                         </tbody>
                     </table>
                 </div>
@@ -207,6 +206,17 @@
                             <input id="PasswordInput" asp-for="Password" type="password" class="form-control has-feedback-left" placeholder="Password">
                             <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                             <span id="AdminPasswordErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12  parsley-error">
+                           Confirm Password <span class="required">*</span>
+                        </label>
+
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="ConfirmPasswordInput" asp-for="ConfirmPassword" type="password" class="form-control has-feedback-left" placeholder="Password">
+                            <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                            <span id="AdminConfirmPasswordErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
                 </div>

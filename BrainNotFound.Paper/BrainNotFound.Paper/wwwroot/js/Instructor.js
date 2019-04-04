@@ -107,6 +107,13 @@ $("button#CreateInstructor").click(function () {
             else {
                 $("#InstructorPasswordErrorMessage").html(err.errors.Password[0]);
             }
+            // Places validation on the Password Field
+            if (typeof err.errors.ConfirmPassword === "undefined") {
+                $("#InstructorConfirmPasswordErrorMessage").empty();
+            }
+            else {
+                $("#InstructorConfirmPasswordErrorMessage").html(err.errors.ConfirmPassword[0]);
+            }
         }
     })
 })

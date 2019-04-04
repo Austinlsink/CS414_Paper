@@ -1,8 +1,61 @@
-@{
-    ViewData["Title"] = "List of Grades - Student";
-}
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
+@using BrainNotFound.Paper.Models.BusinessModels
 
-<p>This page allows the student to view his grades for each test, and his overall
-grade in the course.</p>
+<div class="">
+    <div class="row">
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            @foreach (Enrollment e in ViewBag.Enrollments)
+            {
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>@e.Section.Course.Department.DepartmentCode @e.Section.Course.CourseCode - @e.Section.SectionNumber</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></a>
+
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Assignment</th>
+                                    <th>Date</th>
+                                    <th>Grade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (ViewBag.Grades.Count > 0)
+                                {
+                                    @foreach (StudentTestAssignment ts in ViewBag.Grades)
+                                    {
+
+                                        if (e.Section.Course.CourseId == ts.TestSchedule.Test.Course.CourseId)
+                                        {
+                                            <tr>
+                                                <td>@ts.TestSchedule.Test.TestName</td>
+                                                <td>@ts.TestSchedule.EndTime</td>
+                                                <td>@ts.Grade</td>
+                                            </tr>
+                                        }
+                                    }
+
+                                }
+                                else
+                                {
+                                    <p>There are no grades to be displayed.</p>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
