@@ -110,7 +110,6 @@ namespace BrainNotFound.Paper.api
         {
             user.UserName = user.FirstName + user.LastName;
             var admin = await _userManager.FindByIdAsync(user.Id);
-
             if (admin == null)
             {
                 //Create a new Application User

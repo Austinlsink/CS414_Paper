@@ -15,9 +15,10 @@
 
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
+
                             <ul class="dropdown-menu" role="menu">
                                 <li>
-                                    <a asp-controller="Admin" asp-action="EditProfile">Edit information</a>
+                                    <button type="button" id="EditAdmin" value="@ViewBag.profile.UserName" data-toggle="modal" data-target="#EditAdminModal">Edit information</button>
                                 </li>
                             </ul>
                         </li>
@@ -29,7 +30,7 @@
                         <div class="profile_img">
                             <div id="crop-avatar">
                                 <!-- Current avatar -->
-                                <img class="img-responsive avatar-view" src="~/images/picture.jpg" alt="Avatar"
+                                <img class="img-responsive avatar-view" src="~/images/profiles/@(ViewBag.profile.UserName).png" alt="Avatar"
                                      title="Change the avatar">
                             </div>
                         </div>
@@ -50,7 +51,7 @@
                                 <i class="fa fa-user user-profile-icon"> @ViewBag.profile.UserName</i>
 
                             <li>
-                                <i class="fa fa-phone user-profile-icon"> @Convert.ToInt64(ViewBag.profile.PhoneNumber).ToString("###-###-####")</i>
+                                <i class="fa fa-phone user-profile-icon"> @ViewBag.profile.PhoneNumber</i>
                             </li>
 
                         </ul>
@@ -62,3 +63,21 @@
         </div>
     </div>
 </div>
+
+<!--Modal for editing an admin-->
+<div id="EditAdminModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body" id="EditAdminPlaceholder">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+    {
+    <!--Administrator functions-->
+    <script type="text/javascript" src="~/js/Administrator.js"></script>
+
+}
