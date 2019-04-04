@@ -161,6 +161,9 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("Tests/TakeTest")]
         public IActionResult TakeTest()
         {
+            long testId = 150;
+            var questions = _context.Questions.Include(x => x.TestSection).ThenInclude(x => x.Test).Where(x => x.TestSection.TestId == testId).ToList();
+            ViewBag.Questions = questions;
             return View();
         }
 
