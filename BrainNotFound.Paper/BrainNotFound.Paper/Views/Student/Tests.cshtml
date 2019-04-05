@@ -50,7 +50,7 @@
                                         <td class=" ">@DepartmentCodeAndCourseCode</td>
                                         <td class=" ">@String.Format("{0:f}", test.TestSchedules.Select(x => x.StartTime).First())</td>
                                         <td class=" last">
-                                            <a class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                            <a asp-controller="Student" asp-action="TakeTest" asp-route-testId="@test.TestId" class="btn btn-primary btn-xs"> Take Test </a>
                                         </td>
                                     </tr>
                                 }

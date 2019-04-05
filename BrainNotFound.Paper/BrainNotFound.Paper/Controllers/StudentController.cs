@@ -158,11 +158,10 @@ namespace BrainNotFound.Paper.Controllers
 
         
 
-        [HttpGet, Route("Tests/TakeTest")]
-        public IActionResult TakeTest()
+        [HttpGet, Route("Tests/TakeTest/{testId}")]
+        public IActionResult TakeTest(long testId)
         {
-            long testId = 150;
-            var questions = _context.Questions.Include(x => x.TestSection).ThenInclude(x => x.Test).Where(x => x.TestSection.TestId == testId).ToList();
+            var questions = _context.Questions.Include(x => x.TestSection).ThenInclude(x => x.Test).Where(x => x.TestSection.TestId == testId).First();
             ViewBag.Questions = questions;
             return View();
         }
