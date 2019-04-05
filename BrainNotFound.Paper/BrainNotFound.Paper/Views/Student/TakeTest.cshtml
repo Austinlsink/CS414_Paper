@@ -90,14 +90,25 @@
                             <p><strong>@count.</strong> @q.Content</p>
                         </div>
                         <div class="form-group col-md-2 col-sm-2 col-xs-12">
+
                             <div id="gender" class="btn-group" data-toggle="buttons">
-                                <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
-                                    <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
+                                <label class="btn btn-primary btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
+                                    <input type="radio" checked="checked" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
                                 </label>
                                 <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
                                     <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
                                 </label>
                             </div>
+
+                            <div id="gender" class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
+                                    <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
+                                </label>
+                                <label class="btn btn-danger btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
+                                    <input type="radio" checked="checked" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
+                                </label>
+                            </div>
+
                         </div>
                     </div>
                     count++;

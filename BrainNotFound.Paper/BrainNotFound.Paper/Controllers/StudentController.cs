@@ -180,7 +180,8 @@ namespace BrainNotFound.Paper.Controllers
             var testSections = _context.TestSections.Include(ts =>  ts.Questions).Where(x => x.TestId == testSchedule.TestId).ToList();
             ViewBag.TestSections = testSections;
             
-            // Send questions to View
+            // Grab student answers if any
+            
 
             return View();
         }
