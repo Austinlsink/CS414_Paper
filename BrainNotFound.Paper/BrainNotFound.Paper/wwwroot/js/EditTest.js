@@ -814,8 +814,8 @@ $("#confirmDeletion").click(function () {
     }
 })
 
-// Displays the edit box for a question
-$("#TestSections").on("click", ".editQuestion", function () {
+// Displays the edit box for a true false question
+$("#TestSections").on("click", ".editTrueFalseQuestion", function () {
 
     var questionId = $(this).attr("data-questionId");
     var pointValue = $("#pointValue-" + questionId).val();
@@ -839,7 +839,18 @@ $("#TestSections").on("click", ".editQuestion", function () {
     });
 
 })
+// Displays the edit box for a multiple choice question
+$("#TestSections").on("click", ".editMultipleChoiceQuestion", function () {
+    var questionId = $(this).attr("data-questionId");
+    var pointValue = $("#pointValue-" + questionId).val();
+    var content = $("#content-" + questionId).text();
+    var options = $(this).parents("#multipleChoiceoption-" + questionId).find(".multipleChoiceoption");
+    console.log("questionId: " + questionId);
+    console.log("pointValue: " + pointValue);
+    console.log("content: " + content);
+    console.log("options: " + options);
 
+})
 // Closes the edit question state
 $("#TestSections").on("click", ".cancelEditQuestion", function () {
     var questionId = $(this).attr("data-questionId");
@@ -897,6 +908,8 @@ $("#TestSections").on("click", ".saveEdittedTrueFalseQuestion", function () {
 
     // TODO: UpdateTrueFalseQuestion -> QuestionId, Point value, content, bool ansewer
 })
+
+
 // Handles all forms submition buttons
 $(function () {
     $('.post-using-ajax').each(function () {
