@@ -719,9 +719,6 @@ $("#TestSections").on("click", ".saveNewMultipleChoiceQuestion", function () {
             }
         })
     }
-
-
-
 })
 
 // Add a multiple choice option to a new multiple choice question
@@ -841,14 +838,36 @@ $("#TestSections").on("click", ".editTrueFalseQuestion", function () {
 })
 // Displays the edit box for a multiple choice question
 $("#TestSections").on("click", ".editMultipleChoiceQuestion", function () {
+    // Get the question Information
     var questionId = $(this).attr("data-questionId");
     var pointValue = $("#pointValue-" + questionId).val();
     var content = $("#content-" + questionId).text();
-    var options = $(this).parents("#multipleChoiceoption-" + questionId).find(".multipleChoiceoption");
-    console.log("questionId: " + questionId);
-    console.log("pointValue: " + pointValue);
-    console.log("content: " + content);
-    console.log("options: " + options);
+
+    // Get Editable question Template
+    var rendered = "";
+    var EditMultipleChoiceQuestionTemplate = $("#EditMultipleChoiceQuestionTemplate").html();
+    var template = Handlebars.compile(EditMultipleChoiceQuestionTemplate);
+
+    rendered = template({ questionId: questionId, content: content, pointValue: pointValue})
+
+    // Place editable question in DOM 
+    $("#questionContainer-" + questionId).before(rendered).addClass("hidden");
+    rendered = "";
+    // Get all the question options
+    $(this).parents("#questionContainer-" + questionId)
+        .find(".multipleChoiceOption")
+        .each(function () {
+            var isCorrect = $(this).children("p").attr("data-isCorrect") == "true";
+            var optionContent = $(this).children("p").text();
+
+
+            var EditableMultipleChoiceOptionTextBoxTemplate = $("#EditableMultipleChoiceOptionTextBoxTemplate").html();
+            var template2 = Handlebars.compile(EditableMultipleChoiceOptionTextBoxTemplate);
+            rendered += template2({ questionId: questionId, optionContent: optionContent, isCorrect: isCorrect})
+        });
+    console.log(rendered);
+
+    $("#EditMultipleChoiceOptionsContainer-" + questionId).html(rendered);
 
 })
 // Closes the edit question state

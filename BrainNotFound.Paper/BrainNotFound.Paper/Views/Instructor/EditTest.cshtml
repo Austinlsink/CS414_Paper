@@ -599,28 +599,28 @@
     </div>
 </script>
 <!--Multiple Choice Question End-->
-
 <!--Multiple Choice Option Start -->
 <script type="text/x-handlebars-template" id="MultipleChoiceOptionTemplate">
     {{#if isCorrect}}
-    <div class="col-md-4 col-sm-6 col-xs-12 multipleChoiceoption ">
-        <p class="bg-green-light">{{optionContent}}</p>
+    <div class="col-md-4 col-sm-6 col-xs-12 multipleChoiceOption ">
+        <p class="bg-green-light" data-isCorrect="{{isCorrect}}">{{optionContent}}</p>
     </div>
     {{else}}
-    <div class="col-md-4 col-sm-6 col-xs-12 multipleChoiceoption">
-        <p class=" bg-red-light">{{optionContent}}</p>
+    <div class="col-md-4 col-sm-6 col-xs-12 multipleChoiceOption">
+        <p class=" bg-red-light" data-isCorrect="{{isCorrect}}">{{optionContent}}</p>
     </div>
     {{/if}}
 </script>
+
+
 <script type="text/x-handlebars-template" id="MultipleChoiceOptionTemplat">
     {{#if isCorrect}}
-        <p class="bg-green-light">{{optionContent}}</p>
+    <p class="bg-green-light">{{optionContent}}</p>
     {{else}}
-        <p class=" bg-red-light">{{optionContent}}</p>
+    <p class=" bg-red-light">{{optionContent}}</p>
     {{/if}}
 </script>
 <!--Multiple Choice Option End -->
-
 <!--New Multiple Choice Question Start-->
 
 <script type="text/x-handlebars-template" id="NewMultipleChoiceQuestionTemplate">
@@ -705,8 +705,9 @@
 
 <!--Edit Multiple Choice Question Start-->
 
+
 <script type="text/x-handlebars-template" id="EditMultipleChoiceQuestionTemplate">
-    <div class="newQuestionContainer well">
+    <div class="editQuestionContainer well">
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="col-md-1 col-sm-1 col-xs-3">
@@ -730,7 +731,7 @@
                 </div>
             </div>
 
-            <div id="MultipleChoiceOptionsContainer-{{questionId}}"></div>
+            <div id="EditMultipleChoiceOptionsContainer-{{questionId}}"></div>
 
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="col-md-1 col-sm-1 col-xs-1 text-center">
@@ -746,14 +747,14 @@
             </div>
 
             <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
-                <a style="margin-top:8px" class="pull-right MultipleChoiceOptionNewQuestion" data-uuid="{{timeStamp}}"><i class="fa fa-plus"></i> Add Option</a>
+                <a style="margin-top:8px" class="pull-right MultipleChoiceOptionNewQuestion" data-questionId="{{questionId}}"><i class="fa fa-plus"></i> Add Option</a>
             </div>
         </div>
 
         <div class="row">
             <div class="form-group col-md-3 col-sm-3 col-xs-12 alignright">
                 <p>&nbsp;</p>
-                <button type="button" class="pull-right btn btn-primary btn-md saveEdittedMultipleChoiceQuestion" data-sectionId="{{SectionId}}" data-uuid="{{timeStamp}}">Create</button>
+                <button type="button" class="pull-right btn btn-primary btn-md saveEdittedMultipleChoiceQuestion" data-questionId="{{questionId}}">Update</button>
                 <button type="button" class="pull-right btn btn-danger btn-md cancelEditQuestion" data-questionId="{{questionId}}">Cancel</button>
             </div>
         </div>
@@ -772,6 +773,27 @@
         </div>
         <div class="form-group col-md-1 col-sm-1 col-xs-1">
             <a style="margin-top:8px" data-uuid="{{timeStamp}}" class="pull-right deleteMultipleChoiceOptionNewQuestion"><i class="fa fa-trash-o"></i></a>
+        </div>
+    </div>
+</script>
+<!--Edit Multiple Choice Question End-->
+
+<!-- Multiple choice option Text Box Template -->
+<script type="text/x-handlebars-template" id="EditableMultipleChoiceOptionTextBoxTemplate">
+    <div class="col-md-12 col-sm-12 col-xs-12 EditMultipleChoiceOption-{{questionId}}">
+        <div class="col-md-1 col-sm-1 col-xs-1 text-center">
+            {{#if isCorrect}}
+            <input style="margin-top:12px" class="form-check-input isCorrect" checked="checked" type="checkbox">
+            {{else}}
+            <input style="margin-top:12px" class="form-check-input isCorrect" type="checkbox">
+            {{/if}}
+        </div>
+        <div class="form-group col-md-10 col-sm-10 col-xs-10">
+            <input type="text" placeholder="Option text" id="multipleChoiceOptionContent-{{questionId}}" class="form-control" value="{{optionContent}}">
+            <span class="text-danger hidden optionErrorMessage ">Option may not be empty</span>
+        </div>
+        <div class="form-group col-md-1 col-sm-1 col-xs-1">
+            <a style="margin-top:8px" data-questionId="{{questionId}}" class="pull-right deleteMultipleChoiceOptionNewQuestion"><i class="fa fa-trash-o"></i></a>
         </div>
     </div>
 </script>
