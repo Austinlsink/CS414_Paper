@@ -263,17 +263,17 @@ namespace BrainNotFound.Paper.Controllers
         public IActionResult Tests()
         {
             var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
-         
-
-
+            
             // Find all of the previous and upcoming tests for the instructor
             var instructorScheduledTests = _context.TestSchedules.Include(x => x.Test).Where(x => x.Test.applicationUser.Id == instructor.Id).ToList();
-            var upcomingTests = instructorScheduledTests.Where(x => x.EndTime > DateTime.Now).ToList();
-            var previousTests = instructorScheduledTests.Where(x => x.EndTime < DateTime.Now).ToList();
+            var upcomingTests = _context.TestSchedules.Include(ts => ts.Test).Where(x => x.EndTime > DateTime.Now).Select(tts => tts.Test).Distinct().ToList();
+            var previousTests = _context.TestSchedules.Include(ts => ts.Test).Where(x => x.EndTime < DateTime.Now).Select(tts => tts.Test).Distinct().ToList();
 
             // Find all unscheduled tests
             var instructorTests = _context.Tests.Include(x => x.TestSchedules).Where(x => x.InstructorId == instructor.Id).ToList();
             var unscheduledTests = instructorTests.Except(instructorScheduledTests.Select(x => x.Test)).ToList();
+
+
 
             // Grab the courses and departments
             var courses = _context.Courses.ToList();
