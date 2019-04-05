@@ -2,10 +2,23 @@
 $("input[type='radio']").on("change", function () {
     var QuestionId = $(this).attr("data-questionId");
     var Answer = $(this).val();
-    var StudentId = $("input#studentId").val();
     var TestScheduleId = $("input#testScheduleId").val();
 
-    console.log(questionId, answer, studentId, testScheduleId);
+    var JsonData = JSON.stringify({ QuestionId: QuestionId, Answer: Answer, TestScheduleId: TestScheduleId })
+    $.ajax({
+        url: "/api/Tests/SaveTrueFalseAnswer/",
+        type: "POST",
+        contentType: "application/json",
+        // Data fetched from the form
+        data: JsonData,
+        success: function (result) {
+            // Close the modal window
+            console.log(result.message);
+        },
+        error: function (xhr, status, error) {
+            console.log(xhr.responseText);
+        }
+    })
 })
 
 

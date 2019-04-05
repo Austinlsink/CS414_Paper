@@ -161,9 +161,6 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("Tests/TakeTest/{testScheduleId}")]
         public async Task<IActionResult> TakeTest(long testScheduleId)
         {
-            // Grab the student's id
-            ApplicationUser student = await _userManager.FindByNameAsync(User.Identity.Name);
-            ViewBag.student = student;
 
             var testSchedule = _context.TestSchedules
                 .Include(ts => ts.Test)

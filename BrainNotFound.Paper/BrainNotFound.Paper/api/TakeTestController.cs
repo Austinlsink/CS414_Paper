@@ -39,13 +39,34 @@ namespace BrainNotFound.Paper.api
         public JsonResult SaveTrueFalseAnswer(JObject data)
         {
             dynamic trueFalseInfo = data;
-            long questionId = trueFalseInfo.QuestionId;
-            string answer = trueFalseInfo.Answer;
-            string studentId = trueFalseInfo.StudentId;
-            long testScheduleId = trueFalseInfo.TestScheduleId;
+            long questionId = (long) trueFalseInfo.QuestionId;
+            bool answer = (bool) trueFalseInfo.Answer;
+            long testScheduleId = (long) trueFalseInfo.TestScheduleId;
 
+            var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
 
+            var studentAnswer = _context.StudentTrueFalseAnswers.Where(x => x.QuestionId == questionId && x.TestScheduleId == testScheduleId && x.StudentId == student.Id).FirstOrDefault();
+            
 
+            // 
+            if(studentAnswer == null)
+            {
+                StudentTrueFalseAnswer TFAnswer = new StudentTrueFalseAnswer()
+                {
+                    TrueFalseAnswerGiven = answer,
+                    StudentId = student.Id,
+                    TestScheduleId = testScheduleId,
+                    QuestionId = questionId
+                };
+
+                _context.StudentAnswers.Add(TFAnswer);
+                _context.SaveChanges();
+            }
+            else
+            {
+                studentAnswer.TrueFalseAnswerGiven = answer;
+                _context.SaveChanges();
+            }
             return Json(new { success = true });
         }
 
