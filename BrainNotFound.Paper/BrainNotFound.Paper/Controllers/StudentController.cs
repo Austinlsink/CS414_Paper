@@ -159,9 +159,8 @@ namespace BrainNotFound.Paper.Controllers
         
 
         [HttpGet, Route("Tests/TakeTest/{testScheduleId}")]
-        public async Task<IActionResult> TakeTest(long testScheduleId)
+        public  IActionResult TakeTest(long testScheduleId)
         {
-
             var testSchedule = _context.TestSchedules
                 .Include(ts => ts.Test)
                     .ThenInclude(t => t.Course)
@@ -173,14 +172,20 @@ namespace BrainNotFound.Paper.Controllers
             var testInformation = testSchedule.Test;
             ViewBag.TestInformation = testInformation;
 
-            // Grab the testschedule
+            // Grab the testschedule and its ID to pass as a hidden parameter to the ajax call
             ViewBag.TestSchedule = testSchedule;
 
             // Grab the test sections for the test
             var testSections = _context.TestSections.Include(ts =>  ts.Questions).Where(x => x.TestId == testSchedule.TestId).ToList();
             ViewBag.TestSections = testSections;
-            
-            // Send questions to View
+
+            // Grab the truefalse questions that mat
+            var TFQuestions = _context.TrueFalses.ToList();
+            ViewBag.TFQuestions = TFQuestions;
+
+            // Grab student answers if any
+            var studentAnswers = _context.StudentTrueFalseAnswers.Where(x => x.TestScheduleId == testSchedule.TestScheduleId).ToList();
+            ViewBag.StudentTFAnswers = studentAnswers;
 
             return View();
         }
