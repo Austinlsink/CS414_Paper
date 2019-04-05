@@ -747,7 +747,7 @@
             </div>
 
             <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
-                <a style="margin-top:8px" class="pull-right MultipleChoiceOptionNewQuestion" data-questionId="{{questionId}}"><i class="fa fa-plus"></i> Add Option</a>
+                <a style="margin-top:8px" class="pull-right addMultipleChoiceOptionEditQuestion" data-questionId="{{questionId}}"><i class="fa fa-plus"></i> Add Option</a>
             </div>
         </div>
 
@@ -789,7 +789,7 @@
             {{/if}}
         </div>
         <div class="form-group col-md-10 col-sm-10 col-xs-10">
-            <input type="text" placeholder="Option text" id="multipleChoiceOptionContent-{{questionId}}" class="form-control" value="{{optionContent}}">
+            <input type="text" placeholder="Option text" class="form-control optionContent" value="{{optionContent}}">
             <span class="text-danger hidden optionErrorMessage ">Option may not be empty</span>
         </div>
         <div class="form-group col-md-1 col-sm-1 col-xs-1">
