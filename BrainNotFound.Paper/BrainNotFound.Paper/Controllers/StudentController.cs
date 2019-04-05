@@ -138,8 +138,8 @@ namespace BrainNotFound.Paper.Controllers
             var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
             var studentTestAssignments = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).Where(x => x.StudentId == student.Id).ToList();
 
-            var upcomingTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime > DateTime.Now).Select(sta => sta.TestSchedule.Test).ToList();
-            var previousTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime < DateTime.Now).Select(sta => sta.TestSchedule.Test).ToList();
+            var upcomingTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime > DateTime.Now).Select(sta => sta.TestSchedule.Test).Distinct().ToList();
+            var previousTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime < DateTime.Now).Select(sta => sta.TestSchedule.Test).Distinct().ToList();
 
             var courses = _context.Courses.ToList();
             var departments = _context.Departments.ToList();
