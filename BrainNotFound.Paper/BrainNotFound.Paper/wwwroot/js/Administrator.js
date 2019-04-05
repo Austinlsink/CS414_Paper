@@ -2,6 +2,15 @@
 var adminId;
 var username;
 
+$("button#ViewAdmin").click(function () {
+    var username = $(this).val();
+    $.ajax({
+        url: "/Admin/Administrators/" + username,
+        success: function (result) {
+            $("#ViewAdminPlaceholder").html(result);
+        }
+    });
+})
 
 // Displays the admin form to edit a specific admin
 $("button#EditAdmin").click(function () {
@@ -107,6 +116,14 @@ $("button#CreateAdmin").click(function () {
             }
             else {
                 $("#AdminPasswordErrorMessage").html(err.errors.Password[0]);
+            }
+
+            // Places validation on the Password Field
+            if (typeof err.errors.ConfirmPassword === "undefined") {
+                $("#AdminConfirmPasswordErrorMessage").empty();
+            }
+            else {
+                $("#AdminConfirmPasswordErrorMessage").html(err.errors.ConfirmPassword[0]);
             }
         }
     })

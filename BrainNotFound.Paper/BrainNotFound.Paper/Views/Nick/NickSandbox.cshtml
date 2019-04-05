@@ -5,7 +5,78 @@
     List<TrueFalse> questions = ViewBag.Questions;
     List<TrueFalse> SortedQuestions = questions.OrderBy(q => q.Index).ToList();
 }
-<!--Page Content-->
+<div id="TestSections">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-info-circle"></i> | Multiple Choice</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class=""><i class="fa fa-trash-o"></i></a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Settings 1</a></li>
+                        <li><a href="#">Settings 2</a></li>
+                    </ul>
+                </li>
+                <li><a class="collapse-link"><i class="fa fa-arrow-up"></i></a></li>
+                <li><a class="collapse-link"><i class="fa fa-arrow-down"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <p><b>Instructions:</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+            </div>
+            <div class="ln_solid"></div>
+
+            <div class="row ">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-md-1 col-sm-1 col-xs-3">
+                        <input type="text" placeholder="pts" class="form-group form-control">
+                    </div>
+                    <div class="col-md-9 col-sm-9 col-xs-11">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+
+                    </div>
+                    <div class="form-group col-md-2 col-sm-2 col-xs-12">
+                        <span>
+                            <ul class="nav navbar-right panel_toolbox">
+                                <li><a class=""><i class="fa fa-trash-o"></i></a></li>
+                                <li><a class=""><i class="fa fa-edit"></i></a></li>
+                                <li><a class=""><i class="fa fa-chevron-up"></i></a></li>
+                                <li><a class=""><i class="fa fa-chevron-down"></i></a></li>
+                            </ul>
+                        </span>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <br />
+                <div class="col-md-1 col-sm-1 col-xs-12"></div>
+                <div class="col-md-9 col-sm-9 col-xs-12 MultipleChoiceOptionsContainer-{{questionId}}">
+                    <div class="col-md-6 col-sm-6 col-xs-12 multipleChoiceoption">
+                        <p class="bg-green-light">Integer posuere erat a ante Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-12 multipleChoiceoption">
+                        <p class=" bg-green-light">Integer posuere erat a ante Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-12 multipleChoiceoption">
+                        <p class=" bg-red-light">Integer posuere erat a ante Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-12 multipleChoiceoption">
+                        <p class=" bg-green-light">Integer posuere erat a ante Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<!--Page Content
 <div id="TestSections">
     <div class="x_panel">
         <div class="x_title">
@@ -122,7 +193,7 @@
                     <button type="button" class="pull-right btn btn-danger">Cancel</button>
                 </div>
             </div>
-            <!-- end of row 2 -->
+            <!-- end of row 2 - ->
         </div>
     </div>
 </div>

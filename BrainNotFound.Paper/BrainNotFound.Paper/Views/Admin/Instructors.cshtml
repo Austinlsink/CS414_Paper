@@ -38,7 +38,7 @@
                                 <tr class="odd pointer">
                                     <td class=" ">@instructor.FirstName</td>
                                     <td class=" ">@instructor.LastName</td>
-                                    <td class=" ">@instructor.PhoneNumber</td>
+                                    <td class=" ">@Convert.ToInt64(instructor.PhoneNumber).ToString("###-###-####")</td>
                                     <td class=" ">@instructor.Email</td>
                                     <td>
 
@@ -187,6 +187,17 @@
                             <input id="InstructorPasswordInput" asp-for="Password" type="password" class="form-control has-feedback-left" placeholder="Password">
                             <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                             <span id="InstructorPasswordErrorMessage" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12  parsley-error">
+                            Confirm Password <span class="required">*</span>
+                        </label>
+
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="InstructorConfirmPasswordInput" asp-for="ConfirmPassword" type="password" class="form-control has-feedback-left" placeholder="Password">
+                            <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                            <span id="InstructorConfirmPasswordErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
                 </div>

@@ -56,6 +56,10 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         [Required(ErrorMessage = "Please enter a password")]
         public string Password { get; set; }
 
+        [NotMapped]
+        [Compare("Password", ErrorMessage = "Passwords do not match.")]
+        public string ConfirmPassword { get; set; }
+
 
         // Instructor relationships
         public List<Section> SectionsTaught { get; set; } // Sections an instructor teaches

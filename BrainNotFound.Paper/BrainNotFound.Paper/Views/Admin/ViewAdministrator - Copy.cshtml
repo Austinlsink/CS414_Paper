@@ -1,8 +1,8 @@
 @model BrainNotFound.Paper.Models.BusinessModels.ApplicationUser;
-
 @{
-    ViewData["Title"] = "Profile - Admin";
+    ViewData["Title"] = "View Administrator - Admin";
 }
+
 <div class="">
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
@@ -14,11 +14,10 @@
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
 
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
-
+                            <a asp-controller="Admin" asp-action="EditAdministrator" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>
-                                    <button type="button" id="EditAdmin" value="@ViewBag.profile.UserName" data-toggle="modal" data-target="#EditAdminModal">Edit information</button>
+                                    <a href="#">Edit information</a>
                                 </li>
                             </ul>
                         </li>
@@ -30,54 +29,33 @@
                         <div class="profile_img">
                             <div id="crop-avatar">
                                 <!-- Current avatar -->
-                                <img class="img-responsive avatar-view" src="~/images/profiles/@(ViewBag.profile.UserName).png" alt="Avatar"
+                                <img class="img-responsive avatar-view" src="images/picture.jpg" alt="Avatar"
                                      title="Change the avatar">
                             </div>
                         </div>
                     </div>
                     <div class="col-md-10 col-sm-10 col-xs-12">
-                        <h3> @ViewBag.profile.FirstName @ViewBag.profile.LastName</h3>
-
+                        <h3>@ViewBag.admin.FirstName @ViewBag.admin.LastName</h3>
                         <ul class="list-unstyled user_data">
                             <li>
-                                <i class="fa fa-map-marker user-profile-icon"></i> @ViewBag.profile.Address @ViewBag.profile.City @ViewBag.profile.State @ViewBag.profile.ZipCode
+                                <i class="fa fa-map-marker user-profile-icon"></i> @ViewBag.admin.Address @ViewBag.admin.City @ViewBag.admin.State @ViewBag.admin.ZipCode
                             </li>
 
                             <li>
-                                <i class="fa fa-at user-profile-icon"> @ViewBag.profile.Email</i>
+                                <i class="fa fa-at user-profile-icon">@ViewBag.admin.Email</i>
                             </li>
 
                             <li>
-                                <i class="fa fa-user user-profile-icon"> @ViewBag.profile.UserName</i>
+                                <i class="fa fa-user user-profile-icon">@ViewBag.admin.UserName</i>
 
                             <li>
-                                <i class="fa fa-phone user-profile-icon"> @ViewBag.profile.PhoneNumber</i>
+                                <i class="fa fa-phone user-profile-icon"> @ViewBag.admin.PhoneNumber </i>
                             </li>
-
                         </ul>
                         <br />
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<!--Modal for editing an admin-->
-<div id="EditAdminModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-body" id="EditAdminPlaceholder">
-
-            </div>
-        </div>
-    </div>
-</div>
-
-@section scripts
-    {
-    <!--Administrator functions-->
-    <script type="text/javascript" src="~/js/Administrator.js"></script>
-
-}

@@ -161,6 +161,9 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("Tests/TakeTest")]
         public IActionResult TakeTest()
         {
+            long testId = 150;
+            var questions = _context.Questions.Include(x => x.TestSection).ThenInclude(x => x.Test).Where(x => x.TestSection.TestId == testId).ToList();
+            ViewBag.Questions = questions;
             return View();
         }
 
@@ -172,8 +175,16 @@ namespace BrainNotFound.Paper.Controllers
         #endregion Test Controllers
 
         [HttpGet, Route("Grades")]
-        public IActionResult Grades()
+        public async Task<IActionResult> Grades()
         {
+            // Get the courses that the student is enrolled in
+            ApplicationUser student = await _userManager.FindByNameAsync(User.Identity.Name);
+            var enrollments = _context.Enrollments.Include(x => x.Section).ThenInclude(x => x.Course).ThenInclude(x => x.Department).Where(x => x.StudentId == student.Id).ToList();
+            ViewBag.Enrollments = enrollments;
+
+            // Get the student's grades
+            var grades = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).ThenInclude(x => x.Course).Where(x => x.StudentId == student.Id && x.TestSchedule.EndTime < DateTime.Now).ToList();
+            ViewBag.Grades = grades;
             return View();
         }
 

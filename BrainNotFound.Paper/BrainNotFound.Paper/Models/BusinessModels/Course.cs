@@ -15,7 +15,7 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         [Required(ErrorMessage = "Please enter a Credit Hour.")]
         [Range(1, 8, ErrorMessage = "Credit Hours must be between 1 and 8.")]
         public int CreditHours { get; set; }
-        [Required(ErrorMessage = "Please enter a Course Code")]
+        [Required(ErrorMessage = "Please enter a Course Code between 100 - 999")]
         [Range(100, 999, ErrorMessage = "Course Code examples: 101, 202.")]
         public string CourseCode { get; set; } //should this be an int?
         [Required(ErrorMessage = "Please enter a Course Name")]

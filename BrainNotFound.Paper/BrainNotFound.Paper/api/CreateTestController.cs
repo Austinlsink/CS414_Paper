@@ -59,7 +59,7 @@ namespace BrainNotFound.Paper.api
                 {
                     Content = json.content,
                     // Index = int.Parse((string)json.Index);
-                    PointValue = int.Parse((string)json.pointValue),
+                    PointValue = json.pointValue,
                     TestSectionId = testSectionId,
                     TrueFalseAnswer = bool.Parse((string)json.answer),
                     QuestionType = QuestionType.TrueFalse
@@ -68,6 +68,7 @@ namespace BrainNotFound.Paper.api
                 _context.TrueFalses.Add(TFQuestion);
                 _context.SaveChanges();
 
+                // Create the response Object
                 dynamic question = new JObject();
                 question.pointValue = TFQuestion.PointValue;
                 question.content = TFQuestion.Content;
@@ -91,13 +92,13 @@ namespace BrainNotFound.Paper.api
         /// </summary>
         /// <param name="jsonData">The object that contains all of the question information</param>
         /// <returns>The question that was created</returns>
-        [HttpPost, Route("MultipleChoice")]
-        public JsonResult NewMultipleChoice([FromBody] JObject jsonData)
+        [HttpPost, Route("NewMultipleChoiceQuestion")]
+        public JsonResult NewMultipleChoiceQuestion([FromBody] JObject jsonData)
         {
             dynamic json = jsonData;
-            long testSectionId = long.Parse(json.TestSectionId);
+            long testSectionId = json.testSectionId;
             var testSection = _context.TestSections.Include(s => s.Test).Where(x => x.TestSectionId == testSectionId).First();
-            JArray MCAnswers = json.MultipleChoiceAnswers;
+            JArray MCAnswers = json.multipleChoiceAnswers;
 
             // Find the instructor who is creating the test
             var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
@@ -107,12 +108,14 @@ namespace BrainNotFound.Paper.api
             }
             else
             {
-                Question MCQuestion = new Question();
-                MCQuestion.Content = json.Content;
-                MCQuestion.Index = int.Parse((string)json.Index);
-                MCQuestion.PointValue = int.Parse((string)json.PointValue);
-                MCQuestion.TestSectionId = long.Parse((string)json.TestSectionId);
-                MCQuestion.QuestionType = QuestionType.MultipleChoice;
+                Question MCQuestion = new Question
+                {
+                    Content = json.questionContent,
+                    //Index = int.Parse((string)json.Index),
+                    PointValue = json.pointValue,
+                    TestSectionId = testSectionId,
+                    QuestionType = QuestionType.MultipleChoice
+                };
 
                 List<MultipleChoiceAnswer> MCAList = new List<MultipleChoiceAnswer>();
 
@@ -121,15 +124,36 @@ namespace BrainNotFound.Paper.api
                     dynamic mca = x;
                     MCAList.Add(new MultipleChoiceAnswer()
                     {
-                        MultipleChoiceAnswerOption = mca.MultipleChoiceAnswerOption,
-                        IsCorrect = bool.Parse(mca.IsCorrect)
+                        MultipleChoiceAnswerOption = mca.optionContent,
+                        IsCorrect = mca.isCorrect
                     });
                 }
 
                 MCQuestion.MultipleChoiceAnswers = MCAList;
                 _context.Questions.Add(MCQuestion);
                 _context.SaveChanges();
-                return Json(new { success = true, question = MCQuestion });
+
+
+                // Create the response Object
+                dynamic question = new JObject();
+                question.pointValue = MCQuestion.PointValue;
+                question.content = MCQuestion.Content;
+                question.questionId = MCQuestion.QuestionId;
+                question.sectionId = MCQuestion.TestSectionId;
+
+                JArray MCOptions = new JArray();
+                foreach(var option in MCQuestion.MultipleChoiceAnswers)
+                {
+                    dynamic MCOption = new JObject();
+                    MCOption.multipleChoiceAnswerId = option.MultipleChoiceAnswerId;
+                    MCOption.isCorrect = option.IsCorrect;
+                    MCOption.optionContent = option.MultipleChoiceAnswerOption;
+
+                    MCOptions.Add(MCOption);
+                }
+                question.multipleChoiceAnswers = MCOptions;
+
+                return Json(new { success = true, question});
             }
         }
 
@@ -584,10 +608,10 @@ namespace BrainNotFound.Paper.api
                     switch (testSection.QuestionType)
                     {
                         case QuestionType.TrueFalse:
-                            var questions = _context.TrueFalses.Where(q => q.TestSectionId == testSection.TestSectionId).ToList();
-                            JArray jquestios = new JArray();
+                            var TFquestions = _context.TrueFalses.Where(q => q.TestSectionId == testSection.TestSectionId).ToList();
+                            JArray jTFquestios = new JArray();
 
-                            foreach (var question in questions)
+                            foreach (var question in TFquestions)
                             {
                                 dynamic jquestion = new JObject();
                                 jquestion.questionId = question.QuestionId;
@@ -595,10 +619,41 @@ namespace BrainNotFound.Paper.api
                                 jquestion.content = question.Content;
                                 jquestion.answer = question.TrueFalseAnswer;
 
-                                jquestios.Add(jquestion);
+                                jTFquestios.Add(jquestion);
                             }
 
-                            jTestSection.questions = jquestios;
+                            jTestSection.questions = jTFquestios;
+                            break;
+
+                        case QuestionType.MultipleChoice:
+                            var MCquestions = _context.Questions.Include(q => q.MultipleChoiceAnswers).Where(q => q.TestSectionId == testSection.TestSectionId).ToList();
+                            JArray jMCquestios = new JArray();
+
+                            foreach (var question in MCquestions)
+                            {
+                                dynamic jquestion = new JObject();
+
+                                jquestion.pointValue = question.PointValue;
+                                jquestion.content    = question.Content;
+                                jquestion.questionId = question.QuestionId;
+                                jquestion.sectionId  = question.TestSectionId;
+
+                                JArray MCOptions = new JArray();
+                                foreach (var option in question.MultipleChoiceAnswers)
+                                {
+                                    dynamic MCOption = new JObject();
+                                    MCOption.multipleChoiceAnswerId = option.MultipleChoiceAnswerId;
+                                    MCOption.isCorrect = option.IsCorrect;
+                                    MCOption.optionContent = option.MultipleChoiceAnswerOption;
+
+                                    MCOptions.Add(MCOption);
+                                }
+                                jquestion.multipleChoiceAnswers = MCOptions;
+
+                                jMCquestios.Add(jquestion);
+                            }
+
+                            jTestSection.questions = jMCquestios;
                             break;
                     }
                     jTestSections.Add(jTestSection);
