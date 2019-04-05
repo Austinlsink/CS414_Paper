@@ -4241,7 +4241,7 @@ table thead .checkbox.radio { margin-top:-7px;margin-top:-21px; }
 /** bootstrap-datetimepicker **/
 .input-group.date .input-group-addon{
     border-radius: 0px !important;
-    background-color: #ffff !important;
+    background-color: #fff !important;
 }
 /** /bootstrap-datetimepicker **/
 

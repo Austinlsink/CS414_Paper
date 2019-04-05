@@ -47,7 +47,7 @@
                 <div class="icon">
                     <i class="fa fa-clock-o"></i>
                 </div>
-                <div id="TimeLimitStats" class="count">50 minutes</div>
+                <div id="TimeLimitStats" class="count">50 mins</div>
                 <h3>Time Limit</h3>
             </div>
         </div>
@@ -76,49 +76,25 @@
         </div>
         @for (i = 1; i <= 6; i++)
         {
-            @if (i % 2 == 0)
-            {
-                <div class="col-md-12 col-sm-12 col-xs-12 bg-light" style="padding: 20px 0 10px 0">
+                <div class="col-md-12 col-sm-12 col-xs-12 questionRow" style="padding: 20px 0 10px 0">
                     <div class="col-md-1 col-sm-1 col-xs-3 text-center">
                         <span id="pointValue-56789">(2 pts.)</span>
                     </div>
                     <div class="col-md-9 col-sm-9 col-xs-11">
-                        <p>@i. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <p><strong>@i.</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                     </div>
                     <div class="form-group col-md-2 col-sm-2 col-xs-12">
-                        <label> <input type="radio" class="flat" checked="" name="iCheck" style="position: absolute; opacity: 0;"> True</label>
-                        <label> <input type="radio" class="flat" name="iCheck" style="position: absolute; opacity: 0;"> False </label>
-                    </div>
-                </div>
-            }
-            else
-            {
-                <div class="col-md-12 col-sm-12 col-xs-12 " style="padding: 20px 0 10px 0">
-                    <div class="col-md-1 col-sm-1 col-xs-3 text-center">
-                        <span id="pointValue-56789">(2 pts.)</span>
-                    </div>
-
-                    <div class="col-md-9 col-sm-9 col-xs-11">
-                        <p>@i. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-
-                    <div class="form-group col-md-2 col-sm-2 col-xs-12">
-                        <label><input type="radio" class="flat" checked="" name="iCheck" style=" opacity: 0;"> True</label>
-                        <label><input type="radio" class="flat" name="iCheck" style=" opacity: 0;"> False</label>
-
-
                         <div id="gender" class="btn-group" data-toggle="buttons">
-                            <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-primary">
-                                <input type="radio" name="gender" value="male"> &nbsp; True &nbsp;
+                            <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
+                                <input type="radio" name="trueFalseAnswer" value="true"> &nbsp; True &nbsp;
                             </label>
-                            <label class="btn btn-default" data-toggle-class="btn-danger" data-toggle-passive-class="btn-danger">
-                                <input type="radio" name="gender" value="female"> False
+                            <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
+                                <input type="radio" name="trueFalseAnswer" value="false"> False
                             </label>
                         </div>
+
                     </div>
                 </div>
-
-            }
 
             <!-- end of row 2 -->
         }
@@ -126,6 +102,8 @@
 
     </div>
 </div>
+
+
 
 <div class="x_panel">
     <div class="x_title">
@@ -155,6 +133,13 @@
             </div>
         </div>
 
-        </div>
-
     </div>
+
+</div>
+
+
+@section Scripts
+    {
+    <script src="~/js/TakeTest.js" type="text/javascript"></script>
+
+}

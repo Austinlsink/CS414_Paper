@@ -59,7 +59,7 @@ namespace BrainNotFound.Paper.api
                 {
                     Content = json.content,
                     // Index = int.Parse((string)json.Index);
-                    PointValue = int.Parse((string)json.pointValue),
+                    PointValue = json.pointValue,
                     TestSectionId = testSectionId,
                     TrueFalseAnswer = bool.Parse((string)json.answer),
                     QuestionType = QuestionType.TrueFalse
@@ -139,6 +139,7 @@ namespace BrainNotFound.Paper.api
                 question.pointValue = MCQuestion.PointValue;
                 question.content = MCQuestion.Content;
                 question.questionId = MCQuestion.QuestionId;
+                question.sectionId = MCQuestion.TestSectionId;
 
                 JArray MCOptions = new JArray();
                 foreach(var option in MCQuestion.MultipleChoiceAnswers)
@@ -607,10 +608,10 @@ namespace BrainNotFound.Paper.api
                     switch (testSection.QuestionType)
                     {
                         case QuestionType.TrueFalse:
-                            var questions = _context.TrueFalses.Where(q => q.TestSectionId == testSection.TestSectionId).ToList();
-                            JArray jquestios = new JArray();
+                            var TFquestions = _context.TrueFalses.Where(q => q.TestSectionId == testSection.TestSectionId).ToList();
+                            JArray jTFquestios = new JArray();
 
-                            foreach (var question in questions)
+                            foreach (var question in TFquestions)
                             {
                                 dynamic jquestion = new JObject();
                                 jquestion.questionId = question.QuestionId;
@@ -618,10 +619,41 @@ namespace BrainNotFound.Paper.api
                                 jquestion.content = question.Content;
                                 jquestion.answer = question.TrueFalseAnswer;
 
-                                jquestios.Add(jquestion);
+                                jTFquestios.Add(jquestion);
                             }
 
-                            jTestSection.questions = jquestios;
+                            jTestSection.questions = jTFquestios;
+                            break;
+
+                        case QuestionType.MultipleChoice:
+                            var MCquestions = _context.Questions.Include(q => q.MultipleChoiceAnswers).Where(q => q.TestSectionId == testSection.TestSectionId).ToList();
+                            JArray jMCquestios = new JArray();
+
+                            foreach (var question in MCquestions)
+                            {
+                                dynamic jquestion = new JObject();
+
+                                jquestion.pointValue = question.PointValue;
+                                jquestion.content    = question.Content;
+                                jquestion.questionId = question.QuestionId;
+                                jquestion.sectionId  = question.TestSectionId;
+
+                                JArray MCOptions = new JArray();
+                                foreach (var option in question.MultipleChoiceAnswers)
+                                {
+                                    dynamic MCOption = new JObject();
+                                    MCOption.multipleChoiceAnswerId = option.MultipleChoiceAnswerId;
+                                    MCOption.isCorrect = option.IsCorrect;
+                                    MCOption.optionContent = option.MultipleChoiceAnswerOption;
+
+                                    MCOptions.Add(MCOption);
+                                }
+                                jquestion.multipleChoiceAnswers = MCOptions;
+
+                                jMCquestios.Add(jquestion);
+                            }
+
+                            jTestSection.questions = jMCquestios;
                             break;
                     }
                     jTestSections.Add(jTestSection);

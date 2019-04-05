@@ -12,7 +12,7 @@ var IndivisualsAssigned = [];
 // DataTable
 var studentsDataTable;
 
-// Currently selected Section
+// Currently selected Section 
 var studentsInSelectedSection;
 
 // Initialize Page
@@ -39,19 +39,45 @@ function init_testSections() {
                     NumberOfSections += 1;
 
                     // Adds each question to its section
-                    testSection.questions.forEach(function (question) {
-                        var rendered = "";
-                        var TrueFalseQuestionTemplate = $("#TrueFalseQuestionTemplate").html();
-                        var template = Handlebars.compile(TrueFalseQuestionTemplate);
 
-                        rendered += template(question);
+                    switch (testSection.sectionType) {
+                        case "TrueFalse":
+                            testSection.questions.forEach(function (question) {
+                                var rendered = "";
+                                var TrueFalseQuestionTemplate = $("#TrueFalseQuestionTemplate").html();
+                                var template = Handlebars.compile(TrueFalseQuestionTemplate);
 
-                        $("#questionsContainer-" + testSection.sectionId).append(rendered);
+                                rendered += template(question);
 
-                        TotalPoints += question.pointValue;
-                        NumberOfQuestions += 1;
-                        Update_TestStatistics();
-                    });
+                                $("#questionsContainer-" + testSection.sectionId).append(rendered);
+
+                                TotalPoints += question.pointValue;
+                                NumberOfQuestions += 1;
+                                Update_TestStatistics();
+                            });
+                            break;
+                        case "MultipleChoice":
+                            testSection.questions.forEach(function (question) {
+                                var rendered = "";
+                                var multipleChoiceQuestionTemplate = $("#MultipleChoiceQuestionTemplate").html();
+                                var template = Handlebars.compile(multipleChoiceQuestionTemplate);
+                                rendered = template(question);
+
+                                $("#questionsContainer-" + question.sectionId).append(rendered);
+
+                                // Adds the question options to the questions
+                                rendered = "";
+                                question.multipleChoiceAnswers.forEach(function (questionOption) {
+                                    var multipleChoiceOptionTemplate = $("#MultipleChoiceOptionTemplate").html();
+                                    var template = Handlebars.compile(multipleChoiceOptionTemplate);
+                                    rendered += template(questionOption);
+                                });
+
+                                $("#multipleChoiceOptionsContainer-" + question.questionId).html(rendered);
+                            });
+                            break;
+                    }
+                    
                 })
 
                 Update_TestStatistics();
@@ -563,6 +589,8 @@ $("#TestSections").on("click", "button.saveNewTrueFalseQuestion", function () {
         var JsonData = JSON.stringify({ testSectionId: sectionId, content: questionContent, pointValue: pointValue, answer: questionAnswer });
         var newQuestionContainer = $(this).parents(".newQuestionContainer");
 
+        console.log("questionAnswer: " + questionAnswer);
+        console.log("JasonData: " + JsonData);
         $.ajax({
             url: "/api/CreateTest/NewTrueFalseQuestion",
             type: "POST",
@@ -597,6 +625,7 @@ $("#TestSections").on("click", ".saveNewMultipleChoiceQuestion", function () {
     var uuid = $(this).attr("data-uuid");
     var questionContent = $.trim($("#MultipleChoiceContent-" + uuid).val());
     var pointValue = $("#MultipleChoicePointValue-" + uuid).val();
+    var newQuestionContainer = $(this).parents(".newQuestionContainer");
     var hasError = false;
 
     // Checks if there is at least two options
@@ -662,8 +691,25 @@ $("#TestSections").on("click", ".saveNewMultipleChoiceQuestion", function () {
             data: JsonData,
             success: function (result) {
                 if (result.success) {
+                    // Adds question to section
+                    var rendered = "";
+                    var multipleChoiceQuestionTemplate = $("#MultipleChoiceQuestionTemplate").html();
+                    var template = Handlebars.compile(multipleChoiceQuestionTemplate);
+                    rendered = template(result.question);
 
+                    $("#questionsContainer-" + result.question.sectionId).append(rendered);
 
+                    // Adds the question options to the questions
+                    rendered = "";
+                    result.question.multipleChoiceAnswers.forEach(function (questionOption) {
+                        var multipleChoiceOptionTemplate = $("#MultipleChoiceOptionTemplate").html();
+                        var template = Handlebars.compile(multipleChoiceOptionTemplate);
+                        rendered += template(questionOption);
+                    });
+
+                    $("#multipleChoiceOptionsContainer-" + result.question.questionId).html(rendered);
+
+                    $(newQuestionContainer).remove();
                     console.log(result);
                     // ADD-NOTIFICATION
                 }
@@ -807,7 +853,7 @@ $("#TestSections").on("click", ".saveEdittedTrueFalseQuestion", function () {
     var pointValue = $("#pointValue-" + questionId).val();
     var content = $("#TrueFalseContent-" + questionId).val();
     var saveButton = this;
-    var answer = $("input[name='TFRadioButton-" + questionId + "']:checked").val();
+    var answer = $("input[name='TrueFalseRadioButton-" + questionId + "']:checked").val();
 
     // Error checks for empty Question content
     if (content.length > 0) {
