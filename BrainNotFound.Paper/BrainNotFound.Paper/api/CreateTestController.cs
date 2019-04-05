@@ -551,10 +551,15 @@ namespace BrainNotFound.Paper.api
                 testScheduleJObject.TestScheduleId = testSchedule.TestScheduleId;
 
                 schedules.Add(testScheduleJObject);
-                return Json(new { success = true, schedules });
+                
             }
 
+            if(schedules.Any())
+            {
+                return Json(new { success = true, schedules });
+            }
             
+
 
             return Json(new { success = true, schedules = "none" });
         }
