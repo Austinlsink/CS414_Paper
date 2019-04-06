@@ -22,11 +22,10 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 		[ForeignKey("TestSectionId")]
 		public TestSection TestSection { get; set; }
 
-       
-
         public List<StudentAnswer> StudentAnswers { get; set; }
         public List<MultipleChoiceAnswer> MultipleChoiceAnswers { get; set; }
         public List<MatchingQuestionSide> MatchingQuestionSides { get; set; }
         public List<MatchingAnswerSide>   MatchingAnswerSides   { get; set; }
+        public List<FillInTheBlankQuestion>   FillInTheBlankQuestions   { get; set; }
     }
 }
