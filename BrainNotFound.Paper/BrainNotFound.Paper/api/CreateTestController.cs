@@ -197,40 +197,40 @@ namespace BrainNotFound.Paper.api
         /// </summary>
         /// <param name="jsonData">The object that contains all of the fill in the blank question information</param>
         /// <returns>The fill in the blank question that was created</returns>
-        [HttpPost, Route("FillInTheBlank")]
-        public JsonResult NewFillInTheBlank([FromBody] JObject jsonData)
-        {
-            dynamic json = jsonData;
-            long testSectionId = long.Parse(json.TestSectionId);
-            var testSection = _context.TestSections.Include(s => s.Test).Where(x => x.TestSectionId == testSectionId).First();
-            JArray getAnswers = json.FillInTheBlankAnswer;
-            String answers = String.Empty;
+        //[HttpPost, Route("FillInTheBlank")]
+        //public JsonResult NewFillInTheBlank([FromBody] JObject jsonData)
+        //{
+        //    dynamic json = jsonData;
+        //    long testSectionId = long.Parse(json.TestSectionId);
+        //    var testSection = _context.TestSections.Include(s => s.Test).Where(x => x.TestSectionId == testSectionId).First();
+        //    JArray getAnswers = json.FillInTheBlankAnswer;
+        //    String answers = String.Empty;
 
-            // Find the instructor who is creating the test
-            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
-            if (testSection.Test.InstructorId != instructor.Id)
-            {
-                return Json(new { success = false, error = "Instructor not allowed" });
-            }
-            else
-            {
-                FillInTheBlank FITBQuestion = new FillInTheBlank();
-                FITBQuestion.Content = json.Content;
-                FITBQuestion.Index = int.Parse((string)json.Index);
-                FITBQuestion.PointValue = int.Parse((string)json.PointValue);
-                FITBQuestion.TestSectionId = long.Parse((string)json.TestSectionId);
-                FITBQuestion.QuestionType = QuestionType.FillInTheBlank;
+        //     Find the instructor who is creating the test
+        //    var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+        //    if (testSection.Test.InstructorId != instructor.Id)
+        //    {
+        //        return Json(new { success = false, error = "Instructor not allowed" });
+        //    }
+        //    else
+        //    {
+        //        FillInTheBlank FITBQuestion = new FillInTheBlank();
+        //        FITBQuestion.Content = json.Content;
+        //        FITBQuestion.Index = int.Parse((string)json.Index);
+        //        FITBQuestion.PointValue = int.Parse((string)json.PointValue);
+        //        FITBQuestion.TestSectionId = long.Parse((string)json.TestSectionId);
+        //        FITBQuestion.QuestionType = QuestionType.FillInTheBlank;
 
-                foreach (JObject x in answers)
-                {
-                    answers += x.ToString() + " ";
-                }
+        //        foreach (JObject x in answers)
+        //        {
+        //            answers += x.ToString() + " ";
+        //        }
 
-                _context.Questions.Add(FITBQuestion);
-                _context.SaveChanges();
-                return Json(new { success = true, question = FITBQuestion });
-            }
-        }
+        //        _context.Questions.Add(FITBQuestion);
+        //        _context.SaveChanges();
+        //        return Json(new { success = true, question = FITBQuestion });
+        //    }
+        //}
         #endregion get different question types
 
         /// <summary>
@@ -241,39 +241,39 @@ namespace BrainNotFound.Paper.api
         /// <param name="content"></param>
         /// <param name="answer"></param>
         /// <returns></returns>
-        [HttpPost, Route("UpdateTrueFalseQuestion")]
-        public JsonResult UpdateTrueFalseQuestion([FromBody] JObject jsonData)
-        {
-            dynamic json = jsonData;
-            long questionId = (long) json.questionId;
-            int pointValue = (int) json.pointValue;
-            string content = json.content;
-            bool answer = (bool) json.answer;
+        //[HttpPost, Route("UpdateTrueFalseQuestion")]
+        //public JsonResult UpdateTrueFalseQuestion([FromBody] JObject jsonData)
+        //{
+        //    dynamic json = jsonData;
+        //    long questionId = (long) json.questionId;
+        //    int pointValue = (int) json.pointValue;
+        //    string content = json.content;
+        //    bool answer = (bool) json.answer;
 
-            TrueFalse question = _context.TrueFalses
-                .Include(tf => tf.TestSection)
-                    .ThenInclude(ts => ts.Test)
-                .Where(tfq => tfq.QuestionId == questionId)
-                .First();
+        //    TrueFalse question = _context.TrueFalses
+        //        .Include(tf => tf.TestSection)
+        //            .ThenInclude(ts => ts.Test)
+        //        .Where(tfq => tfq.QuestionId == questionId)
+        //        .First();
 
-            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+        //    var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
 
             
-            if (question.TestSection.Test.InstructorId == instructor.Id)
-            {
-                question.PointValue = pointValue;
-                question.Content = content;
-                question.TrueFalseAnswer = answer;
+        //    if (question.TestSection.Test.InstructorId == instructor.Id)
+        //    {
+        //        question.PointValue = pointValue;
+        //        question.Content = content;
+        //        question.TrueFalseAnswer = answer;
 
-                _context.TrueFalses.Update(question);
-                _context.SaveChanges();
-                return Json(new { success = true });
-            }
-            else
-            {
-                return Json(new { success = false, error = "Instructor invalid." });
-            }
-        }
+        //        _context.TrueFalses.Update(question);
+        //        _context.SaveChanges();
+        //        return Json(new { success = true });
+        //    }
+        //    else
+        //    {
+        //        return Json(new { success = false, error = "Instructor invalid." });
+        //    }
+        //}
 
         /// <summary>
         /// Allows the instructor to delete a test

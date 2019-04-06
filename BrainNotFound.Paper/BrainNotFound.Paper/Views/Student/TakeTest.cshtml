@@ -1,12 +1,14 @@
+@using BrainNotFound.Paper.Models.BusinessModels;
+@using BrainNotFound.Paper.Services;
 @{
     ViewData["Title"] = "test_name - Student";
-    int i = 1;
 }
 
+<input id="testScheduleId" type="hidden" value="@ViewBag.TestSchedule.TestScheduleId" />
 <!-- (General test information) beginning of row 2 -->
 <div class="x_panel">
     <div class="x_title">
-        <h2><i class="fa fa-info-circle"></i> BI 201-1 Midterm Exam</h2>
+        <h2><i class="fa fa-info-circle"></i> @ViewBag.TestInformation.Course.Department.DepartmentCode @ViewBag.TestInformation.Course.CourseCode @ViewBag.TestInformation.TestName</h2>
         <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
         </ul>
@@ -55,53 +57,102 @@
     </div>
 </div>
 
-<!-- Multiple choice section template-->
-<div class="x_panel">
-    <div class="x_title">
-        <h2><i class="fa fa-info-circle"></i> | True/False</h2>
-        <ul class="nav navbar-right panel_toolbox">
-            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-        </ul>
-        <div class="clearfix"></div>
-    </div>
-    <div class="x_content">
-        <div class="row">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                <p><b>Instructions:</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </div>
-        </div>
-        <div class="ln_solid"></div>
-        <div class="col-md-12 col-sm-12 col-xs-12">
-            <p><b>Questions:</b> </p>
-        </div>
-        @for (i = 1; i <= 6; i++)
-        {
-                <div class="col-md-12 col-sm-12 col-xs-12 questionRow" style="padding: 20px 0 10px 0">
-                    <div class="col-md-1 col-sm-1 col-xs-3 text-center">
-                        <span id="pointValue-56789">(2 pts.)</span>
-                    </div>
-                    <div class="col-md-9 col-sm-9 col-xs-11">
-                        <p><strong>@i.</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                    <div class="form-group col-md-2 col-sm-2 col-xs-12">
-                        <div id="gender" class="btn-group" data-toggle="buttons">
-                            <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
-                                <input type="radio" name="trueFalseAnswer" value="true"> &nbsp; True &nbsp;
-                            </label>
-                            <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
-                                <input type="radio" name="trueFalseAnswer" value="false"> False
-                            </label>
-                        </div>
-
-                    </div>
+<!-- True false section template-->
+@foreach (TestSection ts in ViewBag.TestSections)
+{
+    switch (ts.QuestionType)
+    {
+        case "TrueFalse":
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-info-circle"></i> | @DefaultTestSectionText.Header.Get(ts.QuestionType)</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
                 </div>
+                <div class="x_content">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <p><b>Instructions:</b> @ts.SectionInstructions</p>
+                        </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <p><b>Questions:</b> </p>
+                    </div>
+                    @{
+                        int count = 1;
+                        foreach (TrueFalse q in ViewBag.TFQuestions)
+                        {
+                            foreach (StudentTrueFalseAnswer answer in ViewBag.StudentTFAnswers)
+                            {
+                                <div class="col-md-12 col-sm-12 col-xs-12 questionRow" style="padding: 20px 0 10px 0">
+                                    <div class="col-md-1 col-sm-1 col-xs-3 text-center">
+                                        <span id="pointValue-56789">(2 pts.)</span>
+                                    </div>
+                                    <div class="col-md-9 col-sm-9 col-xs-11">
+                                        <p><strong>@count.</strong> @q.Content</p>
+                                    </div>
 
-            <!-- end of row 2 -->
-        }
+                                    <div class="form-group col-md-2 col-sm-2 col-xs-12">
+                                        @if (q.QuestionId == answer.QuestionId && answer.TrueFalseAnswerGiven == true)
+                                        {
+                                            <!-- True -->
+                                            <div id="gender" class="btn-group" data-toggle="buttons">
+                                                <label class="btn btn-primary btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
+                                                    <input type="radio" checked="checked" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
+                                                </label>
+                                                <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
+                                                    <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
+                                                </label>
+                                            </div>
+                                        }
+                                        else if (q.QuestionId == answer.QuestionId && answer.TrueFalseAnswerGiven == false)
+                                        {
+                                            <!-- False -->
+                                            <div id="gender" class="btn-group" data-toggle="buttons">
+                                                <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
+                                                    <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
+                                                </label>
+                                                <label class="btn btn-danger btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
+                                                    <input type="radio" checked="checked" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
+                                                </label>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <!-- Default -->
+                                            <div id="gender" class="btn-group" data-toggle="buttons">
+                                                <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
+                                                    <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
+                                                </label>
+                                                <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
+                                                    <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
+                                                </label>
+                                            </div>
+                                        }
 
+                                    </div>
+                                </div>
+                            }
 
-    </div>
-</div>
+                            count++;
+                        }
+                    }
+
+                </div>
+            </div>
+            break;
+        case "MultipleChoice":
+            break;
+        default:
+            break;
+    }
+
+}
+
+<!--Pledge and submition-->
 <div class="x_panel">
     <div class="x_title">
         <h2><i class="fa fa-paper-plane-o"></i> Pledge & Submitions</h2>
@@ -113,7 +164,7 @@
     <div class="x_content">
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12 ">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                <p>I pledge that I did not cheat. All questions were answered to the best of my ability. My phone a friend was Chuck Norris.</p>
                 <br />
             </div>
             <div class="col-md-4 col-sm-4 col-xs-12 ">

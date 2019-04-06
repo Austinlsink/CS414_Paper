@@ -138,8 +138,8 @@ namespace BrainNotFound.Paper.Controllers
             var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
             var studentTestAssignments = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).Where(x => x.StudentId == student.Id).ToList();
 
-            var upcomingTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime > DateTime.Now).Select(sta => sta.TestSchedule.Test).Distinct().ToList();
-            var previousTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime < DateTime.Now).Select(sta => sta.TestSchedule.Test).Distinct().ToList();
+            var upcomingTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime > DateTime.Now).Select(sta => sta.TestSchedule).ToList();
+            var previousTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime < DateTime.Now).Select(sta => sta.TestSchedule).ToList();
 
             var courses = _context.Courses.ToList();
             var departments = _context.Departments.ToList();
@@ -158,12 +158,35 @@ namespace BrainNotFound.Paper.Controllers
 
         
 
-        [HttpGet, Route("Tests/TakeTest")]
-        public IActionResult TakeTest()
+        [HttpGet, Route("Tests/TakeTest/{testScheduleId}")]
+        public  IActionResult TakeTest(long testScheduleId)
         {
-            long testId = 150;
-            var questions = _context.Questions.Include(x => x.TestSection).ThenInclude(x => x.Test).Where(x => x.TestSection.TestId == testId).ToList();
-            ViewBag.Questions = questions;
+            var testSchedule = _context.TestSchedules
+                .Include(ts => ts.Test)
+                    .ThenInclude(t => t.Course)
+                        .ThenInclude(c => c.Department)
+                .Where(ts => ts.TestScheduleId == testScheduleId)
+                .First();
+
+            // Grab the test information
+            var testInformation = testSchedule.Test;
+            ViewBag.TestInformation = testInformation;
+
+            // Grab the testschedule and its ID to pass as a hidden parameter to the ajax call
+            ViewBag.TestSchedule = testSchedule;
+
+            // Grab the test sections for the test
+            var testSections = _context.TestSections.Include(ts =>  ts.Questions).Where(x => x.TestId == testSchedule.TestId).ToList();
+            ViewBag.TestSections = testSections;
+
+            // Grab the truefalse questions that mat
+            var TFQuestions = _context.TrueFalses.ToList();
+            ViewBag.TFQuestions = TFQuestions;
+
+            // Grab student answers if any
+            var studentAnswers = _context.StudentTrueFalseAnswers.Where(x => x.TestScheduleId == testSchedule.TestScheduleId).ToList();
+            ViewBag.StudentTFAnswers = studentAnswers;
+
             return View();
         }
 
