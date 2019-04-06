@@ -198,313 +198,285 @@
          <div class="right_col">
             <div class="row">
                <div class="col-md-12 col-xs-12">
+                  <div class="x_title">
 
-                  <!-- Test creation information -->
-                  <div class="x_panel">
-                     <div class="x_title">
-
-                        <!-- (Test creation information) beginning of row 2 -->
-                        <div class="x_panel">
-                           <div class="x_title">
-                              <h2><i class="fa fa-info-circle"></i> | Grade Test</h2>
-                              <ul class="nav navbar-right panel_toolbox">
-                                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                                 <li><a class=""><i class="fa fa-trash-o"></i></a></li>
-                                 <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
-                                    <ul class="dropdown-menu" role="menu">
-                                       <li><a href="#">Settings 1</a></li>
-                                       <li><a href="#">Settings 2</a></li>
-                                    </ul>
-                                 </li>
-                                 <li><a class="collapse-link"><i class="fa fa-arrow-up"></i></a></li>
-                                 <li><a class="collapse-link"><i class="fa fa-arrow-down"></i></a></li>
-                              </ul>
-                              <div class="clearfix"></div>
+                     <!-- (Test creation information) beginning of row 2 -->
+                     <div class="x_panel">
+                        <div class="x_title">
+                           <h2><i class="fa fa-info-circle"></i> | Grade Test</h2>
+                           <ul class="nav navbar-right panel_toolbox">
+                              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                           </ul>
+                           <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                           <div class="row form-group">
+                              <div class="col-md-12 col-sm-12 col-xs-12">
+                                 <h3>BI 101 - Midterm</h3>
+                                 <p><i class="fa fa-book"></i> <b>Course: </b> MATH</p>
+                                 <p><i class="fa fa-user"></i> <b>Teacher:</b> Austin Sink</p>
+                                 <label>Grade by:&nbsp&nbsp</label>
+                                 <div id="gender" class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
+                                       <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; Student &nbsp;
+                                    </label>
+                                    <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
+                                       <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> Questions
+                                    </label>
+                                 </div>&nbsp &nbsp
+                                 <label><select class="form-control">
+                                    <option>Choose option</option>
+                                    <option>Option one</option>
+                                    <option>Option two</option>
+                                    <option>Option three</option>
+                                    <option>Option four</option>
+                                 </select></label>
+                              </div>
                            </div>
-                           <div class="x_content">
-                              <div class="row form-group">
-                                 <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <p><b>Test Name:</b> This is the most awesome test</p>
-                                    <p><b>Course: </b> MATH</p>
-                                    <p><b>Teacher:</b> Austin Sink</p>
-                                    <label>Grade by:&nbsp&nbsp</label>
-                                    <div id="gender" class="btn-group" data-toggle="buttons">
-                                       <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
-                                          <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; Student &nbsp;
-                                       </label>
-                                       <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
-                                          <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> Questions
-                                       </label>
-                                    </div>&nbsp &nbsp
-                                    <label><select class="form-control">
-                                       <option>Choose option</option>
-                                       <option>Option one</option>
-                                       <option>Option two</option>
-                                       <option>Option three</option>
-                                       <option>Option four</option>
-                                    </select></label>
-                                 </div>
+                        </div>
+                     </div>
+                     <div class="row form-group">
+                        <div class="col-md-4 col-sm-12 col-xs-12">
+                           <div class="x_panel">
+                              <div class="x_title">
+                                 <h2><i class="fa fa-question-circle"></i> | Questions</h2>
+                                 <ul class="nav navbar-right panel_toolbox">
+                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                                 </ul>
+                                 <div class="clearfix"></div>
                               </div>
-
-                              <div class="row">
-                                 <div class="x_panel">
-                                    <div class="x_title">
-                                       <h2><i class="fa fa-question-circle"></i> | Questions <small>Try hovering over the rows</small></h2>
-                                       <ul class="nav navbar-right panel_toolbox">
-                                          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                          </li>
-                                          <li class="dropdown">
-                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                             <ul class="dropdown-menu" role="menu">
-                                                <li><a href="#">Settings 1</a>
-                                                </li>
-                                                <li><a href="#">Settings 2</a>
-                                                </li>
-                                             </ul>
-                                          </li>
-                                          <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                          </li>
-                                       </ul>
-                                       <div class="clearfix"></div>
-                                    </div>
-                                    <div class="x_content">
-                                       <table class="table table-hover">
-                                          <thead>
-                                             <tr>
-                                                <th>#</th>
-                                                <th>Question</th>
-                                             </tr>
-                                          </thead>
-                                          <tbody>
-                                             <tr>
-                                                <th scope="row">1</th>
-                                                <td>Marklkjfhal skdjfhansvsdo ilfjkgahsfdalsk jdfhaldkvnsjdcna lksdfjahsfaiusfwefn alsidfukjas.df halsdkfjas lcjknaskldfj asdhf ajsdf halkd jfahdlf kjad</td>
-                                             </tr>
-                                             <tr>
-                                                <th scope="row">2</th>
-                                                <td>Marklkjf halskdjfhan svsdoilfjkgahsfda lskjdfhaldkv nsjdcnalksdfjahsfaiu sfwefnalsidfukjas. dfhals dkfjaslcjknaskldfj asdhf ajsdf halkd jfahdlf kjad</td>
-                                             </tr>
-                                             <tr>
-                                                <th scope="row">3</th>
-                                                <td>Marklkjfhal skdjfhansvsdo ilfjkgahsfda lskjdfhaldkvnsj dcnalksdfjahs faiusfwefnal sidfukjas.dfhalsdkfjasl cjknaskldfj asdhf ajsdf halkd jfahdlf kjad</td>
-                                             </tr>
-                                          </tbody>
-                                       </table>
+                              <div class="x_content">
+                                 <table class="table table-hover">
+                                    <thead>
+                                       <tr>
+                                          <th>#</th>
+                                          <th>Question</th>
+                                       </tr>
+                                    </thead>
+                                    <tbody>
+                                       <tr>
+                                          <th scope="row">1</th>
+                                          <td>Marklkjfhal skdjfhansvsdo ilfjkgahsfdalsk jdfhaldkvnsjdcna lksdfjahsfaiusfwefn alsidfukjas.df halsdkfjas lcjknaskldfj asdhf ajsdf halkd jfahdlf kjad</td>
+                                       </tr>
+                                       <tr>
+                                          <th scope="row">2</th>
+                                          <td>Marklkjf halskdjfhan svsdoilfjkgahsfda lskjdfhaldkv nsjdcnalksdfjahsfaiu sfwefnalsidfukjas. dfhals dkfjaslcjknaskldfj asdhf ajsdf halkd jfahdlf kjad</td>
+                                       </tr>
+                                       <tr>
+                                          <th scope="row">3</th>
+                                          <td>Marklkjfhal skdjfhansvsdo ilfjkgahsfda lskjdfhaldkvnsj dcnalksdfjahs faiusfwefnal sidfukjas.dfhalsdkfjasl cjknaskldfj asdhf ajsdf halkd jfahdlf kjad</td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                                 <div class="ln_solid"></div>
+                                 <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                       <button type="button" class="pull-right btn btn-info">Previous <i class="fa fa-angle-right"></i></button>
+                                       <button type="button" class="btn btn-info"><i class="fa fa-angle-left"></i> Next&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</button>
                                     </div>
                                  </div>
                               </div>
-                              <div class="row">
-                                 <div class="x_panel">
-                                    <div class="x_title">
-                                       <h2><i class="fa fa-question-circle"></i> | Current Question - Essays</h2>
-                                       <ul class="nav navbar-right panel_toolbox">
-                                          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                          </li>
-                                          <li class="dropdown">
-                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                             <ul class="dropdown-menu" role="menu">
-                                                <li><a href="#">Settings 1</a>
-                                                </li>
-                                                <li><a href="#">Settings 2</a>
-                                                </li>
-                                             </ul>
-                                          </li>
-                                          <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                          </li>
-                                       </ul>
-                                       <div class="clearfix"></div>
+                           </div>
+                        </div>
+                        <div class="col-md-8 col-sm-12 col-xs-12">
+                           <div class="x_panel">
+                              <div class="x_title">
+                                 <h2><i class="fa fa-question-circle"></i> | Current Question</h2>
+                                 <ul class="nav navbar-right panel_toolbox">
+                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                                 </ul>
+                                 <div class="clearfix"></div>
+                              </div>
+                              <div class="x_content">
+                                 <div class="row">
+                                    <div class="col-md-1 col-sm-1 col-xs-1">
+                                       <label>#1 </label>
                                     </div>
-                                    <div class="x_content">
-                                       <div class="row">
-                                          <div class="col-md-1 col-sm-1 col-xs-1">
-                                             <label>#1 </label>
-                                          </div>
-                                          <div class="col-md-11 col-sm-11 col-xs-11">
-                                             <p>Marklkjfhal skdjfhansvsdo ilfjkgahsfdalsk jdfhaldkvnsjdcna lksdfjahsfaiusfwefn alsidfukjas.df halsdkfjas lcjknaskldfj asdhf ajsdf halkd jfahdlf kjad</p>
-                                          </div>
-                                       </div>
+                                    <div class="col-md-11 col-sm-11 col-xs-11">
+                                       <p>Marklkjfhal skdjfhansvsdo ilfjkgahsfdalsk jdfhaldkvnsjdcna lksdfjahsfaiusfwefn alsidfukjas.df halsdkfjas lcjknaskldfj asdhf ajsdf halkd jfahdlf kjad</p>
+                                    </div>
+                                 </div>
+                                 <div class="ln_solid"></div>
+                                 <div class="row">
+                                    <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                       <p>Student: <b>Austin Sink</b></p>
                                        <div class="ln_solid"></div>
-                                       <div class="row">
-                                          <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                                             <p>Student: <b>Austin Sink</b></p>
-                                             <div class="ln_solid"></div>
-                                             <h3>Student answer</h3>
-                                             <p>Marklkjfhal skdjfhansvsdo ilfjkgahsfdalsk jdfhaldkvnsjdcna lksdfjahsfaiusfwefn alsidfukjas.df halsdkfjas lcjknaskldfj asdhf ajsdf halkd jfahdlf kjad</p>
-                                          </div>
-                                       </div>
-                                       <div class="row">
-                                          <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                                             <h3>Correct answer</h3>
-                                             <p>Marklkjfhal skdjfhansvsdo ilfjkgahsfdalsk jdfhaldkvnsjdcna lksdfjahsfaiusfwefn alsidfukjas.df halsdkfjas lcjknaskldfj asdhf ajsdf halkd jfahdlf kjad</p>
-                                          </div>
-                                          <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                                             <h3>Comments</h3>
-                                             <textarea class="" id="textarea1"></textarea>
-                                          </div>
-                                       </div>
+                                       <label>Student answer</label>
+                                       <p>Marklkjfhal skdjfhansvsdo ilfjkgahsfdalsk jdfhaldkvnsjdcna lksdfjahsfaiusfwefn alsidfukjas.df halsdkfjas lcjknaskldfj asdhf ajsdf halkd jfahdlf kjad</p>
                                     </div>
                                  </div>
-                              </div>
-                              <div class="row">
+                                 <div class="row">
+                                    <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                       <label>Correct answer</label>
+                                       <p>Marklkjfhal skdjfhansvsdo ilfjkgahsfdalsk jdfhaldkvnsjdcna lksdfjahsfaiusfwefn alsidfukjas.df halsdkfjas lcjknaskldfj asdhf ajsdf halkd jfahdlf kjad</p>
+                                    </div>
+                                    <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                       <label>Comments</label>
+                                       <textarea class="" id="textarea1"></textarea>
+                                    </div>
+                                    <div class="col-md-2 col-sm-2 col-xs-2">
+                                       <input type="text" placeholder="pts" class="form-group form-control">
+                                    </div><h3>/15</h3>
+                                 </div>
+                                 <div class="ln_solid"></div>
                                  <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <button type="button" class="pull-right btn btn-primary">Save</button>
+                                    <button type="button" class="pull-right btn btn-info">Grade</button>
                                     <button type="button" class="pull-right btn btn-danger">Cancel</button>
                                  </div>
                               </div>
-                              <!-- end of row 2 -->
                            </div>
                         </div>
                      </div>
                   </div>
                </div>
             </div>
-            <!-- /page content -->
-
-            <!-- footer content -->
-            <footer>
-               <div class="pull-right">
-                  2019 404Brain!Found
-               </div>
-               <div class="clearfix"></div>
-            </footer>
-            <!-- /footer content -->
          </div>
+         <!-- /page content -->
+
+         <!-- footer content -->
+         <footer>
+            <div class="pull-right">
+               2019 404Brain!Found
+            </div>
+            <div class="clearfix"></div>
+         </footer>
+         <!-- /footer content -->
       </div>
+   </div>
 
-      <!-- jQuery -->
-      <script src="../vendors/jquery/dist/jquery.min.js"></script>
-      <!-- Bootstrap -->
-      <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
-      <!-- FastClick -->
-      <script src="../vendors/fastclick/lib/fastclick.js"></script>
-      <!-- NProgress -->
-      <script src="../vendors/nprogress/nprogress.js"></script>
-      <!-- bootstrap-progressbar -->
-      <script src="../vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
-      <!-- iCheck -->
-      <script src="../vendors/iCheck/icheck.min.js"></script>
-      <!-- bootstrap-daterangepicker -->
-      <script src="../vendors/moment/min/moment.min.js"></script>
-      <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
-      <!-- bootstrap-wysiwyg -->
-      <script src="../vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js"></script>
-      <script src="../vendors/jquery.hotkeys/jquery.hotkeys.js"></script>
-      <script src="../vendors/google-code-prettify/src/prettify.js"></script>
-      <!-- jQuery Tags Input -->
-      <script src="../vendors/jquery.tagsinput/src/jquery.tagsinput.js"></script>
-      <!-- Switchery -->
-      <script src="../vendors/switchery/dist/switchery.min.js"></script>
-      <!-- Select2 -->
-      <script src="../vendors/select2/dist/js/select2.full.min.js"></script>
-      <!-- Parsley -->
-      <script src="../vendors/parsleyjs/dist/parsley.min.js"></script>
-      <!-- Autosize -->
-      <script src="../vendors/autosize/dist/autosize.min.js"></script>
-      <!-- jQuery autocomplete -->
-      <script src="../vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
-      <!-- starrr -->
-      <script src="../vendors/starrr/dist/starrr.js"></script>
-      <!-- Custom Theme Scripts -->
-      <script src="../build/js/custom.min.js"></script>
-      <script>
-      /*
-      * jQuery autoResize (textarea auto-resizer)
-      * @copyright James Padolsey http://james.padolsey.com
-      * @version 1.04
-      */
+   <!-- jQuery -->
+   <script src="../vendors/jquery/dist/jquery.min.js"></script>
+   <!-- Bootstrap -->
+   <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+   <!-- FastClick -->
+   <script src="../vendors/fastclick/lib/fastclick.js"></script>
+   <!-- NProgress -->
+   <script src="../vendors/nprogress/nprogress.js"></script>
+   <!-- bootstrap-progressbar -->
+   <script src="../vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+   <!-- iCheck -->
+   <script src="../vendors/iCheck/icheck.min.js"></script>
+   <!-- bootstrap-daterangepicker -->
+   <script src="../vendors/moment/min/moment.min.js"></script>
+   <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+   <!-- bootstrap-wysiwyg -->
+   <script src="../vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js"></script>
+   <script src="../vendors/jquery.hotkeys/jquery.hotkeys.js"></script>
+   <script src="../vendors/google-code-prettify/src/prettify.js"></script>
+   <!-- jQuery Tags Input -->
+   <script src="../vendors/jquery.tagsinput/src/jquery.tagsinput.js"></script>
+   <!-- Switchery -->
+   <script src="../vendors/switchery/dist/switchery.min.js"></script>
+   <!-- Select2 -->
+   <script src="../vendors/select2/dist/js/select2.full.min.js"></script>
+   <!-- Parsley -->
+   <script src="../vendors/parsleyjs/dist/parsley.min.js"></script>
+   <!-- Autosize -->
+   <script src="../vendors/autosize/dist/autosize.min.js"></script>
+   <!-- jQuery autocomplete -->
+   <script src="../vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
+   <!-- starrr -->
+   <script src="../vendors/starrr/dist/starrr.js"></script>
+   <!-- Custom Theme Scripts -->
+   <script src="../build/js/custom.min.js"></script>
+   <script>
+   /*
+   * jQuery autoResize (textarea auto-resizer)
+   * @copyright James Padolsey http://james.padolsey.com
+   * @version 1.04
+   */
 
-      (function($){
+   (function($){
 
-         $.fn.autoResize = function(options) {
+      $.fn.autoResize = function(options) {
 
-            // Just some abstracted details,
-            // to make plugin users happy:
-            var settings = $.extend({
-               onResize : function(){},
-               animate : true,
-               animateDuration : 150,
-               animateCallback : function(){},
-               extraSpace : 0,
-               limit: 1000
-            }, options);
+         // Just some abstracted details,
+         // to make plugin users happy:
+         var settings = $.extend({
+            onResize : function(){},
+            animate : true,
+            animateDuration : 150,
+            animateCallback : function(){},
+            extraSpace : 0,
+            limit: 1000
+         }, options);
 
-            // Only textarea's auto-resize:
-            this.filter('textarea').each(function(){
+         // Only textarea's auto-resize:
+         this.filter('textarea').each(function(){
 
-               // Get rid of scrollbars and disable WebKit resizing:
-               var textarea = $(this).css({resize:'none','overflow-y':'hidden'}),
+            // Get rid of scrollbars and disable WebKit resizing:
+            var textarea = $(this).css({resize:'none','overflow-y':'hidden'}),
 
-               // Cache original height, for use later:
-               origHeight = textarea.height(),
+            // Cache original height, for use later:
+            origHeight = textarea.height(),
 
-               // Need clone of textarea, hidden off screen:
-               clone = (function(){
+            // Need clone of textarea, hidden off screen:
+            clone = (function(){
 
-                  // Properties which may effect space taken up by chracters:
-                  var props = ['height','width','lineHeight','textDecoration','letterSpacing'],
-                  propOb = {};
+               // Properties which may effect space taken up by chracters:
+               var props = ['height','width','lineHeight','textDecoration','letterSpacing'],
+               propOb = {};
 
-                  // Create object of styles to apply:
-                  $.each(props, function(i, prop){
-                     propOb[prop] = textarea.css(prop);
-                  });
+               // Create object of styles to apply:
+               $.each(props, function(i, prop){
+                  propOb[prop] = textarea.css(prop);
+               });
 
-                  // Clone the actual textarea removing unique properties
-                  // and insert before original textarea:
-                  return textarea.clone().removeAttr('id').removeAttr('name').css({
-                     position: 'absolute',
-                     top: 0,
-                     left: -9999
-                  }).css(propOb).attr('tabIndex','-1').insertBefore(textarea);
+               // Clone the actual textarea removing unique properties
+               // and insert before original textarea:
+               return textarea.clone().removeAttr('id').removeAttr('name').css({
+                  position: 'absolute',
+                  top: 0,
+                  left: -9999
+               }).css(propOb).attr('tabIndex','-1').insertBefore(textarea);
 
-               })(),
-               lastScrollTop = null,
-               updateSize = function() {
+            })(),
+            lastScrollTop = null,
+            updateSize = function() {
 
-                  // Prepare the clone:
-                  clone.height(0).val($(this).val()).scrollTop(10000);
+               // Prepare the clone:
+               clone.height(0).val($(this).val()).scrollTop(10000);
 
-                  // Find the height of text:
-                  var scrollTop = Math.max(clone.scrollTop(), origHeight) + settings.extraSpace,
-                  toChange = $(this).add(clone);
+               // Find the height of text:
+               var scrollTop = Math.max(clone.scrollTop(), origHeight) + settings.extraSpace,
+               toChange = $(this).add(clone);
 
-                  // Don't do anything if scrollTip hasen't changed:
-                  if (lastScrollTop === scrollTop) { return; }
-                  lastScrollTop = scrollTop;
+               // Don't do anything if scrollTip hasen't changed:
+               if (lastScrollTop === scrollTop) { return; }
+               lastScrollTop = scrollTop;
 
-                  // Check for limit:
-                  if ( scrollTop >= settings.limit ) {
-                     $(this).css('overflow-y','');
-                     return;
-                  }
-                  // Fire off callback:
-                  settings.onResize.call(this);
+               // Check for limit:
+               if ( scrollTop >= settings.limit ) {
+                  $(this).css('overflow-y','');
+                  return;
+               }
+               // Fire off callback:
+               settings.onResize.call(this);
 
-                  // Either animate or directly apply height:
-                  settings.animate && textarea.css('display') === 'block' ?
-                  toChange.stop().animate({height:scrollTop}, settings.animateDuration, settings.animateCallback)
-                  : toChange.height(scrollTop);
-               };
+               // Either animate or directly apply height:
+               settings.animate && textarea.css('display') === 'block' ?
+               toChange.stop().animate({height:scrollTop}, settings.animateDuration, settings.animateCallback)
+               : toChange.height(scrollTop);
+            };
 
-               // Bind namespaced handlers to appropriate events:
-               textarea
-               .unbind('.dynSiz')
-               .bind('keyup.dynSiz', updateSize)
-               .bind('keydown.dynSiz', updateSize)
-               .bind('change.dynSiz', updateSize);
+            // Bind namespaced handlers to appropriate events:
+            textarea
+            .unbind('.dynSiz')
+            .bind('keyup.dynSiz', updateSize)
+            .bind('keydown.dynSiz', updateSize)
+            .bind('change.dynSiz', updateSize);
 
-            });
+         });
 
-            // Chain:
-            return this;
+         // Chain:
+         return this;
 
-         };
+      };
 
 
 
-      })(jQuery);
-      $("#textarea1").autoResize();
-      </script>
-   </body>
-   </html>
+   })(jQuery);
+   $("#textarea1").autoResize();
+   </script>
+</body>
+</html>
