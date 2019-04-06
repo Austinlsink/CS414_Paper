@@ -188,6 +188,8 @@ namespace BrainNotFound.Paper.Controllers
             List<TrueFalse> TFQuestions = new List<TrueFalse>();
             var allMCQuestions = _context.Questions.Where(x => x.QuestionType == "MultipleChoice");
             List<Question> MCQuestions = new List<Question>();
+            var allMCOptions = _context.MultipleChoiceAnswers.ToList();
+            List<MultipleChoiceAnswer> MCOptions = new List<MultipleChoiceAnswer>();
             int totalPoints = 0;
             // Grab the questions for each test section
             foreach(TestSection ts in testSections)
@@ -204,6 +206,14 @@ namespace BrainNotFound.Paper.Controllers
                 {
                     if (ts.TestSectionId == q.TestSectionId)
                     {
+                        foreach(MultipleChoiceAnswer option in allMCOptions)
+                        {
+                            if (q.QuestionId == option.QuestionId)
+                            {
+                                MCOptions.Add(option);
+                            }
+                        }
+                        q.MultipleChoiceAnswers = MCOptions;
                         MCQuestions.Add(q);
                         totalPoints += q.PointValue;
                     }

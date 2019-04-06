@@ -101,6 +101,18 @@ $("label[data-questionType='trueFalse']").click(function () {
     $(this).siblings().removeClass("btn-primary").removeClass("btn-danger").addClass("btn-default");
 })
 
+// Multiple choice toggle
+$(".multipleChoiceOption").click(function () {
+    if ($(this).hasClass("btn-default")) {
+        $(this).removeClass("btn-default").addClass("btn-primary");
+    }
+    else {
+        $(this).removeClass("btn-primary").addClass("btn-default");
+    }
+
+})
+
+
 // stripes every other row
 $(document).ready(function () {
     var hasBackground = false;
