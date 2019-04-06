@@ -1,7 +1,9 @@
--- Get enrollments with student names
-SELECT Enrollments.EnrollmentId, AspNetUsers.FirstName + AspNetUsers.LastName AS Student, Enrollments.SectionId
+-- Get enrollments with student names and course names
+SELECT Enrollments.EnrollmentId, AspNetUsers.FirstName + AspNetUsers.LastName AS Student, Enrollments.SectionId, Courses.Name
   FROM Enrollments JOIN AspNetUsers ON Enrollments.StudentId = AspNetUsers.Id
-ORDER BY Student, SectionId;
+				   JOIN Sections ON Enrollments.SectionId = Sections.SectionId
+				   JOIN Courses ON Sections.CourseId = Courses.CourseId
+ORDER BY Student, Name;
 
 -- Get course of a specific section
 SELECT Courses.Name

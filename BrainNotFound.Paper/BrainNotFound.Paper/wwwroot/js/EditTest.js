@@ -731,7 +731,7 @@ $("#TestSections").on("click", ".addMultipleChoiceOptionNewQuestion", function (
 
     rendered += template({ "timeStamp": uuid });
 
-    $("#MultipleChoiceOptionsContainer-" + questionId).append(rendered);
+    $("#MultipleChoiceOptionsContainer-" + uuid).append(rendered);
 })
 
 // Add a multiple choice option to a new multiple choice question
@@ -953,7 +953,7 @@ $("#TestSections").on("click", ".saveEdittedMultipleChoiceQuestion", function ()
     }
 
     if (!hasError) {
-        var JsonData = JSON.stringify({ testSectionId: testSectionId, questionContent: questionContent, pointValue: pointValue, multipleChoiceAnswers: multipleChoiceAnswers });
+        var JsonData = JSON.stringify({questionId: questionId, questionContent: questionContent, pointValue: pointValue, multipleChoiceAnswers: multipleChoiceAnswers });
 
         $.ajax({
             url: "/api/CreateTest/NewMultipleChoiceQuestion",

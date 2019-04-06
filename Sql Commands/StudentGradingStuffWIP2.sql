@@ -50,16 +50,28 @@ BEGIN
 								IF ((SELECT Questions.QuestionType FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId) = 'Essay')
 									BEGIN
 										UPDATE StudentTestAssignments
-										   SET ManualGradingRequred = 1
+										   SET ManualGradingRequired = 1
 										 WHERE StudentTestAssignments.StudentTestAssignmentId = @studentTestAssignmentId;
 									END;
 
 								-- Grade FillInTheBlank answers
 								IF ((SELECT Questions.QuestionType FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId) = 'FillInTheBlank')
 									BEGIN
+										-- All the correct answers for the question
+										DECLARE fillInTheBlankCorrectAnswersCursor CURSOR FOR
+											 SELECT FillInTheBlankQuestions.FillInTheBlankQuestionId, FillInTheBlankQuestions.FillInTheBlankAnswer
+											   FROM FillInTheBlankQuestions JOIN Questions ON FillInTheBlankQuestions.QuestionId = Questions.QuestionId
+																			JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId
+											   WHERE StudentAnswers.QuestionId = @c_answerId;
+										DECLARE @currentFillInTheBlankQuestionId BIGINT;
+										DECLARE @currentCorrectFillInTheBlankAnswer NVARCHAR;
+
+										-- Grade answers
+										WHILE
+
 										-- Compare answers
-										IF ((SELECT StudentAnswers.FillInTheBlankAnswerGiven FROM StudentAnswers WHERE StudentAnswers.AnswerId = @c_AnswerId) = (SELECT Questions.FillInTheBlankAnswer FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId))
-										BEGIN
+										IF ((SELECT AnswerGiven FROM StudentFillInTheBlankAnswers WHERE StudentFillInTheBlankAnswers.AnswerId = @c_AnswerId) = (SELECT FillInTheBlankQuestions.FillInTheBlankAnswer FROM FillInTheBlankQuestions JOIN Questions ON FillInTheBlankQuestions.QuestionId = Questions.QuestionId JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId))
+										BEGIN -- The above won't work--too many possible answers
 											SELECT @c_testGrade += (SELECT Questions.PointValue FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId);
 										END;
 									END;

@@ -23,5 +23,6 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 
         public List<StudentMatchingAnswer> StudentMatchingAnswers {get; set;}
         public List<StudentMultipleChoiceAnswer> StudentMultipleChoiceAnswers { get; set; }
+        public List<StudentFillInTheBlankAnswer> StudentFillInTheBlankAnswers { get; set; }
     }
 }
