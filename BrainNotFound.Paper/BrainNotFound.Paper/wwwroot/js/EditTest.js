@@ -109,6 +109,8 @@ function init_students_datatable() {
     });
 }
 
+
+
 // Reset New Schedule Time Picker
 function init_daterangepicker_TestSchedule() {
 
@@ -898,7 +900,7 @@ $("#TestSections").on("click", ".saveEdittedMultipleChoiceQuestion", function ()
     var questionId = $(this).attr("data-questionId");
     var questionContent = $.trim($("#MultipleChoiceContent-" + questionId).val());
     var pointValue = $("#MultipleChoicePointValue-" + questionId).val();
-    var newQuestionContainer = $(this).parents(".editQuestionContainer");
+    var editQuestionContainer = $(this).parents(".editQuestionContainer");
     var hasError = false;
 
     // Checks if there is at least two options
@@ -956,19 +958,22 @@ $("#TestSections").on("click", ".saveEdittedMultipleChoiceQuestion", function ()
         var JsonData = JSON.stringify({questionId: questionId, questionContent: questionContent, pointValue: pointValue, multipleChoiceAnswers: multipleChoiceAnswers });
 
         $.ajax({
-            url: "/api/CreateTest/NewMultipleChoiceQuestion",
+            url: "/api/CreateTest/UpdateMultipleChoiceQuestion",
             type: "POST",
             contentType: 'application/json; charset=utf-8',
             data: JsonData,
             success: function (result) {
                 if (result.success) {
+
+                    $(editQuestionContainer).remove();
+                    // Adds question to section
                     // Adds question to section
                     var rendered = "";
                     var multipleChoiceQuestionTemplate = $("#MultipleChoiceQuestionTemplate").html();
                     var template = Handlebars.compile(multipleChoiceQuestionTemplate);
                     rendered = template(result.question);
 
-                    $("#questionsContainer-" + result.question.sectionId).append(rendered);
+                    $("#questionContainer-" + result.question.questionId).before(rendered).remove();
 
                     // Adds the question options to the questions
                     rendered = "";
@@ -979,8 +984,7 @@ $("#TestSections").on("click", ".saveEdittedMultipleChoiceQuestion", function ()
                     });
 
                     $("#multipleChoiceOptionsContainer-" + result.question.questionId).html(rendered);
-
-                    $(newQuestionContainer).remove();
+                    
                     console.log(result);
                     // ADD-NOTIFICATION
                 }
