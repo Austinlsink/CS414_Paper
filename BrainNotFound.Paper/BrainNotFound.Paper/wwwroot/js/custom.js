@@ -2617,16 +2617,16 @@ function init_morris_charts() {
         Morris.Bar({
             element: 'graphx',
             data: [
-                { x: '2015 Q1', y: 2, z: 3, a: 4 },
-                { x: '2015 Q2', y: 3, z: 5, a: 6 },
-                { x: '2015 Q3', y: 4, z: 3, a: 2 },
-                { x: '2015 Q4', y: 2, z: 4, a: 5 }
+                { x: 'CS 202', 1: 85, 2: 78 },
+                { x: 'CS 214', 1: 82,},
+                { x: 'CS 227', 1: 79, 2: 92, 3: 68 },
+                { x: 'CS 246', 1: 83, 2: 100, 3: 37, 4: 74, 5:88}
             ],
             xkey: 'x',
-            ykeys: ['y', 'z', 'a'],
-            barColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
+            ykeys: ['1', '2', '3', '4', '5'],
+            barColors: ['#2B3080', '#A3A8FF', '#5760FF', '#525480', '#454CCC'],
             hideHover: 'auto',
-            labels: ['Y', 'Z', 'A'],
+            labels: ['1', '2', '3', '4', '5'],
             resize: true
         }).on('click', function (i, row) {
             console.log(i, row);
@@ -2666,14 +2666,15 @@ function init_morris_charts() {
         Morris.Donut({
             element: 'graph_donut',
             data: [
-                { label: 'Jam', value: 25 },
-                { label: 'Frosted', value: 40 },
-                { label: 'Custard', value: 25 },
-                { label: 'Sugar', value: 10 }
+                { label: 'A', value: 9 },
+                { label: 'B', value: 15 },
+                { label: 'C', value: 10 },
+                { label: 'D', value: 4 },
+                { label: 'F', value: 2 }
             ],
-            colors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
+            colors: ['#2B3080', '#A3A8FF', '#5760FF', '#525480', '#454CCC'],
             formatter: function (y) {
-                return y + "%";
+                return y + " students";
             },
             resize: true
         });
