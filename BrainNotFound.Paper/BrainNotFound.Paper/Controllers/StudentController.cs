@@ -159,8 +159,12 @@ namespace BrainNotFound.Paper.Controllers
         
 
         [HttpGet, Route("Tests/TakeTest/{testScheduleId}")]
-        public  IActionResult TakeTest(long testScheduleId)
+        public async Task<IActionResult> TakeTest(long testScheduleId)
         {
+            // Student information
+            ApplicationUser student = await _userManager.FindByNameAsync(User.Identity.Name);
+            ViewBag.Student = student;
+        
             var testSchedule = _context.TestSchedules
                 .Include(ts => ts.Test)
                     .ThenInclude(t => t.Course)
@@ -179,13 +183,55 @@ namespace BrainNotFound.Paper.Controllers
             var testSections = _context.TestSections.Include(ts =>  ts.Questions).Where(x => x.TestId == testSchedule.TestId).ToList();
             ViewBag.TestSections = testSections;
 
-            // Grab the truefalse questions that mat
-            var TFQuestions = _context.TrueFalses.ToList();
-            ViewBag.TFQuestions = TFQuestions;
 
-            // Grab student answers if any
-            var studentAnswers = _context.StudentTrueFalseAnswers.Where(x => x.TestScheduleId == testSchedule.TestScheduleId).ToList();
-            ViewBag.StudentTFAnswers = studentAnswers;
+            var allTFQuestions = _context.TrueFalses.ToList();
+            List<TrueFalse> TFQuestions = new List<TrueFalse>();
+            var allMCQuestions = _context.Questions.Where(x => x.QuestionType == "MultipleChoice");
+            List<Question> MCQuestions = new List<Question>();
+            var allMCOptions = _context.MultipleChoiceAnswers.ToList();
+            List<MultipleChoiceAnswer> MCOptions = new List<MultipleChoiceAnswer>();
+            int totalPoints = 0;
+            // Grab the questions for each test section
+            foreach(TestSection ts in testSections)
+            {
+                foreach(TrueFalse tf in allTFQuestions)
+                {
+                    if (tf.TestSectionId == ts.TestSectionId)
+                    {
+                        TFQuestions.Add(tf);
+                        totalPoints += tf.PointValue;
+                    }
+                }
+                foreach(Question q in allMCQuestions)
+                {
+                    if (ts.TestSectionId == q.TestSectionId)
+                    {
+                        foreach(MultipleChoiceAnswer option in allMCOptions)
+                        {
+                            if (q.QuestionId == option.QuestionId)
+                            {
+                                MCOptions.Add(option);
+                            }
+                        }
+                        q.MultipleChoiceAnswers = MCOptions;
+                        MCQuestions.Add(q);
+                        totalPoints += q.PointValue;
+                    }
+                }
+            }
+
+            // Add the test section's questions to their bags
+            ViewBag.TFQuestions = TFQuestions;
+            ViewBag.MCQuestions = MCQuestions;
+
+            // Add the total points to the bag
+            ViewBag.TotalPoints = totalPoints;
+
+            // Grab student's True false answers if any
+            var studentTFAnswers = _context.StudentTrueFalseAnswers.Where(x => x.TestScheduleId == testSchedule.TestScheduleId).ToList();
+            ViewBag.StudentTFAnswers = studentTFAnswers;
+
+            // Grab the student's multiple choice answers if any
 
             return View();
         }

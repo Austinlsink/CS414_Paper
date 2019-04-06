@@ -134,26 +134,9 @@ namespace BrainNotFound.Paper.api
                 _context.SaveChanges();
 
 
-                // Create the response Object
-                dynamic question = new JObject();
-                question.pointValue = MCQuestion.PointValue;
-                question.content = MCQuestion.Content;
-                question.questionId = MCQuestion.QuestionId;
-                question.sectionId = MCQuestion.TestSectionId;
+                var question = MCQuestion.GetJsonMultipleChoice();
 
-                JArray MCOptions = new JArray();
-                foreach(var option in MCQuestion.MultipleChoiceAnswers)
-                {
-                    dynamic MCOption = new JObject();
-                    MCOption.multipleChoiceAnswerId = option.MultipleChoiceAnswerId;
-                    MCOption.isCorrect = option.IsCorrect;
-                    MCOption.optionContent = option.MultipleChoiceAnswerOption;
-
-                    MCOptions.Add(MCOption);
-                }
-                question.multipleChoiceAnswers = MCOptions;
-
-                return Json(new { success = true, question});
+                return Json(new { success = true, question });
             }
         }
 
@@ -241,39 +224,91 @@ namespace BrainNotFound.Paper.api
         /// <param name="content"></param>
         /// <param name="answer"></param>
         /// <returns></returns>
-        //[HttpPost, Route("UpdateTrueFalseQuestion")]
-        //public JsonResult UpdateTrueFalseQuestion([FromBody] JObject jsonData)
-        //{
-        //    dynamic json = jsonData;
-        //    long questionId = (long) json.questionId;
-        //    int pointValue = (int) json.pointValue;
-        //    string content = json.content;
-        //    bool answer = (bool) json.answer;
+        [HttpPost, Route("UpdateTrueFalseQuestion")]
+        public JsonResult UpdateTrueFalseQuestion([FromBody] JObject jsonData)
+        {
+            dynamic json = jsonData;
+            long questionId = (long)json.questionId;
+            int pointValue = (int)json.pointValue;
+            string content = json.content;
+            bool answer = (bool)json.answer;
 
-        //    TrueFalse question = _context.TrueFalses
-        //        .Include(tf => tf.TestSection)
-        //            .ThenInclude(ts => ts.Test)
-        //        .Where(tfq => tfq.QuestionId == questionId)
-        //        .First();
+            TrueFalse question = _context.TrueFalses
+                .Include(tf => tf.TestSection)
+                    .ThenInclude(ts => ts.Test)
+                .Where(tfq => tfq.QuestionId == questionId)
+                .First();
 
-        //    var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
 
+
+            if (question.TestSection.Test.InstructorId == instructor.Id)
+            {
+                question.PointValue = pointValue;
+                question.Content = content;
+                question.TrueFalseAnswer = answer;
+                
+                _context.SaveChanges();
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { success = false, error = "Instructor invalid." });
+            }
+        }
+
+        /// <summary>
+        /// Update the Multiple choice question
+        /// </summary>
+        /// <param name="questionId"></param>
+        /// <param name="pointValue"></param>
+        /// <param name="content"></param>
+        /// <param name="answer"></param>
+        /// <returns></returns>
+        [HttpPost, Route("UpdateMultipleChoiceQuestion")]
+        public JsonResult UpdateMultipleChoiceQuestion([FromBody] JObject jsonData)
+        {
+            // Receives the data
+            dynamic json = jsonData;
+            long questionId = json.questionId;
+            string content = json.questionContent;
+            int pointValue = json.pointValue;
             
-        //    if (question.TestSection.Test.InstructorId == instructor.Id)
-        //    {
-        //        question.PointValue = pointValue;
-        //        question.Content = content;
-        //        question.TrueFalseAnswer = answer;
+            JArray MCAnswers = json.multipleChoiceAnswers;
 
-        //        _context.TrueFalses.Update(question);
-        //        _context.SaveChanges();
-        //        return Json(new { success = true });
-        //    }
-        //    else
-        //    {
-        //        return Json(new { success = false, error = "Instructor invalid." });
-        //    }
-        //}
+            var multipleChoiceQuestion = _context.Questions.Include(q => q.MultipleChoiceAnswers).Where(q => q.QuestionId == questionId).First();
+
+            // Find the instructor who is creating the test
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
+            // Resets the question options
+            _context.MultipleChoiceAnswers.RemoveRange(multipleChoiceQuestion.MultipleChoiceAnswers);
+
+            // Creates the annswer options
+            List<MultipleChoiceAnswer> MCAList = new List<MultipleChoiceAnswer>();
+
+            foreach (JObject x in MCAnswers)
+            {
+                dynamic mca = x;
+                MCAList.Add(new MultipleChoiceAnswer()
+                {
+                    MultipleChoiceAnswerOption = mca.optionContent,
+                    IsCorrect = mca.isCorrect
+                });
+            }
+
+            multipleChoiceQuestion.MultipleChoiceAnswers = MCAList;
+            multipleChoiceQuestion.PointValue = pointValue;
+            multipleChoiceQuestion.Content = content;
+
+            _context.SaveChanges();
+
+            var question = multipleChoiceQuestion.GetJsonMultipleChoice();
+
+
+
+            return Json(new { success = true, question });
+        }
 
         /// <summary>
         /// Allows the instructor to delete a test
@@ -551,14 +586,14 @@ namespace BrainNotFound.Paper.api
                 testScheduleJObject.TestScheduleId = testSchedule.TestScheduleId;
 
                 schedules.Add(testScheduleJObject);
-                
+
             }
 
-            if(schedules.Any())
+            if (schedules.Any())
             {
                 return Json(new { success = true, schedules });
             }
-            
+
 
 
             return Json(new { success = true, schedules = "none" });
@@ -639,9 +674,9 @@ namespace BrainNotFound.Paper.api
                                 dynamic jquestion = new JObject();
 
                                 jquestion.pointValue = question.PointValue;
-                                jquestion.content    = question.Content;
+                                jquestion.content = question.Content;
                                 jquestion.questionId = question.QuestionId;
-                                jquestion.sectionId  = question.TestSectionId;
+                                jquestion.sectionId = question.TestSectionId;
 
                                 JArray MCOptions = new JArray();
                                 foreach (var option in question.MultipleChoiceAnswers)
@@ -699,8 +734,8 @@ namespace BrainNotFound.Paper.api
         {
             // Receiving the data
             dynamic json = jsonData;
-            long questionId = (long) json.questionId;
-            int pointValue = (int) json.pointValue;
+            long questionId = (long)json.questionId;
+            int pointValue = (int)json.pointValue;
 
             // load the question and instructor
             var question = _context.Questions.Include(q => q.TestSection).ThenInclude(ts => ts.Test).Where(q => q.QuestionId == questionId).First();
@@ -709,7 +744,7 @@ namespace BrainNotFound.Paper.api
             // Check if the question belongs to the instructor
             if (instructor.Id == question.TestSection.Test.InstructorId)
             {
-                if(pointValue >= 1)
+                if (pointValue >= 1)
                 {
                     question.PointValue = pointValue;
                     _context.SaveChanges();
@@ -748,7 +783,7 @@ namespace BrainNotFound.Paper.api
             {
                 return Json(new { success = false, error = "Anathorized action" });
             }
-            
+
         }
 
         [HttpPost, Route("DeleteTestSection")]
@@ -779,7 +814,7 @@ namespace BrainNotFound.Paper.api
 
                 return Json(new { success = false, error = "Anathorized action" });
             }
-           
+
         }
     }
 }
