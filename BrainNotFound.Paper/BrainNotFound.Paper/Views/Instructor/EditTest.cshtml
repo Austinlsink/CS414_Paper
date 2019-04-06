@@ -293,6 +293,7 @@
 
 @section Scripts
     {
+    <script src="~/vendors/autosize/dist/autosize.min.js"></script>
     <script type="text/javascript" src="~/vendors/handlebars/handlebars-v4.1.1.js"></script>
     <script type="text/javascript" src="~/js/EditTest.js"></script>
 }
@@ -777,7 +778,6 @@
     </div>
 </script>
 <!--Edit Multiple Choice Question End-->
-
 <!-- Multiple choice option Text Box Template -->
 <script type="text/x-handlebars-template" id="EditableMultipleChoiceOptionTextBoxTemplate">
     <div class="col-md-12 col-sm-12 col-xs-12 EditMultipleChoiceOption-{{questionId}}">
@@ -798,3 +798,37 @@
     </div>
 </script>
 <!--Edit Multiple Choice Question End-->
+
+<script type="text/x-handlebars-template" id="newEssayQuestionTemplate">
+    <div class="newQuestionContainer">
+        <!--Edit True/False Question Start-->
+        <div class="ln_solid"></div>
+        <div class="row well">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="col-md-1 col-sm-1 col-xs-3">
+                    <p>Points:</p>
+                    <input type="number" placeholder="pts" min="1" class="form-group form-control" id="EssayPointValue-{{timeStamp}}" value="1">
+                </div>
+                <div class="form-group col-md-11 col-sm-11 col-xs-12">
+                    <label>Question: </label>
+                    <input type="text" placeholder="Enter question text here" class="form-control " id="essayContent-{{timeStamp}}" />
+                    <span class="text-danger hidden" id="essayContentError-{{timeStamp}}">Please enter a question</span>
+                </div>
+                <div class="col-md-1 col-sm-1 col-xs-3"></div>
+                <div class="col-md-11 col-sm-11 col-xs-12">
+                    <label>Expected Answer</label>
+                    <textarea id="expectedAnswer-{{timeStamp}}"></textarea>
+                </div>
+
+                <div class="form-group col-md-3 col-sm-3 col-xs-12 pull-right">
+                    <p>&nbsp;</p>
+                    <button type="button" class="pull-right btn btn-primary btn-md saveNewEssayQuestion" data-sectionId="{{SectionId}}" data-uuid="{{timeStamp}}">Create</button>
+                    <button type="button" class="pull-right btn btn-danger btn-md cancelNewQuestion">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</script>
+
+

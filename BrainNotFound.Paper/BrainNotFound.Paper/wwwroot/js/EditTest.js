@@ -557,8 +557,12 @@ $("#TestSections").on("click", "button.addQuestionToSection", function () {
         case "MultipleChoice":
             templateId = "#NewMultipleChoiceQuestionTemplate";
             break;
+        case "Essay":
+            templateId = "#newEssayQuestionTemplate";
+            break;
 
     }
+
     var timestamp = new Date().getUTCMilliseconds();
     var newQuestion = $(templateId).html();
     var template = Handlebars.compile(newQuestion);
@@ -566,10 +570,15 @@ $("#TestSections").on("click", "button.addQuestionToSection", function () {
 
     $("#newQuestionContainer-" + sectionId).append(rendered);
 
+    // Initialize true False radio buttons
     $('input.flat').iCheck({
         checkboxClass: 'icheckbox_flat-green',
         radioClass: 'iradio_flat-green'
     });
+
+    // Initialize textares autoresize
+    autosize($('#expectedAnswer-' + timestamp));
+
 })
 
 // Saves a newly created true false question
@@ -1074,7 +1083,7 @@ window.onpopstate = function () {
     window.location.href = "/Instructor/Tests";
 }; history.pushState({}, '');
 
-
+// Deletes a section from the section assinment table
 $("table#TestAssignmentTable").on("click", ".DeleteSectionSchedule", function () {
     var sectionScheduleId = $(this).attr("data-testScheduleId");
     $.ajax({

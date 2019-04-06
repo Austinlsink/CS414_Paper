@@ -27,9 +27,6 @@ $("button#submit").click(function () {
     })
 })
 
-
-
-
 // This function confirms that when the student submits the test, the pledge and his name match and that all of the questions are answered
 $("button#submitTest").click(function () {
     var nameInput = document.getElementById("fullnameInput").value;
