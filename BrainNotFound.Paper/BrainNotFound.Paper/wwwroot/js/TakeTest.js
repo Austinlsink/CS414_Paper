@@ -1,5 +1,36 @@
-﻿
-// This function confirms that when the student submits the test, the pledge and his name match
+﻿// Submits the test
+$("button#submit").click(function () {
+    var newInstructorForm = $("form#NewInstructorForm");
+
+    // Gets the values of the form, and creates an object to be sent to the server
+    var instructor = {};
+    $.each(newInstructorForm.serializeArray(), function (i, field) {
+        instructor[field.name] = field.value;
+    });
+
+    // Creates, submits, and responds to Ajax Call
+    $.ajax({
+        url: "/api/Instructor/New/",
+        type: "POST",
+        contentType: "application/json",
+        // Data fetched from the form
+        data: JSON.stringify(instructor),
+        success: function (result) {
+            // Close the modal window
+            console.log(result.message);
+            location.reload();
+        },
+        error: function (xhr, status, error) {
+            console.log(xhr.responseText);
+            var err = JSON.parse(xhr.responseText);
+        }
+    })
+})
+
+
+
+
+// This function confirms that when the student submits the test, the pledge and his name match and that all of the questions are answered
 $("button#submitTest").click(function () {
     var nameInput = document.getElementById("fullnameInput").value;
     var studentName = $("span#fullname").attr("data-studentName");
@@ -10,20 +41,35 @@ $("button#submitTest").click(function () {
         $("#ErrorModal").modal("toggle");
     }
     else if (nameInput.trim() === studentName.trim()) {
-        $("h4#myModalLabel2").text("Success!");
-        $("p#errorMessagePlaceHolder").text("You've finished the test. Congratulations. You may now review the results.");
-        $("#ErrorModal").modal("toggle");
+        // Now verify that all of the questions have been answered
+        var TestScheduleId = $("input#testScheduleId").val();
+        $.ajax({
+            url: "/api/Tests/ConfirmAllQuestionsAnswered/",
+            type: "POST",
+            contentType: "application/json",
+            // Data fetched from the form
+            data: TestScheduleId,
+            success: function (result) {
+                $("h4#myModalLabel2").text("Success!");
+                $("p#errorMessagePlaceHolder").text("You've finished the test. You may now review the results.");
+                $("#SuccessModal").modal("toggle");
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr.responseText);
+                var err = JSON.parse(xhr.responseText);
+            }
+        })
+
+        
     }
     else {
         $("h4#myModalLabel2").text("Error!");
         $("p#errorMessagePlaceHolder").text("The pledge does not match. Please re-enter your name.");
+        document.getElementById("MessageNo").style.display = "none";
+        document.getElementById("MessageYes").innerText = "Ok";
         $("#ErrorModal").modal("toggle");
     }
-    
 })
-
-
-
 
 // This function reponds to the radios on change event - we're grabbing data!!!!!
 $("input[type='radio']").on("change", function () {
