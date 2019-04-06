@@ -145,34 +145,37 @@ namespace BrainNotFound.Paper.api
         /// </summary>
         /// <param name="jsonData">The object that contains all of the essay question information</param>
         /// <returns>The fill in the blank question that was created</returns>
-        [HttpPost, Route("Essay")]
-        public JsonResult NewEssay([FromBody] JObject jsonData)
+        [HttpPost, Route("NewEssayQuestion")]
+        public JsonResult NewEssayQuestion([FromBody] JObject jsonData)
         {
 
             dynamic json = jsonData;
-            long testSectionId = long.Parse(json.TestSectionId);
+            long testSectionId = json.testSectionId;
             var testSection = _context.TestSections.Include(s => s.Test).Where(x => x.TestSectionId == testSectionId).First();
 
             // Find the instructor who is creating the test
             var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
-            if (testSection.Test.InstructorId != instructor.Id)
-            {
-                return Json(new { success = false, error = "Instructor not allowed" });
-            }
-            else
-            {
-                Essay EssayQuestion = new Essay();
-                EssayQuestion.Content = json.Content;
-                EssayQuestion.Index = int.Parse((string)json.Index);
-                EssayQuestion.PointValue = int.Parse((string)json.PointValue);
-                EssayQuestion.TestSectionId = long.Parse((string)json.TestSectionId);
-                EssayQuestion.QuestionType = QuestionType.Essay;
-                EssayQuestion.ExpectedEssayAnswer = json.ExpectedEssayAnswer;
 
-                _context.Questions.Add(EssayQuestion);
-                _context.SaveChanges();
-                return Json(new { success = true, question = EssayQuestion });
-            }
+            // Creates the new essay question with the view's data
+            Essay newEssayQuestion = new Essay
+            {
+                Content = json.questionContent,
+                //Index = json.Index,
+                PointValue = json.pointValue,
+                TestSectionId = testSectionId,
+                QuestionType = QuestionType.Essay,
+                ExpectedEssayAnswer = json.expectedAnswer
+            };
+
+            // saves question to db
+            _context.Essays.Add(newEssayQuestion);
+            _context.SaveChanges();
+
+            // Returns question to the view0
+            var question = newEssayQuestion.ToJObject();
+
+            return Json(new { success = true, question });
+
         }
 
         /// <summary>
@@ -247,7 +250,7 @@ namespace BrainNotFound.Paper.api
                 question.PointValue = pointValue;
                 question.Content = content;
                 question.TrueFalseAnswer = answer;
-                
+
                 _context.SaveChanges();
                 return Json(new { success = true });
             }
@@ -273,7 +276,7 @@ namespace BrainNotFound.Paper.api
             long questionId = json.questionId;
             string content = json.questionContent;
             int pointValue = json.pointValue;
-            
+
             JArray MCAnswers = json.multipleChoiceAnswers;
 
             var multipleChoiceQuestion = _context.Questions.Include(q => q.MultipleChoiceAnswers).Where(q => q.QuestionId == questionId).First();

@@ -77,7 +77,7 @@ function init_testSections() {
                             });
                             break;
                     }
-                    
+
                 })
 
                 Update_TestStatistics();
@@ -648,8 +648,6 @@ $("#TestSections").on("click", ".saveNewMultipleChoiceQuestion", function () {
         $("li#MinimumNumberOfOptionErrorMessage-" + uuid).addClass("hidden");
     }
 
-
-
     // gets the multiple choices options
     var multipleChoiceAnswers = [];
     var hasCorretOption = false;
@@ -732,6 +730,66 @@ $("#TestSections").on("click", ".saveNewMultipleChoiceQuestion", function () {
     }
 })
 
+
+// Saves a newly created essay question
+$("#TestSections").on("click", "button.saveNewEssayQuestion", function () {
+    var testSectionId = $(this).attr("data-sectionId");
+    var uuid = $(this).attr("data-uuid");
+
+    // Getting question data from the view
+    var questionContent = $("#essayContent-" + uuid).val();
+    var pointValue = $("#EssayPointValue-" + uuid).val();
+    var expectedAnswer = $("#expectedAnswer-" + uuid).val();
+
+    // Error checking on question content
+    if (questionContent.length == 0) {
+        $("#essayContentError-" + uuid).removeClass("hidden");
+    }
+    else {
+        var JsonData = JSON.stringify({ testSectionId: testSectionId, questionContent: questionContent, pointValue: pointValue, expectedAnswer: expectedAnswer });
+
+        console.log(JsonData);
+        $.ajax({
+            url: "/api/CreateTest/NewEssayQuestion",
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            data: JsonData,
+            success: function (result) {
+                console.log(result)
+                //if (result.success) {
+                //    // Adds question to section
+                //    var rendered = "";
+                //    var multipleChoiceQuestionTemplate = $("#MultipleChoiceQuestionTemplate").html();
+                //    var template = Handlebars.compile(multipleChoiceQuestionTemplate);
+                //    rendered = template(result.question);
+
+                //    $("#questionsContainer-" + result.question.sectionId).append(rendered);
+
+                //    // Adds the question options to the questions
+                //    rendered = "";
+                //    result.question.multipleChoiceAnswers.forEach(function (questionOption) {
+                //        var multipleChoiceOptionTemplate = $("#MultipleChoiceOptionTemplate").html();
+                //        var template = Handlebars.compile(multipleChoiceOptionTemplate);
+                //        rendered += template(questionOption);
+                //    });
+
+                //    $("#multipleChoiceOptionsContainer-" + result.question.questionId).html(rendered);
+
+                //    $(newQuestionContainer).remove();
+                //    console.log(result);
+                //    // ADD-NOTIFICATION
+                //}
+                //else {
+                //    console.log(result)
+                //}
+            }
+        })
+    }
+})
+
+
+
+
 // Add a multiple choice option to a new multiple choice question
 $("#TestSections").on("click", ".addMultipleChoiceOptionNewQuestion", function () {
     var uuid = $(this).attr("data-uuid");
@@ -747,14 +805,14 @@ $("#TestSections").on("click", ".addMultipleChoiceOptionNewQuestion", function (
 
 // Add a multiple choice option to a new multiple choice question
 $("#TestSections").on("click", ".addMultipleChoiceOptionEditQuestion", function () {
-    
+
     var questionId = $(this).attr("data-questionId");
     console.log("questionId: " + questionId);
     var rendered = "";
     var EditableMultipleChoiceOptionTextBoxTemplate = $("#EditableMultipleChoiceOptionTextBoxTemplate").html();
     var template = Handlebars.compile(EditableMultipleChoiceOptionTextBoxTemplate);
 
-    rendered += template({questionId: questionId});
+    rendered += template({ questionId: questionId });
     $("#EditMultipleChoiceOptionsContainer-" + questionId).append(rendered);
 
     rendered += template({ questionId: questionId });
@@ -767,7 +825,7 @@ $("#TestSections").on("click", ".deleteMultipleChoiceOptionNewQuestion", functio
 
     $(this).parents(".newMultipleChoiceOption-" + uuid).remove();
     $(this).parents(".EditMultipleChoiceOption-" + questionId).remove();
-    
+
 })
 
 // Deletes a Question from a section
@@ -877,7 +935,7 @@ $("#TestSections").on("click", ".editMultipleChoiceQuestion", function () {
     var EditMultipleChoiceQuestionTemplate = $("#EditMultipleChoiceQuestionTemplate").html();
     var template = Handlebars.compile(EditMultipleChoiceQuestionTemplate);
 
-    rendered = template({ questionId: questionId, content: content, pointValue: pointValue})
+    rendered = template({ questionId: questionId, content: content, pointValue: pointValue })
 
     // Place editable question in DOM 
     $("#questionContainer-" + questionId).before(rendered).addClass("hidden");
@@ -892,7 +950,7 @@ $("#TestSections").on("click", ".editMultipleChoiceQuestion", function () {
 
             var EditableMultipleChoiceOptionTextBoxTemplate = $("#EditableMultipleChoiceOptionTextBoxTemplate").html();
             var template2 = Handlebars.compile(EditableMultipleChoiceOptionTextBoxTemplate);
-            rendered += template2({ questionId: questionId, optionContent: optionContent, isCorrect: isCorrect})
+            rendered += template2({ questionId: questionId, optionContent: optionContent, isCorrect: isCorrect })
         });
     $("#EditMultipleChoiceOptionsContainer-" + questionId).html(rendered);
 
@@ -920,7 +978,7 @@ $("#TestSections").on("click", ".saveEdittedMultipleChoiceQuestion", function ()
     else {
         $("li#MinimumNumberOfOptionErrorMessage-" + questionId).addClass("hidden");
     }
-    
+
     // gets the multiple choices options
     var multipleChoiceAnswers = [];
     var hasCorretOption = false;
@@ -964,7 +1022,7 @@ $("#TestSections").on("click", ".saveEdittedMultipleChoiceQuestion", function ()
     }
 
     if (!hasError) {
-        var JsonData = JSON.stringify({questionId: questionId, questionContent: questionContent, pointValue: pointValue, multipleChoiceAnswers: multipleChoiceAnswers });
+        var JsonData = JSON.stringify({ questionId: questionId, questionContent: questionContent, pointValue: pointValue, multipleChoiceAnswers: multipleChoiceAnswers });
 
         $.ajax({
             url: "/api/CreateTest/UpdateMultipleChoiceQuestion",
@@ -993,7 +1051,7 @@ $("#TestSections").on("click", ".saveEdittedMultipleChoiceQuestion", function ()
                     });
 
                     $("#multipleChoiceOptionsContainer-" + result.question.questionId).html(rendered);
-                    
+
                     console.log(result);
                     // ADD-NOTIFICATION
                 }
