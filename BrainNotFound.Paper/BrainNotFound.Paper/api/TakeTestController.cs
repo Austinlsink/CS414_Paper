@@ -36,15 +36,61 @@ namespace BrainNotFound.Paper.api
 
         #endregion Initialize Controllers
 
-        [HttpPost, Route("ConfirmAllQuestionsAnswered")]
-        public JsonResult ConfirmAllQuestionsAnswered(JObject jsonObject)
+        [HttpPost, Route("SubmitTest")]
+        public async Task<JsonResult> SubmitTest(long testScheduleId)
         {
-            dynamic data = jsonObject;
-            long testScheduleId = (long) data.TestScheduleId;
+            ApplicationUser student = await _userManager.FindByNameAsync(User.Identity.Name);
 
-            var allQuestions = _context.Questions.Include(x => x.TestSection);
+            var studentTestAssignment = _context.StudentTestAssignments.Where(x => x.StudentId == student.Id && x.TestScheduleId == testScheduleId).First();
+            if (studentTestAssignment == null)
+            {
+                return Json(new { success = false });
+            }
+            else
+            {
+                studentTestAssignment.Submitted = true;
+                _context.SaveChanges();
+                return Json(new { success = true });
+            }
+        }
 
-            return Json(new { success = true });
+        /// <summary>
+        /// Confirms if all the questions are answered. If not, it returns an error message.
+        /// </summary>
+        /// <param name="jsonObject"></param>
+        /// <returns></returns>
+        [HttpPost, Route("ConfirmAllQuestionsAnswered")]
+        public JsonResult ConfirmAllQuestionsAnswered(long testScheduleId)
+        {
+            var testSchedule = _context.TestSchedules.Include(x => x.Test).ThenInclude(x => x.TestSections).Where(x => x.TestScheduleId == testScheduleId).First();
+            var testSections = testSchedule.Test.TestSections.ToList();
+
+            var allQuestions = _context.Questions.ToList();
+            List<Question> testSectionQuestions = new List<Question>();
+
+            // Grab all of the questions for each test section
+            foreach(TestSection ts in testSections)
+            {
+                foreach(Question q in allQuestions)
+                {
+                    if (q.TestSectionId == ts.TestSectionId)
+                    {
+                        testSectionQuestions.Add(q);
+                    }
+                }
+            }
+
+            // Grab all of the student answers
+            var allStudentAnswers = _context.StudentAnswers.Where(x => x.TestScheduleId == testSchedule.TestScheduleId).ToList();
+            
+            if(testSectionQuestions.Count == allStudentAnswers.Count)
+            {
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
         }
 
         [HttpPost, Route("SaveTrueFalseAnswer")]
