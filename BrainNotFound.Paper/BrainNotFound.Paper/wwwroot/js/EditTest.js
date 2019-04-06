@@ -76,8 +76,18 @@ function init_testSections() {
                                 $("#multipleChoiceOptionsContainer-" + question.questionId).html(rendered);
                             });
                             break;
-                    }
+                        case "Essay":
+                            testSection.questions.forEach(function (question) {
+                                var rendered = "";
+                                var EssayQuestionTemplate = $("#EssayQuestionTemplate").html();
+                                var template = Handlebars.compile(EssayQuestionTemplate);
+                                rendered = template(question);
 
+                                $("#questionsContainer-" + question.sectionId).append(rendered);
+                            })
+
+                            break;
+                    }
                 })
 
                 Update_TestStatistics();
@@ -108,8 +118,6 @@ function init_students_datatable() {
         'order': [[1, 'asc']]
     });
 }
-
-
 
 // Reset New Schedule Time Picker
 function init_daterangepicker_TestSchedule() {
@@ -747,7 +755,7 @@ $("#TestSections").on("click", "button.saveNewEssayQuestion", function () {
     }
     else {
         var JsonData = JSON.stringify({ testSectionId: testSectionId, questionContent: questionContent, pointValue: pointValue, expectedAnswer: expectedAnswer });
-
+        var newQuestionContainer = $(this).parents(".newQuestionContainer");
         console.log(JsonData);
         $.ajax({
             url: "/api/CreateTest/NewEssayQuestion",
@@ -755,33 +763,21 @@ $("#TestSections").on("click", "button.saveNewEssayQuestion", function () {
             contentType: 'application/json; charset=utf-8',
             data: JsonData,
             success: function (result) {
-                console.log(result)
-                //if (result.success) {
-                //    // Adds question to section
-                //    var rendered = "";
-                //    var multipleChoiceQuestionTemplate = $("#MultipleChoiceQuestionTemplate").html();
-                //    var template = Handlebars.compile(multipleChoiceQuestionTemplate);
-                //    rendered = template(result.question);
+                if (result.success) {
+                    // Adds question to section
+                    var rendered = "";
+                    var EssayQuestionTemplate = $("#EssayQuestionTemplate").html();
+                    var template = Handlebars.compile(EssayQuestionTemplate);
+                    rendered = template(result.question);
 
-                //    $("#questionsContainer-" + result.question.sectionId).append(rendered);
+                    $("#questionsContainer-" + result.question.sectionId).append(rendered);
 
-                //    // Adds the question options to the questions
-                //    rendered = "";
-                //    result.question.multipleChoiceAnswers.forEach(function (questionOption) {
-                //        var multipleChoiceOptionTemplate = $("#MultipleChoiceOptionTemplate").html();
-                //        var template = Handlebars.compile(multipleChoiceOptionTemplate);
-                //        rendered += template(questionOption);
-                //    });
-
-                //    $("#multipleChoiceOptionsContainer-" + result.question.questionId).html(rendered);
-
-                //    $(newQuestionContainer).remove();
-                //    console.log(result);
-                //    // ADD-NOTIFICATION
-                //}
-                //else {
-                //    console.log(result)
-                //}
+                    $(newQuestionContainer).remove();
+                    // ADD-NOTIFICATION
+                }
+                else {
+                    console.log(result)
+                }
             }
         })
     }
@@ -923,6 +919,33 @@ $("#TestSections").on("click", ".editTrueFalseQuestion", function () {
     });
 
 })
+
+// Displays the edit box for a essay question
+$("#TestSections").on("click", ".editEssayQuestion", function () {
+
+    var questionId = $(this).attr("data-questionId");
+    var pointValue = $("#pointValue-" + questionId).val();
+    var expectedAnswerContent = $("#essayExpectedAnswer-" + questionId).text();
+
+    var content = $("#content-" + questionId).text();
+    // Fetch the template
+    var rendered = "";
+    var EditEssayQuestionTemplate = $("#EditEssayQuestionTemplate").html();
+    var template = Handlebars.compile(EditEssayQuestionTemplate);
+
+    //Apply template
+    rendered += template({ questionId: questionId, pointValue: pointValue, expectedAnswerContent: expectedAnswerContent, content: content });
+    $("#questionContainer-" + questionId).before(rendered);
+    $("#questionContainer-" + questionId).addClass("hidden");
+
+    // Initialize rdio buttons
+    $('input.flat').iCheck({
+        checkboxClass: 'icheckbox_flat-green',
+        radioClass: 'iradio_flat-green'
+    });
+
+})
+
 // Displays the edit box for a multiple choice question
 $("#TestSections").on("click", ".editMultipleChoiceQuestion", function () {
     // Get the question Information
@@ -1114,6 +1137,49 @@ $("#TestSections").on("click", ".saveEdittedTrueFalseQuestion", function () {
 
 
     // TODO: UpdateTrueFalseQuestion -> QuestionId, Point value, content, bool ansewer
+})
+
+
+// Saves the edited true false information on the database
+$("#TestSections").on("click", ".saveEdittedEssayQuestion", function () {
+    var questionId = $(this).attr("data-questionId");
+    var pointValue = $("#EssayPointValue-" + questionId).val();
+    var content = $("#EdittedessayContent-" + questionId).val();
+    var saveButton = this;
+    var expectedAnswer = $("#edittedExpectedAnswer-" + questionId).val();
+
+    // Error checks for empty Question content
+    if (content.length > 0) {
+
+        var JsonData = JSON.stringify({ questionId: questionId, content: content, pointValue: pointValue, expectedAnswer: expectedAnswer });
+
+        console.log(JsonData);
+        $.ajax({
+            url: "/api/CreateTest/UpdateEssayQuestion",
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            data: JsonData,
+            success: function (result) {
+                if (result.success) {
+                    $(saveButton).parents(".editQuestionContainer").remove();
+
+                    // Updates the question
+                    $("#questionContainer-" + questionId).removeClass("hidden");
+                    $("#pointValue-" + questionId).val(pointValue);
+                    $("#content-" + questionId).text(content);
+                    $("#essayExpectedAnswer-" + questionId).text(expectedAnswer);
+
+                    // ADD-NOTIFICATION
+                }
+                else {
+                    console.log(result)
+                }
+            }
+        })
+
+    } else {
+        $("#editEssayContentError-" + questionId).removeClass("hidden");
+    }
 })
 
 

@@ -178,6 +178,28 @@ namespace BrainNotFound.Paper.api
 
         }
 
+        // Updates a essay question
+        [HttpPost, Route("UpdateEssayQuestion")]
+        public JsonResult UpdateEssayQuestion([FromBody] JObject jsonData)
+        {
+            dynamic json = jsonData;
+            long questionId = json.questionId;
+            var essayQuestion = _context.Essays.Find(questionId);
+
+            // Find the instructor who is creating the test
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
+            essayQuestion.PointValue = json.pointValue;
+            essayQuestion.Content = json.content;
+            essayQuestion.ExpectedEssayAnswer = json.expectedAnswer;
+
+            // saves question to db
+            _context.SaveChanges();
+
+            return Json(new { success = true});
+
+        }
+
         /// <summary>
         /// Bima says that this method gets a Fill in the Blank questions, saves it to the DB, and returns the question
         /// </summary>
@@ -656,13 +678,7 @@ namespace BrainNotFound.Paper.api
 
                             foreach (var question in TFquestions)
                             {
-                                dynamic jquestion = new JObject();
-                                jquestion.questionId = question.QuestionId;
-                                jquestion.pointValue = question.PointValue;
-                                jquestion.content = question.Content;
-                                jquestion.answer = question.TrueFalseAnswer;
-
-                                jTFquestios.Add(jquestion);
+                                jTFquestios.Add(question.ToJObject());
                             }
 
                             jTestSection.questions = jTFquestios;
@@ -674,29 +690,21 @@ namespace BrainNotFound.Paper.api
 
                             foreach (var question in MCquestions)
                             {
-                                dynamic jquestion = new JObject();
-
-                                jquestion.pointValue = question.PointValue;
-                                jquestion.content = question.Content;
-                                jquestion.questionId = question.QuestionId;
-                                jquestion.sectionId = question.TestSectionId;
-
-                                JArray MCOptions = new JArray();
-                                foreach (var option in question.MultipleChoiceAnswers)
-                                {
-                                    dynamic MCOption = new JObject();
-                                    MCOption.multipleChoiceAnswerId = option.MultipleChoiceAnswerId;
-                                    MCOption.isCorrect = option.IsCorrect;
-                                    MCOption.optionContent = option.MultipleChoiceAnswerOption;
-
-                                    MCOptions.Add(MCOption);
-                                }
-                                jquestion.multipleChoiceAnswers = MCOptions;
-
-                                jMCquestios.Add(jquestion);
+                                jMCquestios.Add(question.GetJsonMultipleChoice());
                             }
 
                             jTestSection.questions = jMCquestios;
+                            break;
+                        case QuestionType.Essay:
+                            var essayQuestions = _context.Essays.Where(q => q.TestSectionId == testSection.TestSectionId).ToList();
+                            JArray jEssayQuestios = new JArray();
+
+                            foreach (var question in essayQuestions)
+                            {
+                                jEssayQuestios.Add(question.ToJObject());
+                            }
+
+                            jTestSection.questions = jEssayQuestios;
                             break;
                     }
                     jTestSections.Add(jTestSection);
