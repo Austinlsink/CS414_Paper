@@ -1,4 +1,31 @@
-﻿// This function reponds to the radios on change event - we're grabbing data!!!!!
+﻿
+// This function confirms that when the student submits the test, the pledge and his name match
+$("button#submitTest").click(function () {
+    var nameInput = document.getElementById("fullnameInput").value;
+    var studentName = $("span#fullname").attr("data-studentName");
+
+    if (nameInput === "") {
+        $("h4#myModalLabel2").text("Warning:");
+        $("p#errorMessagePlaceHolder").text("Submitting the test without a pledge will result in a 0. Are you sure you want to proceed?");
+        $("#ErrorModal").modal("toggle");
+    }
+    else if (nameInput.trim() === studentName.trim()) {
+        $("h4#myModalLabel2").text("Success!");
+        $("p#errorMessagePlaceHolder").text("You've finished the test. Congratulations. You may now review the results.");
+        $("#ErrorModal").modal("toggle");
+    }
+    else {
+        $("h4#myModalLabel2").text("Error!");
+        $("p#errorMessagePlaceHolder").text("The pledge does not match. Please re-enter your name.");
+        $("#ErrorModal").modal("toggle");
+    }
+    
+})
+
+
+
+
+// This function reponds to the radios on change event - we're grabbing data!!!!!
 $("input[type='radio']").on("change", function () {
     var QuestionId = $(this).attr("data-questionId");
     var Answer = $(this).val();
@@ -20,8 +47,6 @@ $("input[type='radio']").on("change", function () {
         }
     })
 })
-
-
 
 // True false toggle
 $("label[data-questionType='trueFalse']").click(function () {
