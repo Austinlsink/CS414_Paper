@@ -2,6 +2,7 @@
 @using BrainNotFound.Paper.Services;
 @{
     ViewData["Title"] = "test_name - Student";
+    int option = 97;
 }
 
 <input id="testScheduleId" type="hidden" value="@ViewBag.TestSchedule.TestScheduleId" />
@@ -88,7 +89,7 @@
 
                             <div class="col-md-12 col-sm-12 col-xs-12 questionRow" style="padding: 20px 0 10px 0">
                                 <div class="col-md-1 col-sm-1 col-xs-3 text-center">
-                                    <span id="pointValue-56789">(@q.PointValue)</span>
+                                    <span id="pointValue-56789">(@q.PointValue pts.)</span>
                                 </div>
                                 <div class="col-md-9 col-sm-9 col-xs-11">
                                     <p><strong>@count.</strong> @q.Content</p>
@@ -172,7 +173,7 @@
                             <div class="row">
                                 <div class="col-sm-12 col-xs-12 questionRow">
                                     <div class="col-md-1 col-sm-1 col-xs-3 text-center">
-                                        <span id="pointValue-56789">(@mcQuestion.PointValue)</span>
+                                        <span id="pointValue-56789">(@mcQuestion.PointValue pts.)</span>
                                     </div>
                                     <div class="col-md-11 col-sm-11 col-xs-11">
                                         <p><strong>@countMC.</strong> @mcQuestion.Content</p>
@@ -180,14 +181,14 @@
                                     <div class="clearfix"></div>
                                     <div class="col-md-1 col-sm- col-xs-12"></div>
                                     <div class=" col-md-10 col-sm-10 col-xs-12">
-                                        @{ 
-                                            int option = 97;
-                                            foreach(MultipleChoiceAnswer answer in mcQuestion.MultipleChoiceAnswers)
+                                        @{
+                                            option = 97;
+                                            foreach (MultipleChoiceAnswer answer in mcQuestion.MultipleChoiceAnswers)
                                             {
 
                                                 if (answer.QuestionId == mcQuestion.QuestionId)
                                                 {
-                                            <a class="btn btn-default btn-block text-left multipleChoiceOption"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @answer.MultipleChoiceAnswerOption</span>&nbsp;</a>
+                                                    <a class="btn btn-default btn-block text-left multipleChoiceOption"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @answer.MultipleChoiceAnswerOption</span>&nbsp;</a>
 
                                                 }
                                                 option++;
@@ -198,7 +199,7 @@
                                     <div class="col-md-1 col-sm- col-xs-12"></div>
                                 </div>
                             </div>
-                                                                                                                                      
+
                             countMC++;
                         }
                     }
@@ -228,7 +229,8 @@
             </div>
             <div class="col-md-4 col-sm-4 col-xs-12 ">
                 <input type="text" id="fullnameInput" class="form-control " name="fullname" required="" placeholder="Type in full name">
-                <span id="fullname" data-studentName="@ViewBag.Student.FirstName @ViewBag.Student.LastName">@ViewBag.Student.FirstName @ViewBag.Student.LastName</span>
+                <span id="fullname" data-studentName="@ViewBag.Student.FirstName @ViewBag.Student.LastName">@ViewBag.Student.FirstName @ViewBag.Student.LastName</span><br/>
+                <span class="text-danger hidden" id="pledgeErrorMessage">Signature does not match name</span>
 
             </div>
 
@@ -256,7 +258,7 @@
                 <p id="errorMessagePlaceHolder"></p>
                 <div class="modal-footer">
                     <button id="MessageNo" type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                    <button id="MessageYes" type="button" class="btn btn-default" data-dismiss="modal">Yes</button>
+                    <button id="MessageYes" type="button" class="btn btn-default submitTest" data-dismiss="modal">Yes</button>
                 </div>
             </div>
         </div>
@@ -269,12 +271,31 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <h4 class="modal-title" id="modalSuccessHeader">Congratulations!</h4>
+                <h4 class="modal-title" id="successModalHeader">Congratulations!</h4>
             </div>
             <div class="modal-body">
-                <p id="errorMessagePlaceHolder"></p>
+                <p id="successModalPlaceholder"></p>
                 <div class="modal-footer">
-                    <button id="submit" type="button" class="btn btn-default" data-dismiss="modal">Okay!</button>
+                    <button id="submit" type="button" class="btn btn-default submitTest" data-dismiss="modal">Okay!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- All questions not answered Modal-->
+<div id="QuestionsAnsweredModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="questionModalHeader">Warning!</h4>
+            </div>
+            <div class="modal-body">
+                <p id="questionModalPlaceholder"></p>
+                <div class="modal-footer">
+                    <button id="questionModalYes" type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                    <button id="questionModalNo" type="button" class="btn btn-default submitTest" data-dismiss="modal">Yes</button>
                 </div>
             </div>
         </div>
