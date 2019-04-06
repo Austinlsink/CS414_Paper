@@ -247,8 +247,7 @@ namespace BrainNotFound.Paper.api
                 question.PointValue = pointValue;
                 question.Content = content;
                 question.TrueFalseAnswer = answer;
-
-                _context.TrueFalses.Update(question);
+                
                 _context.SaveChanges();
                 return Json(new { success = true });
             }
