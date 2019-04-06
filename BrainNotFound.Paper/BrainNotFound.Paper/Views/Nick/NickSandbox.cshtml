@@ -74,6 +74,170 @@
 
         </div>
     </div>
+
+
+    <div class="newQuestionContainer well">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="col-md-1 col-sm-1 col-xs-3">
+                    <p>Points:</p>
+                    <input type="number" placeholder="pts" min="1" class="form-group form-control" id="MultipleChoicePointValue-{{timeStamp}}" value="1">
+                </div>
+                <div class="form-group col-md-11 col-sm-11 col-xs-12">
+                    <p>Question: </p>
+                    <input type="text" placeholder="Question text" class="form-control " id="MultipleChoiceContent-{{timeStamp}}" />
+                    <span class="text-danger hidden" id="multipleChoiceContentError-{{timeStamp}}">Please enter a question</span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div id="MultipleChoiceOptionsContainer-{{timeStamp}}">
+                <div class="col-md-12 col-sm-12 col-xs-12 newMultipleChoiceOption-{{timeStamp}}">
+                    <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                    <label>Expected Answer:</label>
+                                    <textarea class="" id="textarea1"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="text-danger hidden optionErrorMessage ">Option may not be empty</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-3 col-sm-3 col-xs-12 alignright">
+                <p>&nbsp;</p>
+                <button type="button" class="pull-right btn btn-primary btn-md saveNewMultipleChoiceQuestion" data-sectionId="{{SectionId}}" data-uuid="{{timeStamp}}">Create</button>
+                <button type="button" class="pull-right btn btn-danger btn-md cancelNewQuestion" data-questionId="{{timeStamp}}">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-info-circle"></i> | Multiple Choice</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class=""><i class="fa fa-trash-o"></i></a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Settings 1</a></li>
+                        <li><a href="#">Settings 2</a></li>
+                    </ul>
+                </li>
+                <li><a class="collapse-link"><i class="fa fa-arrow-up"></i></a></li>
+                <li><a class="collapse-link"><i class="fa fa-arrow-down"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <p><b>Instructions:</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+            </div>
+
+            <div class="ln_solid"></div>
+
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-md-1 col-sm-1 col-xs-3">
+                        <input type="text" placeholder="pts" class="form-group form-control">
+                    </div>
+                    <div class="col-md-9 col-sm-9 col-xs-11">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    </div>
+                    <div class="form-group col-md-2 col-sm-2 col-xs-12">
+                        <span <ul class="nav navbar-right panel_toolbox">
+                                          <li><a class=""><i class="fa fa-trash-o"></i></a></li>
+                                          <li><a class=""><i class="fa fa-edit"></i></a></li>
+                                          <li><a class=""><i class="fa fa-chevron-up"></i></a></li>
+                                          <li><a class=""><i class="fa fa-chevron-down"></i></a></li>
+                                       </ul> </span>
+                    </div>
+                </div>
+            </div>
+            <div class="ln_solid"></div>
+            <div class="well">
+                <div class="row form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="col-md-1 col-sm-1 col-xs-12">
+                            <input type="text" placeholder="pts" class="form-group form-control">
+                        </div>
+                        <div class="col-md-11 col-sm-11 col-xs-12">
+                            <input type="text" placeholder="pts" class="form-group form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="col-md-11 col-sm-11 col-xs-12">
+                            <div class="col-md-6 col-sm-6 col-xs-12 text-center">
+                                <label>Question Side</label>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12 text-center">
+                                <label>Answer Side</label>
+                            </div>
+                        </div>
+                        <div class="col-md-1 col-sm-1 col-xs-12 text-center">
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12 ">
+                        <div class="col-md-1 col-sm-1 col-xs-12"></div>
+                        <div class="col-md-10 col-sm-10 col-xs-12 well bg-light">
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" placeholder="Question 1" class="form-group form-control">
+                                <input type="text" placeholder="pts" class="form-group form-control">
+                                <div class="text-center"><a class=""><i class="fa fa-plus"></i></a></div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" placeholder="Answer" class="form-group form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-1 col-sm-1 col-xs-12 text-center">
+                            <a class=""><i class="fa fa-trash-o"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12 ">
+                        <div class="col-md-1 col-sm-1 col-xs-12"></div>
+                        <div class="col-md-10 col-sm-10 col-xs-12 well bg-light">
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" placeholder="Question 1" class="form-group form-control">
+                                <input type="text" placeholder="pts" class="form-group form-control">
+                                <div class="text-center"><a class=""><i class="fa fa-plus"></i></a></div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" placeholder="Answer" class="form-group form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-1 col-sm-1 col-xs-12 text-center">
+                            <a class=""><i class="fa fa-trash-o"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="ln_solid"></div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <button type="button" class="pull-right btn btn-primary">Save</button>
+                        <button type="button" class="pull-right btn btn-danger">Cancel</button>
+                    </div>
+                </div>
+                <!-- end of row 2 -->
+            </div>
+        </div>
+    </div>
+
+
 </div>
 
 <!--Page Content
