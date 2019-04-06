@@ -222,7 +222,7 @@
 
 </div>
 
-<!-- Message Modal-->
+<!-- Error Modal-->
 <div id="ErrorModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
@@ -233,14 +233,31 @@
             <div class="modal-body">
                 <p id="errorMessagePlaceHolder"></p>
                 <div class="modal-footer">
-                    <button id="MessageNo"  type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                    <button id="MessageYes" type="button" class="btn btn-default">Yes</button>
+                    <button id="MessageNo" type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                    <button id="MessageYes" type="button" class="btn btn-default" data-dismiss="modal">Yes</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Success Modal-->
+<div id="SuccessModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalSuccessHeader">Congratulations!</h4>
+            </div>
+            <div class="modal-body">
+                <p id="errorMessagePlaceHolder"></p>
+                <div class="modal-footer">
+                    <button id="submit" type="button" class="btn btn-default" data-dismiss="modal">Okay!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts
     {
     <script src="~/js/TakeTest.js" type="text/javascript"></script>

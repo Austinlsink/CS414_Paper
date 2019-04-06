@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 
 namespace BrainNotFound.Paper.api
@@ -34,6 +35,17 @@ namespace BrainNotFound.Paper.api
         }
 
         #endregion Initialize Controllers
+
+        [HttpPost, Route("ConfirmAllQuestionsAnswered")]
+        public JsonResult ConfirmAllQuestionsAnswered(JObject jsonObject)
+        {
+            dynamic data = jsonObject;
+            long testScheduleId = (long) data.TestScheduleId;
+
+            var allQuestions = _context.Questions.Include(x => x.TestSection);
+
+            return Json(new { success = true });
+        }
 
         [HttpPost, Route("SaveTrueFalseAnswer")]
         public JsonResult SaveTrueFalseAnswer(JObject data)
