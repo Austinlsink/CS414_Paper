@@ -177,7 +177,6 @@ namespace BrainNotFound.Paper.api
             return Json(new { success = true, question });
 
         }
-
         // Updates a essay question
         [HttpPost, Route("UpdateEssayQuestion")]
         public JsonResult UpdateEssayQuestion([FromBody] JObject jsonData)

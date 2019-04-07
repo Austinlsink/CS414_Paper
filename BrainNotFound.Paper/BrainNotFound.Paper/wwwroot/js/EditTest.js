@@ -1,5 +1,8 @@
 ﻿//Constants
 
+// PNotify Stack
+var myStack = { "dir1": "down", "dir2": "right", "push": "top" };
+
 // Variables for this Page
 var TotalPoints = 0;
 var NumberOfQuestions = 0;
@@ -31,11 +34,9 @@ function init_testSections() {
         success: function (result) {
             if (result.success) {
 
-                var TestSection = $("#TestSectionTemplate").html();
-                var template = Handlebars.compile(TestSection);
                 result.testSections.forEach(function (testSection) {
                     //console.log(testSection);
-                    $("#TestSections").append(template(testSection));
+                    $("#TestSections").append(DisplayTestSectionTemplate(testSection));
                     NumberOfSections += 1;
 
                     // Adds each question to its section
@@ -43,30 +44,18 @@ function init_testSections() {
                     switch (testSection.sectionType) {
                         case "TrueFalse":
                             testSection.questions.forEach(function (question) {
-                                var rendered = "";
-                                var TrueFalseQuestionTemplate = $("#TrueFalseQuestionTemplate").html();
-                                var template = Handlebars.compile(TrueFalseQuestionTemplate);
-
-                                rendered += template(question);
-
-                                $("#questionsContainer-" + testSection.sectionId).append(rendered);
-
-                                TotalPoints += question.pointValue;
-                                NumberOfQuestions += 1;
-                                Update_TestStatistics();
+                                $("#questionsContainer-" + testSection.sectionId)
+                                    .append(DisplayTrueFalseQuestionsTemplate(question));
                             });
                             break;
                         case "MultipleChoice":
                             testSection.questions.forEach(function (question) {
-                                var rendered = "";
-                                var multipleChoiceQuestionTemplate = $("#MultipleChoiceQuestionTemplate").html();
-                                var template = Handlebars.compile(multipleChoiceQuestionTemplate);
-                                rendered = template(question);
+                                
 
-                                $("#questionsContainer-" + question.sectionId).append(rendered);
+                                $("#questionsContainer-" + question.sectionId).append(DisplayMultipleChoiceTemplate(question));
 
                                 // Adds the question options to the questions
-                                rendered = "";
+                                var rendered = "";
                                 question.multipleChoiceAnswers.forEach(function (questionOption) {
                                     var multipleChoiceOptionTemplate = $("#MultipleChoiceOptionTemplate").html();
                                     var template = Handlebars.compile(multipleChoiceOptionTemplate);
@@ -78,12 +67,8 @@ function init_testSections() {
                             break;
                         case "Essay":
                             testSection.questions.forEach(function (question) {
-                                var rendered = "";
-                                var EssayQuestionTemplate = $("#EssayQuestionTemplate").html();
-                                var template = Handlebars.compile(EssayQuestionTemplate);
-                                rendered = template(question);
-
-                                $("#questionsContainer-" + question.sectionId).append(rendered);
+                                $("#questionsContainer-" + question.sectionId)
+                                    .append(DisplayEssayQuestionTemplate(question));
                             })
 
                             break;
@@ -431,16 +416,8 @@ $("button#SaveNewTestSchedule").click(function () {
 
 // Adds a Generic Section to a Test
 $("#AddTestSectionBtn").click(function () {
-    var rendered = "";
-    var GenericTestSection = $("#GenericTestSectionTemplate").html();
-    var template = Handlebars.compile(GenericTestSection);
-
-    rendered += template();
-
-    $("#TestSections").append(rendered);
+    $("#TestSections").append(NewTestSectionTemplate());
 })
-
-
 
 // Removes a section from the assigment table
 $("table#SectionsAssignedTest").on("click", ".deleteEntireSectionAssignment", function () {
@@ -483,13 +460,15 @@ $("#TestSections").on("click", "button#setQuestionType", function () {
         success: function (result) {
             if (result.success) {
 
-                var rendered = "";
-                var TestSection = $("#TestSectionTemplate").html();
-                var template = Handlebars.compile(TestSection);
+                // Display test section
+                $(SectionTypeContainer)
+                    .before(DisplayTestSectionTemplate({
+                        instructions: result.instructions,
+                        sectionId: result.sectionId,
+                        sectionType: result.sectionType,
+                        header: result.header
+                    }));
 
-                rendered += template({ instructions: result.instructions, sectionId: result.sectionId, sectionType: result.sectionType, header: result.header });
-
-                $(SectionTypeContainer).before(rendered);
                 $(SectionTypeContainer).remove();
 
                 NumberOfSections += 1;
@@ -555,28 +534,23 @@ $("#TestSections").on("click", "button.cancelNewQuestion", function () {
 $("#TestSections").on("click", "button.addQuestionToSection", function () {
     var sectionId = $(this).attr("data-sectionId");
     var sectionType = $(this).attr("data-sectionType");
-    var rendered = "";
-    var templateId = "";
+    var timestamp = new Date().getUTCMilliseconds();
+    var newQuestionData = { sectionId: sectionId, timeStamp: timestamp };
 
     switch (sectionType) {
         case "TrueFalse":
-            templateId = "#NewTrueFalseQuestionTemplate";
+            $("#newQuestionContainer-" + sectionId)
+                .append(NewTrueFalseQuestionTemplate(newQuestionData));
             break;
         case "MultipleChoice":
-            templateId = "#NewMultipleChoiceQuestionTemplate";
+            $("#newQuestionContainer-" + sectionId)
+                .append(NewMultipleChoiceQuestionTemplate(newQuestionData));
             break;
         case "Essay":
-            templateId = "#newEssayQuestionTemplate";
+            $("#newQuestionContainer-" + sectionId)
+                .append(NewEssayQuestionTemplate(newQuestionData));
             break;
-
     }
-
-    var timestamp = new Date().getUTCMilliseconds();
-    var newQuestion = $(templateId).html();
-    var template = Handlebars.compile(newQuestion);
-    rendered += template({ SectionId: sectionId, timeStamp: timestamp, QuestionType: sectionType });
-
-    $("#newQuestionContainer-" + sectionId).append(rendered);
 
     // Initialize true False radio buttons
     $('input.flat').iCheck({
@@ -617,17 +591,10 @@ $("#TestSections").on("click", "button.saveNewTrueFalseQuestion", function () {
             data: JsonData,
             success: function (result) {
                 if (result.success) {
-                    var rendered = "";
-                    var TrueFalseQuestionTemplate = $("#TrueFalseQuestionTemplate").html();
-                    var template = Handlebars.compile(TrueFalseQuestionTemplate);
+                    $("#questionsContainer-" + sectionId)
+                        .append(DisplayTrueFalseQuestionsTemplate(result.question));
 
-                    rendered += template(result.question);
-
-                    $("#questionsContainer-" + sectionId).append(rendered);
                     $(newQuestionContainer).remove();
-                    TotalPoints += result.question.pointValue;
-                    NumberOfQuestions += 1;
-                    Update_TestStatistics();
                 }
                 else {
                     console.log(result)
@@ -709,12 +676,9 @@ $("#TestSections").on("click", ".saveNewMultipleChoiceQuestion", function () {
             success: function (result) {
                 if (result.success) {
                     // Adds question to section
-                    var rendered = "";
-                    var multipleChoiceQuestionTemplate = $("#MultipleChoiceQuestionTemplate").html();
-                    var template = Handlebars.compile(multipleChoiceQuestionTemplate);
-                    rendered = template(result.question);
+                    
 
-                    $("#questionsContainer-" + result.question.sectionId).append(rendered);
+                    $("#questionsContainer-" + result.question.sectionId).append(EditMultipleChoiceQuestionTemplate(result.question));
 
                     // Adds the question options to the questions
                     rendered = "";
@@ -764,16 +728,20 @@ $("#TestSections").on("click", "button.saveNewEssayQuestion", function () {
             data: JsonData,
             success: function (result) {
                 if (result.success) {
+
                     // Adds question to section
-                    var rendered = "";
-                    var EssayQuestionTemplate = $("#EssayQuestionTemplate").html();
-                    var template = Handlebars.compile(EssayQuestionTemplate);
-                    rendered = template(result.question);
+                    $("#questionsContainer-" + result.question.sectionId)
+                        .append(DisplayEssayQuestionTemplate(result.question));
 
-                    $("#questionsContainer-" + result.question.sectionId).append(rendered);
-
+                    // Remove new essay question form
                     $(newQuestionContainer).remove();
+
                     // ADD-NOTIFICATION
+                    new PNotify({
+                        title: 'Animate.css Effect',
+                        text: 'I use effects from Animate.css. Such smooth CSS3 transitions make me feel like butter.',
+
+                    });
                 }
                 else {
                     console.log(result)
@@ -902,14 +870,11 @@ $("#TestSections").on("click", ".editTrueFalseQuestion", function () {
     var answer = $("#TrueFalseAnswer-" + questionId).attr("data-answer") == "true";
     var content = $("#content-" + questionId).text();
     // Fetch the template
-    var rendered = "";
-    var editQuestionTemplate = $("#EditTrueFalseQuestionTemplate").html();
-    var template = Handlebars.compile(editQuestionTemplate);
-
+    
     //Apply template
-    rendered += template({ questionId: questionId, pointValue: pointValue, answer: answer, content: content });
-    console.log(answer);
-    $("#questionContainer-" + questionId).before(rendered);
+    var templateData = { questionId: questionId, pointValue: pointValue, answer: answer, content: content };
+    $("#questionContainer-" + questionId).before(EditTrueFalseQuestionTemplate(templateData));
+
     $("#questionContainer-" + questionId).addClass("hidden");
 
     // Initialize rdio buttons
@@ -953,15 +918,19 @@ $("#TestSections").on("click", ".editMultipleChoiceQuestion", function () {
     var pointValue = $("#pointValue-" + questionId).val();
     var content = $("#content-" + questionId).text();
 
-    // Get Editable question Template
-    var rendered = "";
-    var EditMultipleChoiceQuestionTemplate = $("#EditMultipleChoiceQuestionTemplate").html();
-    var template = Handlebars.compile(EditMultipleChoiceQuestionTemplate);
+    
 
-    rendered = template({ questionId: questionId, content: content, pointValue: pointValue })
+    var templateData = {
+        questionId: questionId,
+        content:    content,
+        pointValue: pointValue
+    };
 
     // Place editable question in DOM 
-    $("#questionContainer-" + questionId).before(rendered).addClass("hidden");
+    $("#questionContainer-" + questionId)
+        .before(EditMultipleChoiceQuestionTemplate(templateData))
+        .addClass("hidden");
+
     rendered = "";
     // Get all the question options
     $(this).parents("#questionContainer-" + questionId)
@@ -1134,8 +1103,6 @@ $("#TestSections").on("click", ".saveEdittedTrueFalseQuestion", function () {
     } else {
         $("TFContentError-" + questionId).removeClass("hidden");
     }
-
-
     // TODO: UpdateTrueFalseQuestion -> QuestionId, Point value, content, bool ansewer
 })
 
@@ -1224,4 +1191,89 @@ $("table#TestAssignmentTable").on("click", ".DeleteSectionSchedule", function ()
             }
         }
     })
+})
+
+/**********************************************************************/
+/*                         Compiled Templates                         */
+/**********************************************************************/
+// Test Section Template
+var NewTestSectionTemplate;
+var DisplayTestSectionTemplate;
+
+// True/False Templates
+var NewTrueFalseQuestionTemplate;
+var DisplayTrueFalseQuestionsTemplate;
+var EditTrueFalseQuestionTemplate;
+
+// Multiple Choice Templates
+var NewMultipleChoiceQuestionTemplate;
+var DisplayMultipleChoiceTemplate;
+
+// Essay Templates
+var NewEssayQuestionTemplate;
+var DisplayEssayQuestionTemplate;
+
+
+/**********************************************************************/
+/*                         Compile templates                          */
+/**********************************************************************/
+
+$(document).ready(function () {
+
+    // Compile True False Templates
+    // Compile new True/False question form
+    $.get("/handlebarsTemplates/newTrueFalseQuestion.html",
+        function (template) {
+            NewTrueFalseQuestionTemplate = Handlebars.compile(template);
+        })
+
+    // Compile diplay True/False question
+    $.get("/handlebarsTemplates/displayTrueFalseQuestion.html",
+        function (template) {
+            DisplayTrueFalseQuestionsTemplate = Handlebars.compile(template);
+        })
+
+    // Compile diplay True/False question
+    $.get("/handlebarsTemplates/editTrueFalseQuestion.html",
+        function (template) {
+            EditTrueFalseQuestionTemplate = Handlebars.compile(template);
+        })
+
+    // Compile Multiple Choice Templates
+    // Compile new Multiple Choice question form
+    $.get("/handlebarsTemplates/newMultipleChoiceQuestion.html",
+        function (template) {
+            NewMultipleChoiceQuestionTemplate = Handlebars.compile(template);
+        })
+
+    $.get("/handlebarsTemplates/displayMultipleChoiceQuestion.html",
+        function (template) {
+            DisplayMultipleChoiceTemplate = Handlebars.compile(template);
+        })
+
+    // Compile Essay Templates
+    // Compile new Essay question form
+    $.get("/handlebarsTemplates/newEssayQuestion.html",
+        function (template) {
+            NewEssayQuestionTemplate = Handlebars.compile(template);
+        })
+
+    // Compile diplay essay question
+    $.get("/handlebarsTemplates/displayEssayQuestion.html",
+        function (template) {
+            DisplayEssayQuestionTemplate = Handlebars.compile(template);
+        })
+
+    // Compile other templates
+    // Compile display test section template
+    $.get("/handlebarsTemplates/displayTestSection.html",
+        function (template) {
+            DisplayTestSectionTemplate = Handlebars.compile(template);
+        })
+
+    // Compile Generic Test Section form
+    $.get("/handlebarsTemplates/newTestSection.html",
+        function (template) {
+            NewTestSectionTemplate = Handlebars.compile(template);
+        })
 })

@@ -1,0 +1,31 @@
+﻿<!-- Template for diplaying a Treu/False question in the edit test  -->
+<!-- Parameters: questionId, pointValue, content, answer -->
+
+<div id="questionContainer-{{questionId}}">
+    <!--True False Question Start-->
+    <div class="ln_solid"></div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="col-md-1 col-sm-1 col-xs-3">
+                <input type="number" id="pointValue-{{questionId}}" data-questionId="{{questionId}}" value="{{pointValue}}" min="1" class="form-group form-control pointValue">
+            </div>
+            <div class="col-md-8 col-sm-8 col-xs-11">
+                <p id="content-{{questionId}}">{{content}}</p>
+            </div>
+            <div class="form-group col-md-3 col-sm-3 col-xs-12">
+                {{#if answer}}
+                <span id="TrueFalseAnswer-{{questionId}}" data-answer="true" style="color:white" class="label label-success">True</span>
+                {{else}}
+                <span id="TrueFalseAnswer-{{questionId}}" data-answer="false" style="color:white" class="label label-danger">False</span>
+                {{/if}}
+
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="deleteQuestion" data-questionId="{{questionId}}"><i class="fa fa-trash-o"></i></a></li>
+                    <li><a class="editTrueFalseQuestion" data-questionId="{{questionId}}"><i class="fa fa-edit"></i></a></li>
+                    <li><a class=""><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class=""><i class="fa fa-chevron-down"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
