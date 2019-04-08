@@ -192,8 +192,7 @@
 
                                                 if (answer.QuestionId == mcQuestion.QuestionId)
                                                 {
-                                                    <a class="btn btn-default btn-block text-left multipleChoiceOption"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @answer.MultipleChoiceAnswerOption</span>&nbsp;</a>
-
+                                                    <a class="btn btn-default btn-block text-left multipleChoiceOption"  name="multipleChoiceAnswer-@mcQuestion.QuestionId" data-mcQuestionId="@mcQuestion.QuestionId" ><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @answer.MultipleChoiceAnswerOption</span>&nbsp;</a>
                                                 }
                                                 option++;
                                             }
