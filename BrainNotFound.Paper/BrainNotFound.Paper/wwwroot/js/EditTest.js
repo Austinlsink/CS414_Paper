@@ -52,7 +52,7 @@ function init_testSections() {
                             testSection.questions.forEach(function (question) {
                                 
 
-                                $("#questionsContainer-" + question.sectionId).append(DisplayMultipleChoiceTemplate(question));
+                                $("#questionsContainer-" + question.sectionId).append(DisplayMultipleChoiceQuestionTemplate(question));
 
                                 // Adds the question options to the questions
                                 var rendered = "";
@@ -1027,12 +1027,11 @@ $("#TestSections").on("click", ".saveEdittedMultipleChoiceQuestion", function ()
                     $(editQuestionContainer).remove();
                     // Adds question to section
                     // Adds question to section
-                    var rendered = "";
-                    var multipleChoiceQuestionTemplate = $("#MultipleChoiceQuestionTemplate").html();
-                    var template = Handlebars.compile(multipleChoiceQuestionTemplate);
-                    rendered = template(result.question);
+                   
 
-                    $("#questionContainer-" + result.question.questionId).before(rendered).remove();
+                    $("#questionContainer-" + result.question.questionId)
+                        .before(DisplayMultipleChoiceQuestionTemplate(result.question))
+                        .remove();
 
                     // Adds the question options to the questions
                     rendered = "";
@@ -1207,7 +1206,10 @@ var EditTrueFalseQuestionTemplate;
 
 // Multiple Choice Templates
 var NewMultipleChoiceQuestionTemplate;
-var DisplayMultipleChoiceTemplate;
+var DisplayMultipleChoiceQuestionTemplate;
+var DisplayMultipleChoiceQuestionOptionTemplate;
+var EditMultipleChoiceQuestionTemplate;
+
 
 // Essay Templates
 var NewEssayQuestionTemplate;
@@ -1246,9 +1248,22 @@ $(document).ready(function () {
             NewMultipleChoiceQuestionTemplate = Handlebars.compile(template);
         })
 
+    // Compile diplay Multiple Choice Template
     $.get("/handlebarsTemplates/displayMultipleChoiceQuestion.html",
         function (template) {
-            DisplayMultipleChoiceTemplate = Handlebars.compile(template);
+            DisplayMultipleChoiceQuestionTemplate = Handlebars.compile(template);
+        })
+
+    // Compile diplay Multiple Choice option Template
+    $.get("/handlebarsTemplates/displayMultipleChoiceQuestionOption.html",
+        function (template) {
+            DisplayMultipleChoiceQuestionOptionTemplate = Handlebars.compile(template);
+        })
+
+    // Compile edit Multiple Choice Question
+    $.get("/handlebarsTemplates/editMultipleChoiceQuestion.html",
+        function (template) {
+            EditMultipleChoiceQuestionTemplate = Handlebars.compile(template);
         })
 
     // Compile Essay Templates

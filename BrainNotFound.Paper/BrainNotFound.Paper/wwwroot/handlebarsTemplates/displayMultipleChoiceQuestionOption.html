@@ -1,0 +1,12 @@
+﻿<!-- Template for diplaying a Multiple Choice  option in the test page-->
+<!-- Parameters: isCorrect, optionContent -->
+
+{{#if isCorrect}}
+<div class="col-md-4 col-sm-6 col-xs-12 multipleChoiceOption ">
+    <p class="bg-green-light" data-isCorrect="{{isCorrect}}">{{optionContent}}</p>
+</div>
+{{else}}
+<div class="col-md-4 col-sm-6 col-xs-12 multipleChoiceOption">
+    <p class=" bg-red-light" data-isCorrect="{{isCorrect}}">{{optionContent}}</p>
+</div>
+{{/if}}
