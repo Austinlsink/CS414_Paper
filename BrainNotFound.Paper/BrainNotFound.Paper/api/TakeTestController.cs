@@ -37,11 +37,15 @@ namespace BrainNotFound.Paper.api
         #endregion Initialize Controllers
 
         [HttpPost, Route("SubmitTest")]
-        public async Task<JsonResult> SubmitTest(long testScheduleId)
+        public async Task<JsonResult> SubmitTest(JObject JsonData)
         {
+            dynamic data = JsonData;
+            long testScheduleId = data.TestScheduleId;
+           // return Json(new { success = true, message = "In the controller: " + testScheduleId });
+
             ApplicationUser student = await _userManager.FindByNameAsync(User.Identity.Name);
 
-            var studentTestAssignment = _context.StudentTestAssignments.Where(x => x.StudentId == student.Id && x.TestScheduleId == testScheduleId).First();
+            var studentTestAssignment = _context.StudentTestAssignments.Where(x => x.StudentId == student.Id && x.TestScheduleId == testScheduleId).FirstOrDefault();
             if (studentTestAssignment == null)
             {
                 return Json(new { success = false });
@@ -49,7 +53,7 @@ namespace BrainNotFound.Paper.api
             else
             {
                 studentTestAssignment.Submitted = true;
-                _context.SaveChanges();
+                _context.SaveChanges(); 
                 return Json(new { success = true });
             }
         }
@@ -93,6 +97,38 @@ namespace BrainNotFound.Paper.api
             }
         }
 
+
+        /// <summary>
+        /// Biiiiiiiimmmmmmmmaaaaaaa... it doesn't make sense
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [HttpPost, Route("SaveMultipleChoiceAnswer")]
+        public JsonResult SaveMultipleChoiceAnswer(JObject data)
+        {
+            dynamic multipleChoiceInfo = data;
+            long questionId = (long)multipleChoiceInfo.QuestionId;
+            string answer = multipleChoiceInfo.Answer;
+            long testScheduleId = (long)multipleChoiceInfo.TestScheduleId;
+
+            var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            var studentAnswer = _context.StudentAnswers.Where(x => x.QuestionId == questionId && x.TestScheduleId == testScheduleId).FirstOrDefault();
+            
+            if (studentAnswer == null)
+            {
+                
+                
+                
+            }
+
+            return Json(new { success = true });
+        }
+
+        /// <summary>
+        /// Saves the student's true false answer
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         [HttpPost, Route("SaveTrueFalseAnswer")]
         public JsonResult SaveTrueFalseAnswer(JObject data)
         {
@@ -105,8 +141,6 @@ namespace BrainNotFound.Paper.api
 
             var studentAnswer = _context.StudentTrueFalseAnswers.Where(x => x.QuestionId == questionId && x.TestScheduleId == testScheduleId && x.StudentId == student.Id).FirstOrDefault();
             
-
-            // 
             if(studentAnswer == null)
             {
                 StudentTrueFalseAnswer TFAnswer = new StudentTrueFalseAnswer()
@@ -127,6 +161,5 @@ namespace BrainNotFound.Paper.api
             }
             return Json(new { success = true });
         }
-
     }
 }

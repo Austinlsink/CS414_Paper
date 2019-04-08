@@ -1,17 +1,21 @@
 ﻿// Submits the test
 $(".submitTest").click(function () {
     var TestScheduleId = $("input#testScheduleId").val();
-    console.log("In the submit test function");
+    console.log("In the submit test function - test schedule Id = ", TestScheduleId);
+
+    var JsonData = JSON.stringify({ TestScheduleId: TestScheduleId })
+
     $.ajax({
         url: "/api/Tests/SubmitTest/",
         type: "POST",
-        contentType: "application/json",
+        contentType: "application/json; charset=utf-8",
         // Data fetched from the form
-        data: TestScheduleId,
+        data: JsonData,
         success: function (result) {
             // Close the modal window
             console.log(result.message);
-            location.replace("Student/Grades");
+            window.location.href = "/Student/Grades";
+            
         },
         error: function (xhr, status, error) {
             console.log(error);
@@ -56,6 +60,12 @@ $("button#submitTest").click(function () {
     }
 })
 
+$("a.multipleChoiceOption").click(function () {
+    var QuestionId = $(this).attr("data-mcQuestionId");
+    var Answer = $(this).text();
+    Answer = (Answer.slice(2)).trim();
+    var TestScheduleId = $("input#testScheduleId").val();
+})
 
 // This function reponds to the radios on change event - we're grabbing data!!!!!
 $("input[type='radio']").on("change", function () {
