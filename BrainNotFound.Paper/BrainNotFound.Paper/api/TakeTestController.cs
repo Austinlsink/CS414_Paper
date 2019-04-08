@@ -53,7 +53,7 @@ namespace BrainNotFound.Paper.api
             else
             {
                 studentTestAssignment.Submitted = true;
-                //_context.SaveChanges();
+                _context.SaveChanges(); 
                 return Json(new { success = true });
             }
         }

@@ -252,7 +252,7 @@ namespace BrainNotFound.Paper.Controllers
             ViewBag.Enrollments = enrollments;
 
             // Get the student's grades
-            var grades = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).ThenInclude(x => x.Course).Where(x => x.StudentId == student.Id && x.TestSchedule.EndTime < DateTime.Now).ToList();
+            var grades = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).ThenInclude(x => x.Course).Where(x => x.StudentId == student.Id).ToList();
             ViewBag.Grades = grades;
             return View();
         }
