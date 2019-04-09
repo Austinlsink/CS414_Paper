@@ -65,6 +65,27 @@ $("a.multipleChoiceOption").click(function () {
     var Answer = $(this).text();
     Answer = (Answer.slice(2)).trim();
     var TestScheduleId = $("input#testScheduleId").val();
+    var MCAnswerId = $(this).attr("data-answerId");
+    var IsSelected = $(this).attr("data-isSelected");
+    console.log(QuestionId, Answer, TestScheduleId, MCAnswerId, IsToggled);
+
+    var JsonData = JSON.stringify({ QuestionId: QuestionId, TestScheduleId: TestScheduleId, Answer: Answer, MCAnswerId: MCAnswerId, IsSelected: IsSelected })
+
+    if (IsToggled === true) {
+        $.ajax({
+            url: "/api/Tests/SaveMultipleChoiceAnswer/",
+            type: "POST",
+            contentType: "application/json",
+            // Data fetched from the form
+            data: JsonData,
+            success: function (result) {
+               
+            },
+            error: function (xhr, status, error) {
+               
+            }
+        })
+    }
 })
 
 // This function reponds to the radios on change event - we're grabbing data!!!!!
@@ -101,9 +122,11 @@ $("label[data-questionType='trueFalse']").click(function () {
 $(".multipleChoiceOption").click(function () {
     if ($(this).hasClass("btn-default")) {
         $(this).removeClass("btn-default").addClass("btn-primary");
+        $(this).data("isSelected", true);
     }
     else {
         $(this).removeClass("btn-primary").addClass("btn-default");
+        $(this).data("isSelected", false);
     }
 })
 

@@ -104,24 +104,54 @@ namespace BrainNotFound.Paper.api
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost, Route("SaveMultipleChoiceAnswer")]
-        public JsonResult SaveMultipleChoiceAnswer(JObject data)
+        public JsonResult SaveMultipleChoiceAnswer(JObject JsonData)
         {
-            dynamic multipleChoiceInfo = data;
+            // Grad all the data from the JObject
+            dynamic multipleChoiceInfo = JsonData;
             long questionId = (long)multipleChoiceInfo.QuestionId;
             string answer = multipleChoiceInfo.Answer;
             long testScheduleId = (long)multipleChoiceInfo.TestScheduleId;
+            long mcAnswerId = (long)multipleChoiceInfo.MCAnswerId;
 
             var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
             var studentAnswer = _context.StudentAnswers.Where(x => x.QuestionId == questionId && x.TestScheduleId == testScheduleId).FirstOrDefault();
             
             if (studentAnswer == null)
             {
-                
-                
-                
+                StudentAnswer newStudentAnswer = new StudentAnswer()
+                {
+                    QuestionId = questionId,
+                    TestScheduleId = testScheduleId,
+                    StudentId = student.Id
+                };
+
+                List<StudentMultipleChoiceAnswer> answersGiven = new List<StudentMultipleChoiceAnswer>();
+                answersGiven.Add(new StudentMultipleChoiceAnswer()
+                {
+                    MultipleChoiceAnswerId = mcAnswerId,
+                    AnswerId = newStudentAnswer.AnswerId                    
+                });
+
+                newStudentAnswer.StudentMultipleChoiceAnswers = answersGiven;
+
+                _context.StudentAnswers.Add(newStudentAnswer);
+                _context.SaveChanges();
+
+                return Json(new { success = true });
+            }
+            else
+            {
+                var answerRetrived = _context.StudentMultipleChoiceAnswers.Find(mcAnswerId);
+
+                if()
             }
 
-            return Json(new { success = true });
+
+
+        
+
+
+            return Json(new { success = false });
         }
 
         /// <summary>
