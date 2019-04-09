@@ -50,12 +50,12 @@ BEGIN
 								IF ((SELECT Questions.QuestionType FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId) = 'Essay')
 									BEGIN
 										UPDATE StudentTestAssignments
-										   SET ManualGradingRequred = 1
+										   SET ManualGradingRequired = 1
 										 WHERE StudentTestAssignments.StudentTestAssignmentId = @studentTestAssignmentId;
 									END;
 
 								-- Grade FillInTheBlank answers
-								IF ((SELECT Questions.QuestionType FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId) = 'FillInTheBlank')
+								ELSE IF((SELECT Questions.QuestionType FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId) = 'FillInTheBlank')
 									BEGIN
 										-- Compare answers
 										IF ((SELECT StudentAnswers.FillInTheBlankAnswerGiven FROM StudentAnswers WHERE StudentAnswers.AnswerId = @c_AnswerId) = (SELECT Questions.FillInTheBlankAnswer FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId))
@@ -65,7 +65,7 @@ BEGIN
 									END;
 
 								-- Grade Matching answers
-								IF ((SELECT Questions.QuestionType FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId) = 'Matching')
+								ELSE IF ((SELECT Questions.QuestionType FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId) = 'Matching')
 									BEGIN
 										-- Compare answers
 										-- STEP 1: Compare student matching answer to the correct answer
@@ -73,15 +73,15 @@ BEGIN
 									END;
 
 								-- Grade MultipleChoice answers
-								IF ((SELECT Questions.QuestionType FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId) = 'MultipleChoice')
+								ELSE IF ((SELECT Questions.QuestionType FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId) = 'MultipleChoice')
 									BEGIN
 										-- Compare answers
-										-- STEP 1: Compare student multiple choice answer to the correct answer
-										-- STEP 2: If correct, add the question's grade point value to the overall grade
+										IF ((SELECT StudentMultipleChoiceAnswers.MultipleChoiceAnswerId FROM StudentMultipleChoiceAnswers WHERE StudentMultipleChoiceAnswers.AnswerId = @c_AnswerId) = (SELECT MultipleChoiceAnswers.MultipleChoiceAnswerId FROM MultipleChoiceAnswers JOIN Questions ON Questions.QuestionId = MultipleChoiceAnswers.QuestionId JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId AND MultipleChoiceAnswers.IsCorrect = 1))
+											SELECT @c_testGrade += (SELECT Questions.PointValue FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId);
 									END;
 
 								-- Grade TrueFalse answers
-								IF ((SELECT Questions.QuestionType FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId) = 'TrueFalse')
+								ELSE IF ((SELECT Questions.QuestionType FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId) = 'TrueFalse')
 									BEGIN
 										-- Compare answers
 										IF ((SELECT StudentAnswers.TrueFalseAnswerGiven FROM StudentAnswers WHERE StudentAnswers.AnswerId = @c_AnswerId) = (SELECT Questions.TrueFalseAnswer FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId))
@@ -108,5 +108,6 @@ BEGIN
 						 WHERE StudentTestAssignments.StudentTestAssignmentId = @studentTestAssignmentId;
 					END;
 			END;
-		END;
+		FETCH NEXT FROM studentAssignmentCursor INTO @studentTestAssignmentId, @studentId, @submitted, @grade, @signed, @testScheduleId;
+	END;
 END;
