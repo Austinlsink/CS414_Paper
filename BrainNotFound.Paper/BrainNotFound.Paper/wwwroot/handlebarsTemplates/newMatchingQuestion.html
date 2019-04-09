@@ -1,0 +1,56 @@
+﻿
+<div class="newQuestionContainer">
+    <div class="row well">
+        <div class="text-center"><h4><strong>New Matching Question</strong></h4></div>
+        <hr />
+        
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="col-md-1 col-sm-1 col-xs-3">
+                <p>Points:</p>
+                <input type="number" placeholder="pts" min="1" class="form-group form-control" id="EssayPointValue-{{timeStamp}}" value="1">
+            </div>
+            <div class="form-group col-md-11 col-sm-11 col-xs-12">
+                <p>Question: </p>
+                <input type="text" placeholder="Enter question text here" class="form-control" id="essayContent-{{timeStamp}}" />
+                <span class="text-danger hidden" id="essayContentError-{{timeStamp}}">Please enter a question</span>
+            </div>
+            <div class="col-md-1 col-sm-1 col-xs-3"></div>
+            <div class="clearfix"></div>
+            <hr />
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="col-md-11 col-sm-11 col-xs-12">
+                    <div class="col-md-6 col-sm-6 col-xs-12 text-center">
+                        <label>Question Side</label>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-12 text-center">
+                        <label>Answer Side</label>
+                    </div>
+                </div>
+                <div class="col-md-1 col-sm-1 col-xs-12 text-center">
+                </div>
+            </div>
+
+            <div class="col-md-12 col-sm-12 col-xs-12 well bg-green-light">
+                <div class="col-xs-12">
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input type="text" placeholder="Question 1" class="form-group form-control" />  <a class=""><i class="fa fa-trash-o"></i></a>
+                        <input type="text" placeholder="pts" class="form-group form-control" />  <a class=""><i class="fa fa-trash-o"></i></a>
+                        <div class="text-center"><a class=""><i class="fa fa-plus"></i></a></div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input type="text" placeholder="Answer" class="form-group form-control">
+
+                    </div>
+                </div>
+                <div class="col-md-1 col-sm-1 col-xs-12 text-center">
+                    <a class=""><i class="fa fa-trash-o"></i></a>
+                </div>
+            </div>
+            <div class="form-group col-md-3 col-sm-3 col-xs-12 pull-right">
+                <p>&nbsp;</p>
+                <button type="button" class="pull-right btn btn-primary btn-md saveNewEssayQuestion" data-sectionId="{{sectionId}}" data-uuid="{{timeStamp}}">Create</button>
+                <button type="button" class="pull-right btn btn-danger btn-md cancelNewQuestion">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

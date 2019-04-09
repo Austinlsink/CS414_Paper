@@ -5106,6 +5106,10 @@ table thead .checkbox.radio { margin-top:-7px;margin-top:-21px; }
     background-color: #f8f9fa !important;
 }
 
+.questionRow {
+   padding: 20px 0 10px 0;
+}
+
 .questionRow .multipleChoiceOption {
     margin-bottom: 4px;
     white-space: normal;

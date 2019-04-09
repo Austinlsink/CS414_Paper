@@ -1,0 +1,30 @@
+﻿<!-- Template for diplaying a question in the edit test page-->
+<!-- Parameters: questionId, pointValue, content, expectedAnswer -->
+
+<div id="questionContainer-{{questionId}}">
+    <div class="row questionRow">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="col-md-1 col-sm-1 col-xs-3">
+                <input type="number" id="pointValue-{{questionId}}" data-questionId="{{questionId}}" value="{{pointValue}}" min="1" class="form-group form-control pointValue">
+            </div>
+
+            <div class="col-md-9 col-sm-9 col-xs-11">
+                <label>Question:</label>
+                <p id="content-{{questionId}}">{{content}}</p>
+                {{#if expectedAnswer}}
+                <label>Expected Answer:</label>
+                <p id="essayExpectedAnswer-{{questionId}}">{{expectedAnswer}}</p>
+                {{/if}}
+            </div>
+
+            <div class="col-md-2 col-sm-2 col-xs-12">
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="deleteQuestion" data-questionId="{{questionId}}"><i class="fa fa-trash-o"></i></a></li>
+                    <li><a class="editEssayQuestion" data-questionId="{{questionId}}"><i class="fa fa-edit"></i></a></li>
+                    <li><a class=""><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class=""><i class="fa fa-chevron-down"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

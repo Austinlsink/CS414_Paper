@@ -1,0 +1,79 @@
+﻿<!-- Template for diplaying a the new multiple choice question form in the edit test page-->
+<!-- Parameters: timeStamp, sectionId -->
+
+<div class="newQuestionContainer well">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="col-md-1 col-sm-1 col-xs-3">
+                <p>Points:</p>
+                <input type="number" placeholder="pts" min="1" class="form-group form-control" id="MultipleChoicePointValue-{{timeStamp}}" value="1">
+            </div>
+            <div class="form-group col-md-11 col-sm-11 col-xs-12">
+                <p>Question: </p>
+                <input type="text" placeholder="Question text" class="form-control " id="MultipleChoiceContent-{{timeStamp}}" />
+                <span class="text-danger hidden" id="multipleChoiceContentError-{{timeStamp}}">Please enter a question</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12 ">
+            <div class="col-md-1 col-sm-1 col-xs-3">
+                <p>Is correct:</p>
+            </div>
+            <div class="col-md-11 col-sm-11 col-xs-12">
+                <p>Options: </p>
+            </div>
+        </div>
+
+        <div id="MultipleChoiceOptionsContainer-{{timeStamp}}">
+            <div class="col-md-12 col-sm-12 col-xs-12 newMultipleChoiceOption-{{timeStamp}}">
+                <div class="col-md-1 col-sm-1 col-xs-1 text-center">
+                    <input style="margin-top:12px" class="form-check-input isCorrect" type="checkbox">
+                </div>
+                <div class="form-group col-md-10 col-sm-10 col-xs-10">
+                    <input type="text" placeholder="Option text" class="form-control optionContent">
+                    <span class="text-danger hidden optionErrorMessage ">Option may not be empty</span>
+                </div>
+                <div class="form-group col-md-1 col-sm-1 col-xs-1">
+                    <a style="margin-top:8px" data-uuid="{{timeStamp}}" class="pull-right deleteMultipleChoiceOptionNewQuestion"><i class="fa fa-trash-o"></i></a>
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12 newMultipleChoiceOption-{{timeStamp}}">
+                <div class="col-md-1 col-sm-1 col-xs-1 text-center">
+                    <input style="margin-top:12px" class="form-check-input isCorrect" type="checkbox">
+                </div>
+                <div class="form-group col-md-10 col-sm-10 col-xs-10">
+                    <input type="text" placeholder="Option text" class="form-control optionContent">
+                    <span class="text-danger hidden optionErrorMessage ">Option may not be empty</span>
+                </div>
+                <div class="form-group col-md-1 col-sm-1 col-xs-1">
+                    <a style="margin-top:8px" data-uuid="{{timeStamp}}" class="pull-right deleteMultipleChoiceOptionNewQuestion"><i class="fa fa-trash-o"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="col-md-1 col-sm-1 col-xs-1 text-center">
+                &nbsp;
+            </div>
+            <div class="form-group col-md-11 col-sm-11 col-xs-10">
+                <ul>
+                    <li id="MinimumNumberOfOptionErrorMessage-{{timeStamp}}" class="text-danger hidden">There must be at least two options</li>
+                    <li id="SelectedCorrectOptionErrorMessage-{{timeStamp}}" class="text-danger hidden">At least one options must be correct</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
+            <a style="margin-top:8px" class="pull-right addMultipleChoiceOptionNewQuestion" data-uuid="{{timeStamp}}"><i class="fa fa-plus"></i> Add Option</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-3 col-sm-3 col-xs-12 alignright">
+            <p>&nbsp;</p>
+            <button type="button" class="pull-right btn btn-primary btn-md saveNewMultipleChoiceQuestion" data-sectionId="{{sectionId}}" data-uuid="{{timeStamp}}">Create</button>
+            <button type="button" class="pull-right btn btn-danger btn-md cancelNewQuestion" data-questionId="{{timeStamp}}">Cancel</button>
+        </div>
+    </div>
+</div>
