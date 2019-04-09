@@ -1,0 +1,13 @@
+﻿<tr>
+    <th scope="row">{{counter}}</th>
+    <td>
+        <p><i class="fa fa-calendar"></i> {{Availability}}</p>
+    </td>
+    <td>{{TimeLimit}}</td>
+    <td>{{Assigmnet}}</td>
+    <td>
+        <button asp-controller="Instructor" asp-action="EditTest" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </button>
+        <input type="hidden" name="CourseId" value="d" />
+        <button type="button" data-testScheduleId="{{TestScheduleId}}" class="btn btn-danger btn-xs DeleteSectionSchedule"><i class="fa fa-trash-o"></i> Delete </button>
+    </td>
+</tr>

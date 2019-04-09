@@ -1,9 +1,7 @@
 ﻿<!-- Template for diplaying a multiple section form in the edit test page-->
 <!-- Parameters: questionId, pointValue, content -->
 
-<div id="questionContainer-{{questionId}}" class="row">
-    <div class="ln_solid"></div>
-
+<div id="questionContainer-{{questionId}}" class="row questionRow">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="col-md-1 col-sm-1 col-xs-3">
             <input type="number" id="pointValue-{{questionId}}" data-questionId="{{questionId}}" value="{{pointValue}}" min="1" class="form-group form-control pointValue">
@@ -12,7 +10,7 @@
             <p id="content-{{questionId}}">{{content}}</p>
         </div>
 
-        <div class="form-group col-md-2 col-sm-2 col-xs-12">
+        <div class="col-md-2 col-sm-2 col-xs-12 vertical-align">
             <ul class="nav navbar-right panel_toolbox">
                 <li><a class="deleteQuestion" data-questionId="{{questionId}}"><i class="fa fa-trash-o"></i></a></li>
                 <li><a class="editMultipleChoiceQuestion" data-questionId="{{questionId}}"><i class="fa fa-edit"></i></a></li>

@@ -19,11 +19,7 @@ var studentsDataTable;
 var studentsInSelectedSection;
 
 // Initialize Page
-init_daterangepicker_TestSchedule();
-init_students_datatable();
-Update_TestStatistics();
-Update_TestAssignmentTable();
-init_testSections();
+
 
 // Fetches all testSections
 function init_testSections() {
@@ -50,19 +46,17 @@ function init_testSections() {
                             break;
                         case "MultipleChoice":
                             testSection.questions.forEach(function (question) {
-                                
 
-                                $("#questionsContainer-" + question.sectionId).append(DisplayMultipleChoiceQuestionTemplate(question));
+
+                                $("#questionsContainer-" + question.sectionId)
+                                    .append(DisplayMultipleChoiceQuestionTemplate(question));
 
                                 // Adds the question options to the questions
-                                var rendered = "";
+                                $("#multipleChoiceOptionsContainer-" + question.questionId).empty();
                                 question.multipleChoiceAnswers.forEach(function (questionOption) {
-                                    var multipleChoiceOptionTemplate = $("#MultipleChoiceOptionTemplate").html();
-                                    var template = Handlebars.compile(multipleChoiceOptionTemplate);
-                                    rendered += template(questionOption);
+                                    $("#multipleChoiceOptionsContainer-" + question.questionId)
+                                        .append(DisplayMultipleChoiceQuestionOptionTemplate(questionOption));
                                 });
-
-                                $("#multipleChoiceOptionsContainer-" + question.questionId).html(rendered);
                             });
                             break;
                         case "Essay":
@@ -74,8 +68,7 @@ function init_testSections() {
                             break;
                     }
                 })
-
-                Update_TestStatistics();
+                stripe();
             }
             else {
                 console.log(result.errors)
@@ -135,15 +128,13 @@ function Update_TestAssignmentTable() {
 
                 // There are any test schedules display them
                 if (result.schedules != 'none') {
-                    var rendered = "";
-                    var Row = $("#ScheduleTableRowTemplate").html();
-                    var template = Handlebars.compile(Row);
-
+                    
+                    $("#TestAssignmentTable > tbody").empty();
                     result.schedules.forEach(function (schedule) {
-                        rendered += template(schedule);
+                        $("#TestAssignmentTable > tbody")
+                            .append(DisplayScheduleTableRowTemplate(schedule))
                     })
-
-                    $("#TestAssignmentTable > tbody").html(rendered);
+                    
                     $("table#TestAssignmentTable").removeClass("hidden");
                     $("div#NoScheduledTestContainer").addClass("hidden");
                 }
@@ -168,15 +159,12 @@ function UpdateAssignmentTables() {
         $("#SectionsAssignedTest").removeClass("show").addClass("hidden");
         $("#NoSectionsAssignedTest").removeClass("hidden").addClass("show");
     } else {
-        var SectionsAssignedToTableRowTemplate = $("#SectionAssigmentTableRowTemplate").html();
-        var template = Handlebars.compile(SectionsAssignedToTableRowTemplate);
-        var rendered = "";
+        $("#SectionsAssignedTest > tbody").empty();
         for (var index = 0; index * 2 < SectionsAssigned.length; index++) {
-
-            var templateInfo = { RowNumber: (index + 1), SectionNumbers: SectionsAssigned[(index * 2) + 1], SectionId: SectionsAssigned[(index * 2)] }
-            rendered += template(templateInfo);
+            var templateData = { RowNumber: (index + 1), SectionNumbers: SectionsAssigned[(index * 2) + 1], SectionId: SectionsAssigned[(index * 2)] }
+            $("#SectionsAssignedTest > tbody")
+                .append(DisplaySectionAssignmentTableRowTemplate(templateData))
         }
-        $("#SectionsAssignedTest > tbody").html(rendered);
 
         $("#NoSectionsAssignedTest").removeClass("show").addClass("hidden");
         $("#SectionsAssignedTest").removeClass("hidden");
@@ -187,15 +175,18 @@ function UpdateAssignmentTables() {
         $("#StudentsAssignedTest").removeClass("show").addClass("hidden");
         $("#NoStudentsAssignedTest").removeClass("hidden").addClass("show");
     } else {
-        var StudentAssignmnetRowTemplate = $("#StudentAssignmnetRowTemplate").html();
-        var template = Handlebars.compile(StudentAssignmnetRowTemplate);
-        var rendered = "";
+        $("#StudentsAssignedTest > tbody").empty();
         for (var index = 0; index * 4 < IndivisualsAssigned.length; index++) {
 
-            var templateInfo = { SectionNumber: IndivisualsAssigned[(index * 4)], StudentId: IndivisualsAssigned[((index * 4) + 1)], FirstName: IndivisualsAssigned[((index * 4) + 2)], LastName: IndivisualsAssigned[((index * 4) + 3)] }
-            rendered += template(templateInfo);
+            var templateData = {
+                SectionNumber: IndivisualsAssigned[(index * 4)],
+                StudentId: IndivisualsAssigned[((index * 4) + 1)],
+                FirstName: IndivisualsAssigned[((index * 4) + 2)],
+                LastName: IndivisualsAssigned[((index * 4) + 3)]
+            }
+            $("#StudentsAssignedTest > tbody")
+                .append(DisplayStudentAssignmnetTableRowTemplate(templateData));
         }
-        $("#StudentsAssignedTest > tbody").html(rendered);
 
         $("#NoStudentsAssignedTest").removeClass("show").addClass("hidden");
         $("#StudentsAssignedTest").removeClass("hidden");
@@ -266,8 +257,6 @@ $("#TestSections").on("change", ".pointValue", function () {
             // TODO: Display if Sections were already assigned
         },
     })
-
-
 })
 
 // Dropdowns
@@ -295,8 +284,6 @@ $('select#SelectSection').change(function () {
             // Hides no section select message
             $("div#SectionNotSelectedContainer").removeClass("show").addClass("hidden");
             $("div#StudentsInSectionTableContainer").removeClass("hidden").addClass("show");
-
-
         }
     });
 });
@@ -550,6 +537,10 @@ $("#TestSections").on("click", "button.addQuestionToSection", function () {
             $("#newQuestionContainer-" + sectionId)
                 .append(NewEssayQuestionTemplate(newQuestionData));
             break;
+        case "Matching":
+            $("#newQuestionContainer-" + sectionId)
+                .append(NewMatchingQuestionTemplate(newQuestionData));
+            break;
     }
 
     // Initialize true False radio buttons
@@ -595,6 +586,8 @@ $("#TestSections").on("click", "button.saveNewTrueFalseQuestion", function () {
                         .append(DisplayTrueFalseQuestionsTemplate(result.question));
 
                     $(newQuestionContainer).remove();
+
+                    stripe();
                 }
                 else {
                     console.log(result)
@@ -666,7 +659,12 @@ $("#TestSections").on("click", ".saveNewMultipleChoiceQuestion", function () {
     }
 
     if (!hasError) {
-        var JsonData = JSON.stringify({ testSectionId: testSectionId, questionContent: questionContent, pointValue: pointValue, multipleChoiceAnswers: multipleChoiceAnswers });
+        var JsonData = JSON.stringify({
+            testSectionId: testSectionId,
+            questionContent: questionContent,
+            pointValue: pointValue,
+            multipleChoiceAnswers: multipleChoiceAnswers
+        });
 
         $.ajax({
             url: "/api/CreateTest/NewMultipleChoiceQuestion",
@@ -676,22 +674,20 @@ $("#TestSections").on("click", ".saveNewMultipleChoiceQuestion", function () {
             success: function (result) {
                 if (result.success) {
                     // Adds question to section
-                    
-
-                    $("#questionsContainer-" + result.question.sectionId).append(EditMultipleChoiceQuestionTemplate(result.question));
+                    $("#questionsContainer-" + result.question.sectionId)
+                        .append(DisplayMultipleChoiceQuestionTemplate(result.question));
 
                     // Adds the question options to the questions
-                    rendered = "";
+                    $("#multipleChoiceOptionsContainer-" + result.question.questionId).empty();
                     result.question.multipleChoiceAnswers.forEach(function (questionOption) {
-                        var multipleChoiceOptionTemplate = $("#MultipleChoiceOptionTemplate").html();
-                        var template = Handlebars.compile(multipleChoiceOptionTemplate);
-                        rendered += template(questionOption);
+                        $("#multipleChoiceOptionsContainer-" + result.question.questionId)
+                            .append(DisplayMultipleChoiceQuestionOptionTemplate(questionOption));
                     });
-
-                    $("#multipleChoiceOptionsContainer-" + result.question.questionId).html(rendered);
 
                     $(newQuestionContainer).remove();
                     console.log(result);
+
+                    stripe();
                     // ADD-NOTIFICATION
                 }
                 else {
@@ -701,7 +697,6 @@ $("#TestSections").on("click", ".saveNewMultipleChoiceQuestion", function () {
         })
     }
 })
-
 
 // Saves a newly created essay question
 $("#TestSections").on("click", "button.saveNewEssayQuestion", function () {
@@ -720,7 +715,6 @@ $("#TestSections").on("click", "button.saveNewEssayQuestion", function () {
     else {
         var JsonData = JSON.stringify({ testSectionId: testSectionId, questionContent: questionContent, pointValue: pointValue, expectedAnswer: expectedAnswer });
         var newQuestionContainer = $(this).parents(".newQuestionContainer");
-        console.log(JsonData);
         $.ajax({
             url: "/api/CreateTest/NewEssayQuestion",
             type: "POST",
@@ -740,8 +734,9 @@ $("#TestSections").on("click", "button.saveNewEssayQuestion", function () {
                     new PNotify({
                         title: 'Animate.css Effect',
                         text: 'I use effects from Animate.css. Such smooth CSS3 transitions make me feel like butter.',
-
                     });
+
+                    stripe();
                 }
                 else {
                     console.log(result)
@@ -751,20 +746,13 @@ $("#TestSections").on("click", "button.saveNewEssayQuestion", function () {
     }
 })
 
-
-
-
 // Add a multiple choice option to a new multiple choice question
 $("#TestSections").on("click", ".addMultipleChoiceOptionNewQuestion", function () {
     var uuid = $(this).attr("data-uuid");
 
-    rendered = "";
-    var MultipleChoiceOptionTextBoxTemplate = $("#MultipleChoiceOptionTextBoxTemplate").html();
-    var template = Handlebars.compile(MultipleChoiceOptionTextBoxTemplate);
-
-    rendered += template({ "timeStamp": uuid });
-
-    $("#MultipleChoiceOptionsContainer-" + uuid).append(rendered);
+    templateData = { timeStamp: uuid };
+    $("#MultipleChoiceOptionsContainer-" + uuid)
+        .append(NewMultipleChoiceQuestionOptionTemplate(templateData));
 })
 
 // Add a multiple choice option to a new multiple choice question
@@ -772,12 +760,11 @@ $("#TestSections").on("click", ".addMultipleChoiceOptionEditQuestion", function 
 
     var questionId = $(this).attr("data-questionId");
     console.log("questionId: " + questionId);
-    var rendered = "";
-    var EditableMultipleChoiceOptionTextBoxTemplate = $("#EditableMultipleChoiceOptionTextBoxTemplate").html();
-    var template = Handlebars.compile(EditableMultipleChoiceOptionTextBoxTemplate);
 
-    rendered += template({ questionId: questionId });
-    $("#EditMultipleChoiceOptionsContainer-" + questionId).append(rendered);
+    templateData = { questionId: questionId };
+
+    $("#EditMultipleChoiceOptionsContainer-" + questionId)
+        .append(EditMultipleChoiceQuestionOptionTemplate(templateData));
 
     rendered += template({ questionId: questionId });
 })
@@ -830,6 +817,8 @@ $("#confirmDeletion").click(function () {
                 if (result.success) {
                     $(".sectionContainer-" + sectionId).remove();
                     $('#confirm-deletion-modal').modal('toggle');
+
+                    
                     // ADD-NOTIFICATION
                 }
                 else {
@@ -852,6 +841,7 @@ $("#confirmDeletion").click(function () {
 
                     $('#confirm-deletion-modal').modal('toggle');
 
+                    stripe();
                     // ADD-NOTIFICATION
                 }
                 else {
@@ -870,7 +860,7 @@ $("#TestSections").on("click", ".editTrueFalseQuestion", function () {
     var answer = $("#TrueFalseAnswer-" + questionId).attr("data-answer") == "true";
     var content = $("#content-" + questionId).text();
     // Fetch the template
-    
+
     //Apply template
     var templateData = { questionId: questionId, pointValue: pointValue, answer: answer, content: content };
     $("#questionContainer-" + questionId).before(EditTrueFalseQuestionTemplate(templateData));
@@ -894,20 +884,20 @@ $("#TestSections").on("click", ".editEssayQuestion", function () {
 
     var content = $("#content-" + questionId).text();
     // Fetch the template
-    var rendered = "";
-    var EditEssayQuestionTemplate = $("#EditEssayQuestionTemplate").html();
-    var template = Handlebars.compile(EditEssayQuestionTemplate);
 
     //Apply template
-    rendered += template({ questionId: questionId, pointValue: pointValue, expectedAnswerContent: expectedAnswerContent, content: content });
-    $("#questionContainer-" + questionId).before(rendered);
-    $("#questionContainer-" + questionId).addClass("hidden");
+    templateData = {
+        questionId: questionId,
+        pointValue: pointValue,
+        expectedAnswerContent:
+            expectedAnswerContent,
+        content: content
+    };
 
-    // Initialize rdio buttons
-    $('input.flat').iCheck({
-        checkboxClass: 'icheckbox_flat-green',
-        radioClass: 'iradio_flat-green'
-    });
+    $("#questionContainer-" + questionId)
+        .before(EditEssayQuestionTemplate(templateData));
+
+    $("#questionContainer-" + questionId).addClass("hidden");
 
 })
 
@@ -918,11 +908,11 @@ $("#TestSections").on("click", ".editMultipleChoiceQuestion", function () {
     var pointValue = $("#pointValue-" + questionId).val();
     var content = $("#content-" + questionId).text();
 
-    
+
 
     var templateData = {
         questionId: questionId,
-        content:    content,
+        content: content,
         pointValue: pointValue
     };
 
@@ -931,21 +921,22 @@ $("#TestSections").on("click", ".editMultipleChoiceQuestion", function () {
         .before(EditMultipleChoiceQuestionTemplate(templateData))
         .addClass("hidden");
 
-    rendered = "";
+    $("#EditMultipleChoiceOptionsContainer-" + questionId).empty();
     // Get all the question options
     $(this).parents("#questionContainer-" + questionId)
         .find(".multipleChoiceOption")
         .each(function () {
             var isCorrect = $(this).children("p").attr("data-isCorrect") == "true";
             var optionContent = $(this).children("p").text();
-
-
-            var EditableMultipleChoiceOptionTextBoxTemplate = $("#EditableMultipleChoiceOptionTextBoxTemplate").html();
-            var template2 = Handlebars.compile(EditableMultipleChoiceOptionTextBoxTemplate);
-            rendered += template2({ questionId: questionId, optionContent: optionContent, isCorrect: isCorrect })
+            
+            templateData = {
+                questionId: questionId,
+                optionContent: optionContent,
+                isCorrect: isCorrect
+            };
+            $("#EditMultipleChoiceOptionsContainer-" + questionId)
+                .append(EditMultipleChoiceQuestionOptionTemplate(templateData));
         });
-    $("#EditMultipleChoiceOptionsContainer-" + questionId).html(rendered);
-
 })
 // Closes the edit question state
 $("#TestSections").on("click", ".cancelEditQuestion", function () {
@@ -1027,21 +1018,18 @@ $("#TestSections").on("click", ".saveEdittedMultipleChoiceQuestion", function ()
                     $(editQuestionContainer).remove();
                     // Adds question to section
                     // Adds question to section
-                   
+
 
                     $("#questionContainer-" + result.question.questionId)
                         .before(DisplayMultipleChoiceQuestionTemplate(result.question))
                         .remove();
 
                     // Adds the question options to the questions
-                    rendered = "";
+                    $("#multipleChoiceOptionsContainer-" + result.question.questionId).empty();
                     result.question.multipleChoiceAnswers.forEach(function (questionOption) {
-                        var multipleChoiceOptionTemplate = $("#MultipleChoiceOptionTemplate").html();
-                        var template = Handlebars.compile(multipleChoiceOptionTemplate);
-                        rendered += template(questionOption);
+                        $("#multipleChoiceOptionsContainer-" + result.question.questionId)
+                            .append(DisplayMultipleChoiceQuestionOptionTemplate(questionOption));
                     });
-
-                    $("#multipleChoiceOptionsContainer-" + result.question.questionId).html(rendered);
 
                     console.log(result);
                     // ADD-NOTIFICATION
@@ -1148,7 +1136,6 @@ $("#TestSections").on("click", ".saveEdittedEssayQuestion", function () {
     }
 })
 
-
 // Handles all forms submition buttons
 $(function () {
     $('.post-using-ajax').each(function () {
@@ -1206,21 +1193,30 @@ var EditTrueFalseQuestionTemplate;
 
 // Multiple Choice Templates
 var NewMultipleChoiceQuestionTemplate;
+var NewMultipleChoiceQuestionOptionTemplate;
 var DisplayMultipleChoiceQuestionTemplate;
 var DisplayMultipleChoiceQuestionOptionTemplate;
 var EditMultipleChoiceQuestionTemplate;
-
+var EditMultipleChoiceQuestionOptionTemplate;
 
 // Essay Templates
 var NewEssayQuestionTemplate;
 var DisplayEssayQuestionTemplate;
+var EditEssayQuestionTemplate;
 
+// Matching Templates
+var NewMatchingQuestionTemplate;
+
+// Other Templates
+var DisplaySectionAssignmentTableRowTemplate;
+var DisplayStudentAssignmnetTableRowTemplate;
+var DisplayScheduleTableRowTemplate;
 
 /**********************************************************************/
 /*                         Compile templates                          */
 /**********************************************************************/
 
-$(document).ready(function () {
+function compile_templates() {
 
     // Compile True False Templates
     // Compile new True/False question form
@@ -1248,6 +1244,12 @@ $(document).ready(function () {
             NewMultipleChoiceQuestionTemplate = Handlebars.compile(template);
         })
 
+    // Compile new Multiple Choice question option texbox
+    $.get("/handlebarsTemplates/newMultipleChoiceQuestionOption.html",
+        function (template) {
+            NewMultipleChoiceQuestionOptionTemplate = Handlebars.compile(template);
+        })
+
     // Compile diplay Multiple Choice Template
     $.get("/handlebarsTemplates/displayMultipleChoiceQuestion.html",
         function (template) {
@@ -1266,6 +1268,12 @@ $(document).ready(function () {
             EditMultipleChoiceQuestionTemplate = Handlebars.compile(template);
         })
 
+   // Compile edit Multiple Choice Question option
+    $.get("/handlebarsTemplates/editMultipleChoiceQuestionOption.html",
+        function (template) {
+            EditMultipleChoiceQuestionOptionTemplate = Handlebars.compile(template);
+        })
+
     // Compile Essay Templates
     // Compile new Essay question form
     $.get("/handlebarsTemplates/newEssayQuestion.html",
@@ -1277,6 +1285,19 @@ $(document).ready(function () {
     $.get("/handlebarsTemplates/displayEssayQuestion.html",
         function (template) {
             DisplayEssayQuestionTemplate = Handlebars.compile(template);
+        })
+
+    // Compile edit Essay question form
+    $.get("/handlebarsTemplates/editEssayQuestion.html",
+        function (template) {
+            EditEssayQuestionTemplate = Handlebars.compile(template);
+        })
+
+    // Compile Matching Templates
+    // Compile new Matching Template
+    $.get("/handlebarsTemplates/newMatchingQuestion.html",
+        function (template) {
+            NewMatchingQuestionTemplate = Handlebars.compile(template);
         })
 
     // Compile other templates
@@ -1291,4 +1312,53 @@ $(document).ready(function () {
         function (template) {
             NewTestSectionTemplate = Handlebars.compile(template);
         })
+
+    // Compile section assigment table row template
+    $.get("/handlebarsTemplates/displaySectionAssigmentTableRow.html",
+        function (template) {
+            DisplaySectionAssignmentTableRowTemplate = Handlebars.compile(template);
+        })
+
+    // Compile section assigment table row template
+    $.get("/handlebarsTemplates/displayStudentAssignmentTableRow.html",
+        function (template) {
+            DisplayStudentAssignmnetTableRowTemplate = Handlebars.compile(template);
+        })
+
+    // Compile section assigment table row template
+    $.get("/handlebarsTemplates/displayScheduleTableRow.html",
+        function (template) {
+            DisplayScheduleTableRowTemplate = Handlebars.compile(template);
+        })
+}
+
+// Stripes every other question row
+function stripe() {
+    var hasBackground = false;
+
+    $(".questionRow").each(function () {
+        $(this).removeClass("bg-light");
+
+        if (hasBackground) {
+            $(this).addClass("bg-light");
+            hasBackground = false;
+        }
+        else {
+            hasBackground = true;
+        }
+    });
+
+}
+
+// Initialize Page Data
+$(document).ready(function () {
+    
+    compile_templates();
+    init_daterangepicker_TestSchedule();
+    init_students_datatable();
+    Update_TestStatistics();
+    Update_TestAssignmentTable();
+    init_testSections();
+    stripe();
+
 })
