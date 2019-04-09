@@ -1,10 +1,17 @@
-CREATE TRIGGER gradeTest ON dbo.StudentTestAssignments
+USE [CS414_BrainNotFound]
+GO
+/****** Object:  Trigger [dbo].[gradeTest]    Script Date: 4/9/2019 1:10:10 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER TRIGGER [dbo].[gradeTest] ON [dbo].[StudentTestAssignments]
 AFTER UPDATE
 AS
 IF (UPDATE (Submitted)) --If the submitted column has changed
 BEGIN
 	-- Get all tests submitted at time of update
-	DECLARE studentTestAssignmentCursor CURSOR FOR (SELECT * FROM inserted);
+	DECLARE studentTestAssignmentCursor CURSOR FOR (SELECT StudentTestAssignmentId, StudentId, Submitted, Grade, Signed, TestScheduleId FROM inserted);
 	DECLARE @studentTestAssignmentId BIGINT,
 			@studentId BIGINT,
 			@submitted BIT,
@@ -32,10 +39,10 @@ BEGIN
 				-- Create a cursor for all the answers a student put on this test
 				DECLARE studentTestCursor CURSOR FOR
 					SELECT StudentAnswers.AnswerId --, Questions.QuestionId
-						FROM StudentTestAssignments JOIN AspNetUsers ON StudentTestAssignments.StudentId = AspNetUsers.Id
+					  FROM StudentTestAssignments JOIN AspNetUsers ON StudentTestAssignments.StudentId = AspNetUsers.Id
 													JOIN StudentAnswers ON AspNetUsers.Id = StudentAnswers.StudentId
 													JOIN TestSchedules ON StudentAnswers.TestScheduleId = TestSchedules.TestScheduleId
-						WHERE StudentTestAssignments.StudentTestAssignmentId = @studentTestAssignmentId;
+					 WHERE StudentTestAssignments.StudentTestAssignmentId = @studentTestAssignmentId;
 					
 				OPEN studentTestCursor;
 
@@ -107,7 +114,7 @@ BEGIN
  						DECLARE multipleChoiceCorrectAnswersCursor CURSOR FOR
 								SELECT MultipleChoiceAnswers.MultipleChoiceAnswerId
 								FROM MultipleChoiceAnswers JOIN Questions ON MultipleChoiceAnswers.QuestionId = Questions.QuestionId
-															JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId
+														   JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId
 								WHERE StudentAnswers.QuestionId = @c_answerId AND MultipleChoiceAnswers.IsCorrect = 1;
 						DECLARE @currentMultipleChoiceAnswerId BIGINT;
 						DECLARE @allStudentMultipleChoiceAnswersCorrect BIT = 1; -- Assume that there are no wrong answers
@@ -118,11 +125,26 @@ BEGIN
 						-- Grade answers
 						WHILE @@FETCH_STATUS = 0
 						BEGIN
-							-- If the answer is INCORRECT!!!
-							IF ((SELECT MultipleChoiceAnswerId FROM StudentMultipleChoiceAnswers WHERE AnswerId = @c_AnswerId) != @currentMultipleChoiceAnswerId)
-							BEGIN
-								SELECT @allStudentMultipleChoiceAnswersCorrect = 0;
-							END;
+						-- TODO: Grade using the studentMultipleChoiceAnswersCursor
+
+							-- Get all the answers the student gave for the question
+							DECLARE studentMultipleChoiceAnswersCursor CURSOR FOR
+								SELECT StudentMultipleChoiceAnswers.MultipleChoiceAnswerId
+								  FROM StudentMultipleChoiceAnswers JOIN StudentAnswers ON StudentMultipleChoiceAnswers.AnswerId = StudentAnswers.AnswerId
+								 WHERE StudentAnswers.QuestionId = @c_answerId;
+							DECLARE @currentStudentMultipleChoiceAnswerId BIGINT;
+
+							OPEN studentMultipleChoiceAnswersCursor;
+							FETCH NEXT FROM studentMultipleChoiceAnswersCursor INTO @currentStudentMultipleChoiceAnswerId;
+
+							WHILE @@FETCH_STATUS = 0
+							BEGIN -- TODO: COMPLETE!!!
+								-- If the answer is INCORRECT!!!
+								IF ((SELECT MultipleChoiceAnswerId FROM StudentMultipleChoiceAnswers WHERE AnswerId = @c_AnswerId) != @currentMultipleChoiceAnswerId)
+								BEGIN
+									SELECT @allStudentMultipleChoiceAnswersCorrect = 0;
+								END;
+							END; -- End going through student's answers
 
 							-- Get next expected answer
 							FETCH NEXT FROM multipleChoiceCorrectAnswersCursor INTO @currentMultipleChoiceAnswerId
