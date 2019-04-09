@@ -1,0 +1,35 @@
+﻿<!-- Template for diplaying a new test section form in the edit test page-->
+<!-- Parameters: No Parameters -->
+
+<div class="row SectionContainer">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div id="genericSection" class="x_panel">
+            <!-- top of section header -->
+            <div class="x_title">
+                <h2 id="Titlefff"><i class="fa fa-question"></i> New test section</h2>
+                <div class="clearfix"></div>
+            </div>
+            <!-- end of section header -->
+            <div class="x_content">
+                <div class="row">
+                    <div class="form-horizontal form-label-left">
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Question Type</label>
+                        <div class="col-md-4 col-sm-4 col-xs-12 ">
+                            <select id="questionType" class="form-control col-md-4 col-sm-4 col-xs-12">
+                                <option value="null" selected disabled="disabled">-- Choose option --</option>
+                                <option value="TrueFalse">True/False</option>
+                                <option value="MultipleChoice">Multiple Choice</option>
+                                <option value="FillInTheBlank">Fill In The Blank</option>
+                                <option value="Matching">Matching</option>
+                                <option value="Essay">Essay</option>
+                            </select>
+                        </div>
+                        <button id="setQuestionType" type="button" class="btn btn-primary">Set Question Type</button>
+                        <button id="cancelQuestionType" class="btn btn-danger">Cancel</button>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

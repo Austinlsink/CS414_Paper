@@ -138,8 +138,8 @@ namespace BrainNotFound.Paper.Controllers
             var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
             var studentTestAssignments = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).Where(x => x.StudentId == student.Id).ToList();
 
-            var upcomingTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime > DateTime.Now).Select(sta => sta.TestSchedule.Test).ToList();
-            var previousTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime < DateTime.Now).Select(sta => sta.TestSchedule.Test).ToList();
+            var upcomingTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime > DateTime.Now).Select(sta => sta.TestSchedule).ToList();
+            var previousTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime < DateTime.Now).Select(sta => sta.TestSchedule).ToList();
 
             var courses = _context.Courses.ToList();
             var departments = _context.Departments.ToList();
@@ -158,12 +158,81 @@ namespace BrainNotFound.Paper.Controllers
 
         
 
-        [HttpGet, Route("Tests/TakeTest")]
-        public IActionResult TakeTest()
+        [HttpGet, Route("Tests/TakeTest/{testScheduleId}")]
+        public async Task<IActionResult> TakeTest(long testScheduleId)
         {
-            long testId = 150;
-            var questions = _context.Questions.Include(x => x.TestSection).ThenInclude(x => x.Test).Where(x => x.TestSection.TestId == testId).ToList();
-            ViewBag.Questions = questions;
+            // Student information
+            ApplicationUser student = await _userManager.FindByNameAsync(User.Identity.Name);
+            ViewBag.Student = student;
+        
+            var testSchedule = _context.TestSchedules
+                .Include(ts => ts.Test)
+                    .ThenInclude(t => t.Course)
+                        .ThenInclude(c => c.Department)
+                .Where(ts => ts.TestScheduleId == testScheduleId)
+                .First();
+
+            // Grab the test information
+            var testInformation = testSchedule.Test;
+            ViewBag.TestInformation = testInformation;
+
+            // Grab the testschedule and its ID to pass as a hidden parameter to the ajax call
+            ViewBag.TestSchedule = testSchedule;
+
+            // Grab the test sections for the test
+            var testSections = _context.TestSections.Include(ts =>  ts.Questions).Where(x => x.TestId == testSchedule.TestId).ToList();
+            ViewBag.TestSections = testSections;
+
+
+            var allTFQuestions = _context.TrueFalses.ToList();
+            List<TrueFalse> TFQuestions = new List<TrueFalse>();
+            var allMCQuestions = _context.Questions.Where(x => x.QuestionType == "MultipleChoice");
+            List<Question> MCQuestions = new List<Question>();
+            var allMCOptions = _context.MultipleChoiceAnswers.ToList();
+            List<MultipleChoiceAnswer> MCOptions = new List<MultipleChoiceAnswer>();
+            int totalPoints = 0;
+            // Grab the questions for each test section
+            foreach(TestSection ts in testSections)
+            {
+                foreach(TrueFalse tf in allTFQuestions)
+                {
+                    if (tf.TestSectionId == ts.TestSectionId)
+                    {
+                        TFQuestions.Add(tf);
+                        totalPoints += tf.PointValue;
+                    }
+                }
+                foreach(Question q in allMCQuestions)
+                {
+                    if (ts.TestSectionId == q.TestSectionId)
+                    {
+                        foreach(MultipleChoiceAnswer option in allMCOptions)
+                        {
+                            if (q.QuestionId == option.QuestionId)
+                            {
+                                MCOptions.Add(option);
+                            }
+                        }
+                        q.MultipleChoiceAnswers = MCOptions;
+                        MCQuestions.Add(q);
+                        totalPoints += q.PointValue;
+                    }
+                }
+            }
+
+            // Add the test section's questions to their bags
+            ViewBag.TFQuestions = TFQuestions;
+            ViewBag.MCQuestions = MCQuestions;
+
+            // Add the total points to the bag
+            ViewBag.TotalPoints = totalPoints;
+
+            // Grab student's True false answers if any
+            var studentTFAnswers = _context.StudentTrueFalseAnswers.Where(x => x.TestScheduleId == testSchedule.TestScheduleId).ToList();
+            ViewBag.StudentTFAnswers = studentTFAnswers;
+
+            // Grab the student's multiple choice answers if any
+
             return View();
         }
 
@@ -183,7 +252,7 @@ namespace BrainNotFound.Paper.Controllers
             ViewBag.Enrollments = enrollments;
 
             // Get the student's grades
-            var grades = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).ThenInclude(x => x.Course).Where(x => x.StudentId == student.Id && x.TestSchedule.EndTime < DateTime.Now).ToList();
+            var grades = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).ThenInclude(x => x.Course).Where(x => x.StudentId == student.Id).ToList();
             ViewBag.Grades = grades;
             return View();
         }

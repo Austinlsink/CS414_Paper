@@ -1,0 +1,30 @@
+﻿<!-- Template for diplaying a edit Essay form in the edit test page-->
+<!-- Parameters: questionId, pointValue, content -->
+
+<div class="editQuestionContainer">
+    <div class="ln_solid"></div>
+    <div class="row well">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="col-md-1 col-sm-1 col-xs-3">
+                <p>Points:</p>
+                <input type="number" placeholder="pts" min="1" class="form-group form-control" id="EssayPointValue-{{questionId}}" value="1">
+            </div>
+            <div class="form-group col-md-11 col-sm-11 col-xs-12">
+                <label>Question: </label>
+                <input type="text" placeholder="Enter question text here" class="form-control " id="EdittedessayContent-{{questionId}}" value="{{content}}" />
+                <span class="text-danger hidden" id="editEssayContentError-{{questionId}}">Please enter a question</span>
+            </div>
+            <div class="col-md-1 col-sm-1 col-xs-3"></div>
+            <div class="col-md-11 col-sm-11 col-xs-12">
+                <label>Expected Answer</label>
+                <textarea id="edittedExpectedAnswer-{{questionId}}">{{expectedAnswerContent}}</textarea>
+            </div>
+
+            <div class="form-group col-md-3 col-sm-3 col-xs-12 pull-right">
+                <p>&nbsp;</p>
+                <button type="button" class="pull-right btn btn-primary btn-md saveEdittedEssayQuestion" data-questionId="{{questionId}}">Update</button>
+                <button type="button" class="pull-right btn btn-danger btn-md cancelEditQuestion" data-questionId="{{questionId}}">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

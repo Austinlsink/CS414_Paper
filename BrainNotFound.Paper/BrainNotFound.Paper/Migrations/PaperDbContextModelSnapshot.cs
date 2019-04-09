@@ -182,6 +182,25 @@ namespace BrainNotFound.Paper.Migrations
                     b.ToTable("FieldsOfStudy");
                 });
 
+            modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.FillInTheBlankQuestion", b =>
+                {
+                    b.Property<long>("FillInTheBlankQuestionId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("FillInTheBlankAnswer");
+
+                    b.Property<long>("QuestionId");
+
+                    b.Property<int>("WordIndex");
+
+                    b.HasKey("FillInTheBlankQuestionId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("FillInTheBlankQuestions");
+                });
+
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.Image", b =>
                 {
                     b.Property<long>("ImageId")
@@ -387,6 +406,27 @@ namespace BrainNotFound.Paper.Migrations
                     b.ToTable("StudentAnswers");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("StudentAnswer");
+                });
+
+            modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.StudentFillInTheBlankAnswer", b =>
+                {
+                    b.Property<long>("StudentFillInTheBlankId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AnswerGiven");
+
+                    b.Property<long>("AnswerId");
+
+                    b.Property<long?>("FillInTheBlankQuestionId");
+
+                    b.HasKey("StudentFillInTheBlankId");
+
+                    b.HasIndex("AnswerId");
+
+                    b.HasIndex("FillInTheBlankQuestionId");
+
+                    b.ToTable("StudentFillInTheBlankAnswers");
                 });
 
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.StudentMajor", b =>
@@ -684,15 +724,6 @@ namespace BrainNotFound.Paper.Migrations
                     b.HasDiscriminator().HasValue("Essay");
                 });
 
-            modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.FillInTheBlank", b =>
-                {
-                    b.HasBaseType("BrainNotFound.Paper.Models.BusinessModels.Question");
-
-                    b.Property<string>("FillInTheBlankAnswer");
-
-                    b.HasDiscriminator().HasValue("FillInTheBlank");
-                });
-
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.TrueFalse", b =>
                 {
                     b.HasBaseType("BrainNotFound.Paper.Models.BusinessModels.Question");
@@ -709,15 +740,6 @@ namespace BrainNotFound.Paper.Migrations
                     b.Property<string>("EssayAnswerGiven");
 
                     b.HasDiscriminator().HasValue("StudentEssayAnswer");
-                });
-
-            modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.StudentFillInTheBlankAnswer", b =>
-                {
-                    b.HasBaseType("BrainNotFound.Paper.Models.BusinessModels.StudentAnswer");
-
-                    b.Property<string>("FillInTheBlankAnswerGiven");
-
-                    b.HasDiscriminator().HasValue("StudentFillInTheBlankAnswer");
                 });
 
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.StudentTrueFalseAnswer", b =>
@@ -761,6 +783,14 @@ namespace BrainNotFound.Paper.Migrations
                     b.HasOne("BrainNotFound.Paper.Models.BusinessModels.Department", "Department")
                         .WithMany("FieldsOfStudy")
                         .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.FillInTheBlankQuestion", b =>
+                {
+                    b.HasOne("BrainNotFound.Paper.Models.BusinessModels.Question", "Question")
+                        .WithMany("FillInTheBlankQuestions")
+                        .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -851,6 +881,18 @@ namespace BrainNotFound.Paper.Migrations
                         .WithMany("StudentAnswers")
                         .HasForeignKey("TestScheduleId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.StudentFillInTheBlankAnswer", b =>
+                {
+                    b.HasOne("BrainNotFound.Paper.Models.BusinessModels.StudentAnswer", "StudentAnswer")
+                        .WithMany("StudentFillInTheBlankAnswers")
+                        .HasForeignKey("AnswerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("BrainNotFound.Paper.Models.BusinessModels.FillInTheBlankQuestion", "FillInTheBlankQuestion")
+                        .WithMany("StudentFillInTheBlankAnswers")
+                        .HasForeignKey("FillInTheBlankQuestionId");
                 });
 
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.StudentMajor", b =>

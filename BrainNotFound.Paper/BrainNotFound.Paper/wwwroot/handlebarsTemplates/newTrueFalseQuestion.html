@@ -1,0 +1,29 @@
+﻿<!-- Template for diplaying a the new true false question form in the edit test page-->
+<!-- Parameters: timeStamp, sectionId -->
+
+<div class="newQuestionContainer">
+    <div class="ln_solid"></div>
+    <div class="row well">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="col-md-1 col-sm-1 col-xs-3">
+                <p>Points:</p>
+                <input type="number" placeholder="pts" min="1" class="form-group form-control" id="TrueFalsePointValue-{{timeStamp}}" value="1">
+            </div>
+            <div class="form-group col-md-5 col-sm-5 col-xs-12">
+                <p>Question: </p>
+                <input type="text" placeholder="Enter question text here" class="form-control " id="TrueFalseContent-{{timeStamp}}" />
+                <span class="text-danger hidden" id="TFContentError-{{timeStamp}}">Please enter a question</span>
+            </div>
+            <div class="form-group col-md-3 col-sm-3 col-xs-12">
+                <p>&nbsp;</p>
+                <input type="radio" class="flat" checked="" name="TrueFalseRadioButton-{{timeStamp}}" value="true" style="position: absolute; opacity: 0;"> True
+                <input type="radio" class="flat" name="TrueFalseRadioButton-{{timeStamp}}" value="false" style="position: absolute; opacity: 0;"> False
+            </div>
+            <div class="form-group col-md-3 col-sm-3 col-xs-12">
+                <p>&nbsp;</p>
+                <button type="button" class="pull-right btn btn-primary btn-md saveNewTrueFalseQuestion" data-sectionId="{{sectionId}}" data-uuid="{{timeStamp}}">Create</button>
+                <button type="button" class="pull-right btn btn-danger btn-md cancelNewQuestion">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

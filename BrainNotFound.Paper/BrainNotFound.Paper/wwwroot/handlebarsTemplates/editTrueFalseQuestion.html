@@ -1,0 +1,36 @@
+﻿<!-- Template for diplaying a edit test section form in the edit test page-->
+<!-- Parameters: questionId, pointValue, content answer -->
+
+<div class="editQuestionContainer">
+    <div class="ln_solid"></div>
+    <div class="row well">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="col-md-1 col-sm-1 col-xs-3">
+                <p>Points:</p>
+                <input type="number" placeholder="pts" min="1" class="form-group form-control" id="pointValue-{{questionId}}" value="{{pointValue}}">
+            </div>
+            <div class="form-group col-md-5 col-sm-5 col-xs-12">
+                <p>Question: </p>
+                <input type="text" placeholder="Enter question text" class="form-control" id="TrueFalseContent-{{questionId}}" value="{{content}}" />
+                <span class="text-danger hidden" id="TFContentError-{{questionId}}">Please enter a question</span>
+            </div>
+            <div class="form-group col-md-3 col-sm-3 col-xs-12">
+                <p>&nbsp;</p>
+
+                {{#if answer}}
+                <input type="radio" class="flat" checked="" name="TrueFalseRadioButton-{{questionId}}" value="true" style="position: absolute; opacity: 0;"> True
+                <input type="radio" class="flat" name="TrueFalseRadioButton-{{questionId}}" value="false" style="position: absolute; opacity: 0;"> False
+                {{else}}
+                <input type="radio" class="flat" name="TrueFalseRadioButton-{{questionId}}" value="true" style="position: absolute; opacity: 0;"> True
+                <input type="radio" class="flat" checked="" name="TrueFalseRadioButton-{{questionId}}" value="false" style="position: absolute; opacity: 0;"> False
+                {{/if}}
+
+            </div>
+            <div class="form-group col-md-3 col-sm-3 col-xs-12">
+                <p>&nbsp;</p>
+                <button type="button" class="pull-right btn btn-primary btn-md saveEdittedTrueFalseQuestion" data-questionId="{{questionId}}">Update</button>
+                <button type="button" class="pull-right btn btn-danger btn-md cancelEditQuestion" data-questionId="{{questionId}}">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

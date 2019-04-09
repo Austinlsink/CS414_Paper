@@ -388,9 +388,8 @@ namespace BrainNotFound.Paper.Controllers
                             selectedCourse = allCourses.ElementAt(rand.Next(0, allCourses.Count));
                         } while (allSections.Where(S => S.CourseId == selectedCourse.CourseId).Count() <= 0);
 
-                        // Reset check values
+                        // Reset check value
                         isBeingTaken = false;
-                        conflicts = true;
 
                         // Make sure the student isn't already taking a section in this course
                         foreach (var studentEnrollment in enrollments.Where(E => E.StudentId == student.Id)) // Get the student's enrollments
@@ -416,6 +415,7 @@ namespace BrainNotFound.Paper.Controllers
                             if (enrollments.Where(E => E.StudentId == student.Id).Where(E => E.SectionId == selectedSection.SectionId).Count() <= 0)
                             {
                                 List<SectionMeetingTime> concurrentSectionMeetingTimes = new List<SectionMeetingTime>();
+                                // Reset check value
                                 conflicts = false;
                                 foreach (var enrollment in enrollments.Where(E => E.StudentId == student.Id))
                                 {
@@ -437,7 +437,7 @@ namespace BrainNotFound.Paper.Controllers
                                 }
                             }
                         }
-                    } while (conflicts == true);
+                    } while (isBeingTaken == true || conflicts == true);
 
                     Enrollment newEnrollment = new Enrollment
                     {
