@@ -144,7 +144,7 @@ namespace BrainNotFound.Paper.api
             // If the studentAnswer already exists, modify the MultipleChoiceAnswer list
             else
             {
-                if (isSelected)
+                if (!isSelected)
                 {
                     var answerRetrived = _context.StudentMultipleChoiceAnswers.Find(mcAnswerId);
                     studentAnswer.StudentMultipleChoiceAnswers.Add(answerRetrived);

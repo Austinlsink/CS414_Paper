@@ -188,7 +188,7 @@ namespace BrainNotFound.Paper.Controllers
 
             var allTFQuestions = _context.TrueFalses.ToList();
             List<TrueFalse> TFQuestions = new List<TrueFalse>();
-            var allMCQuestions = _context.Questions.Where(x => x.QuestionType == "MultipleChoice");
+            var allMCQuestions = _context.Questions.Include(x => x.MultipleChoiceAnswers).Where(x => x.QuestionType == "MultipleChoice");
             List<Question> MCQuestions = new List<Question>();
             var allMCOptions = _context.MultipleChoiceAnswers.ToList();
             List<MultipleChoiceAnswer> MCOptions = new List<MultipleChoiceAnswer>();
