@@ -128,13 +128,13 @@ function Update_TestAssignmentTable() {
 
                 // There are any test schedules display them
                 if (result.schedules != 'none') {
-                    
+
                     $("#TestAssignmentTable > tbody").empty();
                     result.schedules.forEach(function (schedule) {
                         $("#TestAssignmentTable > tbody")
                             .append(DisplayScheduleTableRowTemplate(schedule))
                     })
-                    
+
                     $("table#TestAssignmentTable").removeClass("hidden");
                     $("div#NoScheduledTestContainer").addClass("hidden");
                 }
@@ -818,7 +818,7 @@ $("#confirmDeletion").click(function () {
                     $(".sectionContainer-" + sectionId).remove();
                     $('#confirm-deletion-modal').modal('toggle');
 
-                    
+
                     // ADD-NOTIFICATION
                 }
                 else {
@@ -928,7 +928,7 @@ $("#TestSections").on("click", ".editMultipleChoiceQuestion", function () {
         .each(function () {
             var isCorrect = $(this).children("p").attr("data-isCorrect") == "true";
             var optionContent = $(this).children("p").text();
-            
+
             templateData = {
                 questionId: questionId,
                 optionContent: optionContent,
@@ -1197,7 +1197,7 @@ $("#TestSections").on("click", ".addMatchingGroup", function () {
 })
 
 // Add a match to a matching group
-$("#TestSections").on("click", ".addMatch", function () {        
+$("#TestSections").on("click", ".addMatch", function () {
     $(this).parent().siblings(".groupMatchesContainer")
         .append(NewMatchingQuestionGroupMatchTemplate());
 })
@@ -1213,9 +1213,10 @@ $("#TestSections").on("click", ".saveMatchingQuestion", function () {
     var uuid = $(this).attr("data-uuid");
     var questionContent = $.trim($("#matchingContent-" + uuid).val());
     var pointValue = $("#matchingPointValue-" + uuid).val();
+    var matchingGroups = [];
     var newQuestionContainer = $(this).parents(".newQuestionContainer");
     var hasError = false;
-    l();
+
     // Error check if content is empty
     if (questionContent == "") {
         hasError = true;
@@ -1225,14 +1226,84 @@ $("#TestSections").on("click", ".saveMatchingQuestion", function () {
         $("#matchingContentError-" + uuid).addClass("hidden");
     }
 
-    // Error checks the number of groups
+    // Error checks the minimum number of groups
     if ($("#matchingGroupsContainer-" + uuid).children(".matchingGroupContainer").length > 0) {
-        
+        $("#minimumNumberOfMatchingGroups-" + uuid).addClass("hidden");
+
+        // Gets the data for each matching group
+        $("#matchingGroupsContainer-" + uuid).children(".matchingGroupContainer").each(function () {
+            var matchAnswer = $.trim($(this).find("input.matchingGroupAnswer").val());
+            var matches = [];
+
+            // Error checks Matching group Answer
+            if (matchAnswer == "") {
+                hasError = true;
+                $(this).find(".answerErrorMessage").removeClass("hidden");
+            } else {
+                $(this).find(".answerErrorMessage").addClass("hidden");
+            }
+
+            // Error check minimum number of matches per group
+            if ($(this).find(".groupMatchesContainer").children(".matchingGroupMatch").length > 0) {
+
+                $(this).find("li.minimumNumberOfMatchesErrorMessage").addClass("hidden");
+
+                // Gets all the matches for this answer
+                $(this).find(".groupMatchesContainer").children(".matchingGroupMatch").each(function () {
+                    var matchContent = $.trim($(this).find(".match").val());
+
+                    // Error checks the match content
+                    if (matchContent == "") {
+                        hasError = true;
+                        $(this).find(".matchErrorMessage").removeClass("hidden");
+                    } else {
+
+                        $(this).find(".matchErrorMessage").addClass("hidden");
+                        matches.push(matchContent);
+                    }
+                })
+
+            } else {
+                hasError = true;
+                $(this).find("li.minimumNumberOfMatchesErrorMessage").removeClass("hidden");
+            }
+
+            // Saves the data of a matching group
+            matchingGroups.push({ matchAnswer: matchAnswer, matches: matches });
+        })
+
     }
     else {
         hasError = true;
         $("#minimumNumberOfMatchingGroups-" + uuid).removeClass("hidden");
     }
+
+    // Submits question data to server
+    if (!hasError) {
+        var JsonData = JSON.stringify({
+            testSectionId: testSectionId,
+            questionContent: questionContent,
+            pointValue: pointValue,
+            matchingGroups: matchingGroups
+        });
+
+        $.ajax({
+            url: "/api/CreateTest/NewMatchingQuestion",
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            data: JsonData,
+            success: function (result) {
+                if (result.success) {
+                    log(result);
+                }
+                else {
+                    console.log(result)
+                }
+            }
+        })
+    }
+    log(matchingGroups);
+    
 })
 
 
@@ -1326,7 +1397,7 @@ function compile_templates() {
             EditMultipleChoiceQuestionTemplate = Handlebars.compile(template);
         })
 
-   // Compile edit Multiple Choice Question option
+    // Compile edit Multiple Choice Question option
     $.get("/handlebarsTemplates/editMultipleChoiceQuestionOption.html",
         function (template) {
             EditMultipleChoiceQuestionOptionTemplate = Handlebars.compile(template);
@@ -1363,7 +1434,7 @@ function compile_templates() {
         function (template) {
             NewMatchingQuestionGroupTemplate = Handlebars.compile(template);
         })
-    
+
     // Compile new Matching Group match Template
     $.get("/handlebarsTemplates/newMatchingGroupMatch.html",
         function (template) {
@@ -1444,7 +1515,7 @@ function stripe() {
 
 // Initialize Page Data
 $(document).ready(function () {
-    
+
     compile_templates();
     register_partials();
     init_daterangepicker_TestSchedule();
@@ -1457,5 +1528,9 @@ $(document).ready(function () {
 })
 
 function l(i) {
-    console.log("Got here: " + i);
+    console.log("Test: " + i);
+}
+
+function log(i) {
+    console.log(i);
 }

@@ -80,11 +80,65 @@ namespace BrainNotFound.Paper.api
 
         }
 
-        [HttpPost, Route("Matching")]
-        public IActionResult NewMatching([FromBody] JObject jsonData)
+        [HttpPost, Route("NewMatchingQuestion")]
+        public IActionResult NewMatchingQuestion([FromBody] JObject jsonData)
         {
+            dynamic json = jsonData;
+            long testSectionId = json.testSectionId;
+            var testSection = _context.TestSections.Include(s => s.Test).Where(x => x.TestSectionId == testSectionId).First();
+            JArray matchingGroups = json.matchingGroups;
 
-            return Json(new { success = true });
+            // Find the instructor who is creating the test
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            if (testSection.Test.InstructorId != instructor.Id)
+            {
+                return Json(new { success = false, error = "Instructor not allowed" });
+            }
+            else
+            {
+                Question matchingQuestion = new Question
+                {
+                    Content = json.questionContent,
+                    //Index = int.Parse((string)json.Index),
+                    PointValue = json.pointValue,
+                    TestSectionId = testSectionId,
+                    QuestionType = QuestionType.Matching,
+                    MatchingQuestionSides = new List<MatchingQuestionSide>()
+
+                };
+
+                // Parse all groups
+                foreach (JObject matchingGroup in matchingGroups)
+                {
+                    dynamic matchGroup = matchingGroup;
+                    JArray Jmatches = matchGroup.matches;
+
+                    // Create the answer to the gruop
+                    MatchingAnswerSide matchingAnswerSide = new MatchingAnswerSide
+                    {
+                        MatchingAnswer = matchGroup.matchAnswer
+                    };
+
+                    var matchingQuestionSides = new List<MatchingQuestionSide>();
+
+                    foreach (string matchContent in Jmatches)
+                    {
+                        var matchingQuestionSide = new MatchingQuestionSide()
+                        {
+                            Content = matchContent,
+                            matchingAnswerSide = matchingAnswerSide
+                        };
+
+                        matchingQuestion.MatchingQuestionSides.Add(matchingQuestionSide);
+                    }
+                }
+
+                _context.Questions.Add(matchingQuestion);
+                _context.SaveChanges();
+                return Json(new { success = true, matchingQuestion });
+            }
+
+            
         }
 
         /// <summary>
@@ -195,7 +249,7 @@ namespace BrainNotFound.Paper.api
             // saves question to db
             _context.SaveChanges();
 
-            return Json(new { success = true});
+            return Json(new { success = true });
 
         }
 

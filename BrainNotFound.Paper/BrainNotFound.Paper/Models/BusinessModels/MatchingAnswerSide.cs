@@ -9,9 +9,11 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 		[Key]
 		public long MatchingAnswerSideId { get; set; } //primary key
 		
-		public long QuestionId { get; set; } //foreign key
-        [ForeignKey("QuestionId")]
-        public Question Question { get; set; }
+
+        // Removed to solve conflict, Maybe ill come back in the second round
+		//public long QuestionId { get; set; } //foreign key
+  //      [ForeignKey("QuestionId")]
+  //      public Question Question { get; set; }
 
 		public string MatchingAnswer  { get; set; }
 		

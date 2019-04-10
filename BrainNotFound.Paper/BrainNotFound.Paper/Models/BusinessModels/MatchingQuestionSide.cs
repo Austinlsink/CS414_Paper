@@ -14,7 +14,7 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         public Question Question { get; set; }
 		public long    MatchingAnswerSideId { get; set; } //foreign key
         [ForeignKey("MatchingAnswerSideId")]
-        public MatchingAnswerSide MatchingAnswerSide { get; set; }
+        public MatchingAnswerSide matchingAnswerSide { get; set; }
 		public string Content              { get; set; }
 		
 		public List<StudentMatchingAnswer>  StudentMatchingAnswers  { get; set; }
