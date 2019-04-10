@@ -156,8 +156,11 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        
-
+        /// <summary>
+        /// Allows the user to take the specified tests, and grabs any questions that may already be answered
+        /// </summary>
+        /// <param name="testScheduleId"></param>
+        /// <returns></returns>
         [HttpGet, Route("Tests/TakeTest/{testScheduleId}")]
         public async Task<IActionResult> TakeTest(long testScheduleId)
         {
@@ -182,7 +185,6 @@ namespace BrainNotFound.Paper.Controllers
             // Grab the test sections for the test
             var testSections = _context.TestSections.Include(ts =>  ts.Questions).Where(x => x.TestId == testSchedule.TestId).ToList();
             ViewBag.TestSections = testSections;
-
 
             var allTFQuestions = _context.TrueFalses.ToList();
             List<TrueFalse> TFQuestions = new List<TrueFalse>();
@@ -232,6 +234,9 @@ namespace BrainNotFound.Paper.Controllers
             ViewBag.StudentTFAnswers = studentTFAnswers;
 
             // Grab the student's multiple choice answers if any
+            var studentMCAnswers = _context.StudentMultipleChoiceAnswers.Include(x => x.StudentAnswer).Where(x => x.StudentAnswer.TestScheduleId == testSchedule.TestScheduleId).ToList();
+            ViewBag.StudentMCAnswers = studentMCAnswers;
+
 
             return View();
         }
