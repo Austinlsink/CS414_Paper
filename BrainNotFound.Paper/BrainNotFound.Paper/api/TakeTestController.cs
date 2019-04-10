@@ -108,14 +108,16 @@ namespace BrainNotFound.Paper.api
         {
             // Grad all the data from the JObject
             dynamic multipleChoiceInfo = JsonData;
-            long questionId = (long)multipleChoiceInfo.QuestionId;
+            long questionId = (long) multipleChoiceInfo.QuestionId;
             string answer = multipleChoiceInfo.Answer;
-            long testScheduleId = (long)multipleChoiceInfo.TestScheduleId;
-            long mcAnswerId = (long)multipleChoiceInfo.MCAnswerId;
+            long testScheduleId = (long) multipleChoiceInfo.TestScheduleId;
+            long mcAnswerId = (long) multipleChoiceInfo.MCAnswerId;
+            bool isSelected = (bool) multipleChoiceInfo.IsSelected;
 
             var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
             var studentAnswer = _context.StudentAnswers.Where(x => x.QuestionId == questionId && x.TestScheduleId == testScheduleId).FirstOrDefault();
             
+            // If studentAnswer is empty, create a new student answer and add a list of StudentMultipleChoiceAnswer
             if (studentAnswer == null)
             {
                 StudentAnswer newStudentAnswer = new StudentAnswer()
@@ -139,19 +141,31 @@ namespace BrainNotFound.Paper.api
 
                 return Json(new { success = true });
             }
+            // If the studentAnswer already exists, modify the MultipleChoiceAnswer list
             else
             {
-                var answerRetrived = _context.StudentMultipleChoiceAnswers.Find(mcAnswerId);
+                if (isSelected)
+                {
+                    var answerRetrived = _context.StudentMultipleChoiceAnswers.Find(mcAnswerId);
+                    studentAnswer.StudentMultipleChoiceAnswers.Add(answerRetrived);
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    var answerRetrived = _context.StudentMultipleChoiceAnswers.Find(mcAnswerId);
+                    studentAnswer.StudentMultipleChoiceAnswers.Remove(answerRetrived);
 
-                if()
+                    if(studentAnswer.StudentMultipleChoiceAnswers.Count == 0)
+                    {
+                        _context.StudentMultipleChoiceAnswers.Remove(answerRetrived);
+                        _context.StudentAnswers.Remove(studentAnswer);
+                    }
+
+                    _context.SaveChanges();
+                }
+
+                return Json(new { success = true });
             }
-
-
-
-        
-
-
-            return Json(new { success = false });
         }
 
         /// <summary>

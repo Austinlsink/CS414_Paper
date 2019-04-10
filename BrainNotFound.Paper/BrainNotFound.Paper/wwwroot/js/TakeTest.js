@@ -61,17 +61,29 @@ $("button#submitTest").click(function () {
 })
 
 $("a.multipleChoiceOption").click(function () {
+    // Toggles true/False and changes the button color
+    if ($(this).hasClass("btn-default")) {
+        $(this).removeClass("btn-default").addClass("btn-primary");
+        $(this).attr("data-isSelected", true);
+    }
+    else {
+        $(this).removeClass("btn-primary").addClass("btn-default");
+        $(this).attr("data-isSelected", false);
+    }
+    
     var QuestionId = $(this).attr("data-mcQuestionId");
     var Answer = $(this).text();
     Answer = (Answer.slice(2)).trim();
     var TestScheduleId = $("input#testScheduleId").val();
     var MCAnswerId = $(this).attr("data-answerId");
     var IsSelected = $(this).attr("data-isSelected");
-    console.log(QuestionId, Answer, TestScheduleId, MCAnswerId, IsToggled);
+
+   
+    console.log(QuestionId, Answer, TestScheduleId, MCAnswerId, IsSelected);
 
     var JsonData = JSON.stringify({ QuestionId: QuestionId, TestScheduleId: TestScheduleId, Answer: Answer, MCAnswerId: MCAnswerId, IsSelected: IsSelected })
-
-    if (IsToggled === true) {
+    
+    if (IsSelected == "true") {
         $.ajax({
             url: "/api/Tests/SaveMultipleChoiceAnswer/",
             type: "POST",
@@ -116,18 +128,6 @@ $("label[data-questionType='trueFalse']").click(function () {
     var newClass = $(this).attr("data-toogled-class");
     $(this).removeClass("btn-primary").removeClass("btn-danger").addClass(newClass);
     $(this).siblings().removeClass("btn-primary").removeClass("btn-danger").addClass("btn-default");
-})
-
-// Multiple choice toggle
-$(".multipleChoiceOption").click(function () {
-    if ($(this).hasClass("btn-default")) {
-        $(this).removeClass("btn-default").addClass("btn-primary");
-        $(this).data("isSelected", true);
-    }
-    else {
-        $(this).removeClass("btn-primary").addClass("btn-default");
-        $(this).data("isSelected", false);
-    }
 })
 
 // stripes every other row
