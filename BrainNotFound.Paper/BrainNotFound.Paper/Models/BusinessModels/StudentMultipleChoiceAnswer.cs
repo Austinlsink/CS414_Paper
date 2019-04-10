@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BrainNotFound.Paper.Models.BusinessModels
 {
-    public class StudentMultipleChoiceAnswer
+    public class StudentMultipleChoiceAnswer 
 	{
         [Key]
         public long StudentMultipleChoiceId { get; set; }

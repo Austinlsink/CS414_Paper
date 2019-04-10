@@ -40,8 +40,8 @@ BEGIN
 				DECLARE studentTestCursor CURSOR FOR
 					SELECT StudentAnswers.AnswerId --, Questions.QuestionId
 					  FROM StudentTestAssignments JOIN AspNetUsers ON StudentTestAssignments.StudentId = AspNetUsers.Id
-													JOIN StudentAnswers ON AspNetUsers.Id = StudentAnswers.StudentId
-													JOIN TestSchedules ON StudentAnswers.TestScheduleId = TestSchedules.TestScheduleId
+												  JOIN StudentAnswers ON AspNetUsers.Id = StudentAnswers.StudentId
+												  JOIN TestSchedules ON StudentAnswers.TestScheduleId = TestSchedules.TestScheduleId
 					 WHERE StudentTestAssignments.StudentTestAssignmentId = @studentTestAssignmentId;
 					
 				OPEN studentTestCursor;
@@ -66,27 +66,28 @@ BEGIN
 					BEGIN
 						-- All the expected answers for the question
 						DECLARE fillInTheBlankCorrectAnswersCursor CURSOR FOR
-								SELECT FillInTheBlankQuestions.FillInTheBlankAnswer
+								SELECT FillInTheBlankQuestions.FillInTheBlankAnswer, FillInTheBlankQuestions.FillInTheBlankQuestionId
 								FROM FillInTheBlankQuestions JOIN Questions ON FillInTheBlankQuestions.QuestionId = Questions.QuestionId
-															JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId
+															 JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId
 								WHERE StudentAnswers.QuestionId = @c_answerId;
 						DECLARE @currentCorrectFillInTheBlankAnswer NVARCHAR;
+						DECLARE @currentCorrectFillInTheBlankId BIGINT;
 						DECLARE @allStudentFillInTheBlankAnswersCorrect BIT = 1; -- Assume that there are no wrong answers
 
 						OPEN fillInTheBlankCorrectAnswersCursor
-						FETCH NEXT FROM fillInTheBlankCorrectAnswersCursor INTO @currentCorrectFillInTheBlankAnswer
+						FETCH NEXT FROM fillInTheBlankCorrectAnswersCursor INTO @currentCorrectFillInTheBlankAnswer, @currentCorrectFillInTheBlankId
 
 						-- Grade answers
 						WHILE @@FETCH_STATUS = 0
 						BEGIN
 							-- If the answer is INCORRECT!!!
-							IF ((SELECT AnswerGiven FROM StudentFillInTheBlankAnswers WHERE AnswerId = @c_AnswerId) != @currentCorrectFillInTheBlankAnswer)
+							IF ((SELECT AnswerGiven FROM StudentFillInTheBlankAnswers WHERE FillInTheBlankQuestionId = @currentCorrectFillInTheBlankId) != @currentCorrectFillInTheBlankAnswer)
 							BEGIN
 								SELECT @allStudentFillInTheBlankAnswersCorrect = 0;
 							END;
 
 							-- Get next expected answer
-							FETCH NEXT FROM fillInTheBlankCorrectAnswersCursor INTO @currentCorrectFillInTheBlankAnswer
+							FETCH NEXT FROM fillInTheBlankCorrectAnswersCursor INTO @currentCorrectFillInTheBlankAnswer, @currentCorrectFillInTheBlankId
 						END;
 
 						CLOSE fillInTheBlankCorrectAnswersCursor;
@@ -110,48 +111,35 @@ BEGIN
 					-- Grade MultipleChoice answers
 					ELSE IF ((SELECT Questions.QuestionType FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId) = 'MultipleChoice')
 					BEGIN
-						-- Get all correct answers for the question
- 						DECLARE multipleChoiceCorrectAnswersCursor CURSOR FOR
-								SELECT MultipleChoiceAnswers.MultipleChoiceAnswerId
-								FROM MultipleChoiceAnswers JOIN Questions ON MultipleChoiceAnswers.QuestionId = Questions.QuestionId
-														   JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId
-								WHERE StudentAnswers.QuestionId = @c_answerId AND MultipleChoiceAnswers.IsCorrect = 1;
-						DECLARE @currentMultipleChoiceAnswerId BIGINT;
-						DECLARE @allStudentMultipleChoiceAnswersCorrect BIT = 1; -- Assume that there are no wrong answers
-
-						OPEN multipleChoiceCorrectAnswersCursor
-						FETCH NEXT FROM multipleChoiceCorrectAnswersCursor INTO @currentMultipleChoiceAnswerId
+						-- Get all the answers the student gave for the question
+						DECLARE studentMultipleChoiceAnswersCursor CURSOR FOR
+							SELECT StudentMultipleChoiceAnswers.MultipleChoiceAnswerId
+							  FROM StudentMultipleChoiceAnswers JOIN StudentAnswers ON StudentMultipleChoiceAnswers.AnswerId = StudentAnswers.AnswerId
+							 WHERE StudentAnswers.QuestionId = @c_answerId;
+						DECLARE @currentStudentMultipleChoiceAnswerId BIGINT;
+						DECLARE @allStudentMultipleChoiceAnswersCorrect BIT = 1; -- Assume that there are no wrong answers	
+						
+						OPEN studentMultipleChoiceAnswersCursor;
+						FETCH NEXT FROM studentMultipleChoiceAnswersCursor INTO @currentStudentMultipleChoiceAnswerId;
 
 						-- Grade answers
 						WHILE @@FETCH_STATUS = 0
 						BEGIN
-						-- TODO: Grade using the studentMultipleChoiceAnswersCursor
+							-- If the student's answer is NOT in the correct multiple choice answers
+							IF (@currentStudentMultipleChoiceAnswerId NOT IN (SELECT MultipleChoiceAnswers.MultipleChoiceAnswerId
+																				FROM MultipleChoiceAnswers JOIN Questions ON MultipleChoiceAnswers.QuestionId = Questions.QuestionId
+																										   JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId
+																				WHERE StudentAnswers.QuestionId = @c_answerId AND MultipleChoiceAnswers.IsCorrect = 1))
+							BEGIN
+								SELECT @allStudentMultipleChoiceAnswersCorrect = 0;
+							END;
 
-							-- Get all the answers the student gave for the question
-							DECLARE studentMultipleChoiceAnswersCursor CURSOR FOR
-								SELECT StudentMultipleChoiceAnswers.MultipleChoiceAnswerId
-								  FROM StudentMultipleChoiceAnswers JOIN StudentAnswers ON StudentMultipleChoiceAnswers.AnswerId = StudentAnswers.AnswerId
-								 WHERE StudentAnswers.QuestionId = @c_answerId;
-							DECLARE @currentStudentMultipleChoiceAnswerId BIGINT;
-
-							OPEN studentMultipleChoiceAnswersCursor;
+							-- Get next student answer
 							FETCH NEXT FROM studentMultipleChoiceAnswersCursor INTO @currentStudentMultipleChoiceAnswerId;
-
-							WHILE @@FETCH_STATUS = 0
-							BEGIN -- TODO: COMPLETE!!!
-								-- If the answer is INCORRECT!!!
-								IF ((SELECT MultipleChoiceAnswerId FROM StudentMultipleChoiceAnswers WHERE AnswerId = @c_AnswerId) != @currentMultipleChoiceAnswerId)
-								BEGIN
-									SELECT @allStudentMultipleChoiceAnswersCorrect = 0;
-								END;
-							END; -- End going through student's answers
-
-							-- Get next expected answer
-							FETCH NEXT FROM multipleChoiceCorrectAnswersCursor INTO @currentMultipleChoiceAnswerId
 						END;
 
-						CLOSE multipleChoiceCorrectAnswersCursor;
-						DEALLOCATE multipleChoiceCorrectAnswersCursor;
+						CLOSE studentMultipleChoiceAnswersCursor;
+						DEALLOCATE studentMultipleChoiceAnswersCursor;
 
 						-- If all the answers were correct, add the points to the grade
 						IF (@allStudentMultipleChoiceAnswersCorrect = 1)
