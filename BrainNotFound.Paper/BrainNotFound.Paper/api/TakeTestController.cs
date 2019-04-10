@@ -144,7 +144,7 @@ namespace BrainNotFound.Paper.api
             // If the studentAnswer already exists, modify the MultipleChoiceAnswer list
             else
             {
-                if (!isSelected)
+                if (isSelected)
                 {
                     var answerRetrived = _context.StudentMultipleChoiceAnswers.Find(mcAnswerId);
                     studentAnswer.StudentMultipleChoiceAnswers.Add(answerRetrived);
@@ -152,7 +152,7 @@ namespace BrainNotFound.Paper.api
                 }
                 else
                 {
-                    var answerRetrived = _context.StudentMultipleChoiceAnswers.Find(mcAnswerId);
+                    var answerRetrived = _context.StudentMultipleChoiceAnswers.Where(x => x.MultipleChoiceAnswerId == mcAnswerId && x.AnswerId == studentAnswer.AnswerId).FirstOrDefault();
                     studentAnswer.StudentMultipleChoiceAnswers.Remove(answerRetrived);
 
                     if(studentAnswer.StudentMultipleChoiceAnswers.Count == 0)

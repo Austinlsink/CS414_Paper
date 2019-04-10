@@ -186,7 +186,7 @@
                                                 {
                                                     if (answer.QuestionId == mcQuestion.QuestionId && studentAnswer.MultipleChoiceAnswerId == answer.MultipleChoiceAnswerId )
                                                     {
-                                                        <a class="btn btn-primary btn-block text-left multipleChoiceOption" name="multipleChoiceAnswer-@mcQuestion.QuestionId" data-mcQuestionId="@mcQuestion.QuestionId" data-answerId="@answer.MultipleChoiceAnswerId" data-isSelected="false"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @answer.MultipleChoiceAnswerOption</span>&nbsp;</a>
+                                                        <a class="btn btn-primary btn-block text-left multipleChoiceOption" name="multipleChoiceAnswer-@mcQuestion.QuestionId" data-mcQuestionId="@mcQuestion.QuestionId" data-mcanswerId="@answer.MultipleChoiceAnswerId" data-isSelected="false"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @answer.MultipleChoiceAnswerOption</span>&nbsp;</a>
                                                     }
                                                     else if (answer.QuestionId == mcQuestion.QuestionId)
                                                     {

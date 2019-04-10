@@ -75,7 +75,7 @@ $("a.multipleChoiceOption").click(function () {
     var Answer = $(this).text();
     Answer = (Answer.slice(2)).trim();
     var TestScheduleId = $("input#testScheduleId").val();
-    var MCAnswerId = $(this).attr("data-answerId");
+    var MCAnswerId = $(this).attr("data-mcanswerId");
     var IsSelected = $(this).attr("data-isSelected");
 
    
@@ -83,21 +83,20 @@ $("a.multipleChoiceOption").click(function () {
 
     var JsonData = JSON.stringify({ QuestionId: QuestionId, TestScheduleId: TestScheduleId, Answer: Answer, MCAnswerId: MCAnswerId, IsSelected: IsSelected })
     
-    if (IsSelected == "true") {
-        $.ajax({
-            url: "/api/Tests/SaveMultipleChoiceAnswer/",
-            type: "POST",
-            contentType: "application/json",
-            // Data fetched from the form
-            data: JsonData,
-            success: function (result) {
+
+    $.ajax({
+        url: "/api/Tests/SaveMultipleChoiceAnswer/",
+        type: "POST",
+        contentType: "application/json",
+        // Data fetched from the form
+        data: JsonData,
+        success: function (result) {
                
-            },
-            error: function (xhr, status, error) {
+        },
+        error: function (xhr, status, error) {
                
-            }
-        })
-    }
+        }
+    })
 })
 
 // This function reponds to the radios on change event - we're grabbing data!!!!!
