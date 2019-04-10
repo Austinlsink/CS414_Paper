@@ -1180,6 +1180,63 @@ $("table#TestAssignmentTable").on("click", ".DeleteSectionSchedule", function ()
 })
 
 /**********************************************************************/
+/*                      Matching Event Handlers                       */
+/**********************************************************************/
+
+// Delete a matching group from New Matching Question
+$("#TestSections").on("click", ".deleteMatchingGroup", function () {
+    $(this).parents(".matchingGroupContainer").remove();
+})
+
+// Add a matching group to New Matching Question
+$("#TestSections").on("click", ".addMatchingGroup", function () {
+    var uuid = $(this).attr("data-uuid");
+
+    $("#matchingGroupsContainer-" + uuid)
+        .append(NewMatchingQuestionGroupTemplate());
+})
+
+// Add a match to a matching group
+$("#TestSections").on("click", ".addMatch", function () {        
+    $(this).parent().siblings(".groupMatchesContainer")
+        .append(NewMatchingQuestionGroupMatchTemplate());
+})
+
+// Delete a Match from a matching group
+$("#TestSections").on("click", ".deleteMatch", function () {
+    $(this).parents(".matchingGroupMatch").remove();
+})
+
+// Submitting a Matching Quesiton
+$("#TestSections").on("click", ".saveMatchingQuestion", function () {
+    var testSectionId = $(this).attr("data-sectionId");
+    var uuid = $(this).attr("data-uuid");
+    var questionContent = $.trim($("#matchingContent-" + uuid).val());
+    var pointValue = $("#matchingPointValue-" + uuid).val();
+    var newQuestionContainer = $(this).parents(".newQuestionContainer");
+    var hasError = false;
+    l();
+    // Error check if content is empty
+    if (questionContent == "") {
+        hasError = true;
+        $("#matchingContentError-" + uuid).removeClass("hidden");
+    }
+    else {
+        $("#matchingContentError-" + uuid).addClass("hidden");
+    }
+
+    // Error checks the number of groups
+    if ($("#matchingGroupsContainer-" + uuid).children(".matchingGroupContainer").length > 0) {
+        
+    }
+    else {
+        hasError = true;
+        $("#minimumNumberOfMatchingGroups-" + uuid).removeClass("hidden");
+    }
+})
+
+
+/**********************************************************************/
 /*                         Compiled Templates                         */
 /**********************************************************************/
 // Test Section Template
@@ -1206,6 +1263,8 @@ var EditEssayQuestionTemplate;
 
 // Matching Templates
 var NewMatchingQuestionTemplate;
+var NewMatchingQuestionGroupTemplate;
+var NewMatchingQuestionGroupMatchTemplate;
 
 // Other Templates
 var DisplaySectionAssignmentTableRowTemplate;
@@ -1215,7 +1274,6 @@ var DisplayScheduleTableRowTemplate;
 /**********************************************************************/
 /*                         Compile templates                          */
 /**********************************************************************/
-
 function compile_templates() {
 
     // Compile True False Templates
@@ -1300,6 +1358,18 @@ function compile_templates() {
             NewMatchingQuestionTemplate = Handlebars.compile(template);
         })
 
+    // Compile new Matching Group Template
+    $.get("/handlebarsTemplates/newMatchingGroup.html",
+        function (template) {
+            NewMatchingQuestionGroupTemplate = Handlebars.compile(template);
+        })
+    
+    // Compile new Matching Group match Template
+    $.get("/handlebarsTemplates/newMatchingGroupMatch.html",
+        function (template) {
+            NewMatchingQuestionGroupMatchTemplate = Handlebars.compile(template);
+        })
+
     // Compile other templates
     // Compile display test section template
     $.get("/handlebarsTemplates/displayTestSection.html",
@@ -1332,6 +1402,28 @@ function compile_templates() {
         })
 }
 
+/**********************************************************************/
+/*                     Register Partial templates                     */
+/**********************************************************************/
+function register_partials() {
+
+    // Register the Matching Group Partial
+    $.get("/handlebarsTemplates/newMatchingGroup.html",
+        function (template) {
+            Handlebars.registerPartial("matchingGroup", template);
+        })
+
+    // Register the Matching Group Partial
+    $.get("/handlebarsTemplates/newMatchingGroupMatch.html",
+        function (template) {
+            Handlebars.registerPartial("matchingGroupMatch", template);
+        })
+}
+
+/**********************************************************************/
+/*                           MISC Functions                           */
+/**********************************************************************/
+
 // Stripes every other question row
 function stripe() {
     var hasBackground = false;
@@ -1354,6 +1446,7 @@ function stripe() {
 $(document).ready(function () {
     
     compile_templates();
+    register_partials();
     init_daterangepicker_TestSchedule();
     init_students_datatable();
     Update_TestStatistics();
@@ -1362,3 +1455,7 @@ $(document).ready(function () {
     stripe();
 
 })
+
+function l(i) {
+    console.log("Got here: " + i);
+}

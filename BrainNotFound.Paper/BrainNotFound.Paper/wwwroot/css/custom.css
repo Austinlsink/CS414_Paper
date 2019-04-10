@@ -808,7 +808,8 @@ a {
 
         a:hover,
         a:focus {
-            text-decoration: none
+            text-decoration: none;
+            cursor: pointer;
         }
 
 .navbar {
