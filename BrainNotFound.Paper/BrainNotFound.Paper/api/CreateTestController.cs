@@ -116,7 +116,8 @@ namespace BrainNotFound.Paper.api
                     // Create the answer to the gruop
                     MatchingAnswerSide matchingAnswerSide = new MatchingAnswerSide
                     {
-                        MatchingAnswer = matchGroup.matchAnswer
+                        MatchingAnswer = matchGroup.matchAnswer,
+                        question = matchingQuestion
                     };
 
                     var matchingQuestionSides = new List<MatchingQuestionSide>();
@@ -126,7 +127,7 @@ namespace BrainNotFound.Paper.api
                         var matchingQuestionSide = new MatchingQuestionSide()
                         {
                             Content = matchContent,
-                            matchingAnswerSide = matchingAnswerSide
+                            matchingAnswerSide = matchingAnswerSide,
                         };
 
                         matchingQuestion.MatchingQuestionSides.Add(matchingQuestionSide);
@@ -135,10 +136,13 @@ namespace BrainNotFound.Paper.api
 
                 _context.Questions.Add(matchingQuestion);
                 _context.SaveChanges();
-                return Json(new { success = true, matchingQuestion });
+
+                var question = matchingQuestion.GetJsonMatching();
+
+                return Json(new { success = true, question});
             }
 
-            
+
         }
 
         /// <summary>

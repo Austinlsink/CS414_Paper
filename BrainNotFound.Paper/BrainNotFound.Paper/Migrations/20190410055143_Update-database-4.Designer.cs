@@ -4,14 +4,16 @@ using BrainNotFound.Paper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BrainNotFound.Paper.Migrations
 {
     [DbContext(typeof(PaperDbContext))]
-    partial class PaperDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190410055143_Update-database-4")]
+    partial class Updatedatabase4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

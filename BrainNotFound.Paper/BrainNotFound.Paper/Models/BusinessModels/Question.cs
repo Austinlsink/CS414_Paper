@@ -2,6 +2,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace BrainNotFound.Paper.Models.BusinessModels
 {
@@ -30,7 +31,7 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         public List<FillInTheBlankQuestion>   FillInTheBlankQuestions   { get; set; }
 
 
-        // Returns a Json object to be used in responses to Ajax calls
+        // Returns a Json object to be used in responses to Ajax calls for Multiple Choice Questions
         public JObject GetJsonMultipleChoice()
         {
             // Create the response Object
@@ -52,6 +53,44 @@ namespace BrainNotFound.Paper.Models.BusinessModels
             }
             question.multipleChoiceAnswers = MCOptions;
 
+            return question;
+        }
+
+        // Returns a Json object to be used in responses to Ajax calls for Multiple Choice Questions
+        public JObject GetJsonMatching()
+        {
+            // Create the response Object
+            dynamic question = new JObject();
+            question.pointValue = PointValue;
+            question.content = Content;
+            question.questionId = QuestionId;
+            question.sectionId = TestSectionId;
+
+            // format the mathching groups
+            JArray matchingGroups = new JArray();
+            foreach (var answer in MatchingAnswerSides)
+            {
+                string answerContent = answer.MatchingAnswer;
+
+                var MatchToAnswer = MatchingQuestionSides.Where(mqs => mqs.MatchingAnswerSideId == answer.MatchingAnswerSideId).ToList();
+
+                JArray jMatchs = new JArray();
+
+                foreach(var match in MatchToAnswer)
+                {
+                    jMatchs.Add(match.Content);
+                }
+
+                dynamic matchingGroup = new JObject();
+                matchingGroup.matchAnswer = answerContent;
+                matchingGroup.matchs = jMatchs;
+
+                matchingGroups.Add(matchingGroup);
+
+            }
+            question.matchingGroups = matchingGroups;
+
+            // return as JObject
             return question;
         }
     }

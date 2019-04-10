@@ -685,7 +685,6 @@ $("#TestSections").on("click", ".saveNewMultipleChoiceQuestion", function () {
                     });
 
                     $(newQuestionContainer).remove();
-                    console.log(result);
 
                     stripe();
                     // ADD-NOTIFICATION
@@ -1294,6 +1293,12 @@ $("#TestSections").on("click", ".saveMatchingQuestion", function () {
             data: JsonData,
             success: function (result) {
                 if (result.success) {
+
+
+
+                    $(newQuestionContainer).remove();
+                    stripe();
+                    // ADD-NOTIFICATION
                     log(result);
                 }
                 else {

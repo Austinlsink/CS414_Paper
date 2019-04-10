@@ -4,14 +4,16 @@ using BrainNotFound.Paper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BrainNotFound.Paper.Migrations
 {
     [DbContext(typeof(PaperDbContext))]
-    partial class PaperDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190410054458_Update-database-3")]
+    partial class Updatedatabase3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -804,7 +806,7 @@ namespace BrainNotFound.Paper.Migrations
 
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.MatchingAnswerSide", b =>
                 {
-                    b.HasOne("BrainNotFound.Paper.Models.BusinessModels.Question", "question")
+                    b.HasOne("BrainNotFound.Paper.Models.BusinessModels.Question", "Question")
                         .WithMany()
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade);
