@@ -33,13 +33,13 @@
                         <div class="profile_img">
                             <div id="crop-avatar">
                                 <!-- Current avatar -->
-                                <img class="img-responsive avatar-view" src="~/images/picture.jpg" alt="Avatar"
+                                <img class="img-responsive avatar-view" src="~/images/profiles/Instructors/@(ViewBag.profile.Id).png" alt="Avatar"
                                      title="Change the avatar">
                             </div>
                         </div>
                     </div>
                     <div class="col-md-10 col-sm-10 col-xs-12">
-                        <h3>@ViewBag.profile.FirstName @ViewBag.profile.LastName</h3>
+                        <h3>@ViewBag.profile.FirstName @ViewBag.profile.LastName @ViewBag.profile.Id</h3>
 
                         <ul class="list-unstyled user_data">
                             <li>
