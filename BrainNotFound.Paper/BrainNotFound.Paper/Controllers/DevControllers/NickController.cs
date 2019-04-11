@@ -11,6 +11,9 @@ using BrainNotFound.Paper.Models.BusinessModels;
 using System.IO;
 using CsvHelper;
 using System.Security.Claims;
+using System.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace BrainNotFound.Paper.Controllers.DevControllers
 {
@@ -20,7 +23,7 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly PaperDbContext _context;
-        
+
 
         //public IActionResult Run()
         public async Task<IActionResult> Run()
@@ -29,53 +32,21 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
             return View("TestView");
         }
 
-        public async Task<IActionResult> NickSandbox()
+        public string NickSandbox()
         {
-            var questions = new List<TrueFalse>();
-            var q1 = new TrueFalse()
-            {
-                Content = "Bima is from Brazil",
-                TrueFalseAnswer = true,
-                QuestionId = 1,
-                PointValue = 1,
-                Index =  1
-            };
+            string StudentId = "48ed6229-5496-4e72-9d9f-08ccac22f14f";
 
-            var q2 = new TrueFalse()
-            {
-                Content = "Nick is from Brazil",
-                TrueFalseAnswer = false,
-                QuestionId = 2,
-                PointValue = 2,
-                Index = 5
-            };
+            SqlParameter[] @params =
+                                    {
+                new SqlParameter("@returnVal", SqlDbType.Int) {Direction = ParameterDirection.Output}
+                            };
 
-            var q3 = new TrueFalse()
-            {
-                Content = "Austin is from Brazil",
-                TrueFalseAnswer = false,
-                QuestionId = 3,
-                PointValue = 3,
-                Index = 3
-            };
 
-            var q4 = new TrueFalse()
-            {
-                Content = "Kara is from Brazil",
-                TrueFalseAnswer = false,
-                QuestionId = 4,
-                PointValue = 4,
-                Index = 4
-            };
+            _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetNumberOfTests", @params);
+            
+            return (@params[0].Value).ToString(); //result is 29 
 
-            questions.Add(q1);
-            questions.Add(q2);
-            questions.Add(q3);
-            questions.Add(q4);
-
-            ViewBag.Questions = questions;
-
-            return View();
+            
         }
         // Constructor
         public NickController(
