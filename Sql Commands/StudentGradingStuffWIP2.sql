@@ -1,6 +1,6 @@
 USE [CS414_BrainNotFound]
 GO
-/****** Object:  Trigger [dbo].[gradeTest]    Script Date: 4/9/2019 1:10:10 PM ******/
+/****** Object:  Trigger [dbo].[gradeTest]    Script Date: 4/10/2019 9:27:50 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -11,7 +11,9 @@ AS
 IF (UPDATE (Submitted)) --If the submitted column has changed
 BEGIN
 	-- Get all tests submitted at time of update
-	DECLARE studentTestAssignmentCursor CURSOR FOR (SELECT StudentTestAssignmentId, StudentId, Submitted, Grade, Signed, TestScheduleId FROM inserted);
+	DECLARE studentTestAssignmentCursor CURSOR FOR 
+		SELECT StudentTestAssignmentId, StudentId, Submitted, Grade, Signed, TestScheduleId
+		  FROM inserted;
 	DECLARE @studentTestAssignmentId BIGINT,
 			@studentId BIGINT,
 			@submitted BIT,
@@ -32,6 +34,7 @@ BEGIN
 			-- If the pledge has been signed, grade the test
 			IF (@signed = 1)
 			BEGIN
+
 				-- The overall grade the student has
 				DECLARE @c_testGrade int = 0;
 				-- Store the AnswerId you get from the cursor below
@@ -51,114 +54,59 @@ BEGIN
 				-- Loop through all student answers
 				WHILE @@FETCH_STATUS = 0
 				BEGIN
+					-- If a question is correct (ASSUMED CORRECT!!!)
+					DECLARE @correct BIT = 1; 
+
 					-- Grade the student answers depending on type
 
 					-- Grade Essay answers (tell teacher that manual grading is required)
-					IF ((SELECT Questions.QuestionType FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId) = 'Essay')
+					IF ((SELECT Questions.QuestionType
+						   FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId
+						  WHERE StudentAnswers.AnswerId = @c_AnswerId) = 'Essay')
 					BEGIN
 						UPDATE StudentTestAssignments
 							SET ManualGradingRequired = 1
 							WHERE StudentTestAssignments.StudentTestAssignmentId = @studentTestAssignmentId;
+						SELECT @correct = 0;
 					END; -- End "grading" an Essay question
 
 					-- Grade FillInTheBlank answers
-					ELSE IF ((SELECT Questions.QuestionType FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId) = 'FillInTheBlank')
+					ELSE IF ((SELECT Questions.QuestionType
+								FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId
+							   WHERE StudentAnswers.AnswerId = @c_AnswerId) = 'FillInTheBlank')
 					BEGIN
-						-- All the expected answers for the question
-						DECLARE fillInTheBlankCorrectAnswersCursor CURSOR FOR
-								SELECT FillInTheBlankQuestions.FillInTheBlankAnswer, FillInTheBlankQuestions.FillInTheBlankQuestionId
-								FROM FillInTheBlankQuestions JOIN Questions ON FillInTheBlankQuestions.QuestionId = Questions.QuestionId
-															 JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId
-								WHERE StudentAnswers.QuestionId = @c_answerId;
-						DECLARE @currentCorrectFillInTheBlankAnswer NVARCHAR;
-						DECLARE @currentCorrectFillInTheBlankId BIGINT;
-						DECLARE @allStudentFillInTheBlankAnswersCorrect BIT = 1; -- Assume that there are no wrong answers
-
-						OPEN fillInTheBlankCorrectAnswersCursor
-						FETCH NEXT FROM fillInTheBlankCorrectAnswersCursor INTO @currentCorrectFillInTheBlankAnswer, @currentCorrectFillInTheBlankId
-
-						-- Grade answers
-						WHILE @@FETCH_STATUS = 0
-						BEGIN
-							-- If the answer is INCORRECT!!!
-							IF ((SELECT AnswerGiven FROM StudentFillInTheBlankAnswers WHERE FillInTheBlankQuestionId = @currentCorrectFillInTheBlankId) != @currentCorrectFillInTheBlankAnswer)
-							BEGIN
-								SELECT @allStudentFillInTheBlankAnswersCorrect = 0;
-							END;
-
-							-- Get next expected answer
-							FETCH NEXT FROM fillInTheBlankCorrectAnswersCursor INTO @currentCorrectFillInTheBlankAnswer, @currentCorrectFillInTheBlankId
-						END;
-
-						CLOSE fillInTheBlankCorrectAnswersCursor;
-						DEALLOCATE fillInTheBlankCorrectAnswersCursor;
-
-						-- If all the answers were correct, add the points to the grade
-						IF (@allStudentFillInTheBlankAnswersCorrect = 1)
-						BEGIN
-							SELECT @c_testGrade += (SELECT Questions.PointValue FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId);
-						END;
+						SELECT @correct = dbo.gradeFillInTheBlank(@c_AnswerId);
 					END; -- End grading a FillInTheBlank question
 
 					-- Grade Matching answers
-					--ELSE IF ((SELECT Questions.QuestionType FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId) = 'Matching')
-					--BEGIN
-						-- Compare answers
-						-- STEP 1: Compare student matching answer to the correct answer
-						-- STEP 2: If correct, add the question's grade point value to the overall grade
-					--END; -- End grading a Matching question
+					ELSE IF ((SELECT Questions.QuestionType
+								FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId
+							   WHERE StudentAnswers.AnswerId = @c_AnswerId) = 'Matching')
+					BEGIN
+						SELECT @correct = dbo.gradeMatching(@c_AnswerId);
+					END; -- End grading a Matching question
 
 					-- Grade MultipleChoice answers
-					ELSE IF ((SELECT Questions.QuestionType FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId) = 'MultipleChoice')
+					ELSE IF ((SELECT Questions.QuestionType
+							    FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId
+							   WHERE StudentAnswers.AnswerId = @c_AnswerId) = 'MultipleChoice')
 					BEGIN
-						-- Get all the answers the student gave for the question
-						DECLARE studentMultipleChoiceAnswersCursor CURSOR FOR
-							SELECT StudentMultipleChoiceAnswers.MultipleChoiceAnswerId
-							  FROM StudentMultipleChoiceAnswers JOIN StudentAnswers ON StudentMultipleChoiceAnswers.AnswerId = StudentAnswers.AnswerId
-							 WHERE StudentAnswers.QuestionId = @c_answerId;
-						DECLARE @currentStudentMultipleChoiceAnswerId BIGINT;
-						DECLARE @allStudentMultipleChoiceAnswersCorrect BIT = 1; -- Assume that there are no wrong answers	
-						
-						OPEN studentMultipleChoiceAnswersCursor;
-						FETCH NEXT FROM studentMultipleChoiceAnswersCursor INTO @currentStudentMultipleChoiceAnswerId;
-
-						-- Grade answers
-						WHILE @@FETCH_STATUS = 0
-						BEGIN
-							-- If the student's answer is NOT in the correct multiple choice answers
-							IF (@currentStudentMultipleChoiceAnswerId NOT IN (SELECT MultipleChoiceAnswers.MultipleChoiceAnswerId
-																				FROM MultipleChoiceAnswers JOIN Questions ON MultipleChoiceAnswers.QuestionId = Questions.QuestionId
-																										   JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId
-																				WHERE StudentAnswers.QuestionId = @c_answerId AND MultipleChoiceAnswers.IsCorrect = 1))
-							BEGIN
-								SELECT @allStudentMultipleChoiceAnswersCorrect = 0;
-							END;
-
-							-- Get next student answer
-							FETCH NEXT FROM studentMultipleChoiceAnswersCursor INTO @currentStudentMultipleChoiceAnswerId;
-						END;
-
-						CLOSE studentMultipleChoiceAnswersCursor;
-						DEALLOCATE studentMultipleChoiceAnswersCursor;
-
-						-- If all the answers were correct, add the points to the grade
-						IF (@allStudentMultipleChoiceAnswersCorrect = 1)
-						BEGIN
-							SELECT @c_testGrade += (SELECT Questions.PointValue FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId);
-						END;
+						SELECT @correct = dbo.gradeMultipleChoice(@c_AnswerId);
 					END; -- End grading a MultipleChoice question
 
 					-- Grade TrueFalse answers
-					ELSE IF ((SELECT Questions.QuestionType FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId) = 'TrueFalse')
+					ELSE IF ((SELECT Questions.QuestionType
+					            FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId
+							   WHERE StudentAnswers.AnswerId = @c_AnswerId) = 'TrueFalse')
 					BEGIN
-						-- Compare answers
-						-- If the answer is CORRECT
-						IF ((SELECT StudentAnswers.TrueFalseAnswerGiven FROM StudentAnswers WHERE StudentAnswers.AnswerId = @c_AnswerId)
-							= (SELECT Questions.TrueFalseAnswer FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId))
-						BEGIN
-							SELECT @c_testGrade += (SELECT Questions.PointValue FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId);
-						END;
+						SELECT @correct = dbo.gradeTrueFalse(@c_AnswerId);
 					END; -- End grading a TrueFalse question
+
+					-- END GRADING STUDENT ANSWER
+
+					-- Add points to the test if the answer was correct
+					IF (@correct = 1)
+						SELECT @c_testGrade += (SELECT Questions.PointValue FROM Questions JOIN StudentAnswers ON Questions.QuestionId = StudentAnswers.QuestionId WHERE StudentAnswers.AnswerId = @c_AnswerId);
 
 					-- Get next answer to grade
 					FETCH NEXT FROM studentTestCursor INTO @c_AnswerId;
