@@ -115,7 +115,7 @@
                                 <td class=" ">@DepartmentCodeAndCourseCode</td>
                                 <td class=" ">@String.Format("{0:f}", ts.Test.TestSchedules.Select(x => x.StartTime).First())</td>
                                 <td class=" last">
-                                    <a class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                    <a asp-controller="Student" asp-action="ReviewTest" asp-route-testScheduleId="@ts.TestScheduleId" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Review </a>
                                 </td>
                             </tr>
                         }

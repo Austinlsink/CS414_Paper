@@ -1,9 +1,10 @@
 ﻿// Submits the test
 $(".submitTest").click(function () {
     var TestScheduleId = $("input#testScheduleId").val();
+    var Pledge = $("input#fullnameInput").val();
     console.log("In the submit test function - test schedule Id = ", TestScheduleId);
 
-    var JsonData = JSON.stringify({ TestScheduleId: TestScheduleId })
+    var JsonData = JSON.stringify({ TestScheduleId: TestScheduleId, Pledge: Pledge })
 
     $.ajax({
         url: "/api/Tests/SubmitTest/",

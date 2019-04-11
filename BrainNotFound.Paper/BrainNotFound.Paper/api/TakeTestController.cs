@@ -41,6 +41,9 @@ namespace BrainNotFound.Paper.api
         {
             dynamic data = JsonData;
             long testScheduleId = data.TestScheduleId;
+            string pledge = data.Pledge;
+            bool isPledgeSigned = pledge == String.Empty ? false : true;
+
            // return Json(new { success = true, message = "In the controller: " + testScheduleId });
 
             ApplicationUser student = await _userManager.FindByNameAsync(User.Identity.Name);
@@ -53,6 +56,7 @@ namespace BrainNotFound.Paper.api
             else
             {
                 studentTestAssignment.Submitted = true;
+                studentTestAssignment.Signed = isPledgeSigned;
                 _context.SaveChanges(); 
                 return Json(new { success = true });
             }
