@@ -180,22 +180,25 @@
                                     <div class=" col-md-10 col-sm-10 col-xs-12">
                                         @{
                                             option = 97;
-                                            foreach (MultipleChoiceAnswer answer in mcQuestion.MultipleChoiceAnswers)
+                                            
+                                            foreach (StudentMultipleChoiceAnswer studentAnswer in ViewBag.StudentMCAnswers)
                                             {
-                                                foreach (StudentMultipleChoiceAnswer studentAnswer in ViewBag.StudentMCAnswers)
+                                                foreach (MultipleChoiceAnswer mca in studentAnswer.StudentAnswer.Question.MultipleChoiceAnswers)
                                                 {
-                                                    if (answer.QuestionId == mcQuestion.QuestionId && studentAnswer.MultipleChoiceAnswerId == answer.MultipleChoiceAnswerId)
+                                                    if (mca.QuestionId == mcQuestion.QuestionId && studentAnswer.MultipleChoiceAnswerId == mca.MultipleChoiceAnswerId)
                                                     {
-                                                        <a class="btn btn-primary btn-block text-left multipleChoiceOption" name="multipleChoiceAnswer-@mcQuestion.QuestionId" data-mcQuestionId="@mcQuestion.QuestionId" data-mcanswerId="@answer.MultipleChoiceAnswerId" data-isSelected="false"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @answer.MultipleChoiceAnswerOption</span>&nbsp;</a>
+                                                        <a class="btn btn-primary btn-block text-left multipleChoiceOption" name="multipleChoiceAnswer-@mcQuestion.QuestionId" data-mcQuestionId="@mcQuestion.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="false"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
+                                                        option++;
                                                     }
-                                                    else if (answer.QuestionId == mcQuestion.QuestionId)
+                                                    else if (mca.QuestionId == mcQuestion.QuestionId && mca.QuestionId == studentAnswer.StudentAnswer.QuestionId)
                                                     {
-                                                        <a class="btn btn-default btn-block text-left multipleChoiceOption" name="multipleChoiceAnswer-@mcQuestion.QuestionId" data-mcQuestionId="@mcQuestion.QuestionId" data-mcanswerId="@answer.MultipleChoiceAnswerId" data-isSelected="false"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @answer.MultipleChoiceAnswerOption</span>&nbsp;</a>
+                                                        <a class="btn btn-default btn-block text-left multipleChoiceOption" name="multipleChoiceAnswer-@mcQuestion.QuestionId" data-mcQuestionId="@mcQuestion.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="false"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
+                                                        option++;
+                                                    }
 
-                                                    }
                                                 }
-                                            option++;
-                                        }
+
+                                            }
                                         }
                                     </div>
 

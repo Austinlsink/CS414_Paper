@@ -234,7 +234,7 @@ namespace BrainNotFound.Paper.Controllers
             ViewBag.StudentTFAnswers = studentTFAnswers;
 
             // Grab the student's multiple choice answers if any
-            var studentMCAnswers = _context.StudentMultipleChoiceAnswers.Include(x => x.StudentAnswer).Where(x => x.StudentAnswer.TestScheduleId == testSchedule.TestScheduleId).ToList();
+            var studentMCAnswers = _context.StudentMultipleChoiceAnswers.Include(x => x.StudentAnswer).ThenInclude(x => x.Question).Where(x => x.StudentAnswer.TestScheduleId == testSchedule.TestScheduleId).ToList();
             ViewBag.StudentMCAnswers = studentMCAnswers;
 
 
