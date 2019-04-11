@@ -138,8 +138,8 @@ namespace BrainNotFound.Paper.Controllers
             var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
             var studentTestAssignments = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).Where(x => x.StudentId == student.Id).ToList();
 
-            var upcomingTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime > DateTime.Now).Select(sta => sta.TestSchedule).ToList();
-            var previousTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime < DateTime.Now).Select(sta => sta.TestSchedule).ToList();
+            var upcomingTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime > DateTime.Now && sta.Submitted == false).Select(sta => sta.TestSchedule).ToList();
+            var previousTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime < DateTime.Now || sta.Submitted == true).Select(sta => sta.TestSchedule).ToList();
 
             var courses = _context.Courses.ToList();
             var departments = _context.Departments.ToList();
@@ -257,7 +257,7 @@ namespace BrainNotFound.Paper.Controllers
             ViewBag.Enrollments = enrollments;
 
             // Get the student's grades
-            var grades = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).ThenInclude(x => x.Course).Where(x => x.StudentId == student.Id).ToList();
+            var grades = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).ThenInclude(x => x.Course).Where(x => x.StudentId == student.Id && x.Submitted == true).ToList();
             ViewBag.Grades = grades;
             return View();
         }

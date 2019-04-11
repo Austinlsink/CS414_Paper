@@ -99,21 +99,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (Test test in ViewBag.PreviousTests)
+                        @foreach (TestSchedule ts in ViewBag.PreviousTests)
                         {
                             <tr class="odd pointer">
-                                <td class=" ">@test.TestName</td>
+                                <td class=" ">@ts.Test.TestName</td>
                                 @{
                                     string DepartmentCodeAndCourseCode;
                                     List<Course> courses = ViewBag.Courses;
                                     List<Department> departments = ViewBag.Departments;
-                                    Course currentCourse = courses.Where(c => c.CourseId == test.CourseId).First();
+                                    Course currentCourse = courses.Where(c => c.CourseId == ts.Test.CourseId).First();
                                     Department currentDepartment = departments.Where(d => d.DepartmentId == currentCourse.DepartmentId).First();
                                     DepartmentCodeAndCourseCode = currentDepartment.DepartmentCode + " " + currentCourse.CourseCode;
 
                                 }
                                 <td class=" ">@DepartmentCodeAndCourseCode</td>
-                                <td class=" ">@String.Format("{0:f}", test.TestSchedules.Select(x => x.StartTime).First())</td>
+                                <td class=" ">@String.Format("{0:f}", ts.Test.TestSchedules.Select(x => x.StartTime).First())</td>
                                 <td class=" last">
                                     <a class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                 </td>
