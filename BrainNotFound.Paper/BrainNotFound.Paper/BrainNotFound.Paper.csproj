@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <Folder Include="Uploads\" />
-    <Folder Include="wwwroot\images\profiles\Students\" />
   </ItemGroup>
 
 </Project>
