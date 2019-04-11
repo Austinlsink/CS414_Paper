@@ -40,12 +40,13 @@ $("button#submitTest").click(function () {
         $("#pledgeErrorMessage").addClass("hidden");
         // Now verify that all of the questions have been answered
         var TestScheduleId = $("input#testScheduleId").val();
+        var JsonData = JSON.stringify({ TestScheduleId: TestScheduleId })
         $.ajax({
             url: "/api/Tests/ConfirmAllQuestionsAnswered/",
             type: "POST",
             contentType: "application/json",
             // Data fetched from the form
-            data: TestScheduleId,
+            data: JsonData,
             success: function (result) {
                 $("p#successModalPlaceholder").text("You've finished the test. You may now review the results.");
                 $("#SuccessModal").modal("toggle");

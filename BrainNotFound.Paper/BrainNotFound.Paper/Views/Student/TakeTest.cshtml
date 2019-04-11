@@ -124,19 +124,16 @@
                                                     </label>
                                                 </div>
                                             }
-                                            else
-                                            {
-                                                <!--Default-->
-                                                <div id="gender" class="btn-group" data-toggle="buttons">
-                                                    <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
-                                                        <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
-                                                    </label>
-                                                    <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
-                                                        <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
-                                                    </label>
-                                                </div>
-                                            }
                                         }
+                                        <!--Default-->
+                                        <div id="gender" class="btn-group" data-toggle="buttons">
+                                            <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
+                                                <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
+                                            </label>
+                                            <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
+                                                <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
+                                            </label>
+                                        </div>
                                     }
                                     else
                                     {

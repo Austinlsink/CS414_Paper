@@ -68,8 +68,11 @@ namespace BrainNotFound.Paper.api
         /// <param name="jsonObject"></param>
         /// <returns></returns>
         [HttpPost, Route("ConfirmAllQuestionsAnswered")]
-        public JsonResult ConfirmAllQuestionsAnswered(long testScheduleId)
+        public JsonResult ConfirmAllQuestionsAnswered(JObject JsonData)
         {
+            dynamic data = JsonData;
+            long testScheduleId = data.TestScheduleId;
+
             var testSchedule = _context.TestSchedules.Include(x => x.Test).ThenInclude(x => x.TestSections).Where(x => x.TestScheduleId == testScheduleId).First();
             var testSections = testSchedule.Test.TestSections.ToList();
 
