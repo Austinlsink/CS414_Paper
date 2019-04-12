@@ -62,6 +62,7 @@ $("button#submitTest").click(function () {
     }
 })
 
+// Save multiple choice questions
 $("a.multipleChoiceOption").click(function () {
     // Toggles true/False and changes the button color
     if ($(this).hasClass("btn-default")) {

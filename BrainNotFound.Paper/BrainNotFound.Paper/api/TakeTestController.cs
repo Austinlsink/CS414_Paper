@@ -122,7 +122,7 @@ namespace BrainNotFound.Paper.api
             bool isSelected = (bool) multipleChoiceInfo.IsSelected;
 
             var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
-            var studentAnswer = _context.StudentAnswers.Where(x => x.QuestionId == questionId && x.TestScheduleId == testScheduleId).FirstOrDefault();
+            var studentAnswer = _context.StudentAnswers.Where(x => x.QuestionId == questionId && x.TestScheduleId == testScheduleId && x.StudentId == student.Id).FirstOrDefault();
             
             // If studentAnswer is empty, create a new student answer and add a list of StudentMultipleChoiceAnswer
             if (studentAnswer == null)
@@ -153,8 +153,14 @@ namespace BrainNotFound.Paper.api
             {
                 if (isSelected)
                 {
-                    var answerRetrived = _context.StudentMultipleChoiceAnswers.Find(mcAnswerId);
-                    studentAnswer.StudentMultipleChoiceAnswers.Add(answerRetrived);
+                    // var answerRetrived = _context.StudentMultipleChoiceAnswers.Where(x => x.AnswerId == studentAnswer.AnswerId && x.MultipleChoiceAnswerId == mcAnswerId).First();
+                    StudentMultipleChoiceAnswer newChoice = new StudentMultipleChoiceAnswer()
+                    {
+                        MultipleChoiceAnswerId = mcAnswerId,
+                        AnswerId = studentAnswer.AnswerId
+                    
+                    };
+                    studentAnswer.StudentMultipleChoiceAnswers.Add(newChoice);
                     _context.SaveChanges();
                 }
                 else
