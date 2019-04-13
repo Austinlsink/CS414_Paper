@@ -194,6 +194,9 @@ namespace BrainNotFound.Paper.Controllers
                 .Include(sa => sa.StudentMultipleChoiceAnswers)
                 .Where(sa => sa.StudentId == student.Id && sa.TestScheduleId == testSchedule.TestScheduleId).ToList();
 
+            // Test information
+            int totalQuestions = 0;
+            int totalPoints = 0;
 
             // Fetching all Questions for test
             for (int j = 0; j < testSections.Count; j++)
@@ -214,8 +217,10 @@ namespace BrainNotFound.Paper.Controllers
                             else
                             {
                                 testSections[j].Questions[i].studentTrueFalseAnswer = studentTFAnswer.TrueFalseAnswerGiven;
+                                totalPoints += testSections[j].Questions[i].PointValue;
                             }
-
+                            totalQuestions += 1;
+                            
 
                             break;
                             
@@ -229,14 +234,19 @@ namespace BrainNotFound.Paper.Controllers
                             else
                             {
                                 testSections[j].Questions[i].studentMultipleChoiceAnswers = studentMCAnswers.StudentMultipleChoiceAnswers;
+                                totalPoints += testSections[j].Questions[i].PointValue;
                             }
+                            totalQuestions += 1;
 
                             break;
                     }
                 }
             }
 
+
             ViewBag.TestSections = testSections;
+            ViewBag.TotalQuestions = totalQuestions;
+            ViewBag.TotalPoints = totalPoints;
 
             //var allTFQuestions = _context.TrueFalses.Where(x => x.QuestionType == "TrueFalse").ToList();
             //List<TrueFalse> TFQuestions = new List<TrueFalse>();
