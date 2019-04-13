@@ -220,7 +220,6 @@ namespace BrainNotFound.Paper.Controllers
                                 totalPoints += testSections[j].Questions[i].PointValue;
                             }
                             totalQuestions += 1;
-                            
 
                             break;
                             
@@ -234,6 +233,21 @@ namespace BrainNotFound.Paper.Controllers
                             else
                             {
                                 testSections[j].Questions[i].studentMultipleChoiceAnswers = studentMCAnswers.StudentMultipleChoiceAnswers;
+                                totalPoints += testSections[j].Questions[i].PointValue;
+                            }
+                            totalQuestions += 1;
+
+                            break;
+                        case QuestionType.Essay:
+                            var studentEssayAnswer = _context.StudentEssayAnswers.Where(sea => sea.QuestionId == testSections[j].Questions[i].QuestionId && sea.TestScheduleId == testSchedule.TestScheduleId).FirstOrDefault();
+
+                            if (studentEssayAnswer == null)
+                            {
+                                testSections[j].Questions[i].studentEssayAnswer = null;
+                            }
+                            else
+                            {
+                                testSections[j].Questions[i].studentEssayAnswer = studentEssayAnswer.EssayAnswerGiven;
                                 totalPoints += testSections[j].Questions[i].PointValue;
                             }
                             totalQuestions += 1;
