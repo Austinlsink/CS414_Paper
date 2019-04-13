@@ -1270,7 +1270,6 @@ $("#TestSections").on("click", ".saveMatchingQuestion", function () {
             // Saves the data of a matching group
             matchingGroups.push({ matchAnswer: matchAnswer, matches: matches });
         })
-
     }
     else {
         hasError = true;
@@ -1294,8 +1293,6 @@ $("#TestSections").on("click", ".saveMatchingQuestion", function () {
             success: function (result) {
                 if (result.success) {
 
-
-
                     $(newQuestionContainer).remove();
                     stripe();
                     // ADD-NOTIFICATION
@@ -1308,9 +1305,7 @@ $("#TestSections").on("click", ".saveMatchingQuestion", function () {
         })
     }
     log(matchingGroups);
-    
 })
-
 
 /**********************************************************************/
 /*                         Compiled Templates                         */
@@ -1500,6 +1495,20 @@ function register_partials() {
 /*                           MISC Functions                           */
 /**********************************************************************/
 
+// Initialize Page Data
+$(document).ready(function () {
+
+    compile_templates();
+    register_partials();
+    init_daterangepicker_TestSchedule();
+    init_students_datatable();
+    Update_TestStatistics();
+    Update_TestAssignmentTable();
+    init_testSections();
+    stripe();
+
+})
+
 // Stripes every other question row
 function stripe() {
     var hasBackground = false;
@@ -1517,20 +1526,6 @@ function stripe() {
     });
 
 }
-
-// Initialize Page Data
-$(document).ready(function () {
-
-    compile_templates();
-    register_partials();
-    init_daterangepicker_TestSchedule();
-    init_students_datatable();
-    Update_TestStatistics();
-    Update_TestAssignmentTable();
-    init_testSections();
-    stripe();
-
-})
 
 function l(i) {
     console.log("Test: " + i);
