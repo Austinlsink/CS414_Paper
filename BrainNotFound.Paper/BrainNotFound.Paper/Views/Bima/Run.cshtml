@@ -6,35 +6,149 @@
     Layout = "~/Views/Shared/_InstructorLayout.cshtml";
 }
 
-<div class="x_panel">
-    <div class="x_title">
-        <h2><i class="fa fa-info-circle"></i> | @DefaultTestSectionText.Header.Get("Essay")</h2>
-        <ul class="nav navbar-right panel_toolbox">
-            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-        </ul>
-        <div class="clearfix"></div>
-    </div>
-    <div class="x_content">
-        <div class="row">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                <p><b>Instructions:</b> @DefaultTestSectionText.Instruction.Essay</p>
+<div class="row sectionContainer-{{sectionId}}">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2><i class="fa fa-info-circle"></i> {{header}}</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class="deleteSection" data-testSectionId="{{sectionId}}"><i class="fa fa-trash-o"></i></a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a class="editInstructions" data-sectionId="{{sectionId}}">Edit Instructions</a></li>
+                            <li><a class="editQuestionValues" value="{{sectionId}}">Edit Questions Value</a></li>
+                        </ul>
+                    </li>
+                    <li><a><i class="fa fa-arrow-up"></i></a></li>
+                    <li><a><i class="fa fa-arrow-down"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
             </div>
-        </div>
-        <div class="ln_solid"></div>
-        <div class="col-md-12 col-sm-12 col-xs-12">
-            <p><b>Questions:</b> </p>
-        </div>
-        <div class="col-md-12 col-sm-12 col-xs-12 questionRow" style="padding: 20px 0 10px 0">
-            <div class="col-md-1 col-sm-1 col-xs-3 text-center">
-                <span id="pointValue-56789">(5 pts.)</span>
-            </div>
-            <div class="col-md-11 col-sm-11 col-xs-11">
-                <p><strong>1.</strong> Compare and contrat Abmael ans Bima</p>
-            </div>
-            <div class="col-md-1 col-sm-1 col-xs-3 text-center">
-            </div>
-            <div class="col-md-11 col-sm-11 col-xs-12">
-                <textarea class="studentEssayQuestionAnswer"></textarea>
+            <div class="x_content">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <p><b>Instructions: </b><span id="currentInstructions-{{sectionId}}">{{instructions}}</span></p>
+                    </div>
+                </div>
+                <div class="row well hidden" id="editInstructionsContainer-{{sectionId}}">
+                    <input class="originalInstructions" type="hidden" value="{{instructions}}" />
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="col-md-1 col-sm-1 col-xs-3">
+                            <p><b>Instructions:</b></p>
+                        </div>
+                        <div class="form-group col-md-8 col-sm-8 col-xs-12">
+                            <input type="text" placeholder="Enter section" id="editSectionInstruction-{{sectionId}}" class="form-control editSectionInstructions-{{sectionId}}">
+                        </div>
+                        <div class="form-group col-md-3 col-sm-3 col-xs-12">
+                        </div>
+                        <div class="form-group col-md-3 col-sm-3 col-xs-12">
+                            <button type="button" class="pull-right btn btn-primary btn-md saveEditedSectionInstruction" data-sectionId="{{sectionId}}">Save</button>
+                            <button type="button" class="pull-right btn btn-danger btn-md cancelEditSectionInstruction" data-sectionId="{{sectionId}}">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="EditQuestionsValue" class="well hidden">
+                    <form asp-action="PartialEditNameAndCourse" asp-controller="Instructor" asp-route-TestId="" id="new-department" data-parsley-validate class="form-horizontal form-label-left">
+                        <div class="col-md-9 col-xs-12">
+                            <label class="control-label">Edit Questions Value</label>
+                            <input type="text" placeholder="pt(s)" class="form-control col-md-3">
+                        </div>
+                        <div class="col-md-3 col-sm-12">
+                            <label class="control-label">&emsp;</label>
+                            <table>
+                                <tr>
+                                    <td><a onclick="Cancel('#EditQuestionsValue')" class="pull-right btn btn-danger btn-md">Cancel</a>
+                                    <td> <button type="submit" class="pull-right btn btn-primary btn-md">Assign</button></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+                <hr />
+                <div id="questionsContainer-{{sectionId}}">
+
+                    <div id="questionContainer-{{questionId}}">
+                        <div class="row questionRow">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-md-1 col-sm-1 col-xs-3">
+                                    <input type="number" id="pointValue-{{questionId}}" data-questionId="{{questionId}}" value="{{pointValue}}" min="1" class="form-group form-control pointValue">
+                                </div>
+
+                                <div class="col-md-9 col-sm-9 col-xs-11">
+                                    <div class="col-md-12"><label>Question: </label> <span id="content-{{questionId}}">{{content}}</span></div>
+
+
+
+                                </div>
+
+                                <div class="col-md-2 col-sm-2 col-xs-12">
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li><a class="deleteQuestion" data-questionId="{{questionId}}"><i class="fa fa-trash-o"></i></a></li>
+                                        <li><a class="editEssayQuestion" data-questionId="{{questionId}}"><i class="fa fa-edit"></i></a></li>
+                                        <li><a class=""><i class="fa fa-chevron-up"></i></a></li>
+                                        <li><a class=""><i class="fa fa-chevron-down"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-md-1 col-sm-1 col-xs-3">
+
+                                </div>
+
+                                <div class="col-md-9 col-sm-9 col-xs-11">
+                                    <div class="col-md-12 bg-green-light" style="margin-bottom: 10px;">
+                                        <div class="col-md-6 ">
+                                            <label>Match: </label> Lacy <br />
+                                            <label>Match: </label> Bima
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label>Answer: </label> 1995
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-12 bg-green-light" style="margin-bottom: 10px;">
+                                        <div class="col-md-6 ">
+                                            <label>Match: </label> Lacy <br />
+                                            <label>Match: </label> Nick <br />
+                                            <label>Match: </label> Bima
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label>Answer: </label> 1995
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-12 bg-green-light" style="margin-bottom: 10px;">
+                                        <div class="col-md-6 ">
+                                            <label>Match: </label> Bima
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label>Answer: </label> 1995
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-sm-2 col-xs-12"></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                </div>
+                <div id="newQuestionContainer-{{sectionId}}"></div>
+                <hr />
+                <div class="text-right">
+                    <button type="button" class="btn btn-round btn-info addQuestionToSection" data-sectionId="{{sectionId}}" data-sectionType="{{sectionType}}"><i class="fa fa-plus"></i> &nbsp;Add Question</button>
+                </div>
             </div>
         </div>
     </div>
