@@ -122,7 +122,7 @@ namespace BrainNotFound.Paper.api
             bool isSelected = (bool) multipleChoiceInfo.IsSelected;
 
             var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
-            var studentAnswer = _context.StudentAnswers.Where(x => x.QuestionId == questionId && x.TestScheduleId == testScheduleId && x.StudentId == student.Id).FirstOrDefault();
+            var studentAnswer = _context.StudentAnswers.Include(x => x.StudentMultipleChoiceAnswers).Where(x => x.QuestionId == questionId && x.TestScheduleId == testScheduleId && x.StudentId == student.Id).FirstOrDefault();
             
             // If studentAnswer is empty, create a new student answer and add a list of StudentMultipleChoiceAnswer
             if (studentAnswer == null)
@@ -160,6 +160,7 @@ namespace BrainNotFound.Paper.api
                         AnswerId = studentAnswer.AnswerId
                     
                     };
+                    //_context.StudentMultipleChoiceAnswers.Add(newChoice);
                     studentAnswer.StudentMultipleChoiceAnswers.Add(newChoice);
                     _context.SaveChanges();
                 }
@@ -170,7 +171,7 @@ namespace BrainNotFound.Paper.api
 
                     if(studentAnswer.StudentMultipleChoiceAnswers.Count == 0)
                     {
-                        _context.StudentMultipleChoiceAnswers.Remove(answerRetrived);
+                       // _context.StudentMultipleChoiceAnswers.Remove(answerRetrived);
                         _context.StudentAnswers.Remove(studentAnswer);
                     }
 
