@@ -31,6 +31,14 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         public List<FillInTheBlankQuestion>   FillInTheBlankQuestions   { get; set; }
 
 
+        // Holds the student answer for populating take test
+        [NotMapped]
+        public bool? studentTrueFalseAnswer { get; set; }
+
+        [NotMapped]
+        public List<StudentMultipleChoiceAnswer> studentMultipleChoiceAnswers { get; set; }
+
+
         // Returns a Json object to be used in responses to Ajax calls for Multiple Choice Questions
         public JObject GetJsonMultipleChoice()
         {

@@ -23,7 +23,7 @@
                 <div class="icon">
                     <i class="fa fa-dot-circle-o"></i>
                 </div>
-                <div id="TotalPointsStats" class="count"> @ViewBag.TotalPoints </div>
+                <div id="TotalPointsStats" class="count"> ViewBag.TotalPoints </div>
                 <h3>Total Points</h3>
             </div>
         </div>
@@ -32,7 +32,7 @@
                 <div class="icon">
                     <i class="fa fa-question"></i>
                 </div>
-                <div id="TotalQuestionsStats" class="count">@(ViewBag.TFQuestions.Count + ViewBag.MCQuestions.Count)</div>
+                <div id="TotalQuestionsStats" class="count">(ViewBag.TFQuestions.Count + ViewBag.MCQuestions.Count)</div>
                 <h3>Questions</h3>
             </div>
         </div>
@@ -41,7 +41,7 @@
                 <div class="icon">
                     <i class="fa fa-sort-alpha-asc"></i>
                 </div>
-                <div id="TotalSectionsStats" class="count">@ViewBag.TestSections.Count</div>
+                <div id="TotalSectionsStats" class="count">ViewBag.TestSections.Count</div>
                 <h3>Sections</h3>
             </div>
         </div>
@@ -50,7 +50,7 @@
                 <div class="icon">
                     <i class="fa fa-clock-o"></i>
                 </div>
-                <div id="TimeLimitStats" class="count">@ViewBag.TestSchedule.EndTime.Subtract(ViewBag.TestSchedule.StartTime)</div>
+                <div id="TimeLimitStats" class="count">ViewBag.TestSchedule.EndTime.Subtract(ViewBag.TestSchedule.StartTime)</div>
                 <h3>Time Limit</h3>
             </div>
         </div>
@@ -84,7 +84,7 @@
                     </div>
                     @{
                         int count = 1;
-                        foreach (TrueFalse q in ViewBag.TFQuestions)
+                        foreach (Question q in ts.Questions)
                         {
 
                             <div class="col-md-12 col-sm-12 col-xs-12 questionRow" style="padding: 20px 0 10px 0">
@@ -96,39 +96,25 @@
                                 </div>
 
                                 <div class="form-group col-md-2 col-sm-2 col-xs-12">
-                                    @if (ViewBag.StudentTFAnswers.Count > 0)
+
+                                    @if (q.studentTrueFalseAnswer == null)
                                     {
-                                        @foreach (StudentTrueFalseAnswer answer in ViewBag.StudentTFAnswers)
-                                        {
-                                            if (answer.QuestionId == q.QuestionId && answer.TrueFalseAnswerGiven == true)
-                                            {
-                                                <!-- True -->
-                                                <div id="gender" class="btn-group" data-toggle="buttons">
-                                                    <label class="btn btn-primary btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
-                                                        <input type="radio" checked="checked" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
-                                                    </label>
-                                                    <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
-                                                        <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
-                                                    </label>
-                                                </div>
-                                            }
-                                            else if (answer.QuestionId == q.QuestionId && answer.TrueFalseAnswerGiven == false)
-                                            {
-                                                <!-- False -->
-                                                <div id="gender" class="btn-group" data-toggle="buttons">
-                                                    <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
-                                                        <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
-                                                    </label>
-                                                    <label class="btn btn-danger btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
-                                                        <input type="radio" checked="checked" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
-                                                    </label>
-                                                </div>
-                                            }
-                                        }
                                         <!--Default-->
                                         <div id="gender" class="btn-group" data-toggle="buttons">
                                             <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
                                                 <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
+                                            </label>
+                                            <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
+                                                <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
+                                            </label>
+                                        </div>
+                                    }
+                                    else if (q.studentTrueFalseAnswer == true)
+                                    {
+                                        <!-- True -->
+                                        <div id="gender" class="btn-group" data-toggle="buttons">
+                                            <label class="btn btn-primary btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
+                                                <input type="radio" checked="checked" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
                                             </label>
                                             <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
                                                 <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
@@ -137,17 +123,16 @@
                                     }
                                     else
                                     {
-                                        <!--Default-->
+                                        <!-- False -->
                                         <div id="gender" class="btn-group" data-toggle="buttons">
                                             <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
                                                 <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
                                             </label>
-                                            <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
-                                                <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
+                                            <label class="btn btn-danger btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
+                                                <input type="radio" checked="checked" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
                                             </label>
                                         </div>
                                     }
-
                                 </div>
                             </div>
                             count++;
@@ -156,6 +141,8 @@
                 </div>
             </div>
             break;
+
+
         case "MultipleChoice":
             <div class="x_panel">
                 <div class="x_title">
@@ -177,51 +164,34 @@
                     </div>
                     @{
                         int countMC = 1;
-                        foreach (Question mcQuestion in ViewBag.MCQuestions)
+                        foreach (Question q in ts.Questions)
                         {
                             <div class="ln_solid"></div>
                             <div class="row">
                                 <div class="col-sm-12 col-xs-12 questionRow">
                                     <div class="col-md-1 col-sm-1 col-xs-3 text-center">
-                                        <span id="pointValue-56789">(@mcQuestion.PointValue pts.)</span>
+                                        <span id="pointValue-56789">(@q.PointValue pts.)</span>
                                     </div>
                                     <div class="col-md-11 col-sm-11 col-xs-11">
-                                        <p><strong>@countMC.</strong> @mcQuestion.Content</p>
+                                        <p><strong>@countMC.</strong> @q.Content</p>
                                     </div>
                                     <div class="clearfix"></div>
                                     <div class="col-md-1 col-sm- col-xs-12"></div>
                                     <div class=" col-md-10 col-sm-10 col-xs-12">
                                         @{
                                             option = 97;
-                                            foreach (MultipleChoiceAnswer mca in mcQuestion.MultipleChoiceAnswers)
+                                            foreach (MultipleChoiceAnswer mca in q.MultipleChoiceAnswers)
                                             {
-                                                if (ViewBag.StudentMCAnswers.Count <= 0)
+                                                if (q.studentMultipleChoiceAnswers.Where(smca => smca.MultipleChoiceAnswerId == mca.MultipleChoiceAnswerId).Any())
                                                 {
-                                                    <a class="btn btn-default btn-block text-left multipleChoiceOption" name="multipleChoiceAnswer-@mcQuestion.QuestionId" data-mcQuestionId="@mcQuestion.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="false"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
-                                                    option++;
+                                                    <a class="btn btn-primary btn-block text-left multipleChoiceOption" data-mcQuestionId="@q.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="true"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
+
                                                 }
                                                 else
                                                 {
-                                                    foreach (StudentMultipleChoiceAnswer studentAnswer in ViewBag.StudentMCAnswers)
-                                                    {
-
-                                                        if (mca.QuestionId == mcQuestion.QuestionId && studentAnswer.MultipleChoiceAnswerId == mca.MultipleChoiceAnswerId)
-                                                        {
-                                                            <a class="btn btn-primary btn-block text-left multipleChoiceOption" name="multipleChoiceAnswer-@mcQuestion.QuestionId" data-mcQuestionId="@mcQuestion.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="false"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
-                                                            option++;
-                                                        }
-                                                        else if (mca.QuestionId == mcQuestion.QuestionId && mca.QuestionId == studentAnswer.StudentAnswer.QuestionId)
-                                                        {
-                                                            <a class="btn btn-default btn-block text-left multipleChoiceOption" name="multipleChoiceAnswer-@mcQuestion.QuestionId" data-mcQuestionId="@mcQuestion.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="false"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
-                                                            option++;
-                                                        }
-                                                        else
-                                                        {
-                                                            <a class="btn btn-default btn-block text-left multipleChoiceOption" name="multipleChoiceAnswer-@mcQuestion.QuestionId" data-mcQuestionId="@mcQuestion.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="false"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
-                                                            option++;
-                                                        }
-                                                    }
+                                                    <a class="btn btn-default btn-block text-left multipleChoiceOption" data-mcQuestionId="@q.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="false"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
                                                 }
+                                                option++;
                                             }
                                         }
                                     </div>
