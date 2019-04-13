@@ -23,9 +23,9 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
         private readonly PaperDbContext _context;
 
         //public IActionResult Run()
-        public string Run()
+        public ActionResult Run()
         {
-            return "Bima";
+            return View();
         }
 
 
