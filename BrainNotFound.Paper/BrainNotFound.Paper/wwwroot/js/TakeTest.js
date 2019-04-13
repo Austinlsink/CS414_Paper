@@ -1,4 +1,29 @@
-﻿// Submits the test
+﻿// Saves the essay questions
+$("textarea.studentEssayQuestionAnswer").focusout(function () {
+    var StudentEssayAnswer = $(this).val();
+    var QuestionId = $(this).attr("data-essayQuestionId");
+    var TestScheduleId = $("input#testScheduleId").val();
+    console.log(StudentEssayAnswer, QuestionId, TestScheduleId);
+
+    var JsonData = JSON.stringify({ QuestionId: QuestionId, StudentEssayAnswer: StudentEssayAnswer, TestScheduleId: TestScheduleId })
+    $.ajax({
+        url: "/api/Tests/SaveEssayAnswer/",
+        type: "POST",
+        contentType: "application/json",
+        // Data fetched from the form
+        data: JsonData,
+        success: function (result) {
+            // Close the modal window
+            console.log(result.message);
+        },
+        error: function (xhr, status, error) {
+            console.log(xhr.responseText);
+        }
+    })
+
+});
+
+// Submits the test
 $(".submitTest").click(function () {
     var TestScheduleId = $("input#testScheduleId").val();
     var Pledge = $("input#fullnameInput").val();
@@ -28,6 +53,17 @@ $(".submitTest").click(function () {
 // Initialize textares autoresize
 $(document).ready(function () {
     autosize($('.studentEssayQuestionAnswer'));
+})
+
+$(document).ready(function () {
+    var totalPoints = 0;
+
+    $(".pointValue").each(function () {
+        console.log($(this).value);
+    });
+
+    console.log(totalPoints);
+    document.getElementById("TotalPointsStats").innerHTML = totalPoints;
 })
 
 // This function confirms that when the student submits the test, the pledge and his name match and that all of the questions are answered
@@ -107,7 +143,7 @@ $("a.multipleChoiceOption").click(function () {
     })
 })
 
-// This function reponds to the radios on change event - we're grabbing data!!!!!
+// Save true false answers
 $("input[type='radio']").on("change", function () {
     var QuestionId = $(this).attr("data-questionId");
     var Answer = $(this).val();

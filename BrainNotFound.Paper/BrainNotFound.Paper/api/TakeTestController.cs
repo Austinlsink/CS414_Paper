@@ -62,6 +62,40 @@ namespace BrainNotFound.Paper.api
             }
         }
 
+        [HttpPost, Route("SaveEssayAnswer")]
+        public JsonResult SaveEssayAnswer(JObject JsonData)
+        {
+            dynamic multipleChoiceInfo = JsonData;
+            long questionId = (long)multipleChoiceInfo.QuestionId;
+            long testScheduleId = (long)multipleChoiceInfo.TestScheduleId;
+            string studentEssayAnswer = multipleChoiceInfo.StudentEssayAnswer;
+
+            var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
+            var studentAnswer = _context.StudentEssayAnswers.Where(x => x.QuestionId == questionId && x.StudentId == student.Id && x.TestScheduleId == testScheduleId).FirstOrDefault();
+
+            if (studentAnswer == null)
+            {
+                StudentEssayAnswer essayAnswer = new StudentEssayAnswer()
+                {
+                    TestScheduleId = testScheduleId,
+                    EssayAnswerGiven = studentEssayAnswer,
+                    QuestionId = questionId,
+                    StudentId = student.Id
+                };
+
+                _context.StudentEssayAnswers.Add(essayAnswer);
+                _context.SaveChanges();
+            }
+            else
+            {
+                studentAnswer.EssayAnswerGiven = studentEssayAnswer;
+                _context.SaveChanges();
+            }
+
+            return Json(new { success = true });
+        }
+
         /// <summary>
         /// Confirms if all the questions are answered. If not, it returns an error message.
         /// </summary>
@@ -106,7 +140,7 @@ namespace BrainNotFound.Paper.api
 
 
         /// <summary>
-        /// Biiiiiiiimmmmmmmmaaaaaaa... it doesn't make sense
+        /// Saves the multiple choice answer that the student selects
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
