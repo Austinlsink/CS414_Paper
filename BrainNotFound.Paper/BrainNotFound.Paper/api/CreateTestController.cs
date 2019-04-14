@@ -96,6 +96,7 @@ namespace BrainNotFound.Paper.api
             }
             else
             {
+
                 Question matchingQuestion = new Question
                 {
                     Content = json.questionContent,
@@ -139,7 +140,78 @@ namespace BrainNotFound.Paper.api
 
                 var question = matchingQuestion.GetJsonMatching();
 
-                return Json(new { success = true, question});
+                return Json(new { success = true, question });
+            }
+
+
+        }
+
+        [HttpPost, Route("UpdateMatchingQuestion")]
+        public IActionResult UpdateMatchingQuestion([FromBody] JObject jsonData)
+        {
+            // Receives the data
+            dynamic json = jsonData;
+            long questionId = json.questionId;
+            string content = json.questionContent;
+            int pointValue = json.pointValue;
+            var matchingQuestion = _context.Questions
+                .Include(q => q.MatchingAnswerSides)
+                .Include(q => q.MatchingQuestionSides)
+                .Include(q => q.TestSection)
+                    .ThenInclude(ts => ts.Test)
+                .Where(q => q.QuestionId == questionId)
+                .First();
+
+            JArray matchingGroups = json.matchingGroups;
+
+            // Find the instructor who is creating the test
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            if (matchingQuestion.TestSection.Test.InstructorId != instructor.Id)
+            {
+                return Json(new { success = false, error = "Instructor not allowed" });
+            }
+            else
+            {
+                _context.MatchingAnswerSides.RemoveRange(matchingQuestion.MatchingAnswerSides);
+                _context.MatchingQuestionSides.RemoveRange(matchingQuestion.MatchingQuestionSides);
+
+
+                // Update Common Data
+                matchingQuestion.Content = content;
+                matchingQuestion.PointValue = pointValue;
+
+                // Parse all groups
+                foreach (JObject matchingGroup in matchingGroups)
+                {
+                    dynamic matchGroup = matchingGroup;
+                    JArray Jmatches = matchGroup.matches;
+
+                    // Create the answer to the gruop
+                    MatchingAnswerSide matchingAnswerSide = new MatchingAnswerSide
+                    {
+                        MatchingAnswer = matchGroup.matchAnswer,
+                        question = matchingQuestion
+                    };
+
+                    var matchingQuestionSides = new List<MatchingQuestionSide>();
+
+                    foreach (string matchContent in Jmatches)
+                    {
+                        var matchingQuestionSide = new MatchingQuestionSide()
+                        {
+                            Content = matchContent,
+                            matchingAnswerSide = matchingAnswerSide,
+                        };
+
+                        matchingQuestion.MatchingQuestionSides.Add(matchingQuestionSide);
+                    }
+                }
+
+                _context.SaveChanges();
+
+                var question = matchingQuestion.GetJsonMatching();
+
+                return Json(new { success = true, question });
             }
 
 
@@ -763,6 +835,20 @@ namespace BrainNotFound.Paper.api
 
                             jTestSection.questions = jEssayQuestios;
                             break;
+                        case QuestionType.Matching:
+                            var matchingQuestions = _context.Questions
+                                .Include(q => q.MatchingAnswerSides)
+                                .Include(q => q.MatchingQuestionSides)
+                                .Where(q => q.TestSectionId == testSection.TestSectionId)
+                                .ToList();
+
+                            JArray jMatchingQuestios = new JArray();
+                            foreach (var question in matchingQuestions)
+                            {
+                                jMatchingQuestios.Add(question.GetJsonMatching());
+                            }
+                            jTestSection.questions = jMatchingQuestios;
+                            break;
                     }
                     jTestSections.Add(jTestSection);
                 }
@@ -838,11 +924,24 @@ namespace BrainNotFound.Paper.api
             long questionId = (long)json.questionId;
 
             // load the question and instructor
-            var question = _context.Questions.Include(q => q.TestSection).ThenInclude(ts => ts.Test).Where(q => q.QuestionId == questionId).First();
+            var question = _context.Questions
+                .Include(q => q.TestSection)
+                    .ThenInclude(ts => ts.Test)
+                .Include(q => q.MatchingAnswerSides)
+                .Include(q => q.MatchingQuestionSides)
+                .Where(q => q.QuestionId == questionId)
+                .First();
+
             var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
 
             if (instructor.Id == question.TestSection.Test.InstructorId)
             {
+                if(question.QuestionType == QuestionType.Matching)
+                {
+                    _context.MatchingQuestionSides.RemoveRange(question.MatchingQuestionSides);
+                    _context.MatchingAnswerSides.RemoveRange(question.MatchingAnswerSides);
+                }
+
                 _context.Questions.Remove(question);
                 _context.SaveChanges();
                 return Json(new { success = true });
@@ -871,6 +970,15 @@ namespace BrainNotFound.Paper.api
 
             if (instructor.Id == section.Test.InstructorId)
             {
+                if(section.QuestionType == QuestionType.Matching)
+                {
+                    foreach(var question in section.Questions)
+                    {
+                        var currentQuestion = _context.Questions.Include(q => q.MatchingAnswerSides).Include(q => q.MatchingQuestionSides).Where(q => q.QuestionId == question.QuestionId).First();
+                        _context.MatchingQuestionSides.RemoveRange(currentQuestion.MatchingQuestionSides);
+                        _context.MatchingAnswerSides.RemoveRange(currentQuestion.MatchingAnswerSides);
+                    }
+                }
                 _context.Questions.RemoveRange(section.Questions);
                 _context.TestSections.Remove(section);
                 _context.SaveChanges();

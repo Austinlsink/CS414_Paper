@@ -1,0 +1,61 @@
+﻿<div id="questionContainer-{{questionId}}">
+    <input id="questionData-{{questionId}}" type="hidden" value="{{jasonData}}" />
+    <div class="row questionRow">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="col-md-1 col-sm-1 col-xs-3">
+                <input type="number" id="pointValue-{{questionId}}" data-questionId="{{questionId}}" value="{{pointValue}}" min="1" class="form-group form-control pointValue">
+            </div>
+
+            <div class="col-md-9 col-sm-9 col-xs-11">
+                <div class="col-md-12"><label>Question: </label> <span id="content-{{questionId}}">{{content}}</span></div>
+
+
+
+            </div>
+
+            <div class="col-md-2 col-sm-2 col-xs-12">
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="deleteQuestion" data-questionId="{{questionId}}"><i class="fa fa-trash-o"></i></a></li>
+                    <li><a class="editMatchingQuestion" data-questionId="{{questionId}}"><i class="fa fa-edit"></i></a></li>
+                    <li><a class=""><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class=""><i class="fa fa-chevron-down"></i></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="col-md-1 col-sm-1 col-xs-3">
+
+            </div>
+
+            <div class="col-md-9 col-sm-9 col-xs-11">
+                <div class="col-md-12" style="margin-bottom: 10px;">
+                    <div class="table-responsive">
+
+                        <table class="table table-bordered table-hover">
+
+                            <thead >
+                                <tr>
+                                    <th class="info">Match</th>
+                                    <th class="info">Answer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each matchingGroups}}
+                                <tr>
+                                    <td>
+                                        {{#each matchs}}
+                                        <p><i class="fa fa-caret-right"></i> {{match}}</p>
+                                        {{/each}}
+                                    </td>
+                                    <td><p><i class="fa fa-caret-right"></i> {{matchAnswer}}</p></td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12"></div>
+        </div>
+    </div>
+</div>

@@ -89,7 +89,9 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 
                 foreach(var match in MatchToAnswer)
                 {
-                    jMatchs.Add(match.Content);
+                    dynamic Jmatch = new JObject();
+                    Jmatch.match = match.Content;
+                    jMatchs.Add(Jmatch);
                 }
 
                 dynamic matchingGroup = new JObject();

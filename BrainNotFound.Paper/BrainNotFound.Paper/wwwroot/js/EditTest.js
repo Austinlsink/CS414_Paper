@@ -47,7 +47,6 @@ function init_testSections() {
                         case "MultipleChoice":
                             testSection.questions.forEach(function (question) {
 
-
                                 $("#questionsContainer-" + question.sectionId)
                                     .append(DisplayMultipleChoiceQuestionTemplate(question));
 
@@ -59,12 +58,21 @@ function init_testSections() {
                                 });
                             });
                             break;
+
                         case "Essay":
                             testSection.questions.forEach(function (question) {
                                 $("#questionsContainer-" + question.sectionId)
                                     .append(DisplayEssayQuestionTemplate(question));
                             })
 
+                            break;
+                        case "Matching":
+                            testSection.questions.forEach(function (question) {
+                                question.jasonData = JSON.stringify(question);
+
+                                $("#questionsContainer-" + question.sectionId)
+                                    .append(DisplayMatchingQuestionTemplate(question));
+                            })
                             break;
                     }
                 })
@@ -937,6 +945,8 @@ $("#TestSections").on("click", ".editMultipleChoiceQuestion", function () {
                 .append(EditMultipleChoiceQuestionOptionTemplate(templateData));
         });
 })
+
+
 // Closes the edit question state
 $("#TestSections").on("click", ".cancelEditQuestion", function () {
     var questionId = $(this).attr("data-questionId");
@@ -1190,8 +1200,12 @@ $("#TestSections").on("click", ".deleteMatchingGroup", function () {
 // Add a matching group to New Matching Question
 $("#TestSections").on("click", ".addMatchingGroup", function () {
     var uuid = $(this).attr("data-uuid");
+    var questionId = $(this).attr("data-questionId");
 
     $("#matchingGroupsContainer-" + uuid)
+        .append(NewMatchingQuestionGroupTemplate());
+
+    $("#matchingGroupsContainer-" + questionId)
         .append(NewMatchingQuestionGroupTemplate());
 })
 
@@ -1292,6 +1306,12 @@ $("#TestSections").on("click", ".saveMatchingQuestion", function () {
             data: JsonData,
             success: function (result) {
                 if (result.success) {
+                    log(result.question);
+                    // Creates a newly created Matching Question
+                    result.question.jasonData = JSON.stringify(result.question);
+
+                    $("#questionsContainer-" + result.question.sectionId)
+                        .append(DisplayMatchingQuestionTemplate(result.question));
 
                     $(newQuestionContainer).remove();
                     stripe();
@@ -1304,7 +1324,125 @@ $("#TestSections").on("click", ".saveMatchingQuestion", function () {
             }
         })
     }
-    log(matchingGroups);
+})
+
+// Displays the edit box for a matching question
+$("#TestSections").on("click", ".editMatchingQuestion", function () {
+    // Get the question Information
+    var questionId = $(this).attr("data-questionId");
+    var templateData = JSON.parse($("#questionData-" + questionId).val());
+
+
+    // Place editable question in DOM 
+    $("#questionContainer-" + questionId)
+        .before(EditMatchingQuestionTemplate(templateData))
+        .addClass("hidden");
+
+})
+
+// Displays the edit box for a matching question
+$("#TestSections").on("click", ".saveEdittedMatchingQuestion", function () {
+    var questionId = $(this).attr("data-questionId");
+    var questionContent = $.trim($("#MatchingContent-" + questionId).val());
+    var pointValue = $("#MatchingPointValue-" + questionId).val();
+    var editQuestionContainer = $(this).parents(".editQuestionContainer");
+    var hasError = false;
+    var matchingGroups = [];
+
+    // Error check if content is empty
+    if (questionContent == "") {
+        hasError = true;
+        $("#matchingContentError-" + questionId).removeClass("hidden");
+    }
+    else {
+        $("#matchingContentError-" + questionId).addClass("hidden");
+    }
+
+    // Error checks the minimum number of groups
+    if ($("#matchingGroupsContainer-" + questionId).children(".matchingGroupContainer").length > 0) {
+        $("#minimumNumberOfMatchingGroups-" + questionId).addClass("hidden");
+
+        // Gets the data for each matching group
+        $("#matchingGroupsContainer-" + questionId).children(".matchingGroupContainer").each(function () {
+            var matchAnswer = $.trim($(this).find("input.matchingGroupAnswer").val());
+            var matches = [];
+
+            // Error checks Matching group Answer
+            if (matchAnswer == "") {
+                hasError = true;
+                $(this).find(".answerErrorMessage").removeClass("hidden");
+            } else {
+                $(this).find(".answerErrorMessage").addClass("hidden");
+            }
+
+            // Error check minimum number of matches per group
+            if ($(this).find(".groupMatchesContainer").children(".matchingGroupMatch").length > 0) {
+
+                $(this).find("li.minimumNumberOfMatchesErrorMessage").addClass("hidden");
+
+                // Gets all the matches for this answer
+                $(this).find(".groupMatchesContainer").children(".matchingGroupMatch").each(function () {
+                    var matchContent = $.trim($(this).find(".match").val());
+
+                    // Error checks the match content
+                    if (matchContent == "") {
+                        hasError = true;
+                        $(this).find(".matchErrorMessage").removeClass("hidden");
+                    } else {
+
+                        $(this).find(".matchErrorMessage").addClass("hidden");
+                        matches.push(matchContent);
+                    }
+                })
+
+            } else {
+                hasError = true;
+                $(this).find("li.minimumNumberOfMatchesErrorMessage").removeClass("hidden");
+            }
+
+            // Saves the data of a matching group
+            matchingGroups.push({ matchAnswer: matchAnswer, matches: matches });
+        })
+    }
+    else {
+        hasError = true;
+        $("#minimumNumberOfMatchingGroups-" + questionId).removeClass("hidden");
+    }
+
+    // Submits an editted question data to server
+    if (!hasError) {
+        var JsonData = JSON.stringify({
+            questionContent: questionContent,
+            pointValue: pointValue,
+            matchingGroups: matchingGroups,
+            questionId: questionId
+        });
+
+        $.ajax({
+            url: "/api/CreateTest/UpdateMatchingQuestion",
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            data: JsonData,
+            success: function (result) {
+                if (result.success) {
+                    log(result.question);
+                    // Creates a newly created Matching Question
+                    result.question.jasonData = JSON.stringify(result.question);
+
+                    $("#questionContainer-" + result.question.questionId)
+                        .before(DisplayMatchingQuestionTemplate(result.question)).remove();
+
+                    $(editQuestionContainer).remove();
+                    stripe();
+                    // ADD-NOTIFICATION
+                    log(result);
+                }
+                else {
+                    console.log(result)
+                }
+            }
+        })
+    }
 })
 
 /**********************************************************************/
@@ -1336,6 +1474,8 @@ var EditEssayQuestionTemplate;
 var NewMatchingQuestionTemplate;
 var NewMatchingQuestionGroupTemplate;
 var NewMatchingQuestionGroupMatchTemplate;
+var DisplayMatchingQuestionTemplate;
+var EditMatchingQuestionTemplate;
 
 // Other Templates
 var DisplaySectionAssignmentTableRowTemplate;
@@ -1439,6 +1579,18 @@ function compile_templates() {
     $.get("/handlebarsTemplates/newMatchingGroupMatch.html",
         function (template) {
             NewMatchingQuestionGroupMatchTemplate = Handlebars.compile(template);
+        })
+
+    // Compile display Matching question Template
+    $.get("/handlebarsTemplates/displayMatchingQuestion.html",
+        function (template) {
+            DisplayMatchingQuestionTemplate = Handlebars.compile(template);
+        })
+
+    // Compile display Matching question Template
+    $.get("/handlebarsTemplates/editMatchingQuestion.html",
+        function (template) {
+            EditMatchingQuestionTemplate = Handlebars.compile(template);
         })
 
     // Compile other templates
