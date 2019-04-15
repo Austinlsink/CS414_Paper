@@ -22,8 +22,6 @@ namespace BrainNotFound.Paper.Controllers
         // Routes Start
 
         //[HttpGet, Route("/")]
-        [HttpPost, Route("Account/Login")]
-        [HttpGet, Route("Login")]
         public IActionResult Login()
         {
             return View();
@@ -32,37 +30,52 @@ namespace BrainNotFound.Paper.Controllers
 
 
         
-        [HttpPost, Route("Login")]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        //[HttpPost, Route("/")]
+        public async Task<ActionResult> Login(LoginViewModel model)
         {
-            if (ModelState.IsValid || true)
+            if (ModelState.IsValid)
             {
-
                 var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
-
+                
                 if (result.Succeeded)
                 {
-
-                    if(User.IsInRole("Admin"))
-                    {
-                        return RedirectToAction("Index", "Admin");
-                    }
-                    else if(User.IsInRole("Instructor"))
-                    {
-                        return RedirectToAction("Index", "Instructor");
-                    }
-                    else if(User.IsInRole("Student"))
-                    {
-                        return RedirectToAction("Index", "Student");
-                    }
+                    return RedirectToAction("LoginReroute", "Account");
                 }
             }
 
+            ViewData["Message"] += ModelState.ErrorCount.ToString();
             // If we got this far, something failed, redisplay form
+            return View("TestView");
+        }
+
+        public ActionResult LoginReroute()
+        {
+
+            if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("Admin"))
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
+                else if (User.IsInRole("Instructor"))
+                {
+                    return RedirectToAction("Index", "Instructor");
+                }
+                else if (User.IsInRole("Student"))
+                {
+                    return RedirectToAction("Index", "Student");
+                }
+            }
+
             return RedirectToAction("Login", "Account");
         }
 
-       [Route("/")]
+
+
+
+
+
+        [HttpGet, Route("/")]
         public IActionResult ForceLogin()
         {
             return View("LoginOptions");
@@ -78,7 +91,6 @@ namespace BrainNotFound.Paper.Controllers
             }
             return View();
         }
-
         
         public async Task<IActionResult> ForceInstructorLogin()
         {
