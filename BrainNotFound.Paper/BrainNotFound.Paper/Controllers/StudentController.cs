@@ -133,6 +133,10 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         #region Test Controllers
+        /// <summary>
+        /// Display all of the available tests to the student
+        /// </summary>
+        /// <returns></returns>
         [HttpGet, Route("Tests")]
         public IActionResult Tests()
         {
@@ -176,8 +180,15 @@ namespace BrainNotFound.Paper.Controllers
                 .Where(ts => ts.TestScheduleId == testScheduleId)
                 .First();
 
+            var testSchedules = _context.StudentTestAssignments
+                                .Include(x => x.TestSchedule)
+                                    .ThenInclude(x => x.Test)
+                                        .ThenInclude(x => x.Course)
+                                            .ThenInclude(x => x.Department)
+                                .Where(x => x.Submitted == false && x.TestScheduleId == testScheduleId).First();
+
             // Grab the test information
-            var testInformation = testSchedule.Test;
+            var testInformation = testSchedules.TestSchedule.Test;
             ViewBag.TestInformation = testInformation;
 
             // Grab the testschedule and its ID to pass as a hidden parameter to the ajax call
