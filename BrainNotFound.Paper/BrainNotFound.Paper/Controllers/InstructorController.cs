@@ -29,12 +29,17 @@ namespace BrainNotFound.Paper.Controllers
             
         }
 
-
         [HttpGet, Route("")]
         [HttpGet, Route("Index")]
         [HttpGet, Route("Dashboard")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var instructor = await _userManager.GetUserAsync(HttpContext.User);
+            var essayGrading = _context.StudentTestAssignments
+                                .Include(x => x.TestSchedule)
+                                    .ThenInclude(x => x.Test)
+                                .Where(x => x.ManualGradingRequired == true && x.TestSchedule.Test.InstructorId == instructor.Id).ToList();
+            ViewBag.EssayGrading = essayGrading;
             return View();
         }
 

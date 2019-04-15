@@ -1,4 +1,6 @@
-﻿@{
+﻿@using BrainNotFound.Paper.Models.BusinessModels
+
+@{
     ViewData["Title"] = "Dashboard - Instructor";
 }
 
@@ -9,5 +11,14 @@
     <table class="table">
         <tr></tr>
     </table>
+</div>
+<div>
+    @{
+        <p>Tests requiring attention:</p>
+        foreach (StudentTestAssignment sta in ViewBag.EssayGrading)
+        {
+            <p>@sta.TestSchedule.Test.TestName</p>
+        }
+    }
 </div>
 <div id="demo"></div>

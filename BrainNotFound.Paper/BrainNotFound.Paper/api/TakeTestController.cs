@@ -81,10 +81,11 @@ namespace BrainNotFound.Paper.api
                     TestScheduleId = testScheduleId,
                     EssayAnswerGiven = studentEssayAnswer,
                     QuestionId = questionId,
-                    StudentId = student.Id
+                    StudentId = student.Id                    
                 };
 
                 _context.StudentEssayAnswers.Add(essayAnswer);
+                _context.StudentTestAssignments.Where(x => x.TestScheduleId == testScheduleId && x.StudentId == student.Id).First().ManualGradingRequired = true;
                 _context.SaveChanges();
             }
             else
