@@ -303,12 +303,38 @@
     </div>
 </div>
 
+<button data-toggle="modal" data-target="#TimerOutModal">TimeOutModal</button>
+
+<!--Timer ran out timer-->
+<div id="TimerOutModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="TimerOutModalHeader">Timer Expired!</h4>
+            </div>
+            <div class="modal-body">
+                <p>Please read the pledge, sign if you did not cheat, and submit the test.</p> <br />
+                <p>I pledge that I did not cheat. All questions were answered to the best of my ability. My phone a friend was Chuck Norris.</p>
+                <br />
+                    <input type="text" id="TimerOutFullname" class="form-control " name="fullname" required="" placeholder="Type in full name">
+                    <span id="TimerOutStudentName" data-studentName="@ViewBag.Student.FirstName @ViewBag.Student.LastName">@ViewBag.Student.FirstName @ViewBag.Student.LastName</span><br />
+                    <span class="text-danger hidden" id="TimeOutPledgeErrorMessage">Signature does not match name</span>
+                <div class="modal-footer">
+                    <button id="TimerOutModalYes" type="button" class="btn btn-default submitTest">Submit withOUT pledge</button>
+                    <button id="TimerOutModalNo" type="button" class="btn btn-primary submitTestOnTimerOut">Submit with Pledge</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts
     {
     <script src="~/vendors/autosize/dist/autosize.min.js"></script>
     <script src="~/js/TakeTest.js" type="text/javascript"></script>
-    
-     <!--Timer for how long the test lasts-->
+
+    <!--Timer for how long the test lasts-->
     <script>
         var deadline = new Date("@ViewBag.TestSchedule.EndTime").getTime();
         var x = setInterval(function () {
@@ -319,6 +345,8 @@
             var seconds = Math.floor((t % (1000 * 60)) / 1000);
             document.getElementById("timerScroll").innerHTML = hours + "h " + minutes + "m " + seconds + "s ";
             document.getElementById("TimeLimitStats").innerHTML = hours + "h " + minutes + "m " + seconds + "s ";
+
+            //If the timer has expired, lock out the test and make the student submit the pledge
             if (t < 0) {
                 clearInterval(x);
                 document.getElementById("timerScroll").innerHTML = "EXPIRED";

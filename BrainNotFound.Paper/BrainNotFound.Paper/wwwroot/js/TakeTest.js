@@ -1,33 +1,38 @@
-﻿// Saves the essay questions
-$("textarea.studentEssayQuestionAnswer").focusout(function () {
-    var StudentEssayAnswer = $(this).val();
-    var QuestionId = $(this).attr("data-essayQuestionId");
+﻿// Submits the test on the TimerOut
+$(".submitTestOnTimerOut").click(function () {
     var TestScheduleId = $("input#testScheduleId").val();
-    console.log(StudentEssayAnswer, QuestionId, TestScheduleId);
+    var Pledge = $("input#fullnameInput").val();
+    var nameInput = document.getElementById("TimerOutFullname").value;
+    var studentName = $("span#TimerOutStudentName").attr("data-studentName");
 
-    var JsonData = JSON.stringify({ QuestionId: QuestionId, StudentEssayAnswer: StudentEssayAnswer, TestScheduleId: TestScheduleId })
-    $.ajax({
-        url: "/api/Tests/SaveEssayAnswer/",
-        type: "POST",
-        contentType: "application/json",
-        // Data fetched from the form
-        data: JsonData,
-        success: function (result) {
-            // Close the modal window
-            console.log(result.message);
-        },
-        error: function (xhr, status, error) {
-            console.log(xhr.responseText);
-        }
-    })
+    var JsonData = JSON.stringify({ TestScheduleId: TestScheduleId, Pledge: Pledge })
 
-});
+    // Error check the student signature
+    if (nameInput.trim() === studentName.trim()) {
+        $.ajax({
+            url: "/api/Tests/SubmitTest/",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            // Data fetched from the form
+            data: JsonData,
+            success: function (result) {
+                // Close the modal window
+                window.location.href = "/Student/Grades";
+                $("TimerOutModal").modal("hide");
+            },
+            error: function (xhr, status, error) {
+            }
+        })
+    }
+    else {
+        $("#TimeOutPledgeErrorMessage").removeClass("hidden");
+    }
+})
 
 // Submits the test
 $(".submitTest").click(function () {
     var TestScheduleId = $("input#testScheduleId").val();
     var Pledge = $("input#fullnameInput").val();
-    console.log("In the submit test function - test schedule Id = ", TestScheduleId);
 
     var JsonData = JSON.stringify({ TestScheduleId: TestScheduleId, Pledge: Pledge })
 
@@ -39,20 +44,11 @@ $(".submitTest").click(function () {
         data: JsonData,
         success: function (result) {
             // Close the modal window
-            console.log(result.message);
             window.location.href = "/Student/Grades";
-            
         },
         error: function (xhr, status, error) {
-            console.log(error);
-            
         }
     })
-})
-
-// Initialize textares autoresize
-$(document).ready(function () {
-    autosize($('.studentEssayQuestionAnswer'));
 })
 
 // This function confirms that when the student submits the test, the pledge and his name match and that all of the questions are answered
@@ -155,6 +151,31 @@ $("input[type='radio']").on("change", function () {
     })
 })
 
+// Saves the essay questions
+$("textarea.studentEssayQuestionAnswer").focusout(function () {
+    var StudentEssayAnswer = $(this).val();
+    var QuestionId = $(this).attr("data-essayQuestionId");
+    var TestScheduleId = $("input#testScheduleId").val();
+    console.log(StudentEssayAnswer, QuestionId, TestScheduleId);
+
+    var JsonData = JSON.stringify({ QuestionId: QuestionId, StudentEssayAnswer: StudentEssayAnswer, TestScheduleId: TestScheduleId })
+    $.ajax({
+        url: "/api/Tests/SaveEssayAnswer/",
+        type: "POST",
+        contentType: "application/json",
+        // Data fetched from the form
+        data: JsonData,
+        success: function (result) {
+            // Close the modal window
+            console.log(result.message);
+        },
+        error: function (xhr, status, error) {
+            console.log(xhr.responseText);
+        }
+    })
+
+});
+
 // True false toggle
 $("label[data-questionType='trueFalse']").click(function () {
     var newClass = $(this).attr("data-toogled-class");
@@ -174,4 +195,9 @@ $(document).ready(function () {
             hasBackground = true;
         }
     });
+})
+
+// Initialize textares autoresize
+$(document).ready(function () {
+    autosize($('.studentEssayQuestionAnswer'));
 })
