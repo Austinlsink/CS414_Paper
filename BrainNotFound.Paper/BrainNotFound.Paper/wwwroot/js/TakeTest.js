@@ -55,17 +55,6 @@ $(document).ready(function () {
     autosize($('.studentEssayQuestionAnswer'));
 })
 
-$(document).ready(function () {
-    var totalPoints = 0;
-
-    $(".pointValue").each(function () {
-        console.log($(this).value);
-    });
-
-    console.log(totalPoints);
-    document.getElementById("TotalPointsStats").innerHTML = totalPoints;
-})
-
 // This function confirms that when the student submits the test, the pledge and his name match and that all of the questions are answered
 $("button#submitTest").click(function () {
     var nameInput = document.getElementById("fullnameInput").value;

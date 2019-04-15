@@ -217,10 +217,10 @@ namespace BrainNotFound.Paper.Controllers
                             else
                             {
                                 testSections[j].Questions[i].studentTrueFalseAnswer = studentTFAnswer.TrueFalseAnswerGiven;
-                                totalPoints += testSections[j].Questions[i].PointValue;
+                                
                             }
                             totalQuestions += 1;
-
+                            totalPoints += testSections[j].Questions[i].PointValue;
                             break;
                             
                         case QuestionType.MultipleChoice:
@@ -233,10 +233,10 @@ namespace BrainNotFound.Paper.Controllers
                             else
                             {
                                 testSections[j].Questions[i].studentMultipleChoiceAnswers = studentMCAnswers.StudentMultipleChoiceAnswers;
-                                totalPoints += testSections[j].Questions[i].PointValue;
+                                
                             }
                             totalQuestions += 1;
-
+                            totalPoints += testSections[j].Questions[i].PointValue;
                             break;
                         case QuestionType.Essay:
                             var studentEssayAnswer = _context.StudentEssayAnswers.Where(sea => sea.QuestionId == testSections[j].Questions[i].QuestionId && sea.TestScheduleId == testSchedule.TestScheduleId).FirstOrDefault();
@@ -248,10 +248,9 @@ namespace BrainNotFound.Paper.Controllers
                             else
                             {
                                 testSections[j].Questions[i].studentEssayAnswer = studentEssayAnswer.EssayAnswerGiven;
-                                totalPoints += testSections[j].Questions[i].PointValue;
                             }
                             totalQuestions += 1;
-
+                            totalPoints += testSections[j].Questions[i].PointValue;
                             break;
                     }
                 }

@@ -23,7 +23,7 @@
                 <div class="icon">
                     <i class="fa fa-dot-circle-o"></i>
                 </div>
-                <div id="TotalPointsStats" class="count"> </div>
+                <div id="TotalPointsStats" class="count"> @ViewBag.TotalPoints</div>
                 <h3>Total Points</h3>
             </div>
         </div>
@@ -56,6 +56,10 @@
         </div>
         <div class="clearfix"></div>
     </div>
+</div>
+
+<div style="width: 100px; background-color: #999; z-index: 10; position: fixed; right: 0; bottom: 5px; height: 30px;">
+    <p id="timerScroll"></p>
 </div>
 
 <!-- True false section template-->
@@ -100,10 +104,10 @@
                                         <!--Default-->
                                         <div id="gender" class="btn-group" data-toggle="buttons">
                                             <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
-                                                <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
+                                                <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
                                             </label>
                                             <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
-                                                <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
+                                                <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
                                             </label>
                                         </div>
                                     }
@@ -112,10 +116,10 @@
                                         <!-- True -->
                                         <div id="gender" class="btn-group" data-toggle="buttons">
                                             <label class="btn btn-primary btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
-                                                <input type="radio" checked="checked" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
+                                                <input class="trueFalse" type="radio" checked="checked" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
                                             </label>
                                             <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
-                                                <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
+                                                <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
                                             </label>
                                         </div>
                                     }
@@ -124,10 +128,10 @@
                                         <!-- False -->
                                         <div id="gender" class="btn-group" data-toggle="buttons">
                                             <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
-                                                <input type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
+                                                <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
                                             </label>
                                             <label class="btn btn-danger btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
-                                                <input type="radio" checked="checked" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
+                                                <input class="trueFalse" type="radio" checked="checked" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
                                             </label>
                                         </div>
                                     }
@@ -152,23 +156,23 @@
 
                                 <div class="col-md-1"></div>
                                 <div class="form-group col-md-11 col-sm-11 col-xs-12">
-                                        @{
-                                            option = 97;
-                                            foreach (MultipleChoiceAnswer mca in q.MultipleChoiceAnswers)
+                                    @{
+                                        option = 97;
+                                        foreach (MultipleChoiceAnswer mca in q.MultipleChoiceAnswers)
+                                        {
+                                            if (q.studentMultipleChoiceAnswers.Where(smca => smca.MultipleChoiceAnswerId == mca.MultipleChoiceAnswerId).Any())
                                             {
-                                                if (q.studentMultipleChoiceAnswers.Where(smca => smca.MultipleChoiceAnswerId == mca.MultipleChoiceAnswerId).Any())
-                                                {
-                                                    <a class="btn btn-primary btn-block text-left multipleChoiceOption" data-mcQuestionId="@q.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="true"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
-                                                }
-                                                else
-                                                {
-                                                    <a class="btn btn-default btn-block text-left multipleChoiceOption" data-mcQuestionId="@q.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="false"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
-                                                }
-                                                option++;
+                                                <a class="btn btn-primary btn-block text-left multipleChoiceOption" data-mcQuestionId="@q.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="true"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
                                             }
+                                            else
+                                            {
+                                                <a class="btn btn-default btn-block text-left multipleChoiceOption" data-mcQuestionId="@q.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="false"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
+                                            }
+                                            option++;
                                         }
-                                    </div>
+                                    }
                                 </div>
+                            </div>
                             countMC++;
                         }
                         break;
@@ -303,4 +307,35 @@
     {
     <script src="~/vendors/autosize/dist/autosize.min.js"></script>
     <script src="~/js/TakeTest.js" type="text/javascript"></script>
+    
+     <!--Timer for how long the test lasts-->
+    <script>
+        var deadline = new Date("@ViewBag.TestSchedule.EndTime").getTime();
+        var x = setInterval(function () {
+            var now = new Date().getTime();
+            var t = deadline - now;
+            var hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((t % (1000 * 60)) / 1000);
+            document.getElementById("timerScroll").innerHTML = hours + "h " + minutes + "m " + seconds + "s ";
+            document.getElementById("TimeLimitStats").innerHTML = hours + "h " + minutes + "m " + seconds + "s ";
+            if (t < 0) {
+                clearInterval(x);
+                document.getElementById("timerScroll").innerHTML = "EXPIRED";
+                document.getElementById("TimeLimitStats").innerHTML = "EXPIRED";
+
+                $(".questionRow").each(function () {
+                    $(this).disabled = true;
+                });
+
+                $(".studentEssayQuestionAnswer").each(function () {
+                    $(this).disabled = true;
+                });
+
+                $(".trueFalse").each(function () {
+                    $(this).disabled = true;
+                });
+            }
+        }, 1000);
+    </script>
 }
