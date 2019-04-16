@@ -110,12 +110,10 @@
                         <table id="UpcomingTestsTable" class="table table-striped jambo_table bulk_action ">
                             <thead>
                                 <tr class="headings">
-                                    <th>
-                                        <input type="checkbox" id="check-all" class="flat">
-                                    </th>
                                     <th class="column-title">Name </th>
                                     <th class="column-title">Course</th>
-                                    <th class="column-title">Time</th>
+                                    <th class="column-title">Start Time</th>
+                                    <th class="column-title">End Time</th>
                                     <th class="column-title no-link last">
                                         <span class="nobr">Action</span>
                                     </th>
@@ -128,13 +126,10 @@
                                 @foreach (TestSchedule test in ViewBag.UpcomingTests)
                                 {
                                     <tr class="odd pointer">
-                                        <td class="a-center ">
-                                            <input type="checkbox" class="flat" name="table_records">
-                                        </td>
                                         <td class=" ">@test.Test.TestName</td>
-
                                         <td class=" ">@ViewBag.department.DepartmentCode @ViewBag.course.CourseCode</td>
                                         <td class=" ">@String.Format("{0:f}", test.Test.TestSchedules.Select(x => x.StartTime).First())</td>
+                                        <td class=" ">@String.Format("{0:f}", test.Test.TestSchedules.Select(x => x.EndTime).First())</td>
                                         <td class=" last">
                                             <a class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                         </td>
@@ -171,12 +166,10 @@
                 <table id="PreviousTestsTable" class="table table-striped jambo_table bulk_action ">
                     <thead>
                         <tr class="headings">
-                            <th>
-                                <input type="checkbox" id="check-all" class="flat">
-                            </th>
                             <th class="column-title">Name </th>
                             <th class="column-title">Course</th>
-                            <th class="column-title">Time</th>
+                            <th class="column-title">Start Time</th>
+                            <th class="column-title">End Time</th>
                             <th class="column-title no-link last">
                                 <span class="nobr">Action</span>
                             </th>
@@ -189,12 +182,10 @@
                         @foreach (TestSchedule test in ViewBag.PreviousTests)
                         {
                             <tr class="odd pointer">
-                                <td class="a-center ">
-                                    <input type="checkbox" class="flat" name="table_records">
-                                </td>
                                 <td class=" ">@test.Test.TestName</td>
                                 <td class=" ">@ViewBag.department.DepartmentCode @ViewBag.course.CourseCode</td>
                                 <td class=" ">@String.Format("{0:f}", test.Test.TestSchedules.Select(x => x.StartTime).First())</td>
+                                <td class=" ">@String.Format("{0:f}", test.Test.TestSchedules.Select(x => x.EndTime).First())</td>
                                 <td class=" last">
                                     <a class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                 </td>
@@ -219,9 +210,9 @@
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
             $('#UpcomingTestsTable').DataTable({
-                "order": [3, 'asc'],
+                "order": [2, 'asc'],
                 "columnDefs": [
-                    { "orderable": false, "targets": [0, 4] }
+                    { "orderable": false, "targets": [4] }
                 ],
             });
         });
@@ -231,9 +222,9 @@
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
             $('#PreviousTestsTable').DataTable({
-                "order": [3, 'asc'],
+                "order": [2, 'asc'],
                 "columnDefs": [
-                    { "orderable": false, "targets": [0, 4] }
+                    { "orderable": false, "targets": [4] }
                 ],
             });
         });
