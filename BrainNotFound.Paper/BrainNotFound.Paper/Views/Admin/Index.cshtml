@@ -2,13 +2,27 @@
     ViewData["Title"] = "Home Page";
 }
 
-@*<a asp-controller="root" asp-action="index" class="btn btn-dark">Run Code</a>
-    <a asp-controller="Bima" asp-action="Run" class="btn btn-dark">Run Code for Bima</a>
-    <a asp-controller="Lacy" asp-action="Run" class="btn btn-info">Run Code for Lacy</a>*@
+<!-- top tiles -->
+<div class="row tile_count">
+    <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-users"></i> Number of Students</span>
+        <div class="count">@ViewBag.NumberOfStudents</div>
+    </div>
+    <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-users"></i> Number of Instructors</span>
+        <div class="count">@ViewBag.NumberOfInstructors</div>
+    </div>
+    <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-mortar-board"></i> Number of Departments</span>
+        <div class="count green">@ViewBag.NumberOfDepartments</div>
+    </div>
+    <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-file-text"></i> Number of Tests</span>
+        <div class="count">@ViewBag.NumberOfTests</div>
+    </div>
 
-
-
-
+</div>
+<!-- /top tiles -->
 <!-- pie chart -->
 <div class="col-md-6 col-sm-6 col-xs-12">
     <div class="x_panel">
@@ -176,18 +190,4 @@
         </div>
     </div>
 </div>
-<!-- /bar charts group -->
-<!-- jQuery -->
-<script src="../vendors/jquery/dist/jquery.min.js"></script>
-<!-- Bootstrap -->
-<script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
-<!-- FastClick -->
-<script src="../vendors/fastclick/lib/fastclick.js"></script>
-<!-- NProgress -->
-<script src="../vendors/nprogress/nprogress.js"></script>
-<!-- morris.js -->
-<script src="../vendors/raphael/raphael.min.js"></script>
-<script src="../vendors/morris.js/morris.min.js"></script>
-
-<!-- Custom Theme Scripts -->
-<script src="../build/js/custom.min.js"></script>
+<div class="clearfix"></div>

@@ -10,6 +10,9 @@ using BrainNotFound.Paper.Models.BusinessModels;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 using Microsoft.AspNetCore.Http;
 using BrainNotFound.Paper.Models.ViewModels;
+using System.Data.SqlClient;
+using System.Data;
+using Microsoft.EntityFrameworkCore;
 
 //TODO There is a lot to do
 
@@ -19,7 +22,7 @@ namespace BrainNotFound.Paper.Controllers
     [Route("Admin")]
     public class AdminController : Controller
     {
-        
+
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly PaperDbContext _context;
         #region admin controllers
@@ -37,6 +40,17 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("Dashboard")]
         public IActionResult Index()
         {
+
+            // Fetch Number of Tests in out system
+            SqlParameter[] @params = {
+                new SqlParameter("@returnVal", SqlDbType.Int) {Direction = ParameterDirection.Output}
+            };
+
+            _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetNumberOfTests", @params);
+
+            ViewBag.NumberOfTests = @params[0].Value;
+
+
             return View();
         }
 
@@ -101,7 +115,7 @@ namespace BrainNotFound.Paper.Controllers
             return RedirectToAction("Administrators", "Admin");
         }
 
-       #endregion create administrator controllers
+        #endregion create administrator controllers
 
         #region create instructor controllers
         /// <summary>
@@ -113,7 +127,7 @@ namespace BrainNotFound.Paper.Controllers
         public async Task<IActionResult> Instructors()
         {
             var allInstructors = (await _userManager.GetUsersInRoleAsync("Instructor")).OrderBy(o => o.FirstName).ToList();
-            if(TempData["message"] != null)
+            if (TempData["message"] != null)
             {
                 ViewBag.message = TempData["message"].ToString();
             }
@@ -333,7 +347,7 @@ namespace BrainNotFound.Paper.Controllers
             {
                 ViewBag.message = TempData["message"].ToString();
             }
-            
+
             ViewBag.courses = courses;
             ViewBag.departmentList = departments;
             return View();
@@ -407,7 +421,7 @@ namespace BrainNotFound.Paper.Controllers
             var courses = _context.Courses.OrderBy(o => o.CourseCode).ToList();
             var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
 
-            if(TempData["message"] != null)
+            if (TempData["message"] != null)
             {
                 ViewBag.message = TempData["message"].ToString();
             }
@@ -468,7 +482,7 @@ namespace BrainNotFound.Paper.Controllers
         public async Task<IActionResult> NewSection(string code)
         {
             string departmentCode = code.Substring(0, 2);
-            string courseCode     = code.Substring(2, 3);
+            string courseCode = code.Substring(2, 3);
 
             // Find the department associated with the course by DepartmentCode and add it to the ViewBag
             var department = _context.Departments.Where(d => d.DepartmentCode == departmentCode).First();
@@ -502,7 +516,7 @@ namespace BrainNotFound.Paper.Controllers
             } while (SectionNumberFound);
 
             ViewBag.sectionNumber = sectionNumber;
-            
+
             return View();
         }
 
@@ -510,9 +524,9 @@ namespace BrainNotFound.Paper.Controllers
         public async Task<IActionResult> NewSection(String code, Section section, string[] daysMet, DateTime startTime, DateTime endTime)
         {
             string departmentCode = code.Substring(0, 2);
-            string courseCode     = code.Substring(2, 3);
+            string courseCode = code.Substring(2, 3);
 
-            if(section.InstructorId == null || startTime == null || endTime == null)
+            if (section.InstructorId == null || startTime == null || endTime == null)
             {
                 return View(code);
             }
@@ -520,7 +534,7 @@ namespace BrainNotFound.Paper.Controllers
             // Find the department and course that are associated with the section
             Department department = _context.Departments.Where(d => d.DepartmentCode == departmentCode).First();
             Course course = _context.Courses.Where(c => c.CourseCode == courseCode && c.DepartmentId == department.DepartmentId).First();
- 
+
             // Create the new section meeting time list and add it to the new section
             List<SectionMeetingTime> allDaysMet = new List<SectionMeetingTime>();
 
@@ -562,7 +576,7 @@ namespace BrainNotFound.Paper.Controllers
         public async Task<IActionResult> ViewSection(string code, int sectionNumber)
         {
             string departmentCode = code.Substring(0, 2);
-            string courseCode     = code.Substring(2, 3);
+            string courseCode = code.Substring(2, 3);
 
             // Find the department associated with the course by DepartmentCode and add it to the ViewBag
             var department = _context.Departments.Where(d => d.DepartmentCode == departmentCode).First();
@@ -608,7 +622,7 @@ namespace BrainNotFound.Paper.Controllers
         {
             string code = department.DepartmentCode + course.CourseCode;
 
-            
+
 
             // Find the instructor to reassign to the specified section
             var instructor = await _userManager.FindByNameAsync(user.UserName);
@@ -617,7 +631,7 @@ namespace BrainNotFound.Paper.Controllers
             var sect = _context.Sections.Where(s => s.SectionId == section.SectionId).First();
             sect.InstructorId = instructor.Id;
 
-            _context.SaveChanges();    
+            _context.SaveChanges();
 
             return RedirectToAction("ViewSection", "Admin", new { code, section.SectionNumber });
         }
@@ -636,7 +650,7 @@ namespace BrainNotFound.Paper.Controllers
 
             _context.Enrollments.Add(enroll);
             _context.SaveChanges();
-           
+
             return RedirectToAction("ViewSection", "Admin", new { code, section.SectionNumber });
         }
 
@@ -649,7 +663,7 @@ namespace BrainNotFound.Paper.Controllers
 
             Enrollment deleteStudent = _context.Enrollments.Where(e => e.StudentId == student.Id && e.SectionId == section.SectionId).First();
             _context.Enrollments.Remove(deleteStudent);
-            _context.SaveChanges();            
+            _context.SaveChanges();
 
             return RedirectToAction("ViewSection", "Admin", new { code, section.SectionNumber });
         }
