@@ -17,7 +17,6 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-
                 <div class="table-responsive">
                     <table id="instructorTable" class="table table-striped jambo_table bulk_action">
                         <thead>
@@ -31,7 +30,6 @@
                                 </th>
                             </tr>
                         </thead>
-
                         <tbody>
                             @foreach (ApplicationUser instructor in ViewBag.allInstructors)
                             {
@@ -41,14 +39,12 @@
                                     <td class=" ">@Convert.ToInt64(instructor.PhoneNumber).ToString("###-###-####")</td>
                                     <td class=" ">@instructor.Email</td>
                                     <td>
-
                                         <a asp-controller="Admin" asp-action="ViewInstructor" asp-route-UserName="@instructor.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                         <button type="button" id="EditInstructor" data-toggle="modal" data-target="#EditInstructorModal" value="@instructor.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </button>
                                         <button id="ConfirmDelete" type="submit" data-target="#ConfirmModal" value="@instructor.Id" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
                                     </td>
                                 </tr>
                             }
-
                         </tbody>
                     </table>
                 </div>
@@ -56,7 +52,6 @@
         </div>
     </div>
 </div>
-
 
 <!--Modal for editing an instructor-->
 <div id="EditInstructorModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
@@ -90,12 +85,10 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
                             First Name <span class="required">*</span>
                         </label>
-
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input id="InstructorFirstNameInput" asp-for="FirstName" type="text" class="form-control has-feedback-left" placeholder="First Name">
                             <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
@@ -107,15 +100,12 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
                             Last Name <span class="required">*</span>
                         </label>
-
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input id="InstructorLastNameInput" asp-for="LastName" type="text" class="form-control has-feedback-left" placeholder="Last Name">
                             <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                             <span id="InstructorLastNameErrorMessage" class="text-danger"></span>
-
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="dept-name" class="control-label col-md-3 col-sm-3 col-xs-12">Email </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -124,7 +114,6 @@
                             <span id="InstructorEmailErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-3">Phone Number</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -133,7 +122,6 @@
                             <span id="InstructorPhoneErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-3">Address</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -142,7 +130,6 @@
                             <span id="InstructorAddressErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-3">City</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -151,7 +138,6 @@
                             <span id="InstructorCityErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-3">State</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -169,7 +155,6 @@
                             <span id="InstructorZipErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-3">Date of Birth</label>
                         <div class="col-md-69 col-sm-6 col-xs-9">
@@ -182,7 +167,6 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12  parsley-error">
                             Password <span class="required">*</span>
                         </label>
-
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input id="InstructorPasswordInput" asp-for="Password" type="password" class="form-control has-feedback-left" placeholder="Password">
                             <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
@@ -193,7 +177,6 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12  parsley-error">
                             Confirm Password <span class="required">*</span>
                         </label>
-
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input id="InstructorConfirmPasswordInput" asp-for="ConfirmPassword" type="password" class="form-control has-feedback-left" placeholder="Password">
                             <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
@@ -246,8 +229,6 @@
         </div>
     </div>
 </div>
-
-
 
 @section scripts
     {

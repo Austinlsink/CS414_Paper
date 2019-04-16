@@ -10,6 +10,8 @@ using BrainNotFound.Paper.Models.BusinessModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using BrainNotFound.Paper.Services;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace BrainNotFound.Paper.Controllers
 {
@@ -358,6 +360,15 @@ namespace BrainNotFound.Paper.Controllers
             // Get the student's grades
             var grades = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).ThenInclude(x => x.Course).Where(x => x.StudentId == student.Id && x.Submitted == true).OrderBy(x => x.TestSchedule.EndTime).ToList();
             ViewBag.Grades = grades;
+
+            //// Fetch Number of Students in the system
+            //SqlParameter[] @params1 = {
+            //    new SqlParameter("@returnVal", SqlDbType.Int) {Direction = ParameterDirection.Output},
+            //    new SqlParameter("@inputTestId", SqlDbType.BigInt) {Value = 154}
+            //};
+            //_context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetTotalTestPoints", @params1);
+            //ViewBag.TotalPoints = @params1[0].Value;
+
 
             return View();
         }
