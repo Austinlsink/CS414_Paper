@@ -1,7 +1,106 @@
+@using BrainNotFound.Paper.Models.BusinessModels
+@model Test;
 @{
-    ViewData["Title"] = "View Test_Name - Instructor";
-}
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
+    Test test = ViewBag.Test;
+    List<Section> sections = ViewBag.Sections;
 
-<p>This page displays a test, the sections it’s assigned to, and the students who are taking the test.</p>
+    ViewData["Title"] = "View " + test.TestName + " - Instructor";
+    int testScheduleCounter = 1;
+}
+
+<div class="row" id="TestInformationSection">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2><i class="fa fa-file-text-o"></i> @(test.Course.Department.DepartmentCode) @(test.Course.CourseCode) - @(" " + test.TestName)</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+
+                <!-- START: Statistics -->
+                <h3>General</h3>
+                <hr />
+                <div class="animated flipInY col-md-4 col-sm-12 col-xs-12">
+                    <div class="tile-stats">
+                        <div class="icon">
+                            <i class="fa fa-dot-circle-o"></i>
+                        </div>
+                        <div id="TotalPointsStats" class="count"></div>
+                        <h3>Total Points</h3>
+                    </div>
+                </div>
+                <div class="animated flipInY  col-md-4 col-sm-12 col-xs-12">
+                    <div class="tile-stats">
+                        <div class="icon">
+                            <i class="fa fa-question"></i>
+                        </div>
+                        <div id="TotalQuestionsStats" class="count"></div>
+                        <h3>Questions</h3>
+                    </div>
+                </div>
+                <div class="animated flipInY col-md-4 col-sm-12 col-xs-12">
+                    <div class="tile-stats">
+                        <div class="icon">
+                            <i class="fa fa-sort-alpha-asc"></i>
+                        </div>
+                        <div id="TotalSectionsStats" class="count"></div>
+                        <h3>Sections</h3>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+
+                <!-- END: Statistics -->
+                <!-- START: Schedule -->
+                <h3>Schedule</h3>
+                <hr />
+
+                <div id="NoScheduledTestContainer" class="text-center">
+                    <p>This test has not been scheduled yet.</p>
+                    <hr />
+                </div>
+                <table id="TestAssignmentTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Availability</th>
+                            <th>Time Limit</th>
+                            <th>Students Assigned</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (TestSchedule ts in test.TestSchedules)
+                        {
+                            <tr>
+                                <th scope="row">@testScheduleCounter</th>
+                                <td>
+                                    <p><i class="fa fa-calendar"></i> @ts.GetAvailability()</p>
+                                </td>
+                                <td>
+                                    @if(ts.IsTimeUnlimited)
+                                    {
+                                        <p>Unlimited</p>
+                                    }
+                                    else
+                                    {
+                                        <p>@ts.TimeLimit</p>
+                                    }
+
+                                </td>
+                                <td>{{Assigmnet}}</td>
+                            </tr>
+                        }
+                        <!-- TODO: Add table Rows-->
+                    </tbody>
+                </table>
+                <!-- END: Schedule -->
+                <!-- START: New Test Schedule -->
+                <!-- END: New Test Schedule -->
+            </div>
+        </div>
+    </div>
+</div>
+
+

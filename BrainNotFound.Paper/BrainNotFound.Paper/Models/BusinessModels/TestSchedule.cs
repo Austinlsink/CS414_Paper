@@ -28,5 +28,10 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 
         public List<StudentAnswer> StudentAnswers { get; set; }
         public List<StudentTestAssignment> StudentTestAssignments { get; set; }
+
+        public string GetAvailability()
+        {
+            return StartTime.ToString("MM / dd / yyyy hh: mm tt") + " - " + EndTime.ToString("MM / dd / yyyy hh: mm tt");
+        }
     }
 }

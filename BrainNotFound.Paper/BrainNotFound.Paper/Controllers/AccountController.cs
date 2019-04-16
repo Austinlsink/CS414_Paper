@@ -70,11 +70,6 @@ namespace BrainNotFound.Paper.Controllers
             return RedirectToAction("Login", "Account");
         }
 
-
-
-
-
-
         [HttpGet, Route("/")]
         public IActionResult ForceLogin()
         {

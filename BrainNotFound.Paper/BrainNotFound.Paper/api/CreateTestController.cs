@@ -715,7 +715,7 @@ namespace BrainNotFound.Paper.api
                 var StudentsAssignedIds = testSchedule.StudentTestAssignments.Select(sta => sta.StudentId).ToList();
 
                 dynamic testScheduleJObject = new JObject();
-                testScheduleJObject.Availability = testSchedule.StartTime.ToString("MM / dd / yyyy hh: mm tt") + " - " + testSchedule.EndTime.ToString("MM / dd / yyyy hh: mm tt");
+                testScheduleJObject.Availability = testSchedule.GetAvailability();
                 testScheduleJObject.TimeLimit = testSchedule.IsTimeUnlimited ? "Unlimited" : testSchedule.TimeLimit.ToString() + " minutes";
 
                 // Checks if all students from a section were assigned

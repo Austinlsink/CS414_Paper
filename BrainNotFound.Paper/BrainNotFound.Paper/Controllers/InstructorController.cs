@@ -334,9 +334,22 @@ namespace BrainNotFound.Paper.Controllers
             return RedirectToAction("EditTest", "Instructor", new { DepartmentCode = department.DepartmentCode, CourseCode = course.CourseCode, URLSafeName = test.URLSafeName });
         }
 
-        [HttpGet, Route("Tests/ViewTest")]
-        public IActionResult ViewTest()
+        [HttpGet, Route("Tests/ViewTest/View/{DepartmentCode}/{CourseCode}/{URLSafeName}")]
+        public IActionResult ViewTest(string DepartmentCode, string CourseCode, string URLSafeName)
         {
+            // Get Test info
+            var Instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
+            var test = _context.Tests
+                .Include(t => t.Course)
+                    .ThenInclude(c => c.Department)
+                .Include(t => t.TestSchedules)
+                .Where(t => t.URLSafeName == URLSafeName &&  t.Course.CourseCode == CourseCode &&  t.InstructorId == Instructor.Id)
+                .First();
+            
+
+            ViewBag.Test = test;
+
             return View();
         }
 
