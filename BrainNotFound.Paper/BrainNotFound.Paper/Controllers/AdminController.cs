@@ -9,12 +9,9 @@ using Microsoft.AspNetCore.Identity;
 using BrainNotFound.Paper.Models.BusinessModels;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 using Microsoft.AspNetCore.Http;
-using BrainNotFound.Paper.Models.ViewModels;
 using System.Data.SqlClient;
 using System.Data;
 using Microsoft.EntityFrameworkCore;
-
-//TODO There is a lot to do
 
 namespace BrainNotFound.Paper.Controllers
 {
@@ -23,58 +20,65 @@ namespace BrainNotFound.Paper.Controllers
     public class AdminController : Controller
     {
 
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly PaperDbContext _context;
-        #region admin controllers
+        private readonly UserManager<ApplicationUser> _userManager; // Access to all user information
+        private readonly PaperDbContext _context;                   // Access to the database
 
-        // Constructor 
+        #region admin controllers
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="userManager">Gives access to all of the user profiles</param>
+        /// <param name="context">Gives access to the databse</param>
         public AdminController(UserManager<ApplicationUser> userManager, PaperDbContext context)
         {
             _userManager = userManager;
             _context = context;
         }
 
-        // Start of Routes
+        /// <summary>
+        /// Displays the Index page for the Admin profile. Also called "Dashboard"
+        /// </summary>
+        /// <returns>Index View</returns>
         [HttpGet, Route("")]
         [HttpGet, Route("Index")]
         [HttpGet, Route("Dashboard")]
         public IActionResult Index()
         {
-
-            // Fetch Number of Students in our system
+            // Fetch Number of Students in the system
             SqlParameter[] @params1 = {
                 new SqlParameter("@returnVal", SqlDbType.Int) {Direction = ParameterDirection.Output}
             };
             _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetNumberOfStudents", @params1);
             ViewBag.NumberOfStudents = @params1[0].Value;
 
-            //Fetch Number of Instructors in our system
+            //Fetch the number of Instructors in the system
             SqlParameter[] @params2 = {
                 new SqlParameter("@returnVal", SqlDbType.Int) {Direction = ParameterDirection.Output}
             };
             _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetNumberOfInstructors", @params2);
             ViewBag.NumberOfInstructors = @params2[0].Value;
 
-
-            //Fetch Number of Departments in our system
+            //Fetch the number of Departments in the system
             SqlParameter[] @params3 = {
                 new SqlParameter("@returnVal", SqlDbType.Int) {Direction = ParameterDirection.Output}
             };
             _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetNumberOfDepartments", @params3);
             ViewBag.NumberOfDepartments = @params3[0].Value;
 
-
-            //Fetch Number of Tests in our system
+            //Fetch the number of Tests in the system
             SqlParameter[] @params4 = {
                 new SqlParameter("@returnVal", SqlDbType.Int) {Direction = ParameterDirection.Output}
             };
             _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetNumberOfTests", @params4);
             ViewBag.NumberOfTests = @params4[0].Value;
 
-
             return View();
         }
 
+        /// <summary>
+        /// Displays the Settings page for the Admin profile.
+        /// </summary>
+        /// <returns>Settings View</returns>
         [HttpGet, Route("Settings")]
         public IActionResult Settings()
         {
@@ -86,10 +90,11 @@ namespace BrainNotFound.Paper.Controllers
         /// <summary>
         /// Returns a list of all the administrators
         /// </summary>
+        /// <returns>Administrators View</returns>
         [HttpGet, Route("Administrators")]
         public async Task<IActionResult> Administrators()
         {
-            var allAdministrators = (await _userManager.GetUsersInRoleAsync("Admin")).OrderBy(o => o.FirstName).ToList();
+            var allAdministrators = (await _userManager.GetUsersInRoleAsync("Admin")).ToList();
             ViewBag.adminList = allAdministrators;
             return View();
         }
@@ -98,6 +103,7 @@ namespace BrainNotFound.Paper.Controllers
         /// Views a specific administrator's information
         /// </summary>
         /// <param name="username">The specific admin to look up</param>
+        /// <returns>Administrator's partial view</returns>
         [HttpGet, Route("Administrators/{UserName}")]
         public async Task<IActionResult> ViewAdministrator(String username)
         {
@@ -107,6 +113,11 @@ namespace BrainNotFound.Paper.Controllers
             return PartialView();
         }
 
+        /// <summary>
+        /// Allows the Administrator to edit another administrator's profile
+        /// </summary>
+        /// <param name="UserName">Search criteria for finding the correct administrator</param>
+        /// <returns>Partial View for editing an administator</returns>
         [HttpGet, Route("Administrators/Edit/{UserName}")]
         public async Task<IActionResult> EditAdministrator(String UserName)
         {
@@ -115,6 +126,11 @@ namespace BrainNotFound.Paper.Controllers
             return PartialView();
         }
 
+        /// <summary>
+        /// Saves edited changes to an administrator's profile
+        /// </summary>
+        /// <param name="user">ApplicationUser object that contains the new information</param>
+        /// <returns>Redirects to the Administrators page</returns>
         [HttpPost, Route("Administrators/Edit/{UserName}")]
         public async Task<IActionResult> EditAdministrator(ApplicationUser user)
         {
@@ -140,22 +156,22 @@ namespace BrainNotFound.Paper.Controllers
 
         #region create instructor controllers
         /// <summary>
-        /// Allows the user to view all of the instructors
+        /// Allows the admin to view all of the instructors
         /// </summary>
-        /// <param name="message">Error message from the DeleteInstructor method.</param>
-        /// <returns></returns>
+        /// <returns>Instructors View</returns>
         [HttpGet, Route("Instructors")]
         public async Task<IActionResult> Instructors()
         {
-            var allInstructors = (await _userManager.GetUsersInRoleAsync("Instructor")).OrderBy(o => o.FirstName).ToList();
-            if (TempData["message"] != null)
-            {
-                ViewBag.message = TempData["message"].ToString();
-            }
+            var allInstructors = (await _userManager.GetUsersInRoleAsync("Instructor")).ToList();
             ViewBag.allInstructors = allInstructors;
             return View();
         }
 
+        /// <summary>
+        /// Allows the admin to view a specific instructor and his information
+        /// </summary>
+        /// <param name="username">Search criteria for finding the correct instructor</param>
+        /// <returns>Specific instructor and his associated information</returns>
         [HttpGet, Route("Instructors/{UserName}")]
         public async Task<IActionResult> ViewInstructor(String username)
         {
@@ -189,6 +205,11 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Allows the admin to edit a specific instructor's profile information
+        /// </summary>
+        /// <param name="UserName">Search criteria for finding the specific instructor</param>
+        /// <returns>partial View to edit instructor</returns>
         [HttpGet, Route("Instructors/Edit/{UserName}")]
         public async Task<IActionResult> EditInstructor(String UserName)
         {
@@ -197,6 +218,11 @@ namespace BrainNotFound.Paper.Controllers
             return PartialView();
         }
 
+        /// <summary>
+        /// Allows the admin to save the edited changes on an instructor profile
+        /// </summary>
+        /// <param name="user">ApplicationUser object that contains the new information</param>
+        /// <returns>Redirects to the Instructors page</returns>
         [HttpPost, Route("Instructors/Edit/{UserName}")]
         public async Task<IActionResult> EditInstructor(ApplicationUser user)
         {
@@ -213,31 +239,40 @@ namespace BrainNotFound.Paper.Controllers
 
             await _userManager.UpdateAsync(instructor);
 
-            ViewData["message"] = user.FirstName;
-
             return RedirectToAction("Instructors", "Admin");
         }
         #endregion instructor controllers
 
         #region admin profile controllers
+        /// <summary>
+        /// Allows the admin to view his profile and personal information
+        /// </summary>
+        /// <returns>Profile View</returns>
         [HttpGet, Route("Profile")]
         public async Task<IActionResult> Profile()
         {
             var admin = await _userManager.GetUserAsync(HttpContext.User);
-
             ViewBag.profile = admin;
             return View();
         }
 
+        /// <summary>
+        /// Allows the admin to edit his profile
+        /// </summary>
+        /// <returns></returns>
         [HttpGet, Route("Profile/Edit")]
         public async Task<IActionResult> EditProfile()
         {
             ApplicationUser admin = await _userManager.GetUserAsync(HttpContext.User);
             ViewBag.admin = admin;
-
             return View();
         }
 
+        /// <summary>
+        /// Allows the admin to save the edited changes to his profile
+        /// </summary>
+        /// <param name="user">ApplicationUser object that contains the new information</param>
+        /// <returns>Redirects to the Profile Page</returns>
         [HttpPost, Route("Profile/Edit")]
         public async Task<IActionResult> EditProfile(ApplicationUser user)
         {
@@ -253,24 +288,31 @@ namespace BrainNotFound.Paper.Controllers
             admin.ZipCode = user.ZipCode;
 
             await _userManager.UpdateAsync(admin);
+
             return RedirectToAction("Profile", "Admin");
         }
 
         #endregion admin profile controllers
 
         #region student controllers 
+
+        /// <summary>
+        /// Displays all of the students
+        /// </summary>
+        /// <returns></returns>
         [HttpGet, Route("Students")]
         public async Task<IActionResult> Students()
         {
             var allStudents = (await _userManager.GetUsersInRoleAsync("Student")).OrderBy(o => o.FirstName).ToList();
-            if (TempData["message"] != null)
-            {
-                ViewBag.message = TempData["message"].ToString();
-            }
             ViewBag.allStudents = allStudents;
             return View();
         }
 
+        /// <summary>
+        /// Allows the Admin to view a specific student, the student's personal information, and all of the classes that the student is enrolled in
+        /// </summary>
+        /// <param name="username">Search criteria for finding the specific student</param>
+        /// <returns>Specific Student page</returns>
         [HttpGet, Route("Students/{UserName}")]
         public async Task<IActionResult> ViewStudent(String username)
         {
@@ -302,6 +344,11 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Allows the admin to edit a specific student's profile information
+        /// </summary>
+        /// <param name="UserName">Search criteria for finding the specific student</param>
+        /// <returns></returns>
         [HttpGet, Route("Students/Edit/{UserName}")]
         public async Task<IActionResult> EditStudent(String UserName)
         {
@@ -310,6 +357,11 @@ namespace BrainNotFound.Paper.Controllers
             return PartialView();
         }
 
+        /// <summary>
+        /// Allows the admin to save the edited changes to the student's profile
+        /// </summary>
+        /// <param name="user">ApplicationUser object that contains the new information</param>
+        /// <returns>Redirects to the Students page</returns>
         [HttpPost, Route("Students/Edit/{UserName}")]
         public async Task<IActionResult> EditStudent(ApplicationUser user)
         {
@@ -326,27 +378,49 @@ namespace BrainNotFound.Paper.Controllers
 
             await _userManager.UpdateAsync(student);
 
-            ViewData["message"] = user.FirstName;
-
             return RedirectToAction("Students", "Admin");
         }
 
         #endregion student controllers 
 
         #region Department controllers
+
+        /// <summary>
+        /// Displays the list of departments
+        /// </summary>
+        /// <returns>Departments View</returns>
+        [HttpGet, Route("Departments")]
+        public ActionResult Departments()
+        {
+            var courses = _context.Courses.ToList();
+            List<Department> departments = _context.Departments.ToList();
+
+            ViewBag.courses = courses;
+            ViewBag.departmentList = departments;
+            return View();
+        }
+
+        /// <summary>
+        /// Allows the admin to edit a department's information
+        /// </summary>
+        /// <param name="Id">Search criteria for finding the specific department</param>
+        /// <returns>Partial View for Edit Department</returns>
         [HttpGet, Route("Department/Edit/{Id}")]
         public IActionResult EditDepartment(long Id)
         {
             var department = _context.Departments.Find(Id);
-
             ViewBag.department = department;
             return PartialView();
         }
 
+        /// <summary>
+        /// Allows the admin to save the edited changes for the department
+        /// </summary>
+        /// <param name="dept">Department object that contains the new information</param>
+        /// <returns>Redirects to the Departments page</returns>
         [HttpPost, Route("Department/Edit/{Id}")]
         public IActionResult EditDepartment(Department dept)
         {
-
             var depart = _context.Departments.Find(dept.DepartmentId);
             depart.DepartmentCode = dept.DepartmentCode;
             depart.DepartmentName = dept.DepartmentName;
@@ -356,71 +430,11 @@ namespace BrainNotFound.Paper.Controllers
             return RedirectToAction("Departments", "Admin");
         }
 
-        /// <summary>
-        /// Displays the list of departments
-        /// </summary>
-        [HttpGet, Route("Departments")]
-        public ActionResult Departments()
-        {
-            var courses = _context.Courses.ToList();
-            List<Department> departments = _context.Departments.ToList();
-            if (TempData["message"] != null)
-            {
-                ViewBag.message = TempData["message"].ToString();
-            }
-
-            ViewBag.courses = courses;
-            ViewBag.departmentList = departments;
-            return View();
-        }
-
-        [HttpPost, Route("Departments")]
-        public ActionResult Departments(Department department)
-        {
-            var courses = _context.Courses.ToList();
-            List<Department> departments = _context.Departments.ToList();
-            if (TempData["message"] != null)
-            {
-                ViewBag.message = TempData["message"].ToString();
-            }
-
-            ViewBag.courses = courses;
-            ViewBag.departmentList = departments;
-
-            if (ModelState.IsValid)
-            {
-                _context.Departments.Add(department);
-                _context.SaveChanges();
-            }
-
-            return View();
-        }
-
-        /// <summary>
-        /// Deletes a department as long as there are no associated courses.
-        /// </summary>
-        /// <param name="DepartmentId">The Department to be deleted</param>
-        /// <returns>The Departments View</returns>
-        [HttpPost, Route("DeleteDepartment")]
-        public IActionResult DeleteDepartment(long DepartmentId)
-        {
-            var department = _context.Departments.Find(DepartmentId);
-
-            if (_context.Courses.Where(ac => ac.DepartmentId == department.DepartmentId).Any())
-            {
-                TempData["message"] = "Error: " + department.DepartmentCode + " " + department.DepartmentName + " could not be deleted. Please delete all associated courses.";
-                return RedirectToAction("Departments", "Admin");
-            }
-            else
-            {
-                _context.Departments.Remove(department);
-                _context.SaveChanges();
-            }
-            TempData["message"] = department.DepartmentCode + " " + department.DepartmentName + " was successfully deleted!";
-            return RedirectToAction("Departments", "Admin");
-        }
-
-        // Creates the new Department and re-routes to the Department View
+       /// <summary>
+       /// Allows the admin to create a new department
+       /// </summary>
+       /// <param name="model">Department object that contains the new department to save</param>
+       /// <returns>Redirects to the Departments page</returns>
         [HttpPost, Route("Departments/New")]
         public IActionResult NewDepartment(Department model)
         {
@@ -432,6 +446,7 @@ namespace BrainNotFound.Paper.Controllers
 
             return RedirectToAction("Departments", "Admin");
         }
+
         #endregion Department controllers
 
         #region Course controllers
