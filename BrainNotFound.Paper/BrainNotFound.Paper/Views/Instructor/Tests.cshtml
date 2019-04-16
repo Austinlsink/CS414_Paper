@@ -148,9 +148,6 @@
                 <table id="UnscheduledTestTable" class="table table-striped jambo_table bulk_action ">
                     <thead>
                         <tr class="headings">
-                            <th>
-                                <input type="checkbox" id="check-all" class="flat">
-                            </th>
                             <th class="column-title">Name </th>
                             <th class="column-title">Course</th>
                             <th class="column-title no-link last">
@@ -165,9 +162,6 @@
                         @foreach (Test test in ViewBag.UnscheduledTests)
                         {
                             <tr class="odd pointer">
-                                <td class="a-center ">
-                                    <input type="checkbox" class="flat" name="table_records">
-                                </td>
                                 <td class=" ">@test.TestName</td>
                                 @{
                                     string DepartmentCodeAndCourseCode;
@@ -245,9 +239,9 @@
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
             $('#UnscheduledTestTable').DataTable({
-                "order": [1, 'asc'],
+                "order": [0, 'asc'],
                 "columnDefs": [
-                    { "orderable": false, "targets": [0, 3] }
+                    { "orderable": false, "targets": [2] }
                 ],
             });
         });

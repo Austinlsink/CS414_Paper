@@ -30,13 +30,12 @@ $("button#YesDelete").click(function () {
                 $("h4#MessageModal").text("Error!");
                 $("#errorMessagePlaceHolder").text(result.error);
                 $("div#ErrorModal").modal("toggle");
-
             }
         },
     })
 })
 
-// Reloads the page when a department is successfully deleted
+// Reloads the page when a test is successfully deleted
 $("#MessageClose").click(function () {
     location.reload();
 })
