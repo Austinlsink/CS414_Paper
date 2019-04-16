@@ -34,15 +34,16 @@ namespace BrainNotFound.Paper.Controllers.DevControllers
 
         public string NickSandbox()
         {
-            string StudentId = "48ed6229-5496-4e72-9d9f-08ccac22f14f";
+            int testId = 153;
 
             SqlParameter[] @params =
                                     {
-                new SqlParameter("@returnVal", SqlDbType.Int) {Direction = ParameterDirection.Output}
+                new SqlParameter("@returnVal", SqlDbType.Int) {Direction = ParameterDirection.Output},
+                new SqlParameter("@inputTestId", SqlDbType.Int) {Value = testId}
                             };
 
 
-            _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetNumberOfTests", @params);
+            _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetTotalTestPoints @inputTestId", @params);
             
             return (@params[0].Value).ToString(); //result is 29 
 

@@ -48,6 +48,7 @@
                     </form>
                 </div>
                 <!-- END: Edit test name section-->
+
                 <!-- START: Statistics -->
                 <h3>General</h3>
                 <hr />
@@ -79,12 +80,11 @@
                     </div>
                 </div>
                 <div class="clearfix"></div>
-
                 <!-- END: Statistics -->
+
                 <!-- START: Schedule -->
                 <h3>Schedule</h3>
                 <hr />
-
                 <div id="NoScheduledTestContainer" class="text-center">
                     <p>This test has not been scheduled yet.</p>
                     <hr />
@@ -102,11 +102,11 @@
                     <tbody></tbody>
                 </table>
                 <!-- END: Schedule -->
+
                 <!-- START: New Test Schedule -->
                 <div id="NewScheduleContainer" class="well hidden">
                     <h4><i class="fa fa-calendar"></i> New Schedule</h4>
                     <hr />
-
                     <div class="col-md-8 col-sm-12">
                         Test Availability
                         <fieldset>
@@ -120,11 +120,9 @@
                             </div>
                         </fieldset>
                     </div>
-
                     <div class="col-md-2 col-sm-8 col-xs-12">
                         Time Limit (Minutes)
                         <input type="number" id="TimeLimit" class="form-control" name="TimeLimit" required="" value="50">
-
                     </div>
                     <div class="col-md-2 col-sm-4 col-xs-12">
                         <div class="checkbox">
@@ -135,8 +133,6 @@
                                 </label>
                             </div>
                         </div>
-
-
                     </div>
                     <div class="clearfix"></div>
 
@@ -163,7 +159,6 @@
                                 <button id="AssignEntireSection" type="button" class="btn btn-sm btn-primary alignright"><i class="fa fa-pie-chart"></i> Entire Section</button>
                                 <div class="clearfix"></div>
                                 <hr />
-
                                 <div id="SectionNotSelectedContainer">
                                     <div class="text-center"><p>Please select a section</p></div>
                                 </div>
@@ -180,14 +175,10 @@
                                     </table>
                                 </div>
                                 <hr />
-
                                 <button Id="AssignSelectedStudents" type="button" class="btn btn-sm btn-primary alignright"><i class="fa fa-users"></i> Selected Students</button>
                                 <div class="clearfix"></div>
                             </div>
-
                         </div>
-
-
                     </div>
 
                     <!-- Start: Right -->
@@ -199,10 +190,8 @@
                                 </div>
                                 <div class="x_content">
                                     <i class="fa fa-pie-chart"></i> Sections
-
                                     &emsp;
                                     <p id="NoSectionsAssignedTest" class="">There are no entire section assigned.</p>
-
                                     <!--Sections assigned table-->
                                     <table id="SectionsAssignedTest" class="table table-striped hidden">
                                         <thead>
@@ -214,10 +203,8 @@
                                         </thead>
                                         <tbody></tbody>
                                     </table>
-
                                     <hr />
                                     <i class="fa fa-user"></i>  Individual Students
-
                                     <p id="NoStudentsAssignedTest">There are no indivisual students assigned.</p>
                                     <table id="StudentsAssignedTest" class="table table-striped hidden">
                                         <thead>
@@ -232,9 +219,7 @@
                                     </table>
                                 </div>
                             </div>
-
                         </div>
-
                         <!-- End: Student Test Assignmnet-->
 
                     </div>
@@ -257,9 +242,7 @@
     </div>
 </div>
 
-<div id="TestSections">
-
-</div>
+<div id="TestSections"></div>
 
 <div id="AddTestSection">
     <div class="row">
@@ -292,7 +275,7 @@
 
 
 @section Scripts
-    {
+{
     <script src="~/vendors/autosize/dist/autosize.min.js"></script>
     <script type="text/javascript" src="~/vendors/handlebars/handlebars-v4.1.1.js"></script>
     <script type="text/javascript" src="~/js/EditTest.js"></script>

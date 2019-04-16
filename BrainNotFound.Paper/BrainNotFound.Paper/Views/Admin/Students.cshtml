@@ -81,6 +81,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Salutation</label>
+                        <!--Salutation field-->
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select id="InstructorSalutationInput" asp-for="Salutation" class="select2_single form-control" tabindex="1">
                                 <option value="mr">Mr.</option>
@@ -91,12 +92,11 @@
                             </select>
                         </div>
                     </div>
-
+                    <!--FirstName field-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
                             First Name <span class="required">*</span>
                         </label>
-
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input id="StudentFirstNameInput" asp-for="FirstName" type="text" class="form-control has-feedback-left" placeholder="First Name">
                             <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
@@ -104,11 +104,11 @@
 
                         </div>
                     </div>
+                    <!--LastName field-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
                             Last Name <span class="required">*</span>
                         </label>
-
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input id="StudentLastNameInput" asp-for="LastName" type="text" class="form-control has-feedback-left" placeholder="Last Name">
                             <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
@@ -116,7 +116,7 @@
 
                         </div>
                     </div>
-
+                    <!--Email field-->
                     <div class="form-group">
                         <label for="dept-name" class="control-label col-md-3 col-sm-3 col-xs-12">Email </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -125,7 +125,7 @@
                             <span id="StudentEmailErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
-
+                    <!--PhoneNumber field-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-3">Phone Number</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -134,7 +134,7 @@
                             <span id="StudentPhoneErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
-
+                    <!--Address field-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-3">Address</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -143,7 +143,7 @@
                             <span id="StudentAddressErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
-
+                    <!--City field-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-3">City</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -152,7 +152,7 @@
                             <span id="StudentCityErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
-
+                    <!--State field-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-3">State</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -161,7 +161,7 @@
                             <span id="StudentStateErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
-
+                    <!--ZipCode field-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-3">ZipCode</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -170,7 +170,7 @@
                             <span id="StudentZipErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
-
+                    <!--DOB field-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-3">Date of Birth</label>
                         <div class="col-md-69 col-sm-6 col-xs-9">
@@ -179,22 +179,22 @@
                             <span id="StudentDOBErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
+                    <!--Password field-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12  parsley-error">
                             Password <span class="required">*</span>
                         </label>
-
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input id="StudentPasswordInput" asp-for="Password" type="password" class="form-control has-feedback-left" placeholder="Password">
                             <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                             <span id="StudentPasswordErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
+                    <!--Confirm password field-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12  parsley-error">
                            Confirm Password <span class="required">*</span>
                         </label>
-
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input id="StudentConfirmPasswordInput" asp-for="ConfirmPassword" type="password" class="form-control has-feedback-left" placeholder="Password">
                             <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
@@ -202,6 +202,7 @@
                         </div>
                     </div>
                 </div>
+                <!--Submit or cancel form-->
                 <div class="modal-footer">
                     <button type="button" id="CancelCreateStudent" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="button" id="CreateStudent" class="btn btn-primary">Create</button>
@@ -215,7 +216,6 @@
 <div id="ConfirmModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
-
             <div class="modal-header">
                 <h4 class="modal-title" id="myModalLabel2">Warning: Deleting Student</h4>
             </div>
@@ -234,7 +234,6 @@
 <div id="ErrorModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
-
             <div class="modal-header">
                 <h4 class="modal-title" id="MessageModal"></h4>
             </div>
@@ -249,7 +248,7 @@
 </div>
 
 @section scripts
-    {
+{
     <script type="text/javascript" src="~/js/Student.js"></script>
 
     <script type="text/javascript" charset="utf8">
@@ -262,18 +261,4 @@
             });
         });
     </script>
-
-    <!-- Datatables -->
-    <script src="../vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="../vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-    <script src="../vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="../vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
-    <script src="../vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
-    <script src="../vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
-    <script src="../vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
-    <script src="../vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-    <script src="../vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
-    <script src="../vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-    <script src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
 }

@@ -4,6 +4,7 @@
     ViewData["Title"] = "View Course - Instructor";
 }
 
+<!--Course and section information-->
 <div class="">
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
@@ -21,9 +22,7 @@
                             String name;
                             name = ViewBag.department.DepartmentCode + " " + ViewBag.course.CourseCode;
                         }
-
                         <h3>@name @ViewBag.course.Name</h3>
-
                         <ul class="list-unstyled user_data">
                             <li>
                                 <b>Credit Hours:</b> @ViewBag.course.CreditHours
@@ -37,7 +36,7 @@
                 </div>
             </div>
         </div>
-
+        <!--START: Section information-->
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
@@ -59,7 +58,6 @@
                             </tr>
                         </thead>
                         <tbody>
-
                             @foreach (var s in ViewBag.sectionsList)
                             {
                                 // Find the meeting times for each section
@@ -71,7 +69,6 @@
                                     days.Add(smt.Day);
                                 }
                                 String day = string.Join(", ", days);
-
                                 <tr>
                                     <td>@s.SectionNumber</td>
                                     <td>@s.Location</td>
@@ -87,6 +84,7 @@
                 </div>
             </div>
         </div>
+        <!--END: Section information-->
     </div>
 </div>
 
@@ -94,7 +92,6 @@
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
-
             <div class="x_title">
                 <h2><i class="fa fa-file-text"></i> Upcoming Tests</h2>
                 <ul class="nav navbar-right panel_toolbox">
@@ -138,7 +135,6 @@
                             </tbody>
                         </table>
                     </div>
-
                 </div>
             }
             else
@@ -194,7 +190,6 @@
                     </tbody>
                 </table>
             </div>
-
         </div>
     }
     else
@@ -204,8 +199,7 @@
 </div>
 
 @section scripts
-    {
-
+{
     <!--DataTable for the Upcoming tests-->
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
