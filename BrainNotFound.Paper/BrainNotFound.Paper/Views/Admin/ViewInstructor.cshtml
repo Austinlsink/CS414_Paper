@@ -11,9 +11,7 @@
                 <div class="x_title">
                     <h2><i class="fa fa-user"></i> Instructor Information</h2>
                     <ul class="nav navbar-right panel_toolbox">
-
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
                             <ul class="dropdown-menu" role="menu">
@@ -33,8 +31,7 @@
                         <div class="profile_img">
                             <div id="crop-avatar">
                                 <!-- Current avatar -->
-                                <img class="img-responsive avatar-view" src="~/images/profiles/Instructors/@(ViewBag.profile.Id).png" alt="Avatar"
-                                     title="Change the avatar">
+                                <img class="img-responsive avatar-view" src="~/images/profiles/Instructors/@(ViewBag.profile.Id).png" alt="Avatar" title="Change the avatar">
                             </div>
                         </div>
                     </div>
@@ -45,25 +42,21 @@
                             <li>
                                 <i class="fa fa-map-marker user-profile-icon"></i> @ViewBag.profile.Address @ViewBag.profile.City @ViewBag.profile.State @ViewBag.profile.ZipCode
                             </li>
-
                             <li>
                                 <i class="fa fa-at user-profile-icon"> @ViewBag.profile.Email</i>
                             </li>
-
                             <li>
                                 <i class="fa fa-user user-profile-icon"> @ViewBag.profile.UserName</i>
-
                             <li>
                                 <i class="fa fa-phone user-profile-icon"> @Convert.ToInt64(ViewBag.profile.PhoneNumber).ToString("###-###-####")</i>
                             </li>
-
                         </ul>
                         <br />
-
                     </div>
                 </div>
             </div>
         </div>
+        
         <div class="clearfix"></div>
 
         <div class="col-md-12 col-sm-12 col-xs-12">
@@ -103,14 +96,13 @@
                                     }
                                 }
                             }
-
                         </tbody>
                     </table>
-
                 </div>
             </div>
         </div>
         <div class="clearfix"></div>
+        <!--Displays the sections for the instructor-->
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
@@ -123,8 +115,6 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-
-                    <!-- start accordion -->
                     @{
                         int count = 1;
 
@@ -169,7 +159,6 @@
                                 count++;
                             }
                         </div>
-                        <!-- end of accordion -->
                     }
                 </div>
             </div>

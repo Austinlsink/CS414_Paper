@@ -9,8 +9,7 @@
             <div class="profile_img">
                 <div id="crop-avatar">
                     <!-- Current avatar -->
-                    <img class="img-responsive avatar-view" src="~/images/profiles/Administrators/@(ViewBag.admin.Id).png" alt="Avatar"
-                            title="Change the avatar">
+                    <img class="img-responsive avatar-view" src="~/images/profiles/Administrators/@(ViewBag.admin.Id).png" alt="Avatar" title="Change the avatar">
                 </div>
             </div>
         </div>
@@ -20,14 +19,11 @@
                 <li>
                     <i class="fa fa-map-marker user-profile-icon"></i> @ViewBag.admin.Address @ViewBag.admin.City @ViewBag.admin.State @ViewBag.admin.ZipCode
                 </li>
-
                 <li>
                     <i class="fa fa-at user-profile-icon"> @ViewBag.admin.Email</i>
                 </li>
-
                 <li>
                     <i class="fa fa-user user-profile-icon"> @ViewBag.admin.UserName</i>
-
                 <li>
                     <i class="fa fa-phone user-profile-icon"> @Convert.ToInt64(ViewBag.admin.PhoneNumber).ToString("###-###-####")</i>
                 </li>

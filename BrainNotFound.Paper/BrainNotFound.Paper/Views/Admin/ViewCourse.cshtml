@@ -11,9 +11,7 @@
                 <div class="x_title">
                     <h2><i class="fa fa-book"></i> Course Information</h2>
                     <ul class="nav navbar-right panel_toolbox">
-
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
                             <ul class="dropdown-menu" role="menu">
@@ -30,7 +28,6 @@
                         @{
                             String name;
                             name = ViewBag.department.DepartmentCode + " " + ViewBag.course.CourseCode;
-
                         }
                         <h3>@name @ViewBag.course.Name</h3>
 
@@ -38,13 +35,11 @@
                             <li>
                                 <b>Credit Hours:</b> @ViewBag.course.CreditHours
                             </li>
-
                             <li>
                                 <b> Description:</b> @ViewBag.course.Description
                             </li>
                         </ul>
                         <br />
-
                     </div>
                 </div>
             </div>
@@ -103,7 +98,6 @@
                                         <td>
                                             <a asp-controller="Admin" asp-action="ViewSection" asp-route-code="@ViewBag.department.DepartmentCode@ViewBag.course.CourseCode" asp-route-sectionNumber="@s.SectionNumber" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                         </td>
-
                                     </tr>
                                 }
                             }
@@ -126,6 +120,7 @@
                     <h3 class="modal-title"><i class="fa fa-mortar-board"></i> Edit Course</h3>
                 </div>
                 <div class="modal-body">
+                    <!--CourseCode field-->
                     <div class="form-group">
                         <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Course Code </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -133,6 +128,7 @@
                             <span id="EditCourseCodeErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
+                    <!--CourseName field-->
                     <div class="form-group">
                         <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Course Name </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -140,6 +136,7 @@
                             <span id="EditCourseNameErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
+                    <!--CourseDescription field-->
                     <div class="form-group">
                         <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Course Description </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -148,6 +145,7 @@
                             <span id="EditCourseDescriptionErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
+                    <!--CreditHours field-->
                     <div class="form-group">
                         <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"> Credit Hours </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -155,6 +153,7 @@
                             <span id="EditCourseCreditHoursErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
+                    <!--Department List field-->
                     <div class="form-group">
                         <label class="control-label pull-left col-md-3 col-sm-3 col-xs-12">Department</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -169,6 +168,7 @@
                         </div>
                     </div>
                 </div>
+                <!--Submit or cancel field-->
                 <div class="modal-footer">
                     <button type="button" id="CancelCreateCourse" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     <button type="button" id="SaveCourseChanges" class="btn btn-primary">Save Changes</button>
@@ -177,7 +177,6 @@
         </div>
     </div>
 </div>
-
 
 @section scripts{
     <!--Course functions-->
