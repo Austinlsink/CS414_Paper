@@ -16,16 +16,14 @@
             @if (ViewBag.UpcomingTests.Count > 0)
             {
                 <div class="x_content">
-                    <p>Click checkbox to select multiple courses.</p>
                     <div class="table-responsive">
                         <table id="UpcomingTestTable" class="table table-striped jambo_table bulk_action ">
                             <thead>
                                 <tr class="headings">
-                                    <th>
-                                        <input type="checkbox" id="check-all" class="flat">
-                                    </th>
                                     <th class="column-title">Name </th>
                                     <th class="column-title">Course</th>
+                                    <th class="column-title">Start Time</th>
+                                    <th class="column-title">End Time</th>
                                     <th class="column-title no-link last">
                                         <span class="nobr">Action</span>
                                     </th>
@@ -38,9 +36,6 @@
                                 @foreach (Test test in ViewBag.UpcomingTests)
                                 {
                                     <tr class="odd pointer">
-                                        <td class="a-center ">
-                                            <input type="checkbox" class="flat" name="table_records">
-                                        </td>
                                         <td class=" ">@test.TestName</td>
                                         @{
                                             string DepartmentCodeAndCourseCode;
@@ -52,6 +47,8 @@
 
                                         }
                                         <td class=" ">@DepartmentCodeAndCourseCode</td>
+                                        <td class=" ">@test.TestSchedules.Where(x => x.TestId == test.TestId).First().StartTime</td>
+                                        <td class=" ">@test.TestSchedules.Where(x => x.TestId == test.TestId).First().EndTime</td>
                                         <td class=" last">
                                             <a asp-controller="Instructor" asp-action="EditTest" asp-route-DepartmentCode="@currentDepartment.DepartmentCode" asp-route-CourseCode="@currentCourse.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
                                             <button type="submit" data-target="#ConfirmModal" data-testId="@test.TestId" class="btn btn-danger btn-xs confirmDelete"><i class="fa fa-trash-o"></i> Delete </button>
@@ -85,16 +82,13 @@
     @if (ViewBag.PreviousTests.Count > 0)
     {
         <div class="x_content">
-            <p>Click checkbox to select multiple courses.</p>
             <div class="table-responsive">
                 <table id="PreviousTestTable" class="table table-striped jambo_table bulk_action ">
                     <thead>
                         <tr class="headings">
-                            <th>
-                                <input type="checkbox" id="check-all" class="flat">
-                            </th>
                             <th class="column-title">Name </th>
                             <th class="column-title">Course</th>
+                            <th class="column-title">Date Completed</th>
                             <th class="column-title no-link last">
                                 <span class="nobr">Action</span>
                             </th>
@@ -106,27 +100,25 @@
                     <tbody>
                         @foreach (Test test in ViewBag.PreviousTests)
                         {
-                            <tr class="odd pointer">
-                                <td class="a-center ">
-                                    <input type="checkbox" class="flat" name="table_records">
-                                </td>
-                                <td class=" ">@test.TestName</td>
-                                @{
-                                    string DepartmentCodeAndCourseCode;
-                                    List<Course> courses = ViewBag.Courses;
-                                    List<Department> departments = ViewBag.Departments;
-                                    Course currentCourse = courses.Where(c => c.CourseId == test.CourseId).First();
-                                    Department currentDepartment = departments.Where(d => d.DepartmentId == currentCourse.DepartmentId).First();
-                                    DepartmentCodeAndCourseCode = currentDepartment.DepartmentCode + " " + currentCourse.CourseCode;
+                        <tr class="odd pointer">
+                            <td class=" ">@test.TestName</td>
+                            @{
+                                string DepartmentCodeAndCourseCode;
+                                List<Course> courses = ViewBag.Courses;
+                                List<Department> departments = ViewBag.Departments;
+                                Course currentCourse = courses.Where(c => c.CourseId == test.CourseId).First();
+                                Department currentDepartment = departments.Where(d => d.DepartmentId == currentCourse.DepartmentId).First();
+                                DepartmentCodeAndCourseCode = currentDepartment.DepartmentCode + " " + currentCourse.CourseCode;
 
-                                }
-                                <td class=" ">@DepartmentCodeAndCourseCode</td>
-                                <td class=" last">
-                                    <a asp-controller="Instructor" asp-action="ViewTest" asp-route-DepartmentCode="@currentDepartment.DepartmentCode" asp-route-CourseCode="@currentCourse.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                            }
+                            <td class=" ">@DepartmentCodeAndCourseCode</td>
+                            <td class=" ">@test.TestSchedules.Where(x => x.TestId == test.TestId).First().EndTime</td>
+                            <td class=" last">
+                                <a asp-controller="Instructor" asp-action="ViewTest" asp-route-DepartmentCode="@currentDepartment.DepartmentCode" asp-route-CourseCode="@currentCourse.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
 
-                                    <button type="submit" data-target="#ConfirmModal" data-testId="@test.TestId" class="btn btn-danger btn-xs confirmDelete"><i class="fa fa-trash-o"></i> Delete </button>
-                                </td>
-                            </tr>
+                                <button type="submit" data-target="#ConfirmModal" data-testId="@test.TestId" class="btn btn-danger btn-xs confirmDelete"><i class="fa fa-trash-o"></i> Delete </button>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -152,7 +144,6 @@
     @if (ViewBag.UnscheduledTests.Count > 0)
     {
         <div class="x_content">
-            <p>Click checkbox to select multiple courses.</p>
             <div class="table-responsive">
                 <table id="UnscheduledTestTable" class="table table-striped jambo_table bulk_action ">
                     <thead>
@@ -266,9 +257,9 @@
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
             $('#PreviousTestTable').DataTable({
-                "order": [1, 'asc'],
+                "order": [2, 'asc'],
                 "columnDefs": [
-                    { "orderable": false, "targets": [0, 3] }
+                    { "orderable": false, "targets": [3] }
                 ],
             });
         });
@@ -278,9 +269,9 @@
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
             $('#UpcomingTestTable').DataTable({
-                "order": [1, 'asc'],
+                "order": [2, 'asc'],
                 "columnDefs": [
-                    { "orderable": false, "targets": [0, 3] }
+                    { "orderable": false, "targets": [4] }
                 ],
             });
         });
