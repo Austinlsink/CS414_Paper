@@ -119,6 +119,7 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("ViewStudentProfile/{username}")]
         public async Task<IActionResult> ViewStudentProfile(String username)
         {
+            ApplicationUser instructor = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
             var student = await _userManager.FindByNameAsync(username);
             var enrollment = _context.Enrollments.Where(e => e.StudentId == student.Id).ToList();
             var allSections = _context.Sections.ToList();
@@ -138,6 +139,7 @@ namespace BrainNotFound.Paper.Controllers
                 }
             }
 
+            ViewBag.instructor = instructor;
             ViewBag.profile = student;
             ViewBag.sections = sections;
             ViewBag.sectionMeetingTimesList = allMeetingTimes;

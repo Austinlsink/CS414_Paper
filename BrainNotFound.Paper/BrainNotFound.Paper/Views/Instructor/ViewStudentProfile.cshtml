@@ -101,7 +101,14 @@
                                                     <td>@d.DepartmentCode @c.CourseCode @c.Name - @s.SectionNumber</td>
                                                     <td>@s.Location</td>
                                                     <td>@day</td>
-                                                    <td> <a asp-controller="Instructor" asp-action="ViewSection" asp-route-code="@d.DepartmentCode@c.CourseCode" asp-route-sectionNumber="@s.SectionNumber" class="btn btn-primary btn-xs"> View </a> </td>
+                                                    @if (s.InstructorId == ViewBag.instructor.Id)
+                                                    {
+                                                        <td> <a asp-controller="Instructor" asp-action="ViewSection" asp-route-code="@d.DepartmentCode@c.CourseCode" asp-route-sectionNumber="@s.SectionNumber" class="btn btn-primary btn-xs"> View </a> </td>
+                                                    }
+                                                    else
+                                                    { 
+                                                        <td>--</td>
+                                                    }
                                                 </tr>
                                             }
 
