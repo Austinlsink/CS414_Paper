@@ -48,9 +48,17 @@
 
                                         }
                                         <td class=" ">@DepartmentCodeAndCourseCode</td>
-                                        <td class=" ">@String.Format("{0:f}", ts.Test.TestSchedules.Select(x => x.StartTime).First())</td>
+                                        <td class=" ">@String.Format("{0:f}", ts.Test.TestSchedules.Where(x => x.TestId == ts.Test.TestId).First().StartTime)</td>
                                         <td class=" last">
-                                            <a asp-controller="Student" asp-action="TakeTest" asp-route-testScheduleId="@ts.TestScheduleId" class="btn btn-primary btn-xs"> Take Test </a>
+                                            @if (ts.StartTime < DateTime.Now)
+                                            {
+                                                <a asp-controller="Student" asp-action="TakeTest" asp-route-testScheduleId="@ts.TestScheduleId" class="btn btn-primary btn-xs"> Take Test </a>
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-primary btn-xs"> Locked </a>
+
+                                            }
                                         </td>
                                     </tr>
                                 }
