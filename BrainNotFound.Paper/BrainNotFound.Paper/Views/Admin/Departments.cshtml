@@ -12,20 +12,8 @@
             <div class="x_panel">
                 <div class="x_title">
                     <h2><i class="fa fa-mortar-board"></i> Departments</h2>
-
-                    <!--Error message for deleting a department-->
-                    @if (ViewBag.message != null)
-                    {
-                        <script type="text/javascript">
-                                window.onload = function () {
-                                    alert("@ViewBag.message");
-                                };
-                        </script>
-                    }
-
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-
                         <li>
                             <a id="newDepartmentButton" data-toggle="modal" data-target="#NewDepartmentModel"><i class="fa fa-plus"></i> New Department</a>
                         </li>
@@ -50,7 +38,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
                                     @foreach (Department department in ViewBag.departmentList)
                                     {
                                         <tr class="odd pointer">
@@ -58,16 +45,11 @@
                                             <td class=" ">@department.DepartmentCode </td>
                                             <td class=" last">
                                                 <button id="EditDepartmentButton" type="button" onClick="EditDepartmentCodeAndName(@department.DepartmentId)" data-toggle="modal" data-target="#departmentModal" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </button>
-
                                                 <button id="ConfirmDelete" type="button" data-target="#ConfirmModal" class="btn btn-danger btn-xs delete-department" value="@department.DepartmentId"><i class="fa fa-trash-o"></i> Delete </button>
-
-
                                             </td>
-
                                         </tr>
                                         rowIndex++;
                                     }
-
                                 </tbody>
                             </table>
                         </div>
@@ -76,7 +58,6 @@
                     {
                         <p class="center">There are no departments to list. Please create a new department.</p>
                     }
-
                 </div>
             </div>
         </div>
@@ -88,7 +69,6 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-body" id="departmentPlaceholder">
-
             </div>
         </div>
     </div>
@@ -110,7 +90,6 @@
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input type="text" asp-for="DepartmentCode" id="departmentCode" class="form-control col-md-7 col-xs-12">
                             <span id="departmentCodeErrorMessage" class="text-danger"></span>
-
                         </div>
                     </div>
                     <div class="form-group">
@@ -120,7 +99,6 @@
                             <span id="departmentNameErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="CancelCreateDepartment" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -135,7 +113,6 @@
 <div id="ConfirmModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
-
             <div class="modal-header">
                 <h4 class="modal-title" id="myModalLabel2">Warning: Deleting Department</h4>
             </div>
@@ -154,7 +131,6 @@
 <div id="ErrorModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
-
             <div class="modal-header">
                 <h4 class="modal-title" id="myModalLabel2">Delete Department Error</h4>
             </div>
@@ -184,18 +160,4 @@
 
     <!--Department functions-->
     <script type="text/javascript" src="~/js/Department.js"></script>
-
-    <!-- Datatables -->
-    <script src="../vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="../vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-    <script src="../vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="../vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
-    <script src="../vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
-    <script src="../vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
-    <script src="../vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
-    <script src="../vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-    <script src="../vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
-    <script src="../vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-    <script src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
 }

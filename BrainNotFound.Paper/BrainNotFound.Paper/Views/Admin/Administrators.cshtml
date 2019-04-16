@@ -17,9 +17,6 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-
-                <p>@ViewBag.errorMessage</p>
-
                 <div class="table-responsive">
                     <table id="adminTable" class="table table-striped jambo_table bulk_action">
                         <thead>
@@ -37,7 +34,6 @@
                                 </th>
                             </tr>
                         </thead>
-
                         <tbody>
                             @foreach (ApplicationUser admin in ViewBag.adminList)
                             {
@@ -48,7 +44,7 @@
                                     <td class=" ">@admin.Email</td>
                                     <td>
                                         <button type="button" id="ViewAdmin" data-target="#ViewAdminModal" data-toggle="modal" value="@admin.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </button>
-                                        <button type="button" id="EditAdmin" value="@admin.UserName" data-toggle="modal" data-target="#EditAdminModal"  class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </button>
+                                        <button type="button" id="EditAdmin" value="@admin.UserName" data-toggle="modal" data-target="#EditAdminModal" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </button>
                                         <button id="ConfirmDelete" type="submit" data-target="#ConfirmModal" value="@admin.Id" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
                                     </td>
                                 </tr>
@@ -210,7 +206,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12  parsley-error">
-                           Confirm Password <span class="required">*</span>
+                            Confirm Password <span class="required">*</span>
                         </label>
 
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -281,18 +277,4 @@
             });
         });
     </script>
-
-    <!-- Datatables -->
-    <script src="../vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="../vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-    <script src="../vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="../vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
-    <script src="../vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
-    <script src="../vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
-    <script src="../vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
-    <script src="../vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-    <script src="../vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
-    <script src="../vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-    <script src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
 }

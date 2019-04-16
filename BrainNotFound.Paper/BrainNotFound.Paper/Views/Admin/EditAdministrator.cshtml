@@ -16,7 +16,6 @@
                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Salutation</label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <select asp-for="Salutation" class="select2_single form-control" tabindex="1">
-
                         @foreach (string salutation in SalutationType.All)
                         {
                             @if (salutation == ViewBag.admin.Salutation)
@@ -27,12 +26,10 @@
                             {
                                 <option value="@salutation">@salutation.</option>
                             }
-
                         }
                     </select>
                 </div>
             </div>
-
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
                     UserName <span class="required">*</span>
@@ -56,14 +53,14 @@
                     Last Name <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input value="@ViewBag.admin.LastName" asp-for="LastName" type="text" required="required" class="form-control has-feedback-left" >
+                    <input value="@ViewBag.admin.LastName" asp-for="LastName" type="text" required="required" class="form-control has-feedback-left">
                     <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                 </div>
             </div>
             <div class="form-group">
                 <label for="dept-name" class="control-label col-md-3 col-sm-3 col-xs-12">Email </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input value="@ViewBag.admin.Email" asp-for="Email" class="form-control has-feedback-left"  type="text">
+                    <input value="@ViewBag.admin.Email" asp-for="Email" class="form-control has-feedback-left" type="text">
                     <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
                 </div>
             </div>
@@ -82,7 +79,6 @@
                     <span id="AdminAddressErrorMessage" class="text-danger"></span>
                 </div>
             </div>
-
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-3">City</label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -91,7 +87,6 @@
                     <span id="AdminCityErrorMessage" class="text-danger"></span>
                 </div>
             </div>
-
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-3">State</label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -100,7 +95,6 @@
                     <span id="AdminStateErrorMessage" class="text-danger"></span>
                 </div>
             </div>
-
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-3">ZipCode</label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -112,7 +106,7 @@
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-3">Date of Birth</label>
                 <div class="col-md-69 col-sm-6 col-xs-9">
-                    <input id="DOBInput" asp-for="DOB" type="date" value="@ViewBag.admin.DOB"class="form-control has-feedback-left" data-inputmask="'mask': '99/99/9999'" placeholder="##/##/####">
+                    <input id="DOBInput" asp-for="DOB" type="date" value="@ViewBag.admin.DOB" class="form-control has-feedback-left" data-inputmask="'mask': '99/99/9999'" placeholder="##/##/####">
                     <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                     <span id="AdminDOBErrorMessage" class="text-danger"></span>
                 </div>

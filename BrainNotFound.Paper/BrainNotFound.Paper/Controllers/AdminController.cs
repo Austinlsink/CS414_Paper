@@ -451,16 +451,15 @@ namespace BrainNotFound.Paper.Controllers
 
         #region Course controllers
 
+        /// <summary>
+        /// Allows the admin to view all of the courses
+        /// </summary>
+        /// <returns>Courses View</returns>
         [HttpGet, Route("Courses")]
-        public IActionResult Courses(String message = "")
+        public IActionResult Courses()
         {
             var courses = _context.Courses.OrderBy(o => o.CourseCode).ToList();
             var departments = _context.Departments.OrderBy(o => o.DepartmentName).ToList();
-
-            if (TempData["message"] != null)
-            {
-                ViewBag.message = TempData["message"].ToString();
-            }
 
             ViewBag.departmentList = departments;
             ViewBag.courseList = courses;
@@ -468,10 +467,10 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         /// <summary>
-        /// Allows the user to view a specific course and all of its information
+        /// Allows the admin to view a specific course and all of its information
         /// </summary>
         /// <param name="code">The DepartmentCode and CourseCode</param>
-        /// <returns></returns>
+        /// <returns>Specific course view</returns>
         [HttpGet, Route("Courses/{code}")] // ex: SP101
         public async Task<IActionResult> ViewCourse(string code)
         {
@@ -508,12 +507,12 @@ namespace BrainNotFound.Paper.Controllers
         #endregion course controllers
 
         #region Section controllers
-        [HttpGet, Route("Sections")]
-        public IActionResult Sections()
-        {
-            return View();
-        }
 
+        /// <summary>
+        /// Allows the admin to create a new section
+        /// </summary>
+        /// <param name="code">The DepartmentCode and the CourseCode</param>
+        /// <returns>New Section View</returns>
         [HttpGet, Route("Sections/New/{code}")]
         public async Task<IActionResult> NewSection(string code)
         {
@@ -556,6 +555,15 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Allows the admin to save a new section and its information
+        /// </summary>
+        /// <param name="code">DepartmentCode and CourseCode</param>
+        /// <param name="section">Section object that contains the needed information</param>
+        /// <param name="daysMet">Array of all the days this section meets</param>
+        /// <param name="startTime">Start time for when the section meets</param>
+        /// <param name="endTime">End time for when the section dismisses</param>
+        /// <returns>Redirects to the Index</returns>
         [HttpPost, Route("Sections/New/{code}")]
         public async Task<IActionResult> NewSection(String code, Section section, string[] daysMet, DateTime startTime, DateTime endTime)
         {
@@ -603,11 +611,11 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         /// <summary>
-        /// Allows the user to view a specific section
+        /// Allows the admin to view a specific section
         /// </summary>
         /// <param name="code">DepartmentCode + CourseCode</param>
         /// <param name="sectionNumber">section number for the corresonding course</param>
-        /// <returns></returns>
+        /// <returns>View Section View</returns>
         [HttpGet, Route("Sections/View/{code}/{sectionNumber}")]
         public async Task<IActionResult> ViewSection(string code, int sectionNumber)
         {
@@ -646,19 +654,17 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         /// <summary>
-        /// Allows the user to reassign an instructor to a section
+        /// Allows the admin to reassign an instructor to a section
         /// </summary>
         /// <param name="user">Requested instructor to assign to the section</param>
         /// <param name="section">The section being reassigned a new instructor</param>
-        /// <param name="course"></param>
-        /// <param name="department"></param>
+        /// <param name="course">Course that the section belongs to</param>
+        /// <param name="department">Department that the section belongs to</param>
         /// <returns></returns>
         [HttpPost, Route("ReassignInstructor")]
         public async Task<IActionResult> ReassignInstructor(ApplicationUser user, Section section, Course course, Department department)
         {
             string code = department.DepartmentCode + course.CourseCode;
-
-
 
             // Find the instructor to reassign to the specified section
             var instructor = await _userManager.FindByNameAsync(user.UserName);
@@ -672,7 +678,14 @@ namespace BrainNotFound.Paper.Controllers
             return RedirectToAction("ViewSection", "Admin", new { code, section.SectionNumber });
         }
 
-        // Assign a student to a section
+       /// <summary>
+       /// Allows the admin to assign a student to a section
+       /// </summary>
+       /// <param name="user">ApplicationUser object that contains the student information</param>
+       /// <param name="section">Specific section</param>
+       /// <param name="course">Course object that contains information for the section</param>
+       /// <param name="department">Department object that contains information for the section</param>
+       /// <returns>Redirects to the ViewSection page</returns>
         [HttpPost, Route("AssignStudent")]
         public async Task<IActionResult> AssignStudent(ApplicationUser user, Section section, Course course, Department department)
         {
@@ -690,6 +703,14 @@ namespace BrainNotFound.Paper.Controllers
             return RedirectToAction("ViewSection", "Admin", new { code, section.SectionNumber });
         }
 
+        /// <summary>
+        /// Allows te admin to unassign a student from a section
+        /// </summary>
+        /// <param name="user">Student to be removed</param>
+        /// <param name="section">Section that the student is being removed from</param>
+        /// <param name="course">Course object that contains necessary information for the section</param>
+        /// <param name="department">Department object that contains necessary information for the section</param>
+        /// <returns>Redirects to the ViewSection View</returns>
         [HttpPost, Route("UnassignStudent")]
         public async Task<IActionResult> UnassignStudent(ApplicationUser user, Section section, Course course, Department department)
         {
@@ -704,6 +725,12 @@ namespace BrainNotFound.Paper.Controllers
             return RedirectToAction("ViewSection", "Admin", new { code, section.SectionNumber });
         }
 
+        /// <summary>
+        /// Allows the admin to edit a section
+        /// </summary>
+        /// <param name="CourseCode">DepartmentCode and CourseCode</param>
+        /// <param name="SectionNumber">Section number that is being edited</param>
+        /// <returns></returns>
         [HttpGet, Route("Sections/Edit/{CourseCode}/{SectionNumber}")]
         public IActionResult EditSection(String CourseCode, int SectionNumber)
         {

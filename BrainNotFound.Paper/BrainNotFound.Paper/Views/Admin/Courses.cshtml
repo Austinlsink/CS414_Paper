@@ -4,15 +4,7 @@
 @{
     ViewData["Title"] = "Manage Courses - Admin";
 }
-<!--Error message for deleting a course-->
-@if (ViewBag.message != null)
-{
-    <script type="text/javascript">
-        window.onload = function () {
-            alert("@ViewBag.message");
-        };
-    </script>
-}
+
 <div class="">
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
@@ -30,7 +22,6 @@
                 <div class="x_content">
                     @if (ViewBag.courseList != null)
                     {
-                        <p>@ViewBag.errorMessage</p>
                         <div class="table-responsive">
                             <table id="courseTable" class="table table-striped jambo_table bulk_action ">
                                 <thead>
@@ -69,6 +60,10 @@
                                 </tbody>
                             </table>
                         </div>
+                    }
+                    else
+                    {
+                        <p>There are no courses to be displayed</p>
                     }
                 </div>
             </div>
@@ -251,18 +246,4 @@
 
     <!--Course functions-->
     <script type="text/javascript" src="~/js/Course.js"></script>
-
-    <!-- Datatables -->
-    <script src="../vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="../vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-    <script src="../vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="../vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
-    <script src="../vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
-    <script src="../vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
-    <script src="../vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
-    <script src="../vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-    <script src="../vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
-    <script src="../vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-    <script src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
 }

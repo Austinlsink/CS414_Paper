@@ -18,12 +18,10 @@
                 </div>
                 <div class="x_content">
                     <form asp-controller="Admin" asp-action="EditInstructor" class="form-horizontal form-label-left">
-
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Salutation</label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <select asp-for="Salutation" class="select2_single form-control" tabindex="1">
-
                                     @foreach (string salutation in SalutationType.All)
                                     {
                                         @if (salutation == ViewBag.instructor.Salutation)
@@ -34,13 +32,10 @@
                                         {
                                             <option value="@salutation">@salutation.</option>
                                         }
-
                                     }
                                 </select>
                             </div>
                         </div>
-
-
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
                                 UserName <span class="required">*</span>
@@ -98,7 +93,6 @@
                             </div>
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>
