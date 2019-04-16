@@ -21,5 +21,8 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 		public bool Submitted { get; set; }
         public bool Signed { get; set; }
 		public float Grade { get; set; }
+
+        [NotMapped]
+        public int totalPoints { get; set; }
 	}
 }

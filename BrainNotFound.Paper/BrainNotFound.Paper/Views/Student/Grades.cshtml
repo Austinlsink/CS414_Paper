@@ -26,7 +26,8 @@
                                 <tr>
                                     <th>Assignment</th>
                                     <th>Date</th>
-                                    <th>Grade</th>
+                                    <th>Grade Points</th>
+                                    <th>Letter Grade</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -40,7 +41,8 @@
                                             <tr>
                                                 <td>@ts.TestSchedule.Test.TestName</td>
                                                 <td>@ts.TestSchedule.EndTime</td>
-                                                <td>@ts.Grade/@ViewBag.TotalPoints</td>
+                                                <td>@ts.Grade/@ts.totalPoints</td>
+                                                <td>(A)</td>
                                             </tr>
                                         }
                                     }

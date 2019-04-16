@@ -361,15 +361,29 @@ namespace BrainNotFound.Paper.Controllers
             var grades = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).ThenInclude(x => x.Course).Where(x => x.StudentId == student.Id && x.Submitted == true).OrderBy(x => x.TestSchedule.EndTime).ToList();
             ViewBag.Grades = grades;
 
-            //// Fetch Number of Students in the system
-            //SqlParameter[] @params1 = {
-            //    new SqlParameter("@returnVal", SqlDbType.Int) {Direction = ParameterDirection.Output},
-            //    new SqlParameter("@inputTestId", SqlDbType.BigInt) {Value = 154}
-            //};
-            //_context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetTotalTestPoints", @params1);
-            //ViewBag.TotalPoints = @params1[0].Value;
+            for(int i = 0; i < grades.Count; i++)
+            {
+                var param = new SqlParameter[] {
+                        new SqlParameter() {
+                            ParameterName = "@returnVal",
+                            SqlDbType =  SqlDbType.Int,
+                            Direction = ParameterDirection.Output
+                        },
+                        new SqlParameter() {
+                            ParameterName = "@inputTestId",
+                            SqlDbType =  SqlDbType.BigInt,
+                            Direction = ParameterDirection.Input,
+                            Value = grades[i].TestSchedule.TestId
+                        }};
 
+                _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetTotalTestPoints @inputTestId", param);
 
+                if (Convert.IsDBNull(param[0].Value))
+                    grades[i].totalPoints = 0;
+                else
+                    grades[i].totalPoints = (int) param[0].Value;
+            }
+            
             return View();
         }
 
