@@ -347,22 +347,12 @@
             document.getElementById("TimeLimitStats").innerHTML = hours + "h " + minutes + "m " + seconds + "s ";
 
             //If the timer has expired, lock out the test and make the student submit the pledge
-            if (t < 0) {
+            if (t <= 0) {
                 clearInterval(x);
                 document.getElementById("timerScroll").innerHTML = "EXPIRED";
                 document.getElementById("TimeLimitStats").innerHTML = "EXPIRED";
 
-                $(".questionRow").each(function () {
-                    $(this).disabled = true;
-                });
-
-                $(".studentEssayQuestionAnswer").each(function () {
-                    $(this).disabled = true;
-                });
-
-                $(".trueFalse").each(function () {
-                    $(this).disabled = true;
-                });
+                $("#TimerOutModal").modal("toggle");
             }
         }, 1000);
     </script>
