@@ -11,9 +11,7 @@
                 <div class="x_title">
                     <h2><i class="fa fa-book"></i> Section Information</h2>
                     <ul class="nav navbar-right panel_toolbox">
-
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-
                         <li class="dropdown">
                             <ul class="dropdown-menu" role="menu">
                                 <li>
@@ -26,14 +24,11 @@
                 </div>
                 <div class="x_content">
                     <div class="col-md-10 col-sm-10 col-xs-12">
-
                         <h3>@ViewBag.course.Name @ViewBag.course.CourseCode - @ViewBag.section.SectionNumber</h3>
-
                         <ul class="list-unstyled user_data">
                             <li>
                                 <b>Capacity</b> @ViewBag.section.Capacity
                             </li>
-
                             <li>
                                 <b> Location:</b> @ViewBag.section.Location
                             </li>
@@ -141,7 +136,6 @@
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
-
             <div class="x_title">
                 <h2><i class="fa fa-file-text"></i> Upcoming Tests</h2>
                 <ul class="nav navbar-right panel_toolbox">
@@ -241,7 +235,6 @@
                     </tbody>
                 </table>
             </div>
-
         </div>
     }
     else
@@ -250,10 +243,8 @@
     }
 </div>
 
-
-
-@section scripts
-    {
+@section scripts {
+    <!--Datatable script for the students-->
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
             $('#StudentTable').DataTable({
@@ -265,6 +256,7 @@
         });
     </script>
 
+    <!--Datatable script for the previous tests-->
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
             $('#PreviousTestTable').DataTable({
@@ -276,6 +268,7 @@
         });
     </script>
 
+    <!--Datatable script for the upcoming tests-->
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
             $('#UpcomingTestTable').DataTable({
