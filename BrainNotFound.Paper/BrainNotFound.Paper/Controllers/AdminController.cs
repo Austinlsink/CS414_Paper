@@ -41,14 +41,35 @@ namespace BrainNotFound.Paper.Controllers
         public IActionResult Index()
         {
 
-            // Fetch Number of Tests in out system
-            SqlParameter[] @params = {
+            // Fetch Number of Students in our system
+            SqlParameter[] @params1 = {
                 new SqlParameter("@returnVal", SqlDbType.Int) {Direction = ParameterDirection.Output}
             };
+            _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetNumberOfStudents", @params1);
+            ViewBag.NumberOfStudents = @params1[0].Value;
 
-            _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetNumberOfTests", @params);
+            //Fetch Number of Instructors in our system
+            SqlParameter[] @params2 = {
+                new SqlParameter("@returnVal", SqlDbType.Int) {Direction = ParameterDirection.Output}
+            };
+            _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetNumberOfInstructors", @params2);
+            ViewBag.NumberOfInstructors = @params2[0].Value;
 
-            ViewBag.NumberOfTests = @params[0].Value;
+
+            //Fetch Number of Departments in our system
+            SqlParameter[] @params3 = {
+                new SqlParameter("@returnVal", SqlDbType.Int) {Direction = ParameterDirection.Output}
+            };
+            _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetNumberOfDepartments", @params3);
+            ViewBag.NumberOfDepartments = @params3[0].Value;
+
+
+            //Fetch Number of Tests in our system
+            SqlParameter[] @params4 = {
+                new SqlParameter("@returnVal", SqlDbType.Int) {Direction = ParameterDirection.Output}
+            };
+            _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetNumberOfTests", @params4);
+            ViewBag.NumberOfTests = @params4[0].Value;
 
 
             return View();
