@@ -75,6 +75,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Salutation</label>
+                        <!--Salutation field-->
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select id="InstructorSalutationInput" asp-for="Salutation" class="select2_single form-control" tabindex="1">
                                 <option value="mr">Mr.</option>
@@ -85,6 +86,7 @@
                             </select>
                         </div>
                     </div>
+                    <!--FirstName field-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
                             First Name <span class="required">*</span>
@@ -96,6 +98,7 @@
 
                         </div>
                     </div>
+                    <!--LastName field-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
                             Last Name <span class="required">*</span>
@@ -106,6 +109,7 @@
                             <span id="InstructorLastNameErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
+                    <!--Email field-->
                     <div class="form-group">
                         <label for="dept-name" class="control-label col-md-3 col-sm-3 col-xs-12">Email </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -114,6 +118,7 @@
                             <span id="InstructorEmailErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
+                    <!--PhoneNumber field-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-3">Phone Number</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -122,6 +127,7 @@
                             <span id="InstructorPhoneErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
+                    <!--Address field-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-3">Address</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -130,6 +136,7 @@
                             <span id="InstructorAddressErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
+                    <!--City field-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-3">City</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -138,6 +145,7 @@
                             <span id="InstructorCityErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
+                    <!--State field-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-3">State</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -146,7 +154,7 @@
                             <span id="InstructorStateErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
-
+                    <!--ZipCode field-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-3">ZipCode</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -155,6 +163,7 @@
                             <span id="InstructorZipErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
+                    <!--DOB field-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-3">Date of Birth</label>
                         <div class="col-md-69 col-sm-6 col-xs-9">
@@ -163,6 +172,7 @@
                             <span id="InstructorDOBErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
+                    <!--Password field-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12  parsley-error">
                             Password <span class="required">*</span>
@@ -173,6 +183,7 @@
                             <span id="InstructorPasswordErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
+                    <!--Confirm password field-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12  parsley-error">
                             Confirm Password <span class="required">*</span>
@@ -184,6 +195,7 @@
                         </div>
                     </div>
                 </div>
+                <!--Submit or cancel form-->
                 <div class="modal-footer">
                     <button type="button" id="CancelCreateInstructor" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="button" id="CreateInstructor" class="btn btn-primary">Create</button>
