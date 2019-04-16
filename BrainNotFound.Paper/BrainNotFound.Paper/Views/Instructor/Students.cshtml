@@ -24,7 +24,6 @@
                 </tr>
             </thead>
             <tbody>
-
                 @foreach (var s in ViewBag.students)
                 {
                     <tr class="odd pointer">
@@ -42,8 +41,7 @@
 </div>
 
 @section scripts
-    {
-
+{
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
             $('#studentTable').DataTable({
@@ -54,5 +52,4 @@
             });
         });
     </script>
-
 }

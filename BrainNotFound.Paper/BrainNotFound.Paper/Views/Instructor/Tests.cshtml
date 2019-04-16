@@ -44,7 +44,6 @@
                                             Course currentCourse = courses.Where(c => c.CourseId == test.CourseId).First();
                                             Department currentDepartment = departments.Where(d => d.DepartmentId == currentCourse.DepartmentId).First();
                                             DepartmentCodeAndCourseCode = currentDepartment.DepartmentCode + " " + currentCourse.CourseCode;
-
                                         }
                                         <td class=" ">@DepartmentCodeAndCourseCode</td>
                                         <td class=" ">@test.TestSchedules.Where(x => x.TestId == test.TestId).First().StartTime</td>
@@ -58,9 +57,7 @@
                             </tbody>
                         </table>
                     </div>
-
                 </div>
-
             }
             else
             {
@@ -100,36 +97,33 @@
                     <tbody>
                         @foreach (Test test in ViewBag.PreviousTests)
                         {
-                        <tr class="odd pointer">
-                            <td class=" ">@test.TestName</td>
-                            @{
-                                string DepartmentCodeAndCourseCode;
-                                List<Course> courses = ViewBag.Courses;
-                                List<Department> departments = ViewBag.Departments;
-                                Course currentCourse = courses.Where(c => c.CourseId == test.CourseId).First();
-                                Department currentDepartment = departments.Where(d => d.DepartmentId == currentCourse.DepartmentId).First();
-                                DepartmentCodeAndCourseCode = currentDepartment.DepartmentCode + " " + currentCourse.CourseCode;
-
-                            }
-                            <td class=" ">@DepartmentCodeAndCourseCode</td>
-                            <td class=" ">@test.TestSchedules.Where(x => x.TestId == test.TestId).First().EndTime</td>
-                            <td class=" last">
-                                <a asp-controller="Instructor" asp-action="ViewTest" asp-route-DepartmentCode="@currentDepartment.DepartmentCode" asp-route-CourseCode="@currentCourse.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-
-                                <button type="submit" data-target="#ConfirmModal" data-testId="@test.TestId" class="btn btn-danger btn-xs confirmDelete"><i class="fa fa-trash-o"></i> Delete </button>
-                            </td>
-                        </tr>
+                            <tr class="odd pointer">
+                                <td class=" ">@test.TestName</td>
+                                @{
+                                    string DepartmentCodeAndCourseCode;
+                                    List<Course> courses = ViewBag.Courses;
+                                    List<Department> departments = ViewBag.Departments;
+                                    Course currentCourse = courses.Where(c => c.CourseId == test.CourseId).First();
+                                    Department currentDepartment = departments.Where(d => d.DepartmentId == currentCourse.DepartmentId).First();
+                                    DepartmentCodeAndCourseCode = currentDepartment.DepartmentCode + " " + currentCourse.CourseCode;
+                                }
+                                <td class=" ">@DepartmentCodeAndCourseCode</td>
+                                <td class=" ">@test.TestSchedules.Where(x => x.TestId == test.TestId).First().EndTime</td>
+                                <td class=" last">
+                                    <a asp-controller="Instructor" asp-action="ViewTest" asp-route-DepartmentCode="@currentDepartment.DepartmentCode" asp-route-CourseCode="@currentCourse.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                    <button type="submit" data-target="#ConfirmModal" data-testId="@test.TestId" class="btn btn-danger btn-xs confirmDelete"><i class="fa fa-trash-o"></i> Delete </button>
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>
             </div>
-
         </div>
-        }
-        else
-        {
-            <p>No Previous Tests for display.</p>
-        }
+    }
+    else
+    {
+        <p>No Previous Tests for display.</p>
+    }
 </div>
 
 <!--View all Unscheduled tests-->
@@ -170,7 +164,6 @@
                                     Course currentCourse = courses.Where(c => c.CourseId == test.CourseId).First();
                                     Department currentDepartment = departments.Where(d => d.DepartmentId == currentCourse.DepartmentId).First();
                                     DepartmentCodeAndCourseCode = currentDepartment.DepartmentCode + " " + currentCourse.CourseCode;
-
                                 }
                                 <td class=" ">@DepartmentCodeAndCourseCode</td>
                                 <td class=" last">
@@ -182,7 +175,6 @@
                     </tbody>
                 </table>
             </div>
-
         </div>
     }
     else
@@ -196,7 +188,6 @@
 <div id="ConfirmModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
-
             <div class="modal-header">
                 <h4 class="modal-title" id="myModalLabel2">Warning: Deleting Test</h4>
             </div>
@@ -215,7 +206,6 @@
 <div id="ErrorModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
-
             <div class="modal-header">
                 <h4 class="modal-title" id="myModalLabel2">Delete Test Error</h4>
             </div>
@@ -231,7 +221,7 @@
 
 
 @section scripts
-    {
+{
     <!--CreateTest functions-->
     <script type="text/javascript" src="~/js/Tests.js"></script>
 
