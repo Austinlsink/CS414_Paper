@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using BrainNotFound.Paper.Models.BusinessModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,16 +16,16 @@ namespace BrainNotFound.Paper.api
     [ApiController]
     public class TakeTestController : Controller
     {
-
         #region Initialize controllers
+
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly PaperDbContext _context;
+
         /// <summary>
         /// Constructor 
         /// </summary>
         /// <param name="userManager">Sets the UserManager</param>
         /// <param name="context">Sets the database context</param>
-        /// 
         public TakeTestController(UserManager<ApplicationUser> userManager, PaperDbContext context)
         {
             _userManager = userManager;
@@ -36,15 +34,19 @@ namespace BrainNotFound.Paper.api
 
         #endregion Initialize Controllers
 
+        /// <summary>
+        /// Allows a student to submit his test once he's finished
+        /// </summary>
+        /// <param name="JsonData">JObject: TestScheduleId, Pledge</param>
+        /// <returns>Json result of either true if the test was successfully submitted; otherwise, false</returns>
         [HttpPost, Route("SubmitTest")]
         public async Task<JsonResult> SubmitTest(JObject JsonData)
         {
+            // Parse the information from the JObject
             dynamic data = JsonData;
             long testScheduleId = data.TestScheduleId;
             string pledge = data.Pledge;
             bool isPledgeSigned = pledge == String.Empty ? false : true;
-
-           // return Json(new { success = true, message = "In the controller: " + testScheduleId });
 
             ApplicationUser student = await _userManager.FindByNameAsync(User.Identity.Name);
 
@@ -62,9 +64,15 @@ namespace BrainNotFound.Paper.api
             }
         }
 
+        /// <summary>
+        /// Saves and updates the student's essay answer
+        /// </summary>
+        /// <param name="JsonData">JObject: QuestionId, TestScheduleId, StudentEssayAnswer</param>
+        /// <returns>Json result of true once the essay question is saved</returns>
         [HttpPost, Route("SaveEssayAnswer")]
         public JsonResult SaveEssayAnswer(JObject JsonData)
         {
+            // Parse the information from the JObject
             dynamic multipleChoiceInfo = JsonData;
             long questionId = (long)multipleChoiceInfo.QuestionId;
             long testScheduleId = (long)multipleChoiceInfo.TestScheduleId;
@@ -98,13 +106,14 @@ namespace BrainNotFound.Paper.api
         }
 
         /// <summary>
-        /// Confirms if all the questions are answered. If not, it returns an error message.
+        /// Confirms if all the questions are answered when the test is submitted.
         /// </summary>
-        /// <param name="jsonObject"></param>
-        /// <returns></returns>
+        /// <param name="jsonObject">JObject: TestScheduleId</param>
+        /// <returns>Json result of either true if all the questions were answered; otherwise, false</returns>
         [HttpPost, Route("ConfirmAllQuestionsAnswered")]
         public JsonResult ConfirmAllQuestionsAnswered(JObject JsonData)
         {
+            // Parse the information from the JObject
             dynamic data = JsonData;
             long testScheduleId = data.TestScheduleId;
 
@@ -141,14 +150,14 @@ namespace BrainNotFound.Paper.api
 
 
         /// <summary>
-        /// Saves the multiple choice answer that the student selects
+        /// Saves or updates the multiple choice answer that the student selects
         /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
+        /// <param name="JsonData">JObject: questionId, answer, TestScheduleId, MultipleChoiceAnswerId, IsSelected</param>
+        /// <returns>Json result of true once the question is either saved or updated</returns>
         [HttpPost, Route("SaveMultipleChoiceAnswer")]
         public JsonResult SaveMultipleChoiceAnswer(JObject JsonData)
         {
-            // Grad all the data from the JObject
+            // Parse the information from the JObject
             dynamic multipleChoiceInfo = JsonData;
             long questionId = (long) multipleChoiceInfo.QuestionId;
             string answer = multipleChoiceInfo.Answer;
@@ -220,11 +229,12 @@ namespace BrainNotFound.Paper.api
         /// <summary>
         /// Saves the student's true false answer
         /// </summary>
-        /// <param name="data"></param>
+        /// <param name="data">JObject: QuestionId, answer, TestScheduleId</param>
         /// <returns></returns>
         [HttpPost, Route("SaveTrueFalseAnswer")]
         public JsonResult SaveTrueFalseAnswer(JObject data)
         {
+            // Parse the information from the JObject
             dynamic trueFalseInfo = data;
             long questionId = (long) trueFalseInfo.QuestionId;
             bool answer = (bool) trueFalseInfo.Answer;
