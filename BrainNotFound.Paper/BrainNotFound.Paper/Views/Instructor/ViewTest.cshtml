@@ -140,8 +140,6 @@
                                     <p><strong>@count.</strong> @q.Content</p>
                                 </div>
                                 <div class="form-group col-md-2 col-sm-2 col-xs-12">
-
-                                    <!--Default-->
                                     <div id="gender" class="btn-group" data-toggle="buttons">
                                         <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
                                             <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
@@ -150,7 +148,6 @@
                                             <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
                                         </label>
                                     </div>
-
                                 </div>
                             </div>
                             count++;
@@ -176,7 +173,7 @@
                                         option = 97;
                                         foreach (MultipleChoiceAnswer mca in q.MultipleChoiceAnswers)
                                         {
-                                            <a class="btn btn-primary btn-block text-left multipleChoiceOption" data-mcQuestionId="@q.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="true"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
+                                            <a class="btn btn-default btn-block text-left multipleChoiceOption" data-mcQuestionId="@q.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="true"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
 
                                             option++;
                                         }
@@ -203,8 +200,6 @@
                                 <div class="col-md-11 col-sm-11 col-xs-12">
                                     <textarea class="studentEssayQuestionAnswer" data-essayQuestionId="@q.QuestionId"></textarea>
                                 </div>
-
-
                             </div>
                         }
                         break;

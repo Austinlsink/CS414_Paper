@@ -349,7 +349,6 @@ namespace BrainNotFound.Paper.Controllers
                 .Include(t => t.TestSchedules)
                 .Where(t => t.URLSafeName == URLSafeName &&  t.Course.CourseCode == CourseCode &&  t.InstructorId == Instructor.Id)
                 .First();
-            
 
             ViewBag.Test = test;
             
