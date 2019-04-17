@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using BrainNotFound.Paper.Models.BusinessModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,16 +11,16 @@ namespace BrainNotFound.Paper.api
     [ApiController]
     public class DepartmentController : Controller
     {
-
         #region Initialize controllers
+
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly PaperDbContext _context;
+
         /// <summary>
         /// Constructor 
         /// </summary>
         /// <param name="userManager">Sets the UserManager</param>
         /// <param name="context">Sets the database context</param>
-        /// 
         public DepartmentController(UserManager<ApplicationUser> userManager, PaperDbContext context)
         {
             _userManager = userManager;
@@ -33,15 +29,24 @@ namespace BrainNotFound.Paper.api
 
         #endregion Initialize Controllers
 
+        /// <summary>
+        /// Allows the admin to create a new department
+        /// </summary>
+        /// <param name="department">Department object that contains all of the information for a new department</param>
+        /// <returns>Json result of true</returns>
         [HttpPost, Route("New")]
         public IActionResult New([FromBody] Department department)
         {
             _context.Departments.Add(department);
             _context.SaveChanges();
-
             return Json(new { sucess = true });
         }
 
+        /// <summary>
+        /// Allows the admin to delete a department if there are no associated courses with it
+        /// </summary>
+        /// <param name="DepartmentId">Search criteria for finding the specific department</param>
+        /// <returns>Json result of either true if the department was successfully deleted; otherwise, false</returns>
         [HttpPost, Route("Delete")]
         public IActionResult Delete([FromBody]long DepartmentId)
         {
@@ -57,7 +62,6 @@ namespace BrainNotFound.Paper.api
             _context.Departments.Remove(department);
             _context.SaveChanges();
             SuceessMessage = department.DepartmentCode + " " + department.DepartmentName + " was successfully deleted!";
-
 
             return Json(new { success = true, message = SuceessMessage });
         }
