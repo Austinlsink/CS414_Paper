@@ -15,14 +15,15 @@ namespace BrainNotFound.Paper.api
     public class CreateTestController : Controller
     {
         #region Initialize controllers
+
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly PaperDbContext _context;
+
         /// <summary>
         /// Constructor 
         /// </summary>
         /// <param name="userManager">Sets the UserManager</param>
         /// <param name="context">Sets the database context</param>
-        /// 
         public CreateTestController(UserManager<ApplicationUser> userManager, PaperDbContext context)
         {
             _userManager = userManager;
@@ -34,18 +35,21 @@ namespace BrainNotFound.Paper.api
         // TODO Lacy - Create controller for the matching question
 
         #region get different question types
+
         /// <summary>
-        /// Bima says that this method gets a true false questions, saves it to the DB, and returns the question
+        /// Allows the instructor to create a true false question
         /// </summary>
-        /// <param name="jsonData">The object that contains all of the question information</param>
-        /// <returns>The question that was created</returns>        
+        /// <param name="jsonData">JObject that contains all of the question information</param>
+        /// <returns>Json result of either true if the question is successfully created; otherwise, false</returns>        
         [HttpPost, Route("NewTrueFalseQuestion")]
         public JsonResult NewTrueFalseQuestion([FromBody] JObject jsonData)
         {
+            // Parse the information from the JObject
             dynamic json = jsonData;
             long testSectionId = json.testSectionId;
             var testSection = _context.TestSections.Include(s => s.Test).Where(x => x.TestSectionId == testSectionId).First();
-            // Find the instructor who is creating the test
+
+            // Find the instructor who is creating the test to verify that it is the correct person
             var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
 
             if (testSection.Test.InstructorId != instructor.Id)
@@ -77,18 +81,61 @@ namespace BrainNotFound.Paper.api
 
                 return Json(new { success = true, question });
             }
-
         }
 
+        /// <summary>
+        /// Allows the instructor to update a true false question
+        /// </summary>
+        /// <param name="jsonData">JObject that contains all of the information for the question</param>
+        /// <returns>Json result of either true if the true false question was updated; otherwise, false</returns>
+        [HttpPost, Route("UpdateTrueFalseQuestion")]
+        public JsonResult UpdateTrueFalseQuestion([FromBody] JObject jsonData)
+        {
+            // Parse the information from the JObject
+            dynamic json = jsonData;
+            long questionId = (long)json.questionId;
+            int pointValue = (int)json.pointValue;
+            string content = json.content;
+            bool answer = (bool)json.answer;
+
+            TrueFalse question = _context.TrueFalses
+                .Include(tf => tf.TestSection)
+                    .ThenInclude(ts => ts.Test)
+                .Where(tfq => tfq.QuestionId == questionId)
+                .First();
+
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
+            if (question.TestSection.Test.InstructorId == instructor.Id)
+            {
+                question.PointValue = pointValue;
+                question.Content = content;
+                question.TrueFalseAnswer = answer;
+
+                _context.SaveChanges();
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { success = false, error = "Instructor invalid." });
+            }
+        }
+
+        /// <summary>
+        /// Allows the instructor to create a matching question
+        /// </summary>
+        /// <param name="jsonData">JObject that contains all of the information for the question</param>
+        /// <returns>Json result of either true if the question is successfully created; otherwise, false</returns>
         [HttpPost, Route("NewMatchingQuestion")]
         public IActionResult NewMatchingQuestion([FromBody] JObject jsonData)
         {
+            // Parse the information from the JObject
             dynamic json = jsonData;
             long testSectionId = json.testSectionId;
             var testSection = _context.TestSections.Include(s => s.Test).Where(x => x.TestSectionId == testSectionId).First();
             JArray matchingGroups = json.matchingGroups;
 
-            // Find the instructor who is creating the test
+            // Find the instructor who is creating the test and verify that it is the correct instructor
             var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
             if (testSection.Test.InstructorId != instructor.Id)
             {
@@ -96,7 +143,6 @@ namespace BrainNotFound.Paper.api
             }
             else
             {
-
                 Question matchingQuestion = new Question
                 {
                     Content = json.questionContent,
@@ -142,14 +188,17 @@ namespace BrainNotFound.Paper.api
 
                 return Json(new { success = true, question });
             }
-
-
         }
 
+        /// <summary>
+        /// Allows the instructor to update the matching questions
+        /// </summary>
+        /// <param name="jsonData">JObject of all the information for the question</param>
+        /// <returns>Json result of either true if the question is successfully updated; otherwise, false</returns>
         [HttpPost, Route("UpdateMatchingQuestion")]
         public IActionResult UpdateMatchingQuestion([FromBody] JObject jsonData)
         {
-            // Receives the data
+            // Parse the information from the JObject
             dynamic json = jsonData;
             long questionId = json.questionId;
             string content = json.questionContent;
@@ -174,7 +223,6 @@ namespace BrainNotFound.Paper.api
             {
                 _context.MatchingAnswerSides.RemoveRange(matchingQuestion.MatchingAnswerSides);
                 _context.MatchingQuestionSides.RemoveRange(matchingQuestion.MatchingQuestionSides);
-
 
                 // Update Common Data
                 matchingQuestion.Content = content;
@@ -213,24 +261,23 @@ namespace BrainNotFound.Paper.api
 
                 return Json(new { success = true, question });
             }
-
-
         }
 
         /// <summary>
-        /// Bima says that this method gets a multiple choice question, saves it to the DB, and returns the question
+        /// Allows the instructor to create a new multiple choice question
         /// </summary>
-        /// <param name="jsonData">The object that contains all of the question information</param>
-        /// <returns>The question that was created</returns>
+        /// <param name="jsonData">JObject that contains all of the question information</param>
+        /// <returns>Json result of either true if the question is successfully added; otherwise, false</returns>
         [HttpPost, Route("NewMultipleChoiceQuestion")]
         public JsonResult NewMultipleChoiceQuestion([FromBody] JObject jsonData)
         {
+            // Parse the information from the JObject
             dynamic json = jsonData;
             long testSectionId = json.testSectionId;
             var testSection = _context.TestSections.Include(s => s.Test).Where(x => x.TestSectionId == testSectionId).First();
             JArray MCAnswers = json.multipleChoiceAnswers;
 
-            // Find the instructor who is creating the test
+            // Find the instructor who is creating the test and verify that it is the correct instructor
             var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
             if (testSection.Test.InstructorId != instructor.Id)
             {
@@ -263,7 +310,6 @@ namespace BrainNotFound.Paper.api
                 _context.Questions.Add(MCQuestion);
                 _context.SaveChanges();
 
-
                 var question = MCQuestion.GetJsonMultipleChoice();
 
                 return Json(new { success = true, question });
@@ -271,14 +317,62 @@ namespace BrainNotFound.Paper.api
         }
 
         /// <summary>
-        /// Bima says that this method gets a Fill In The Blank question, saves it to the DB, and returns the question
+        /// Allows the instructor to update a multiple choice question
         /// </summary>
-        /// <param name="jsonData">The object that contains all of the essay question information</param>
-        /// <returns>The fill in the blank question that was created</returns>
+        /// <param name="jsonData">JObject of all the information for the question</param>]
+        /// <returns>Json result of either true if the question was successfully updated; otherwise, false</returns>
+        [HttpPost, Route("UpdateMultipleChoiceQuestion")]
+        public JsonResult UpdateMultipleChoiceQuestion([FromBody] JObject jsonData)
+        {
+            // Parse the information from the JObject
+            dynamic json = jsonData;
+            long questionId = json.questionId;
+            string content = json.questionContent;
+            int pointValue = json.pointValue;
+
+            JArray MCAnswers = json.multipleChoiceAnswers;
+
+            var multipleChoiceQuestion = _context.Questions.Include(q => q.MultipleChoiceAnswers).Where(q => q.QuestionId == questionId).First();
+
+            // Find the instructor who is creating the test
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
+            // Resets the question options
+            _context.MultipleChoiceAnswers.RemoveRange(multipleChoiceQuestion.MultipleChoiceAnswers);
+
+            // Creates the annswer options
+            List<MultipleChoiceAnswer> MCAList = new List<MultipleChoiceAnswer>();
+
+            foreach (JObject x in MCAnswers)
+            {
+                dynamic mca = x;
+                MCAList.Add(new MultipleChoiceAnswer()
+                {
+                    MultipleChoiceAnswerOption = mca.optionContent,
+                    IsCorrect = mca.isCorrect
+                });
+            }
+
+            multipleChoiceQuestion.MultipleChoiceAnswers = MCAList;
+            multipleChoiceQuestion.PointValue = pointValue;
+            multipleChoiceQuestion.Content = content;
+
+            _context.SaveChanges();
+
+            var question = multipleChoiceQuestion.GetJsonMultipleChoice();
+
+            return Json(new { success = true, question });
+        }
+
+        /// <summary>
+        /// Allows the instructor to create a new essay question
+        /// </summary>
+        /// <param name="jsonData">JObject that contains all of the essay question information</param>
+        /// <returns>Json result of true once the essay question is added to the DB</returns>
         [HttpPost, Route("NewEssayQuestion")]
         public JsonResult NewEssayQuestion([FromBody] JObject jsonData)
         {
-
+            // Parse the information from the JObject
             dynamic json = jsonData;
             long testSectionId = json.testSectionId;
             var testSection = _context.TestSections.Include(s => s.Test).Where(x => x.TestSectionId == testSectionId).First();
@@ -305,9 +399,13 @@ namespace BrainNotFound.Paper.api
             var question = newEssayQuestion.ToJObject();
 
             return Json(new { success = true, question });
-
         }
-        // Updates a essay question
+
+        /// <summary>
+        /// Allows the instructor to update an essay question
+        /// </summary>
+        /// <param name="jsonData">JOject that contains all of the information for the question</param>
+        /// <returns>Json object of true once the essay question is updated</returns>
         [HttpPost, Route("UpdateEssayQuestion")]
         public JsonResult UpdateEssayQuestion([FromBody] JObject jsonData)
         {
@@ -330,10 +428,10 @@ namespace BrainNotFound.Paper.api
         }
 
         /// <summary>
-        /// Bima says that this method gets a Fill in the Blank questions, saves it to the DB, and returns the question
+        /// Allows the instructor to create  a new fill in the blank question
         /// </summary>
-        /// <param name="jsonData">The object that contains all of the fill in the blank question information</param>
-        /// <returns>The fill in the blank question that was created</returns>
+        /// <param name="jsonData">JObject that contains all of the fill in the blank question information</param>
+        /// <returns>Json result of either true if the question was added to the DB; otherwise, false</returns>
         //[HttpPost, Route("FillInTheBlank")]
         //public JsonResult NewFillInTheBlank([FromBody] JObject jsonData)
         //{
@@ -371,115 +469,14 @@ namespace BrainNotFound.Paper.api
         #endregion get different question types
 
         /// <summary>
-        /// Update the TrueFalse question
+        /// Allows the instructor to delete a test section 
         /// </summary>
-        /// <param name="questionId"></param>
-        /// <param name="pointValue"></param>
-        /// <param name="content"></param>
-        /// <param name="answer"></param>
-        /// <returns></returns>
-        [HttpPost, Route("UpdateTrueFalseQuestion")]
-        public JsonResult UpdateTrueFalseQuestion([FromBody] JObject jsonData)
-        {
-            dynamic json = jsonData;
-            long questionId = (long)json.questionId;
-            int pointValue = (int)json.pointValue;
-            string content = json.content;
-            bool answer = (bool)json.answer;
-
-            TrueFalse question = _context.TrueFalses
-                .Include(tf => tf.TestSection)
-                    .ThenInclude(ts => ts.Test)
-                .Where(tfq => tfq.QuestionId == questionId)
-                .First();
-
-            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
-
-
-            if (question.TestSection.Test.InstructorId == instructor.Id)
-            {
-                question.PointValue = pointValue;
-                question.Content = content;
-                question.TrueFalseAnswer = answer;
-
-                _context.SaveChanges();
-                return Json(new { success = true });
-            }
-            else
-            {
-                return Json(new { success = false, error = "Instructor invalid." });
-            }
-        }
-
-        /// <summary>
-        /// Update the Multiple choice question
-        /// </summary>
-        /// <param name="questionId"></param>
-        /// <param name="pointValue"></param>
-        /// <param name="content"></param>
-        /// <param name="answer"></param>
-        /// <returns></returns>
-        [HttpPost, Route("UpdateMultipleChoiceQuestion")]
-        public JsonResult UpdateMultipleChoiceQuestion([FromBody] JObject jsonData)
-        {
-            // Receives the data
-            dynamic json = jsonData;
-            long questionId = json.questionId;
-            string content = json.questionContent;
-            int pointValue = json.pointValue;
-
-            JArray MCAnswers = json.multipleChoiceAnswers;
-
-            var multipleChoiceQuestion = _context.Questions.Include(q => q.MultipleChoiceAnswers).Where(q => q.QuestionId == questionId).First();
-
-            // Find the instructor who is creating the test
-            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
-
-            // Resets the question options
-            _context.MultipleChoiceAnswers.RemoveRange(multipleChoiceQuestion.MultipleChoiceAnswers);
-
-            // Creates the annswer options
-            List<MultipleChoiceAnswer> MCAList = new List<MultipleChoiceAnswer>();
-
-            foreach (JObject x in MCAnswers)
-            {
-                dynamic mca = x;
-                MCAList.Add(new MultipleChoiceAnswer()
-                {
-                    MultipleChoiceAnswerOption = mca.optionContent,
-                    IsCorrect = mca.isCorrect
-                });
-            }
-
-            multipleChoiceQuestion.MultipleChoiceAnswers = MCAList;
-            multipleChoiceQuestion.PointValue = pointValue;
-            multipleChoiceQuestion.Content = content;
-
-            _context.SaveChanges();
-
-            var question = multipleChoiceQuestion.GetJsonMultipleChoice();
-
-
-
-            return Json(new { success = true, question });
-        }
-
-        /// <summary>
-        /// Allows the instructor to delete a test
-        /// </summary>
-        /// <param name="jsonData">The TestId</param>
-        /// <returns></returns>
-        [HttpPost, Route("DeleteTest")]
-        public JsonResult DeleteTest([FromBody] JObject jsonData)
-        {
-
-            return Json(new { success = true });
-        }
-
-        ///Bima says: receiving TestSectionId, delete it return true or false
+        /// <param name="jsonData">JObject that contains the TestSectionId to be deleted</param>
+        /// <returns>Json resul of either true if the test section was successfully deleted; otherwise, false</returns>
         [HttpPost, Route("DeleteSectionTestId")]
         public JsonResult DeleteSectionTestId([FromBody] JObject jsonData)
         {
+            // parse the information from the JObject
             dynamic json = jsonData;
             long testSectionId = long.Parse(json.SectionTestId);
             long testId = long.Parse(json.TestId);
@@ -492,7 +489,6 @@ namespace BrainNotFound.Paper.api
             {
                 return Json(new { success = false, error = "Instructor not allowed" });
             }
-
             if (testSection != null)
             {
                 _context.TestSections.Remove(testSection);
@@ -504,20 +500,17 @@ namespace BrainNotFound.Paper.api
             {
                 return Json(new { success = false });
             }
-
         }
 
         /// <summary>
-        /// Bima says that this method gets all of the true false questions in a section
+        /// Allows the instructor to update the section instructions
         /// </summary>
-        /// <param name="testSectionId">Specifies which questions need to be grabbed</param>
-        /// <returns>All of the questions in that test section</returns>
-
-        ///Update section instruction - receive a section id, instrucions, and update the system
-        ///return success true or false
+        /// <param name="jsonData">JObject of the new infromation</param>
+        /// <returns>Json result of either true if the instructions were updated; otherwise, false</returns>
         [HttpPost, Route("UpdateSectionInstruction")]
         public JsonResult UpdateSectionInstruction([FromBody] JObject jsonData)
         {
+            // Parse the information from the JObject
             dynamic json = jsonData;
             long testSectionId = json.TestSectionId;
             string sectionInfo = json.SectionInstructions;
@@ -532,7 +525,6 @@ namespace BrainNotFound.Paper.api
             {
                 return Json(new { success = false, error = "Instructor not allowed" });
             }
-
             if (testSection != null)
             {
                 testSection.SectionInstructions = sectionInfo;
@@ -547,6 +539,11 @@ namespace BrainNotFound.Paper.api
             }
         }
 
+        /// <summary>
+        /// Gets all of the questions for a specific test section
+        /// </summary>
+        /// <param name="testSectionId">Search criteria for the specified test section</param>
+        /// <returns>Json object of all the questions</returns>
         [HttpGet, Route("GetQuestionsInSection/{testSectionId}")]
         public JsonResult GetQuestionsInSection(long testSectionId)
         {
@@ -555,6 +552,11 @@ namespace BrainNotFound.Paper.api
             return Json(questions);
         }
 
+        /// <summary>
+        /// Allows the instructor to create a test section
+        /// </summary>
+        /// <param name="jsonData">JObject of all of the information for the test section</param>
+        /// <returns>Jresult of either true if the test section was added; otherwise, false</returns>
         [HttpPost, Route("CreateTestSection")]
         public JsonResult CreateTestSection([FromBody]JObject jsonData)
         {
@@ -606,18 +608,14 @@ namespace BrainNotFound.Paper.api
             test.TestSections.Add(NewSection);
             _context.SaveChanges();
 
-
             return Json(new { success = true, sectionId = NewSection.TestSectionId, instructions = NewSection.SectionInstructions, sectionType = NewSection.QuestionType, header = sectionHeader });
         }
 
         /// <summary>
-        /// Bima says he needs error checking: 1) if the assigned test date is passed assign error message, 
-        /// 2) If the test time limit is negative or 0, assign error message
-        /// 3) if no sections or students assigned, return error message
-        /// 4) INdividual students cannot be assigned 
+        /// Allows the instructor to create a new test schedule
         /// </summary>
-        /// <param name="jsonData"></param>
-        /// <returns></returns>
+        /// <param name="jsonData">JObject of all the information for the test schedule</param>
+        /// <returns>Json result of either true if the test schedule was successfully created; otherwise, false</returns>
         [HttpPost, Route("NewTestSchedule")]
         public JsonResult NewTestSchedule([FromBody]JObject jsonData)
         {
@@ -660,7 +658,6 @@ namespace BrainNotFound.Paper.api
                 return Json(new { success = false, ErrorMessage = errorMessages });
             }
 
-
             // Create the new Schedule
             var newTestSchedule = new TestSchedule()
             {
@@ -701,14 +698,17 @@ namespace BrainNotFound.Paper.api
                 }
             }
 
-
             _context.TestSchedules.Add(newTestSchedule);
             _context.SaveChanges();
 
             return Json(new { success = true });
         }
 
-        // Get all the Test Schedules for a test
+        /// <summary>
+        /// Gets the test schedules for the specific instructor
+        /// </summary>
+        /// <param name="testId">Search criteria for the specific test</param>
+        /// <returns>Json result of either true and the test schedules, or false</returns>
         [HttpGet, Route("GetTestSchedules/{testId}")]
         public JsonResult GetTestSchedules(long testId)
         {
@@ -755,7 +755,6 @@ namespace BrainNotFound.Paper.api
                 testScheduleJObject.TestScheduleId = testSchedule.TestScheduleId;
 
                 schedules.Add(testScheduleJObject);
-
             }
 
             if (schedules.Any())
@@ -763,16 +762,17 @@ namespace BrainNotFound.Paper.api
                 return Json(new { success = true, schedules });
             }
 
-
-
             return Json(new { success = true, schedules = "none" });
         }
 
-        // Gets all the students in a section
+        /// <summary>
+        /// Gets all of the students associated with a section
+        /// </summary>
+        /// <param name="SectionId">Search criteria for a specific section</param>
+        /// <returns>Json object of all the students</returns>
         [HttpGet, Route("GetStudentsInSection/{SectionId}")]
         public JsonResult GetSection(long SectionId)
         {
-
             var enrollments = _context.Enrollments.Include(e => e.ApplicationUser).Where(e => e.SectionId == SectionId).ToList();
             List<JObject> students = new List<JObject>();
 
@@ -788,7 +788,11 @@ namespace BrainNotFound.Paper.api
             return Json(students);
         }
 
-        // Gets all test Section of a test
+        /// <summary>
+        /// Gets all of the test sections for a specific test
+        /// </summary>
+        /// <param name="TestId">Search criteria for the specific test</param>
+        /// <returns>Json result of either true and all of the tests sections, or false</returns>
         [HttpGet, Route("GetTestSections/{TestId}")]
         public JsonResult GetTestSections(long TestId)
         {
@@ -813,7 +817,6 @@ namespace BrainNotFound.Paper.api
                     jTestSection.header = DefaultTestSectionText.Header.Get(testSection.QuestionType);
 
                     //  Fetch the questions for each test section
-
                     switch (testSection.QuestionType)
                     {
                         case QuestionType.TrueFalse:
@@ -876,6 +879,11 @@ namespace BrainNotFound.Paper.api
             }
         }
 
+        /// <summary>
+        /// Allows the instructor to delete a section schedule
+        /// </summary>
+        /// <param name="sectionScheduleId">Seaerch criteria for a specific section schedule</param>
+        /// <returns>Json result of either true if successfully removed; otherwise, false</returns>
         [HttpPost, Route("DeleteSectionSchedule")]
         public JsonResult DeleteSectionSchedule([FromBody] long sectionScheduleId)
         {
@@ -897,7 +905,11 @@ namespace BrainNotFound.Paper.api
             }
         }
 
-        // Updates a point poitvalue for a question
+        /// <summary>
+        /// Allows the instructor to update the question point value
+        /// </summary>
+        /// <param name="jsonData">JObject of all the information needed to update the point value</param>
+        /// <returns>Json result of either true if successfully updated; otherwise, false</returns>
         [HttpPost, Route("UpdateQuestionPointValue")]
         public JsonResult UpdateQuestionPointValue([FromBody] JObject jsonData)
         {
@@ -930,11 +942,15 @@ namespace BrainNotFound.Paper.api
             }
         }
 
-        // Deletes a question from a section
+        /// <summary>
+        /// Allows the instructor to delete a question from a section
+        /// </summary>
+        /// <param name="jsonData">JObject of all the information needed to delete a question from a section</param>
+        /// <returns>Json result of either true if the question is successfully deleted; otherwise, false</returns>
         [HttpPost, Route("DeleleQuestion")]
         public JsonResult DeleleQuestion([FromBody] JObject jsonData)
         {
-            // Receiving the data
+            // Parse the information from the JObject
             dynamic json = jsonData;
             long questionId = (long)json.questionId;
 
@@ -963,15 +979,19 @@ namespace BrainNotFound.Paper.api
             }
             else
             {
-                return Json(new { success = false, error = "Anathorized action" });
+                return Json(new { success = false, error = "Unauthorized action" });
             }
-
         }
 
+        /// <summary>
+        /// Allows the instructor to delete a ttest section
+        /// </summary>
+        /// <param name="jsonData">JObject of all the information needed to delete a test section</param>
+        /// <returns>Json result of either true if successfully deleted; otherwise, false</returns>
         [HttpPost, Route("DeleteTestSection")]
         public JsonResult DeleteTestSection([FromBody] JObject jsonData)
         {
-            // Receiving the data
+            // parse the information from the JObject
             dynamic json = jsonData;
             long sectionId = (long)json.sectionId;
 
@@ -1002,10 +1022,8 @@ namespace BrainNotFound.Paper.api
             }
             else
             {
-
                 return Json(new { success = false, error = "Anathorized action" });
             }
-
         }
     }
 }
