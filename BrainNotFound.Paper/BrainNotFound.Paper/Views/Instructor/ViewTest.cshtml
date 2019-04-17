@@ -1,4 +1,5 @@
-@using BrainNotFound.Paper.Models.BusinessModels
+@using BrainNotFound.Paper.Models.BusinessModels;
+@using BrainNotFound.Paper.Services;
 @model Test;
 @{
     Test test = ViewBag.Test;
@@ -6,7 +7,10 @@
 
     ViewData["Title"] = "View " + test.TestName + " - Instructor";
     int testScheduleCounter = 1;
+    int option = 97;
+
 }
+
 
 <div class="row" id="TestInformationSection">
     <div class="col-md-12 col-sm-12 col-xs-12">
@@ -51,15 +55,12 @@
                     </div>
                 </div>
                 <div class="clearfix"></div>
-                <!-- END: Statistics -->
 
+                <!-- END: Statistics -->
                 <!-- START: Schedule -->
                 <h3>Schedule</h3>
                 <hr />
-                <div id="NoScheduledTestContainer" class="text-center">
-                    <p>This test has not been scheduled yet.</p>
-                    <hr />
-                </div>
+
                 <table id="TestAssignmentTable" class="table table-striped">
                     <thead>
                         <tr>
@@ -78,7 +79,7 @@
                                     <p><i class="fa fa-calendar"></i> @ts.GetAvailability()</p>
                                 </td>
                                 <td>
-                                    @if(ts.IsTimeUnlimited)
+                                    @if (ts.IsTimeUnlimited)
                                     {
                                         <p>Unlimited</p>
                                     }
@@ -101,3 +102,159 @@
         </div>
     </div>
 </div>
+
+
+<!-- True false section template-->
+@foreach (TestSection ts in ViewBag.TestSections)
+{
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-info-circle"></i> | @DefaultTestSectionText.Header.Get(ts.QuestionType)</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <p><b>Instructions:</b> @ts.SectionInstructions</p>
+                </div>
+            </div>
+            <div class="ln_solid"></div>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <p><b>Questions:</b> </p>
+            </div>
+
+            @{ switch (ts.QuestionType)
+                {
+                    case "TrueFalse":
+                        int count = 1;
+                        foreach (Question q in ts.Questions)
+                        {
+                            <div class="col-md-12 col-sm-12 col-xs-12 questionRow" style="padding: 20px 0 10px 0">
+                                <div class="col-md-1 col-sm-1 col-xs-3 text-center">
+                                    <span id="pointValue-56789">(<span class="pointValue" id="pointValue">@q.PointValue</span> pts.)</span>
+                                </div>
+                                <div class="col-md-9 col-sm-9 col-xs-11">
+                                    <p><strong>@count.</strong> @q.Content</p>
+                                </div>
+                                <div class="form-group col-md-2 col-sm-2 col-xs-12">
+
+                                    @if (q.studentTrueFalseAnswer == null)
+                                    {
+                                        <!--Default-->
+                                        <div id="gender" class="btn-group" data-toggle="buttons">
+                                            <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
+                                                <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
+                                            </label>
+                                            <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
+                                                <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
+                                            </label>
+                                        </div>
+                                    }
+                                    else if (q.studentTrueFalseAnswer == true)
+                                    {
+                                        <!-- True -->
+                                        <div id="gender" class="btn-group" data-toggle="buttons">
+                                            <label class="btn btn-primary btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
+                                                <input class="trueFalse" type="radio" checked="checked" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
+                                            </label>
+                                            <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
+                                                <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
+                                            </label>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <!-- False -->
+                                        <div id="gender" class="btn-group" data-toggle="buttons">
+                                            <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
+                                                <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
+                                            </label>
+                                            <label class="btn btn-danger btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
+                                                <input class="trueFalse" type="radio" checked="checked" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
+                                            </label>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            count++;
+                        }
+
+                        break;
+
+                    case "MultipleChoice":
+                        int countMC = 1;
+                        foreach (Question q in ts.Questions)
+                        {
+                            <div class="col-md-12 col-sm-12 col-xs-12 questionRow" style="padding: 20px 0 10px 0">
+                                <div class="col-md-1 col-sm-1 col-xs-3 text-center">
+                                    <span id="pointValue-56789"><span class="pointValue" id="pointValue">(@q.PointValue</span> pts.)</span>
+                                </div>
+                                <div class="col-md-11 col-sm-11 col-xs-11">
+                                    <p><strong>@countMC.</strong> @q.Content</p>
+                                </div>
+
+                                <div class="col-md-1"></div>
+                                <div class="form-group col-md-11 col-sm-11 col-xs-12">
+                                    @{
+                                        option = 97;
+                                        foreach (MultipleChoiceAnswer mca in q.MultipleChoiceAnswers)
+                                        {
+                                            if (q.studentMultipleChoiceAnswers.Where(smca => smca.MultipleChoiceAnswerId == mca.MultipleChoiceAnswerId).Any())
+                                            {
+                                                <a class="btn btn-primary btn-block text-left multipleChoiceOption" data-mcQuestionId="@q.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="true"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-default btn-block text-left multipleChoiceOption" data-mcQuestionId="@q.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="false"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
+                                            }
+                                            option++;
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            countMC++;
+                        }
+                        break;
+
+                    case "Essay":
+                        int essayCount = 1;
+                        foreach (Question q in ts.Questions)
+                        {
+                            <div class="col-md-12 col-sm-12 col-xs-12 questionRow" style="padding: 20px 0 10px 0">
+                                <div class="col-md-1 col-sm-1 col-xs-3 text-center">
+                                    <span id="pointValue-56789">(<span class="pointValue" id="pointValue">@q.PointValue</span> pts.)</span>
+                                </div>
+                                <div class="col-md-11 col-sm-11 col-xs-11">
+                                    <p><strong>@essayCount.</strong> @q.Content</p>
+                                </div>
+                                <div class="col-md-1 col-sm-1 col-xs-3 text-center">
+                                </div>
+                                @if (q.studentEssayAnswer == null)
+                                {
+                                    <div class="col-md-11 col-sm-11 col-xs-12">
+                                        <textarea class="studentEssayQuestionAnswer" data-essayQuestionId="@q.QuestionId"></textarea>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-md-11 col-sm-11 col-xs-12">
+                                        <textarea class="studentEssayQuestionAnswer" data-essayQuestionId="@q.QuestionId">@q.studentEssayAnswer </textarea>
+                                    </div>
+                                }
+
+                            </div>
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        </div>
+    </div>
+}
+
+
+

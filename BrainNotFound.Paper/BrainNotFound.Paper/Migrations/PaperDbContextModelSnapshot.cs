@@ -272,9 +272,13 @@ namespace BrainNotFound.Paper.Migrations
 
                     b.Property<long>("QuestionId");
 
+                    b.Property<long?>("TestSectionId");
+
                     b.HasKey("MultipleChoiceAnswerId");
 
                     b.HasIndex("QuestionId");
+
+                    b.HasIndex("TestSectionId");
 
                     b.ToTable("MultipleChoiceAnswers");
                 });
@@ -323,9 +327,13 @@ namespace BrainNotFound.Paper.Migrations
 
                     b.Property<long>("TestSectionId");
 
+                    b.Property<long?>("TestSectionId1");
+
                     b.HasKey("QuestionId");
 
                     b.HasIndex("TestSectionId");
+
+                    b.HasIndex("TestSectionId1");
 
                     b.ToTable("Questions");
 
@@ -728,7 +736,11 @@ namespace BrainNotFound.Paper.Migrations
                 {
                     b.HasBaseType("BrainNotFound.Paper.Models.BusinessModels.Question");
 
+                    b.Property<long?>("TestSectionId2");
+
                     b.Property<bool>("TrueFalseAnswer");
+
+                    b.HasIndex("TestSectionId2");
 
                     b.HasDiscriminator().HasValue("TrueFalse");
                 });
@@ -829,6 +841,10 @@ namespace BrainNotFound.Paper.Migrations
                         .WithMany("MultipleChoiceAnswers")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("BrainNotFound.Paper.Models.BusinessModels.TestSection")
+                        .WithMany("MultipleChoiceAnswers")
+                        .HasForeignKey("TestSectionId");
                 });
 
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.Notification", b =>
@@ -841,9 +857,13 @@ namespace BrainNotFound.Paper.Migrations
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.Question", b =>
                 {
                     b.HasOne("BrainNotFound.Paper.Models.BusinessModels.TestSection", "TestSection")
-                        .WithMany("Questions")
+                        .WithMany()
                         .HasForeignKey("TestSectionId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("BrainNotFound.Paper.Models.BusinessModels.TestSection")
+                        .WithMany("Questions")
+                        .HasForeignKey("TestSectionId1");
                 });
 
             modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.Section", b =>
@@ -1021,6 +1041,13 @@ namespace BrainNotFound.Paper.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BrainNotFound.Paper.Models.BusinessModels.TrueFalse", b =>
+                {
+                    b.HasOne("BrainNotFound.Paper.Models.BusinessModels.TestSection")
+                        .WithMany("TrueFalses")
+                        .HasForeignKey("TestSectionId2");
                 });
 #pragma warning restore 612, 618
         }
