@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using BrainNotFound.Paper.Models.BusinessModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,16 +12,16 @@ namespace BrainNotFound.Paper.api
     [ApiController]
     public class StudentController : Controller
     {
-
         #region Initialize controllers
+
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly PaperDbContext _context;
+
         /// <summary>
         /// Constructor 
         /// </summary>
         /// <param name="userManager">Sets the UserManager</param>
         /// <param name="context">Sets the database context</param>
-        /// 
         public StudentController(UserManager<ApplicationUser> userManager, PaperDbContext context)
         {
             _userManager = userManager;
@@ -51,10 +48,10 @@ namespace BrainNotFound.Paper.api
         }
 
         /// <summary>
-        /// Allows you to edit an Instructor
+        /// Allows the admin to edit a student's profile information
         /// </summary>
-        /// <param name="username"></param>
-        /// <returns></returns>
+        /// <param name="username">Search criteria for finding the specific student</param>
+        /// <returns>Json result of true and the student's information</returns>
         [HttpPost, Route("Edit/{username}")]
         public async Task<IActionResult> Edit([FromBody]string username)
         {
@@ -72,6 +69,12 @@ namespace BrainNotFound.Paper.api
                                              dob = student.DOB});
         }
 
+        /// <summary>
+        /// Allows the admin to save the edited changed on a student's profile
+        /// </summary>
+        /// <param name="user">ApplicationUser object that contains all of the new information</param>
+        /// <param name="username">Search criteria for finding the specific student</param>
+        /// <returns>Json result of either true if the student was successfully updated; otherwise, false</returns>
         [HttpPost, Route("SaveChanges")]
         public async Task<IActionResult> SaveChanges([FromBody] ApplicationUser user, string username)
         {
@@ -101,10 +104,10 @@ namespace BrainNotFound.Paper.api
         }
 
         /// <summary>
-        /// Create a new Instructor
+        /// Allows the admin to create a new student
         /// </summary>
-        /// <param name="user">Instructor information</param>
-        /// <returns></returns>
+        /// <param name="user">ApplicationUser object that contains all of the new student information</param>
+        /// <returns>Json result of either true if the student was successfully created; otherwise, false</returns>
         [HttpPost, Route("New")]
         public async Task<IActionResult> New([FromBody] ApplicationUser user)
         {
@@ -124,7 +127,6 @@ namespace BrainNotFound.Paper.api
                     await _userManager.AddToRoleAsync(CreatedUser, "Student");
 
                     return Json(new { success = true, message = "Student successfully created" });
-
                 }
             }
 
