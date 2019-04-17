@@ -340,7 +340,7 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("Tests/ViewTest/View/{DepartmentCode}/{CourseCode}/{URLSafeName}")]
         public IActionResult ViewTest(string DepartmentCode, string CourseCode, string URLSafeName)
         {
-            /* Get Test info
+            // Get Test info
             var Instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
 
             var test = _context.Tests
@@ -352,86 +352,34 @@ namespace BrainNotFound.Paper.Controllers
             
 
             ViewBag.Test = test;
-
-
-
-
+            
             // Grab the test sections for the test
             var testSections = _context.TestSections
                 .Include(ts => ts.Questions)
-                    .ThenInclude(q => q.MultipleChoiceAnswers)
                 .Where(x => x.TestId == test.TestId)
                 .ToList();
 
-
-            // Test information
-            int totalQuestions = 0;
-            int totalPoints = 0;
-
-            // Fetching all Questions for test
-            for (int j = 0; j < testSections.Count; j++)
-            {
-                for (int i = 0; i < testSections[j].Questions.Count; i++)
-                {
-                    switch (testSections[j].QuestionType)
-                    {
-                        case QuestionType.TrueFalse:
-                            var studentTFAnswer = _context.StudentTrueFalseAnswers
-                                .Where(stfa => stfa.QuestionId == testSections[j].Questions[i].QuestionId && stfa.TestScheduleId == studentTestAssignment.TestScheduleId)
-                                .FirstOrDefault();
-
-                            if (studentTFAnswer == null)
-                            {
-                                testSections[j].Questions[i].studentTrueFalseAnswer = null;
-                            }
-                            else
-                            {
-                                testSections[j].Questions[i].studentTrueFalseAnswer = studentTFAnswer.TrueFalseAnswerGiven;
-
-                            }
-                            totalQuestions += 1;
-                            totalPoints += testSections[j].Questions[i].PointValue;
-                            break;
-
-                        case QuestionType.MultipleChoice:
-                            var studentMCAnswers = _context.StudentAnswers.Include(sa => sa.StudentMultipleChoiceAnswers).Where(sa => sa.QuestionId == testSections[j].Questions[i].QuestionId && sa.TestScheduleId == studentTestAssignment.TestScheduleId).FirstOrDefault();
-
-                            if (studentMCAnswers == null)
-                            {
-                                testSections[j].Questions[i].studentMultipleChoiceAnswers = new List<StudentMultipleChoiceAnswer>();
-                            }
-                            else
-                            {
-                                testSections[j].Questions[i].studentMultipleChoiceAnswers = studentMCAnswers.StudentMultipleChoiceAnswers;
-
-                            }
-                            totalQuestions += 1;
-                            totalPoints += testSections[j].Questions[i].PointValue;
-                            break;
-                        case QuestionType.Essay:
-                            var studentEssayAnswer = _context.StudentEssayAnswers.Where(sea => sea.QuestionId == testSections[j].Questions[i].QuestionId && sea.TestScheduleId == studentTestAssignment.TestScheduleId).FirstOrDefault();
-
-                            if (studentEssayAnswer == null)
-                            {
-                                testSections[j].Questions[i].studentEssayAnswer = null;
-                            }
-                            else
-                            {
-                                testSections[j].Questions[i].studentEssayAnswer = studentEssayAnswer.EssayAnswerGiven;
-                            }
-                            totalQuestions += 1;
-                            totalPoints += testSections[j].Questions[i].PointValue;
-                            break;
-                    }
-                }
-            }
-
-
             ViewBag.TestSections = testSections;
-            ViewBag.TotalQuestions = totalQuestions;
-            ViewBag.TotalPoints = totalPoints;
 
-    */
+            // Grabs all true false questions
+            ViewBag.TrueFalseQuestions = _context.TrueFalses
+                .Include(tf => tf.TestSection)
+                .Where(tf => tf.TestSection.TestId == test.TestId)
+                .ToList();
+            
+            // Grabs all true false questions
+            ViewBag.MultipleChoiceQuestions = _context.Questions
+                .Include(mc => mc.TestSection)
+                .Include(mc => mc.MultipleChoiceAnswers)
+                .Where(mc => mc.TestSection.TestId == test.TestId)
+                .ToList();
+
+            // Grabs all true false questions
+            ViewBag.EssayQuestions = _context.Essays
+                .Include(e => e.TestSection)
+                .Where(mc => mc.TestSection.TestId == test.TestId)
+                .ToList();
+
             return View();
         }
 
