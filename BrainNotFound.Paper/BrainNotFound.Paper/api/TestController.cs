@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using BrainNotFound.Paper.Models.BusinessModels;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 
 namespace BrainNotFound.Paper.api
 {
@@ -16,7 +10,6 @@ namespace BrainNotFound.Paper.api
     [ApiController]
     public class TestController : Controller
     {
-
         #region Initialize controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly PaperDbContext _context;
@@ -35,10 +28,10 @@ namespace BrainNotFound.Paper.api
         #endregion Initialize Controllers
 
         /// <summary>
-        /// Delete the test as long as it is in the future
+        /// Allows the instructor to delete a test if the start time is in the future
         /// </summary>
-        /// <param name="jsonData">TestId</param>
-        /// <returns></returns>
+        /// <param name="testId">Search criteria for a specific testId</param>
+        /// <returns>Json result of either true if the test is deleted; otherwise, false </returns>
         [HttpPost, Route("DeleteTest")]
         public JsonResult DeleteTest([FromBody] long testId)
         {
@@ -48,8 +41,6 @@ namespace BrainNotFound.Paper.api
             string ProgressMessage = String.Empty;
             string PastMessage = String.Empty;
             string SuccessMessage = String.Empty;
-
-           
 
             foreach (TestSchedule schedule in testSectionSchedules)
             {
