@@ -141,42 +141,16 @@
                                 </div>
                                 <div class="form-group col-md-2 col-sm-2 col-xs-12">
 
-                                    @if (q.studentTrueFalseAnswer == null)
-                                    {
-                                        <!--Default-->
-                                        <div id="gender" class="btn-group" data-toggle="buttons">
-                                            <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
-                                                <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
-                                            </label>
-                                            <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
-                                                <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
-                                            </label>
-                                        </div>
-                                    }
-                                    else if (q.studentTrueFalseAnswer == true)
-                                    {
-                                        <!-- True -->
-                                        <div id="gender" class="btn-group" data-toggle="buttons">
-                                            <label class="btn btn-primary btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
-                                                <input class="trueFalse" type="radio" checked="checked" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
-                                            </label>
-                                            <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
-                                                <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
-                                            </label>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <!-- False -->
-                                        <div id="gender" class="btn-group" data-toggle="buttons">
-                                            <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
-                                                <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
-                                            </label>
-                                            <label class="btn btn-danger btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
-                                                <input class="trueFalse" type="radio" checked="checked" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
-                                            </label>
-                                        </div>
-                                    }
+                                    <!--Default-->
+                                    <div id="gender" class="btn-group" data-toggle="buttons">
+                                        <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
+                                            <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
+                                        </label>
+                                        <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
+                                            <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
+                                        </label>
+                                    </div>
+
                                 </div>
                             </div>
                             count++;
@@ -202,14 +176,8 @@
                                         option = 97;
                                         foreach (MultipleChoiceAnswer mca in q.MultipleChoiceAnswers)
                                         {
-                                            if (q.studentMultipleChoiceAnswers.Where(smca => smca.MultipleChoiceAnswerId == mca.MultipleChoiceAnswerId).Any())
-                                            {
-                                                <a class="btn btn-primary btn-block text-left multipleChoiceOption" data-mcQuestionId="@q.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="true"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
-                                            }
-                                            else
-                                            {
-                                                <a class="btn btn-default btn-block text-left multipleChoiceOption" data-mcQuestionId="@q.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="false"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
-                                            }
+                                            <a class="btn btn-primary btn-block text-left multipleChoiceOption" data-mcQuestionId="@q.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="true"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
+
                                             option++;
                                         }
                                     }
@@ -232,18 +200,10 @@
                                 </div>
                                 <div class="col-md-1 col-sm-1 col-xs-3 text-center">
                                 </div>
-                                @if (q.studentEssayAnswer == null)
-                                {
-                                    <div class="col-md-11 col-sm-11 col-xs-12">
-                                        <textarea class="studentEssayQuestionAnswer" data-essayQuestionId="@q.QuestionId"></textarea>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="col-md-11 col-sm-11 col-xs-12">
-                                        <textarea class="studentEssayQuestionAnswer" data-essayQuestionId="@q.QuestionId">@q.studentEssayAnswer </textarea>
-                                    </div>
-                                }
+                                <div class="col-md-11 col-sm-11 col-xs-12">
+                                    <textarea class="studentEssayQuestionAnswer" data-essayQuestionId="@q.QuestionId"></textarea>
+                                </div>
+
 
                             </div>
                         }
@@ -255,6 +215,3 @@
         </div>
     </div>
 }
-
-
-

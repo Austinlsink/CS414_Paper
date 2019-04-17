@@ -259,13 +259,13 @@
             <div class="col-md-4 col-sm-4 col-xs-12 ">
                 @if (ViewBag.StudentTestAssignment.Signed)
                 {
-                    <input type="text" id="fullnameInput" class="form-control " name="fullname" required="" placeholder="@ViewBag.Student.FirstName @ViewBag.Student.LastName">
+                    <input disabled="disabled" type="text" id="fullnameInput" class="form-control " name="fullname" required="" placeholder="@ViewBag.Student.FirstName @ViewBag.Student.LastName">
                 }
                 else
                 {
                     <input type="text" id="fullnameInput" class="form-control " name="fullname" required="" placeholder="Pledge not signed">
                 }
-                <span id="fullname" data-studentName="@ViewBag.Student.FirstName @ViewBag.Student.LastName">@ViewBag.Student.FirstName @ViewBag.Student.LastName</span><br />
+                <span id="fullname" disabled="disabled" data-studentName="@ViewBag.Student.FirstName @ViewBag.Student.LastName">@ViewBag.Student.FirstName @ViewBag.Student.LastName</span><br />
             </div> 
             @if (ViewBag.StudentTestAssignment.Signed)
             {
