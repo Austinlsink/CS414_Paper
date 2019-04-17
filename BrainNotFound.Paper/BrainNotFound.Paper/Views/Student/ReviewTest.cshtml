@@ -9,7 +9,7 @@
 <!-- (General test information) beginning of row 2 -->
 <div class="x_panel">
     <div class="x_title">
-        <h2><i class="fa fa-info-circle"></i> @ViewBag.TestInformation.Course.Department.DepartmentCode @ViewBag.TestInformation.Course.CourseCode @ViewBag.TestInformation.TestName</h2>
+        <h2><i class="fa fa-info-circle"></i> @ViewBag.TestInformation.Course.Department.DepartmentCode @ViewBag.TestInformation.Course.CourseCode @ViewBag.TestInformation.TestName Review</h2>
         <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
         </ul>
@@ -23,7 +23,7 @@
                 <div class="icon">
                     <i class="fa fa-dot-circle-o"></i>
                 </div>
-                <div id="TotalPointsStats" class="count"> @ViewBag.TotalPoints</div>
+                <div id="TotalPointsStats" class="count"> @ViewBag.Grades.totalPoints</div>
                 <h3>Total Points</h3>
             </div>
         </div>
@@ -100,10 +100,10 @@
                                         <!--Default-->
                                         <div id="gender" class="btn-group pull-right" data-toggle="buttons">
                                             <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
-                                                <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
+                                                <input class="trueFalse" disabled="disabled" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
                                             </label>
                                             <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
-                                                <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
+                                                <input class="trueFalse" disabled="disabled" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
                                             </label>
                                         </div>
                                     }
@@ -112,10 +112,10 @@
                                         <!-- True -->
                                         <div id="gender" class="btn-group pull-right" data-toggle="buttons">
                                             <label class="btn btn-primary btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
-                                                <input class="trueFalse" type="radio" checked="checked" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
+                                                <input class="trueFalse" disabled="disabled" type="radio" checked="checked" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
                                             </label>
                                             <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
-                                                <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
+                                                <input class="trueFalse" disabled="disabled" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
                                             </label>
                                         </div>
                                     }
@@ -124,10 +124,10 @@
                                         <!-- False -->
                                         <div id="gender" class="btn-group pull-right" data-toggle="buttons">
                                             <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
-                                                <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
+                                                <input class="trueFalse" disabled="disabled" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
                                             </label>
                                             <label class="btn btn-danger btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
-                                                <input class="trueFalse" type="radio" checked="checked" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
+                                                <input class="trueFalse" disabled="disabled" type="radio" checked="checked" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
                                             </label>
                                         </div>
                                     }
@@ -147,7 +147,6 @@
                             </div>
                             count++;
                         }
-
                         break;
 
                     case "MultipleChoice":
@@ -161,8 +160,6 @@
                                 <div class="col-md-11 col-sm-11 col-xs-11">
                                     <p><strong>@countMC.</strong> @q.Content</p>
                                 </div>
-
-
                                 @{
                                     option = 97;
                                     foreach (MultipleChoiceAnswer mca in q.MultipleChoiceAnswers)
@@ -178,30 +175,31 @@
                                                 <a class="btn btn-default btn-block text-left multipleChoiceOption" data-mcQuestionId="@q.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="false"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
                                             }
                                         </div>
-
-
-                                        @if (mca.IsCorrect)
+                                        @if (mca.IsCorrect == true && q.studentMultipleChoiceAnswers.Where(smca => smca.MultipleChoiceAnswerId == mca.MultipleChoiceAnswerId).Any())
                                         {
                                             <div class="form-group col-md-1 col-sm-1 col-xs-2">
                                                 <span class="question-correct"><i class="fa fa-check"></i></span>
                                             </div>
                                         }
-                                        else
+                                        else if (mca.IsCorrect == true && q.studentMultipleChoiceAnswers.Where(smca => smca.MultipleChoiceAnswerId != mca.MultipleChoiceAnswerId).Any())
                                         {
                                             <div class="form-group col-md-1 col-sm-1 col-xs-2">
                                                 <span class="question-wrong"><i class="fa fa-close"></i></span>
                                             </div>
                                         }
+                                        else if (mca.IsCorrect == false && q.studentMultipleChoiceAnswers.Where(smca => smca.MultipleChoiceAnswerId != mca.MultipleChoiceAnswerId).Any())
+                                        {
+                                            <div class="form-group col-md-1 col-sm-1 col-xs-2">
+                                                <span class="question-correct"><i class="fa fa-check"></i></span>
+                                            </div>
+                                        }
                                         option++;
                                     }
                                 }
-
-
                             </div>
                             countMC++;
                         }
                         break;
-
                     case "Essay":
                         int essayCount = 1;
                         foreach (Question q in ts.Questions)
@@ -213,21 +211,25 @@
                                 <div class="col-md-11 col-sm-11 col-xs-11">
                                     <p><strong>@essayCount.</strong> @q.Content</p>
                                 </div>
-                                <div class="col-md-1 col-sm-1 col-xs-3 text-center">
-                                </div>
+                                <div class="col-md-1 col-sm-1 col-xs-3 text-center"></div>
                                 @if (q.studentEssayAnswer == null)
                                 {
                                     <div class="col-md-11 col-sm-11 col-xs-12">
-                                        <textarea class="studentEssayQuestionAnswer" data-essayQuestionId="@q.QuestionId"></textarea>
+                                        <textarea disabled="disabled" class="studentEssayQuestionAnswer" data-essayQuestionId="@q.QuestionId"></textarea>
                                     </div>
                                 }
                                 else
                                 {
                                     <div class="col-md-11 col-sm-11 col-xs-12">
-                                        <textarea class="studentEssayQuestionAnswer" data-essayQuestionId="@q.QuestionId">@q.studentEssayAnswer </textarea>
+                                        <textarea disabled="disabled" class="studentEssayQuestionAnswer" data-essayQuestionId="@q.QuestionId">@q.studentEssayAnswer </textarea>
                                     </div>
                                 }
-
+                                <div class="clearfix"></div>
+                                <br />
+                                <div class="col-md-1 col-sm-1 col-xs-3 text-center"></div>
+                                <div class="col-md-11 col-sm-11 col-xs-12">
+                                    <textarea disabled="disabled" class="bg-default-light">Teacher comments: (please write words and not gobbeldygook...) </textarea>
+                                </div>
                             </div>
                         }
                         break;
@@ -255,19 +257,30 @@
                 <br />
             </div>
             <div class="col-md-4 col-sm-4 col-xs-12 ">
-                <input type="text" id="fullnameInput" class="form-control " name="fullname" required="" placeholder="Type in full name">
+                @if (ViewBag.StudentTestAssignment.Signed)
+                {
+                    <input type="text" id="fullnameInput" class="form-control " name="fullname" required="" placeholder="@ViewBag.Student.FirstName @ViewBag.Student.LastName">
+                }
+                else
+                {
+                    <input type="text" id="fullnameInput" class="form-control " name="fullname" required="" placeholder="Pledge not signed">
+                }
                 <span id="fullname" data-studentName="@ViewBag.Student.FirstName @ViewBag.Student.LastName">@ViewBag.Student.FirstName @ViewBag.Student.LastName</span><br />
-                <span class="text-danger hidden" id="pledgeErrorMessage">Signature does not match name</span>
-
-            </div>
-
+            </div> 
+            @if (ViewBag.StudentTestAssignment.Signed)
+            {
+                <div class="form-group col-md-1 col-sm-1 col-xs-2">
+                    <span class="question-correct"><i class="fa fa-check"></i></span>
+                </div>
+            }
+            else
+            {
+                <div class="form-group col-md-1 col-sm-1 col-xs-2">
+                    <span class="question-wrong"><i class="fa fa-close"></i></span>
+                </div>
+            }
             <br />
             <div class="clearfix"></div>
-            <div class="col-md-4 col-sm-4 col-xs-12 ">
-                <br />
-                <button id="submitTest" type="button" class="btn btn-info btn-lg">Submit Test</button>
-            </div>
         </div>
-
     </div>
 </div>

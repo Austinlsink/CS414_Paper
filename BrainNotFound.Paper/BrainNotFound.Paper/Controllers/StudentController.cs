@@ -50,7 +50,10 @@ namespace BrainNotFound.Paper.Controllers
         }
         #endregion Student profile and Settings controllers
 
-
+        /// <summary>
+        /// Displays the student's Dashboard, which contains quick links
+        /// </summary>
+        /// <returns>Index View</returns>
         [HttpGet, Route("")]
         [HttpGet, Route("Index")]
         [HttpGet, Route("Dashboard")]
@@ -59,6 +62,10 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Allows the user to view all of his instructors and their contact information
+        /// </summary>
+        /// <returns>Instructors View</returns>
         [HttpGet, Route("Instructors")]
         public async Task<IActionResult> ViewInstructors()
         {
@@ -86,11 +93,11 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         /// <summary>
-        /// Allows the user to view a specific section and its information
+        /// Allows the student to view a specific section and its information
         /// </summary>
         /// <param name="code">DepartmentCode + CourseCode</param>
         /// <param name="sectionNumber">section number for the corresonding course</param>
-        /// <returns></returns>
+        /// <returns>Section View</returns>
         [HttpGet, Route("Sections/View/{code}/{sectionNumber}")]
         public async Task<IActionResult> ViewSection(string code, int sectionNumber)
         {
@@ -125,9 +132,9 @@ namespace BrainNotFound.Paper.Controllers
             var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
             var studentTestAssignments = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).Where(x => x.StudentId == student.Id).ToList();
 
+            // Distinguish the tests as either upcoming or previous
             var upcomingTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime > DateTime.Now).Select(sta => sta.TestSchedule.Test).Where(sta => sta.CourseId == course.CourseId).ToList();
             var previousTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime < DateTime.Now).Select(sta => sta.TestSchedule.Test).Where(sta => sta.CourseId == course.CourseId).ToList();
-
             ViewBag.UpcomingTests = upcomingTests;
             ViewBag.PreviousTests = previousTests;
 
@@ -135,46 +142,44 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         #region Test Controllers
+
         /// <summary>
         /// Display all of the available tests to the student
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Tests View</returns>
         [HttpGet, Route("Tests")]
         public IActionResult Tests()
         {
+            // Find the student information and his test assignments
             var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
             var studentTestAssignments = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).Where(x => x.StudentId == student.Id).ToList();
 
+            // Distinguish between upcoming tests and previous tests
             var upcomingTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime > DateTime.Now && sta.Submitted == false).Select(sta => sta.TestSchedule).ToList();
             var previousTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime < DateTime.Now || sta.Submitted == true).Select(sta => sta.TestSchedule).ToList();
-
-            var courses = _context.Courses.ToList();
-            var departments = _context.Departments.ToList();
             ViewBag.UpcomingTests = upcomingTests;
             ViewBag.PreviousTests = previousTests;
+
+            // Grab each tests course and department information
+            var courses = _context.Courses.ToList();
+            var departments = _context.Departments.ToList();
             ViewBag.Courses = courses;
             ViewBag.Departments = departments;
-            return View();
-        }
 
-        [HttpGet, Route("Tests/TestSummary")]
-        public IActionResult TestSummary()
-        {
             return View();
         }
 
         /// <summary>
-        /// Allows the user to take the specified tests, and grabs any questions that may already be answered
+        /// Allows the student to take the specified tests, and grabs any questions that may already be answered
         /// </summary>
-        /// <param name="testScheduleId"></param>
-        /// <returns></returns>
+        /// <param name="testScheduleId">Search criteria for the specified test</param>
+        /// <returns>TakeTest View</returns>
         [HttpGet, Route("Tests/TakeTest/{testScheduleId}")]
         public async Task<IActionResult> TakeTest(long testScheduleId)
         {
-            // Student information
+            // Find the student's information and his test assignment
             ApplicationUser student = await _userManager.FindByNameAsync(User.Identity.Name);
             ViewBag.Student = student;
-
             var studentTestAssignment = _context.StudentTestAssignments
                                 .Include(x => x.TestSchedule)
                                     .ThenInclude(x => x.Test)
@@ -182,7 +187,7 @@ namespace BrainNotFound.Paper.Controllers
                                             .ThenInclude(x => x.Department)
                                 .Where(x => x.Submitted == false && x.TestScheduleId == testScheduleId).First();
 
-            // Grab the test information
+            // Grab the test's information
             var testInformation = studentTestAssignment.TestSchedule.Test;
             ViewBag.TestInformation = testInformation;
 
@@ -196,13 +201,13 @@ namespace BrainNotFound.Paper.Controllers
                 .Where(x => x.TestId == studentTestAssignment.TestSchedule.TestId)
                 .ToList();
 
+            // Grab the student answers for the test if any
             var studentAnswers = _context.StudentAnswers
                 .Include(sa => sa.StudentMultipleChoiceAnswers)
                 .Where(sa => sa.StudentId == student.Id && sa.TestScheduleId == studentTestAssignment.TestScheduleId).ToList();
 
-            // Test information
+            // Test information variables
             int totalQuestions = 0;
-            int totalPoints = 0;
 
             // Fetching all Questions for test
             for (int j = 0; j < testSections.Count; j++)
@@ -223,10 +228,8 @@ namespace BrainNotFound.Paper.Controllers
                             else
                             {
                                 testSections[j].Questions[i].studentTrueFalseAnswer = studentTFAnswer.TrueFalseAnswerGiven;
-                                
                             }
                             totalQuestions += 1;
-                            totalPoints += testSections[j].Questions[i].PointValue;
                             break;
                             
                         case QuestionType.MultipleChoice:
@@ -239,10 +242,8 @@ namespace BrainNotFound.Paper.Controllers
                             else
                             {
                                 testSections[j].Questions[i].studentMultipleChoiceAnswers = studentMCAnswers.StudentMultipleChoiceAnswers;
-                                
                             }
                             totalQuestions += 1;
-                            totalPoints += testSections[j].Questions[i].PointValue;
                             break;
                         case QuestionType.Essay:
                             var studentEssayAnswer = _context.StudentEssayAnswers.Where(sea => sea.QuestionId == testSections[j].Questions[i].QuestionId && sea.TestScheduleId == studentTestAssignment.TestScheduleId).FirstOrDefault();
@@ -256,55 +257,71 @@ namespace BrainNotFound.Paper.Controllers
                                 testSections[j].Questions[i].studentEssayAnswer = studentEssayAnswer.EssayAnswerGiven;
                             }
                             totalQuestions += 1;
-                            totalPoints += testSections[j].Questions[i].PointValue;
                             break;
                     }
                 }
             }
 
+            // Get the total points for the test
+            var totalPoints = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).Where(x => x.StudentId == student.Id && x.Submitted == false && x.TestScheduleId == testScheduleId).First();
 
+            var param = new SqlParameter[] {
+                    new SqlParameter() {
+                        ParameterName = "@returnVal",
+                        SqlDbType =  SqlDbType.Int,
+                        Direction = ParameterDirection.Output
+                    },
+                    new SqlParameter() {
+                        ParameterName = "@inputTestId",
+                        SqlDbType =  SqlDbType.BigInt,
+                        Direction = ParameterDirection.Input,
+                        Value = totalPoints.TestSchedule.TestId
+                    }};
+
+            _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetTotalTestPoints @inputTestId", param);
+
+            if (Convert.IsDBNull(param[0].Value))
+                totalPoints.totalPoints = 0;
+            else
+                totalPoints.totalPoints = (int)param[0].Value;
+
+            ViewBag.TotalPoints = totalPoints;
             ViewBag.TestSections = testSections;
             ViewBag.TotalQuestions = totalQuestions;
-            ViewBag.TotalPoints = totalPoints;
 
             return View();
         }
 
+        /// <summary>
+        /// Allows the student to review his test after it has been taken
+        /// </summary>
+        /// <param name="testScheduleId">Search criteria for the specific test</param>
+        /// <returnsReviewTest View></returns>
         [HttpGet, Route("Tests/ReviewTest/{testScheduleId}")]
         public async Task<IActionResult> ReviewTest(long testScheduleId)
         {
-            // Student information
+            // Find the student information and his test assignments
             ApplicationUser student = await _userManager.FindByNameAsync(User.Identity.Name);
             ViewBag.Student = student;
+            var studentTestAssignment = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).ThenInclude(x => x.Course).ThenInclude(x => x.Department).Where(x => x.Submitted == true && x.TestScheduleId == testScheduleId).First();
+            ViewBag.StudentTestAssignment = studentTestAssignment;
 
-            var studentTestAssignment = _context.StudentTestAssignments
-                .Include(x => x.TestSchedule)
-                                    .ThenInclude(x => x.Test)
-                                        .ThenInclude(x => x.Course)
-                                            .ThenInclude(x => x.Department)
-                                .Where(x => x.Submitted == true && x.TestScheduleId == testScheduleId).First();
-
-            // Grab the test information
+            // Grab the test's information
             var testInformation = studentTestAssignment.TestSchedule.Test;
             ViewBag.TestInformation = testInformation;
-
-            // Grab the testschedule and its ID to pass as a hidden parameter to the ajax call
-            ViewBag.TestSchedule = studentTestAssignment.TestSchedule;
+            ViewBag.TestSchedule = studentTestAssignment.TestSchedule; // Grab the testschedule and its ID to pass as a hidden parameter to the ajax call
 
             // Grab the test sections for the test
-            var testSections = _context.TestSections
-                .Include(ts => ts.Questions)
-                    .ThenInclude(q => q.MultipleChoiceAnswers)
-                .Where(x => x.TestId == studentTestAssignment.TestSchedule.TestId)
-                .ToList();
+            var testSections = _context.TestSections.Include(ts => ts.Questions).ThenInclude(q => q.MultipleChoiceAnswers).Where(x => x.TestId == studentTestAssignment.TestSchedule.TestId).ToList();
+            ViewBag.TestSections = testSections;
 
             var studentAnswers = _context.StudentAnswers
                 .Include(sa => sa.StudentMultipleChoiceAnswers)
                 .Where(sa => sa.StudentId == student.Id && sa.TestScheduleId == studentTestAssignment.TestScheduleId).ToList();
+            
 
-            // Test information
+            // Test information variables
             int totalQuestions = 0;
-            int totalPoints = 0;
 
             // Fetching all Questions for test
             for (int j = 0; j < testSections.Count; j++)
@@ -328,7 +345,6 @@ namespace BrainNotFound.Paper.Controllers
 
                             }
                             totalQuestions += 1;
-                            totalPoints += testSections[j].Questions[i].PointValue;
                             break;
 
                         case QuestionType.MultipleChoice:
@@ -344,7 +360,6 @@ namespace BrainNotFound.Paper.Controllers
 
                             }
                             totalQuestions += 1;
-                            totalPoints += testSections[j].Questions[i].PointValue;
                             break;
                         case QuestionType.Essay:
                             var studentEssayAnswer = _context.StudentEssayAnswers.Where(sea => sea.QuestionId == testSections[j].Questions[i].QuestionId && sea.TestScheduleId == studentTestAssignment.TestScheduleId).FirstOrDefault();
@@ -358,11 +373,11 @@ namespace BrainNotFound.Paper.Controllers
                                 testSections[j].Questions[i].studentEssayAnswer = studentEssayAnswer.EssayAnswerGiven;
                             }
                             totalQuestions += 1;
-                            totalPoints += testSections[j].Questions[i].PointValue;
                             break;
                     }
                 }
             }
+            ViewBag.TotalQuestions = totalQuestions;
 
             // Get the student's grades
             var grades = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).Where(x => x.StudentId == student.Id && x.Submitted == true && x.TestScheduleId == testScheduleId).First();
@@ -388,15 +403,15 @@ namespace BrainNotFound.Paper.Controllers
                 grades.totalPoints = (int)param[0].Value;
 
             ViewBag.Grades = grades;
-
-
-            ViewBag.TestSections = testSections;
-            ViewBag.TotalQuestions = totalQuestions;
-            ViewBag.TotalPoints = totalPoints;
+            
             return View();
         }
         #endregion Test Controllers
 
+        /// <summary>
+        /// Allows the student to view all of his grades for each class
+        /// </summary>
+        /// <returns>Grades View</returns>
         [HttpGet, Route("Grades")]
         public async Task<IActionResult> Grades()
         {
@@ -436,6 +451,10 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Displays an error message if something is amiss
+        /// </summary>
+        /// <returns>Error View</returns>
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
