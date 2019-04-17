@@ -5126,3 +5126,15 @@ table thead .checkbox.radio { margin-top:-7px;margin-top:-21px; }
     background-color: #212529;
     border-color: #212529;
 }
+
+.question-correct {
+    color: green;
+    font-size: 24px;
+    padding: 3px;
+}
+
+.question-wrong {
+    color: darkred;
+    font-size: 24px;
+    padding: 3px;
+}
