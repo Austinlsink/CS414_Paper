@@ -686,6 +686,21 @@ namespace BrainNotFound.Paper.api
                     });
                 }
             }
+            
+            // Assigns individual students
+            for(int i = 0; i < studentIds.Count; i++)
+            {
+                string id = studentIds[i].ToString();
+
+                if (!newTestSchedule.StudentTestAssignments.Where(x => x.StudentId == id).Any())
+                {
+                    newTestSchedule.StudentTestAssignments.Add(new StudentTestAssignment()
+                    {
+                        StudentId = id
+                    });
+                }
+            }
+
 
             _context.TestSchedules.Add(newTestSchedule);
             _context.SaveChanges();
