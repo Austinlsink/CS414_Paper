@@ -90,26 +90,18 @@
                                 <div class="col-md-1 col-sm-1 col-xs-3 text-center">
                                     <span id="pointValue-56789">(<span class="pointValue" id="pointValue">@q.PointValue</span> pts.)</span>
                                 </div>
-                                <div class="col-md-9 col-sm-9 col-xs-11">
+                                <div class="col-md-7 col-sm-7 col-xs-11">
                                     <p><strong>@count.</strong> @q.Content</p>
                                 </div>
-                                <div class="form-group col-md-2 col-sm-2 col-xs-12">
+                                <div class="form-group col-md-3 col-sm-3 col-xs-10">
 
                                     @if (q.studentTrueFalseAnswer == null)
                                     {
                                         <!--Default-->
-                                        <div id="gender" class="btn-group" data-toggle="buttons">
-                                            @if (((TrueFalse)q).TrueFalseAnswer == true)
-                                            {
-                                                <div>&#x2713;</div>
-                                            }
+                                        <div id="gender" class="btn-group pull-right" data-toggle="buttons">
                                             <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
                                                 <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
                                             </label>
-                                            @if (((TrueFalse)q).TrueFalseAnswer == false)
-                                            {
-                                                <div>&#x2713;</div>
-                                            }
                                             <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
                                                 <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
                                             </label>
@@ -117,20 +109,11 @@
                                     }
                                     else if (q.studentTrueFalseAnswer == true)
                                     {
-
                                         <!-- True -->
-                                        <div id="gender" class="btn-group" data-toggle="buttons">
-                                            @if (((TrueFalse)q).TrueFalseAnswer == true)
-                                            {
-                                                <div>&#x2713;</div>
-                                            }
+                                        <div id="gender" class="btn-group pull-right" data-toggle="buttons">
                                             <label class="btn btn-primary btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
                                                 <input class="trueFalse" type="radio" checked="checked" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
                                             </label>
-                                            @if (((TrueFalse)q).TrueFalseAnswer == false)
-                                            {
-                                                <div>&#x2713;</div>
-                                            }
                                             <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
                                                 <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
                                             </label>
@@ -139,24 +122,28 @@
                                     else
                                     {
                                         <!-- False -->
-                                        <div id="gender" class="btn-group" data-toggle="buttons">
-                                            @if (((TrueFalse)q).TrueFalseAnswer == true)
-                                            {
-                                                <div>&#x2713;</div>
-                                            }
+                                        <div id="gender" class="btn-group pull-right" data-toggle="buttons">
                                             <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
                                                 <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
                                             </label>
-                                            @if (((TrueFalse)q).TrueFalseAnswer == false)
-                                            {
-                                                <div>&#x2713;</div>
-                                            }
                                             <label class="btn btn-danger btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
                                                 <input class="trueFalse" type="radio" checked="checked" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
                                             </label>
                                         </div>
                                     }
                                 </div>
+                                @if (((TrueFalse)q).TrueFalseAnswer == q.studentTrueFalseAnswer)
+                                {
+                                    <div class="form-group col-md-1 col-sm-1 col-xs-2">
+                                        <span class="question-correct"><i class="fa fa-check"></i></span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="form-group col-md-1 col-sm-1 col-xs-2">
+                                        <span class="question-wrong"><i class="fa fa-close"></i></span>
+                                    </div>
+                                }
                             </div>
                             count++;
                         }
@@ -175,48 +162,41 @@
                                     <p><strong>@countMC.</strong> @q.Content</p>
                                 </div>
 
-                                <div class="col-md-1"></div>
-                                <div class="form-group col-md-11 col-sm-11 col-xs-12">
-                                    @{
-                                        option = 97;
-                                        foreach (MultipleChoiceAnswer mca in q.MultipleChoiceAnswers)
-                                        {
-                                            if (q.studentMultipleChoiceAnswers.Where(smca => smca.MultipleChoiceAnswerId == mca.MultipleChoiceAnswerId).Any())
+
+                                @{
+                                    option = 97;
+                                    foreach (MultipleChoiceAnswer mca in q.MultipleChoiceAnswers)
+                                    {
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-10 col-sm-10 col-xs-12">
+                                            @if (q.studentMultipleChoiceAnswers.Where(smca => smca.MultipleChoiceAnswerId == mca.MultipleChoiceAnswerId).Any())
                                             {
-                                                if (mca.IsCorrect)
-                                                {
-                                                    <div>&#x2713;</div>
-                                                }
-                                                else
-                                                {
-                                                    <div>X</div>
-                                                }
                                                 <a class="btn btn-primary btn-block text-left multipleChoiceOption" data-mcQuestionId="@q.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="true"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
                                             }
                                             else
                                             {
-                                                if (mca.IsCorrect)
-                                                {
-                                                    <div>&#x2713;</div>
-                                                }
-                                                else
-                                                {
-                                                    <div>X</div>
-                                                }
-                                                if (q.MultipleChoiceAnswers.Contains(mca))
-                                                {
-                                                    <div>&#x2713;</div>
-                                                }
-                                                else
-                                                {
-                                                    <div>X</div>
-                                                }
                                                 <a class="btn btn-default btn-block text-left multipleChoiceOption" data-mcQuestionId="@q.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="false"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
                                             }
-                                            option++;
+                                        </div>
+
+
+                                        @if (mca.IsCorrect)
+                                        {
+                                            <div class="form-group col-md-1 col-sm-1 col-xs-2">
+                                                <span class="question-correct"><i class="fa fa-check"></i></span>
+                                            </div>
                                         }
+                                        else
+                                        {
+                                            <div class="form-group col-md-1 col-sm-1 col-xs-2">
+                                                <span class="question-wrong"><i class="fa fa-close"></i></span>
+                                            </div>
+                                        }
+                                        option++;
                                     }
-                                </div>
+                                }
+
+
                             </div>
                             countMC++;
                         }
