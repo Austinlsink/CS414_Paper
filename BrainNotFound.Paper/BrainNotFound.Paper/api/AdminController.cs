@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BrainNotFound.Paper.Models.BusinessModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,16 +11,15 @@ namespace BrainNotFound.Paper.api
     [ApiController]
     public class AdminController : Controller
     {
-
         #region Initialize controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly PaperDbContext _context;
+
         /// <summary>
         /// Constructor 
         /// </summary>
         /// <param name="userManager">Sets the UserManager</param>
         /// <param name="context">Sets the database context</param>
-        /// 
         public AdminController(UserManager<ApplicationUser> userManager, PaperDbContext context)
         {
             _userManager = userManager;
@@ -33,10 +28,14 @@ namespace BrainNotFound.Paper.api
 
         #endregion Initialize Controllers
 
+        /// <summary>
+        /// Allows the admin to delete another administrator's profile
+        /// </summary>
+        /// <param name="adminId">Search criteria for the specific admin to remove</param>
+        /// <returns>Json object of either true if deletion is successful or false</returns>
         [HttpPost, Route("Delete")]
         public async Task<IActionResult> Delete([FromBody]string adminId)
         {
-            
             var admin = await _userManager.FindByIdAsync(adminId);
             if (admin.UserName != User.Identity.Name)
             {
@@ -46,15 +45,14 @@ namespace BrainNotFound.Paper.api
             else
             {
                 return Json(new { success = false, message = "Sorry, but you can't remove yourself." });
-
             }
         }
 
         /// <summary>
-        /// Allows you to edit an administrator
+        /// Allows the admin to edit a specific admin's profile
         /// </summary>
-        /// <param name="username"></param>
-        /// <returns></returns>
+        /// <param name="username">Search criteria for finding the specific admin</param>
+        /// <returns>Json object with all of the admin's information</returns>
         [HttpPost, Route("Edit/{username}")]
         public async Task<IActionResult> Edit([FromBody]string username)
         {
@@ -101,10 +99,10 @@ namespace BrainNotFound.Paper.api
         }
 
         /// <summary>
-        /// Create a new administrator
+        /// Allows the admin to create a new administrator
         /// </summary>
-        /// <param name="user">Admin information</param>
-        /// <returns></returns>
+        /// <param name="user">ApplilcationUser object that contains all of the new information</param>
+        /// <returns>Json object of either true if the creation of a new admin is successfful; otherwise, false</returns>
         [HttpPost, Route("New")]
         public async Task<IActionResult> New([FromBody] ApplicationUser user)
         {
@@ -123,10 +121,8 @@ namespace BrainNotFound.Paper.api
                     await _userManager.AddToRoleAsync(CreatedUser, "Admin");
 
                     return Json(new { success = true, message = "Admin successfully created" });
-
                 }
             }
-
             return Json(new { success = false, error = "Could not create new admin." });
         }
     }
