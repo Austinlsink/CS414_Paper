@@ -33,7 +33,6 @@
                                 {
                                     @foreach (StudentTestAssignment ts in ViewBag.Grades)
                                     {
-
                                         if (e.Section.Course.CourseId == ts.TestSchedule.Test.Course.CourseId)
                                         {
                                             <tr>
@@ -63,7 +62,6 @@
                                                     {
                                                         letterGrade = 'F';
                                                     }
-
                                                 }
                                                 <td>@letterGrade</td>
                                             </tr>

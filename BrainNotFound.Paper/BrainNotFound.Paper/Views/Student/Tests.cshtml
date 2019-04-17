@@ -6,7 +6,6 @@
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
-
             <div class="x_title">
                 <h2><i class="fa fa-file-text"></i> Upcoming Tests</h2>
                 <ul class="nav navbar-right panel_toolbox">
@@ -57,7 +56,6 @@
                                             else
                                             {
                                                 <a class="btn btn-primary btn-xs"> Locked </a>
-
                                             }
                                         </td>
                                     </tr>
@@ -65,7 +63,6 @@
                             </tbody>
                         </table>
                     </div>
-
                 </div>
             }
             else
@@ -78,8 +75,6 @@
 
 <!--View all previous tests-->
 <div class="x_panel">
-
-
     <div class="x_title">
         <h2><i class="fa fa-file-text"></i> Previous Tests</h2>
         <ul class="nav navbar-right panel_toolbox">
@@ -130,7 +125,6 @@
                     </tbody>
                 </table>
             </div>
-
         </div>
     }
     else
@@ -139,8 +133,8 @@
     }
 </div>
 
-@section scripts
-    {
+@section scripts {
+    <!--Datatable script for the previous tests-->
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
             $('#PreviousTestTable').DataTable({
@@ -152,6 +146,7 @@
         });
     </script>
 
+    <!--Datatable script for the upcoming tests-->
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
             $('#UpcommingTestTable').DataTable({

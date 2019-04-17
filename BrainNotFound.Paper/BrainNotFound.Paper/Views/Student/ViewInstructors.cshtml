@@ -7,10 +7,7 @@
 
 <div class="x_content">
     <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-
-        </div>
-
+        <div class="col-md-12 col-sm-12 col-xs-12 text-center"></div>
         <div class="clearfix"></div>
         @foreach (ApplicationUser i in ViewBag.instructorList)
         {
@@ -22,27 +19,12 @@
                         </div>
                         <div class="left col-xs-12">
                             <h2>@i.FirstName  @i.LastName</h2>
-
                             <br />
                             <ul class="list-unstyled">
                                 <li><i class="fa fa-building"></i> Address: @i.Address  @i.City, @i.State  @i.ZipCode </li>
                                 <li><i class="fa fa-phone"></i> Phone #: </li>
                                 <li><i class="fa fa-at user-profile-icon"></i> Email #: @i.Email</li>
                             </ul>
-                        </div>
-
-                    </div>
-                    <div class="col-xs-12 bottom text-center">
-                        <div class="col-xs-12 col-sm-6 emphasis">
-                            <!--
-                            <button type="button" class="btn btn-success btn-xs">
-                                <i class="fa fa-user">
-                                </i> <i class="fa fa-comments-o"></i>
-                            </button>
-                            <button type="button" class="btn btn-primary btn-xs">
-                                <i class="fa fa-user"> </i> View Profile
-                            </button>
-                            -->
                         </div>
                     </div>
                 </div>
