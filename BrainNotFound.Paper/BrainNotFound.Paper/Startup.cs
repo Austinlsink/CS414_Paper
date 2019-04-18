@@ -35,6 +35,7 @@ namespace BrainNotFound.Paper
             {
 
             //options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTestKara"),                // VisualStudios MSSql Server For Kara to BLOW UP!
+            options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTest"),
             optionsBuilders => optionsBuilders.MigrationsAssembly("BrainNotFound.Paper"));
             });
 
