@@ -110,14 +110,15 @@ function init_daterangepicker_TestSchedule() {
 
     $('#testScheduleDateTime').daterangepicker({
         timePicker: true,
-        startDate: moment().startOf('hour'),
-        endDate: moment().startOf('hour').add(11, 'day'),
+        startDate: moment().startOf('minute').add(1, 'day'),
+        endDate: moment().startOf('min').add(11, 'day'),
         locale: {
             format: 'MM/DD/YYYY hh:mm A'
         }
     });
 
 }
+
 // Updates the statistics in the information section of the test
 function Update_TestStatistics() {
     $("#TotalPointsStats").text(TotalPoints);
