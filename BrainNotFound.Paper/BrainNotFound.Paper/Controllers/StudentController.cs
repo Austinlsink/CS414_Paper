@@ -198,6 +198,10 @@ namespace BrainNotFound.Paper.Controllers
             var testSections = _context.TestSections
                 .Include(ts => ts.Questions)
                     .ThenInclude(q => q.MultipleChoiceAnswers)
+                .Include(ts => ts.Questions)
+                    .ThenInclude(x => x.MatchingQuestionSides)
+                .Include(ts => ts.Questions)
+                    .ThenInclude(x => x.MatchingAnswerSides)
                 .Where(x => x.TestId == studentTestAssignment.TestSchedule.TestId)
                 .ToList();
 
@@ -255,6 +259,21 @@ namespace BrainNotFound.Paper.Controllers
                             else
                             {
                                 testSections[j].Questions[i].studentEssayAnswer = studentEssayAnswer.EssayAnswerGiven;
+                            }
+                            totalQuestions += 1;
+                            break;
+                        case QuestionType.Matching:
+                            var studentMatchingAnswer = _context.StudentMatchingAnswers
+                                                            .Include(x => x.StudentAnswer)
+                                                            .Where(x => x.StudentAnswer.QuestionId == testSections[j].Questions[i].QuestionId).ToList();
+
+                            if (studentMatchingAnswer == null)
+                            {
+                                testSections[j].Questions[i].studentMatchingAnswers = new List<StudentMatchingAnswer>(); ;
+                            }
+                            else
+                            {
+                                testSections[j].Questions[i].studentMatchingAnswers = studentMatchingAnswer;
                             }
                             totalQuestions += 1;
                             break;

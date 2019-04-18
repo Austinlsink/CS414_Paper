@@ -41,6 +41,8 @@ namespace BrainNotFound.Paper.Models.BusinessModels
         [NotMapped]
         public string studentEssayAnswer { get; set; }
 
+        [NotMapped]
+        public List<StudentMatchingAnswer> studentMatchingAnswers { get; set; }
 
         // Returns a Json object to be used in responses to Ajax calls for Multiple Choice Questions
         public JObject GetJsonMultipleChoice()
