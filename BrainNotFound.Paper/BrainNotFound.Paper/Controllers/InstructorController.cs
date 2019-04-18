@@ -83,7 +83,6 @@ namespace BrainNotFound.Paper.Controllers
         }
         #endregion instructor controllers
 
-
         #region student controllers
         [HttpGet, Route("Students")]
         public async Task<IActionResult> Students()
@@ -153,13 +152,11 @@ namespace BrainNotFound.Paper.Controllers
         }
         #endregion student controllers
 
+        #region Courses and Sections Actions
         /// <summary>
         /// Allows the instructor to view a specific course and all of the sections that he teaches
         /// </summary>
         /// <param name="code">DpartmentCode + CourseCode</param>
-
-
-        #region Courses and Sections Actions
         [HttpGet, Route("Courses/{code}")]
         public async Task<IActionResult> ViewCourse(String code)
         {
@@ -374,7 +371,6 @@ namespace BrainNotFound.Paper.Controllers
             else
                 ViewBag.TotalPoints = (int)param[0].Value;
             
-
             // Grab the test sections for the test
             var testSections = _context.TestSections
                 .Include(ts => ts.Questions)
@@ -388,31 +384,17 @@ namespace BrainNotFound.Paper.Controllers
             }
             ViewBag.TotalQuestions = totalQuestions;
             ViewBag.TestSections = testSections;
-
-
-            // Grabs all true false questions
-            ViewBag.TrueFalseQuestions = _context.TrueFalses
-                .Include(tf => tf.TestSection)
-                .Where(tf => tf.TestSection.TestId == test.TestId)
-                .ToList();
-            
+                                   
             // Grabs all multiple choice questions
             ViewBag.MultipleChoiceQuestions = _context.Questions
                 .Include(mc => mc.TestSection)
                 .Include(mc => mc.MultipleChoiceAnswers)
                 .Where(mc => mc.TestSection.TestId == test.TestId)
                 .ToList();
-
-            // Grabs all essay questions
-            ViewBag.EssayQuestions = _context.Essays
-                .Include(e => e.TestSection)
-                .Where(mc => mc.TestSection.TestId == test.TestId)
-                .ToList();
-
+            
             return View();
         }
-
-
+        
         // Allows the user to Edit a test information, add and remove sections
         [HttpGet, Route("Tests/Edit/{DepartmentCode}/{CourseCode}/{URLSafeName}")]
         public IActionResult EditTest(string DepartmentCode, string CourseCode, string URLSafeName)

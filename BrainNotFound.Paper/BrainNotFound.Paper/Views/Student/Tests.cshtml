@@ -23,7 +23,8 @@
                                 <tr class="headings">
                                     <th class="column-title">Name </th>
                                     <th class="column-title">Course</th>
-                                    <th class="column-title">Time</th>
+                                    <th class="column-title">Start Time</th>
+                                    <th class="column-title">End Time</th>
                                     <th class="column-title no-link last">
                                         <span class="nobr">Action</span>
                                     </th>
@@ -48,6 +49,7 @@
                                         }
                                         <td class=" ">@DepartmentCodeAndCourseCode</td>
                                         <td class=" ">@String.Format("{0:f}", ts.Test.TestSchedules.Where(x => x.TestId == ts.Test.TestId).First().StartTime)</td>
+                                        <td class=" ">@String.Format("{0:f}", ts.Test.TestSchedules.Where(x => x.TestId == ts.Test.TestId).First().EndTime)</td>
                                         <td class=" last">
                                             @if (ts.StartTime < DateTime.Now)
                                             {
@@ -92,7 +94,7 @@
                         <tr class="headings">
                             <th class="column-title">Name </th>
                             <th class="column-title">Course</th>
-                            <th class="column-title">Time</th>
+                            <th class="column-title">Date Completed</th>
                             <th class="column-title no-link last">
                                 <span class="nobr">Action</span>
                             </th>
@@ -152,7 +154,7 @@
             $('#UpcommingTestTable').DataTable({
                 "order": [0, 'asc'],
                 "columnDefs": [
-                    { "orderable": false, "targets": [3] }
+                    { "orderable": false, "targets": [4] }
                 ],
             });
         });
