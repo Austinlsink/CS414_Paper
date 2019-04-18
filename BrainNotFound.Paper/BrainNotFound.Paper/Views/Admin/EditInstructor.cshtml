@@ -21,6 +21,7 @@
                     <form asp-controller="Admin" asp-action="EditInstructor" class="form-horizontal form-label-left">
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Salutation</label>
+                            <!--Salutation field-->
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <select asp-for="Salutation" class="select2_single form-control" tabindex="1">
                                     @foreach (string salutation in SalutationType.All)
@@ -43,7 +44,8 @@
                                 UserName <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input value="@ViewBag.instructor.UserName" asp-for="UserName" type="text" required="required" class="form-control col-md-7 col-xs-12">
+                                <input value="@ViewBag.instructor.UserName" asp-for="UserName" type="text" required="required" class="form-control has-feedback-left">
+                                <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                             </div>
                         </div>
                         <!--FirstName field-->
@@ -52,7 +54,8 @@
                                 First Name <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input value="@ViewBag.instructor.FirstName" asp-for="FirstName" type="text" required="required" class="form-control col-md-7 col-xs-12">
+                                <input value="@ViewBag.instructor.FirstName" asp-for="FirstName" type="text" required="required" class="form-control has-feedback-left">
+                                <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                             </div>
                         </div>
                         <!--LastName field-->
@@ -61,39 +64,73 @@
                                 Last Name <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input value="@ViewBag.instructor.LastName" asp-for="LastName" type="text" required="required" class="form-control col-md-7 col-xs-12">
-                            </div>
-                        </div>
-                        <!--Salutation field-->
-                        <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Salutation</label>
-                            <div class="col-md-9 col-sm-9 col-xs-12">
-                                <select asp-for="Salutation" class="select2_single form-control" tabindex="-1">
-                                    <option>@ViewBag.instructor.Salutation</option>
-                                    <option value="mr">Mr.</option>
-                                    <option value="mrs">Mrs.</option>
-                                    <option value="ms">Ms.</option>
-                                    <option value="miss">Miss</option>
-                                    <option value="dr">Dr.</option>
-                                </select>
+                                <input value="@ViewBag.instructor.LastName" asp-for="LastName" type="text" required="required" class="form-control has-feedback-left">
+                                <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                             </div>
                         </div>
                         <!--Email field-->
                         <div class="form-group">
                             <label for="dept-name" class="control-label col-md-3 col-sm-3 col-xs-12">Email </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input value="@ViewBag.instructor.Email" asp-for="Email" class="form-control col-md-7 col-xs-12" type="text">
+                                <input value="@ViewBag.instructor.Email" asp-for="Email" class="form-control has-feedback-left" type="text">
+                                <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
                             </div>
                         </div>
                         <!--PhoneNumber field-->
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-3">Phone Number</label>
-                            <div class="col-md-9 col-sm-9 col-xs-9">
-                                <input value="@ViewBag.instructor.PhoneNumber" asp-for="PhoneNumber" type="text" class="form-control" data-inputmask="'mask' : '(999) 999-9999'">
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input value="@ViewBag.instructor.PhoneNumber" asp-for="PhoneNumber" type="text" class="form-control has-feedback-left" data-inputmask="'mask' : '(999) 999-9999'">
+                                <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
                             </div>
                         </div>
-                        <!--Submit or cancel form-->
+                        <!--Address field-->
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Address</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input id="AddressInput" asp-for="Address" value="@ViewBag.instructor.Address" type="text" class="form-control has-feedback-left" placeholder="Address">
+                                <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
+                                <span id="InstructorAddressErrorMessage" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <!--City field-->
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-3">City</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input id="CityInput" asp-for="City" type="text" value="@ViewBag.instructor.City" class="form-control has-feedback-left" placeholder="City">
+                                <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
+                                <span id="InstructorCityErrorMessage" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <!--State field-->
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-3">State</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input id="StateInput" asp-for="State" type="text" value="@ViewBag.instructor.State" class="form-control has-feedback-left" placeholder="State">
+                                <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
+                                <span id="InstructorStateErrorMessage" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <!--Zipcode field-->
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-3">ZipCode</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input id="ZipInput" asp-for="ZipCode" type="text" value="@ViewBag.instructor.ZipCode" class="form-control has-feedback-left" placeholder="ZipCode">
+                                <span class="fa fa-map-marker form-control-feedback left" aria-hidden="true"></span>
+                                <span id="InstructorZipErrorMessage" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <!--DOB field-->
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Date of Birth</label>
+                            <div class="col-md-69 col-sm-6 col-xs-9">
+                                <input id="DOBInput" asp-for="DOB" type="date" value="@ViewBag.instructor.DOB" class="form-control has-feedback-left" data-inputmask="'mask': 'yyyy-mm-dd'" placeholder="yyyy-mm-dd">
+                                <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                                <span id="InstructorDOBErrorMessage" class="text-danger"></span>
+                            </div>
+                        </div>
                         <div class="ln_solid"></div>
+                        <!--Submit or cancel form-->
                         <div class="form-group">
                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                                 <button class="btn btn-primary" type="button" data-dismiss="modal">Cancel</button>

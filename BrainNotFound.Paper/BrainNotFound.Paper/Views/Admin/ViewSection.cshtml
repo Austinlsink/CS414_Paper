@@ -16,7 +16,7 @@
                             <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>
-                                    <a>Edit information</a>
+                                    <button class="menu_fixed btn-default" type="button" id="EditSection" data-toggle="modal" data-target="#EditSectionModal"><i class="fa fa-edit"></i> Edit </button>
                                 </li>
                             </ul>
                         </li>
@@ -220,8 +220,20 @@
     </div>
 </div>
 
-@section scripts
-{
+<!--Modal for editing the section-->
+<div id="EditSectionModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body" id="EditSectionPlaceholder">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section script {
+    <script type="text/javascript" src="~/js/Course.js"></script>
+
     <!--Datatable script for the students enrolled table-->
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
