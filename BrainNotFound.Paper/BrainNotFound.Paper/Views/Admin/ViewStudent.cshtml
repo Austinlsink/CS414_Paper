@@ -17,10 +17,7 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>
-                                    <a href="#">Edit information</a>
-                                </li>
-                                <li>
-                                    <a href="#">Change password</a>
+                                    <button type="button" id="EditStudent" value="@ViewBag.profile.UserName" data-toggle="modal" data-target="#EditStudentModal" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit Information</button>
                                 </li>
                             </ul>
                         </li>
@@ -120,3 +117,18 @@
         <div class="clearfix"></div>
     </div>
 </div>
+
+<!--Modal for editing a student-->
+<div id="EditStudentModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body" id="EditStudentPlaceholder">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript" src="~/js/Student.js"></script>
+}

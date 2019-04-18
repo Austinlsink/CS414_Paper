@@ -10,7 +10,7 @@
             <div class="x_panel">
                 <div class="x_title">
                     <h2><i class="fa fa-pie-chart"></i> Section Information</h2>
-                    <ul class="nav navbar-right panel_toolbox">
+                    @*<ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
@@ -20,7 +20,7 @@
                                 </li>
                             </ul>
                         </li>
-                    </ul>
+                    </ul>*@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
@@ -108,9 +108,6 @@
                         <table id="studentsEnrolledTable" class="table table-striped jambo_table bulk_action ">
                             <thead>
                                 <tr class="headings">
-                                    <th>
-                                        <input type="checkbox" id="check-all" class="flat">
-                                    </th>
                                     <th class="column-title">First Name </th>
                                     <th class="column-title">Last name </th>
                                     <th class="column-title">Classification </th>
@@ -130,9 +127,6 @@
                                         if (s.Id == e.StudentId && e.SectionId == ViewBag.section.SectionId)
                                         {
                                             <tr class="odd pointer">
-                                                <td class="a-center ">
-                                                    <input type="checkbox" class="flat" name="table_records">
-                                                </td>
                                                 <td class=" ">@s.FirstName </td>
                                                 <td class=" ">@s.LastName </td>
                                                 <td class=" ">@s.Classification </td>
@@ -174,7 +168,6 @@
                         <table id="studentsNotEnrolledTable" class="table table-striped jambo_table bulk_action ">
                             <thead>
                                 <tr class="headings">
-                                    <th><input type="checkbox" id="check-all" class="flat"> </th>
                                     <th class="column-title">First Name </th>
                                     <th class="column-title">Last name </th>
                                     <th class="column-title">Classification </th>
@@ -190,7 +183,6 @@
                                     if ((enrolled.Any(x => x.StudentId == s.Id) && enrolled.Any(x => x.SectionId == ViewBag.section.SectionId)))
                                     {
                                         <tr class="odd pointer">
-                                            <td class="a-center "> <input type="checkbox" class="flat" name="table_records"></td>
                                             <td class=" ">@s.FirstName </td>
                                             <td class=" ">@s.LastName </td>
                                             <td class=" ">@s.Classification </td>
@@ -228,7 +220,7 @@
             $("#studentsEnrolledTable").DataTable({
                 "order": [1, 'asc'],
                 "columnDefs": [
-                    { "orderable": false, "targets": [0, 4] }
+                    { "orderable": false, "targets": [3] }
                 ],
             });
         });
@@ -240,7 +232,7 @@
             $("#studentsNotEnrolledTable").DataTable({
                 "order": [1, 'asc'],
                 "columnDefs": [
-                    { "orderable": false, "targets": [0, 4] }
+                    { "orderable": false, "targets": [3] }
                 ],
             });
         });
