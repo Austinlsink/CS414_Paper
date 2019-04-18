@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Identity;
 using BrainNotFound.Paper.Models.BusinessModels;
 using Microsoft.EntityFrameworkCore;
 using BrainNotFound.Paper.Services;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace BrainNotFound.Paper.Controllers
 {
@@ -351,14 +353,42 @@ namespace BrainNotFound.Paper.Controllers
                 .First();
 
             ViewBag.Test = test;
+
+            // Grab the points for the test
+            var param = new SqlParameter[] {
+                    new SqlParameter() {
+                        ParameterName = "@returnVal",
+                        SqlDbType =  SqlDbType.Int,
+                        Direction = ParameterDirection.Output
+                    },
+                    new SqlParameter() {
+                        ParameterName = "@inputTestId",
+                        SqlDbType =  SqlDbType.BigInt,
+                        Direction = ParameterDirection.Input,
+                        Value = test.TestId
+                    }};
+
+            _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetTotalTestPoints @inputTestId", param);
+            if (Convert.IsDBNull(param[0].Value))
+                ViewBag.TotalPoints = 0;
+            else
+                ViewBag.TotalPoints = (int)param[0].Value;
             
+
             // Grab the test sections for the test
             var testSections = _context.TestSections
                 .Include(ts => ts.Questions)
                 .Where(x => x.TestId == test.TestId)
                 .ToList();
 
+            int totalQuestions = 0;
+            foreach(TestSection ts in testSections)
+            {
+                totalQuestions += ts.Questions.Count;
+            }
+            ViewBag.TotalQuestions = totalQuestions;
             ViewBag.TestSections = testSections;
+
 
             // Grabs all true false questions
             ViewBag.TrueFalseQuestions = _context.TrueFalses
@@ -366,14 +396,14 @@ namespace BrainNotFound.Paper.Controllers
                 .Where(tf => tf.TestSection.TestId == test.TestId)
                 .ToList();
             
-            // Grabs all true false questions
+            // Grabs all multiple choice questions
             ViewBag.MultipleChoiceQuestions = _context.Questions
                 .Include(mc => mc.TestSection)
                 .Include(mc => mc.MultipleChoiceAnswers)
                 .Where(mc => mc.TestSection.TestId == test.TestId)
                 .ToList();
 
-            // Grabs all true false questions
+            // Grabs all essay questions
             ViewBag.EssayQuestions = _context.Essays
                 .Include(e => e.TestSection)
                 .Where(mc => mc.TestSection.TestId == test.TestId)
