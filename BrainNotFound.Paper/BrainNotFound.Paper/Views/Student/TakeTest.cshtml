@@ -209,9 +209,7 @@
                         foreach (Question q in ts.Questions)
                         {
                             <div class="x_panel">
-                                
                                 <div class="x_content">
-                                    
                                     <div class="col-md-12 col-sm-12 col-xs-12 questionRow" style="padding: 20px 0 10px 0">
                                         <div class="col-md-1 col-sm-1 col-xs-3 text-center">
                                             <span id="pointValue-56789">(<span class="pointValue" id="pointValue">1</span> pts.)</span>
@@ -232,7 +230,7 @@
                                                     <option value="">Choose..</option>
                                                     @foreach (MatchingAnswerSide mas in q.MatchingAnswerSides)
                                                     {
-                                                        <option value="">@mas.MatchingAnswer</option>
+                                                        <option value="@mas.MatchingAnswer">@mas.MatchingAnswer</option>
                                                     }
                                                 </select>
                                             </div>
