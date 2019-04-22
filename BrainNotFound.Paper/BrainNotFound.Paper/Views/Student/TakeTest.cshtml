@@ -214,24 +214,38 @@
                                         <div class="col-md-1 col-sm-1 col-xs-3 text-center">
                                             <span id="pointValue-56789">(<span class="pointValue" id="pointValue">1</span> pts.)</span>
                                         </div>
-                                        <div class="col-md-11 col-sm-11 col-xs-11">
+                                        <div class="col-md-10 col-sm-11 col-xs-11">
                                             <p><strong>@matchingCount.</strong> @q.Content</p>
                                         </div>
                                         <div class="clearfix"></div>
                                         <div class="ln_solid"></div>
-                                        <div class="col-md-1 col-sm-1 col-xs-12"></div>
+                                        <div class="col-md-11 col-sm-11 col-xs-12"></div>
                                         @foreach (MatchingQuestionSide mqs in q.MatchingQuestionSides)
                                         {
                                             <div class="col-md-5 col-sm-5 col-xs-12">
                                                 <p>@mqs.Content</p>
                                             </div>
                                             <div class=" col-md-5 col-sm-5 col-xs-12">
-                                                <select id="heard" class="form-control" required="">
-                                                    <option value="">Choose..</option>
-                                                    @foreach (MatchingAnswerSide mas in q.MatchingAnswerSides)
+                                                <select data-matchingAnswerSideId="@mqs.MatchingAnswerSideId" data-mQuestionId="@q.QuestionId" data-matchingQuestionSideId="@mqs.MatchingQuestionSideId" class="form-control MatchingAnswerOptions" required="">
+                                                    @if (q.studentMatchingAnswers.Where(x => x.MatchingQuestionSideId == mqs.MatchingQuestionSideId).Any())
                                                     {
-                                                        <option value="@mas.MatchingAnswer">@mas.MatchingAnswer</option>
+                                                        @foreach (MatchingAnswerSide mas in q.MatchingAnswerSides)
+                                                        {
+                                                            if (q.studentMatchingAnswers.Where(x => x.MatchingQuestionSideId == mqs.MatchingQuestionSideId && x.MatchingAnswerSideId == mas.MatchingAnswerSideId).Any())
+                                                            {
+                                                                <option value="@mas.MatchingAnswerSideId">@mas.MatchingAnswer</option>
+                                                            }
+                                                        }
                                                     }
+                                                    else
+                                                    {
+                                                        <option value="">Choose..</option>
+                                                        @foreach (MatchingAnswerSide mas in q.MatchingAnswerSides)
+                                                        {
+                                                            <option value="@mas.MatchingAnswerSideId">@mas.MatchingAnswer</option>
+                                                        }
+                                                    }
+
                                                 </select>
                                             </div>
                                         }
@@ -247,9 +261,6 @@
         </div>
     </div>
 }
-
-
-
 
 
 <!--Pledge and submition-->
