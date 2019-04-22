@@ -48,8 +48,8 @@
 
                                         }
                                         <td class=" ">@DepartmentCodeAndCourseCode</td>
-                                        <td class=" ">@String.Format("{0:f}", ts.Test.TestSchedules.Where(x => x.TestId == ts.Test.TestId).First().StartTime)</td>
-                                        <td class=" ">@String.Format("{0:f}", ts.Test.TestSchedules.Where(x => x.TestId == ts.Test.TestId).First().EndTime)</td>
+                                        <td class=" ">@String.Format("{0:f}", ts.StartTime)</td>
+                                        <td class=" ">@String.Format("{0:f}", ts.EndTime)</td>
                                         <td class=" last">
                                             @if (ts.StartTime < DateTime.Now)
                                             {

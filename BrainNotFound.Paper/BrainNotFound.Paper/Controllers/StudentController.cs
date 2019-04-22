@@ -51,7 +51,7 @@ namespace BrainNotFound.Paper.Controllers
         #endregion Student profile and Settings controllers
 
         /// <summary>
-        /// Displays the student's Dashboard, which contains quick links
+        /// Displays the student's upcoming and previous tests
         /// </summary>
         /// <returns>Index View</returns>
         [HttpGet, Route("")]
@@ -157,32 +157,6 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         #region Test Controllers
-
-        /// <summary>
-        /// Display all of the available tests to the student
-        /// </summary>
-        /// <returns>Tests View</returns>
-        [HttpGet, Route("Tests")]
-        public IActionResult Tests()
-        {
-            // Find the student information and his test assignments
-            var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
-            var studentTestAssignments = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).Where(x => x.StudentId == student.Id).ToList();
-
-            // Distinguish between upcoming tests and previous tests
-            var upcomingTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime > DateTime.Now && sta.Submitted == false).Select(sta => sta.TestSchedule).ToList();
-            var previousTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime < DateTime.Now || sta.Submitted == true).Select(sta => sta.TestSchedule).ToList();
-            ViewBag.UpcomingTests = upcomingTests;
-            ViewBag.PreviousTests = previousTests;
-
-            // Grab each tests course and department information
-            var courses = _context.Courses.ToList();
-            var departments = _context.Departments.ToList();
-            ViewBag.Courses = courses;
-            ViewBag.Departments = departments;
-
-            return View();
-        }
 
         /// <summary>
         /// Allows the student to take the specified tests, and grabs any questions that may already be answered
@@ -318,6 +292,9 @@ namespace BrainNotFound.Paper.Controllers
                 totalPoints.totalPoints = 0;
             else
                 totalPoints.totalPoints = (int)param[0].Value;
+
+            studentTestAssignment.StartedTime = DateTime.Now;
+            _context.SaveChanges();
 
             ViewBag.TotalPoints = totalPoints;
             ViewBag.TestSections = testSections;
