@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using BrainNotFound.Paper.Models.BusinessModels;
 using BrainNotFound.Paper.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using Newtonsoft.Json.Linq;
 
 namespace BrainNotFound.Paper.api
 {
+    [Authorize(Roles = "Instructor")]
     [Route("api/CreateTest")]
     public class CreateTestController : Controller
     {

@@ -313,7 +313,6 @@ namespace BrainNotFound.Paper.Controllers
                 {
                     currentCourse.DepartmentCode = (departments.Where(d => d.DepartmentId == currentCourse.DepartmentId).First()).DepartmentCode;
                     coursesTaught.Add(currentCourse);
-
                 }
             }
 
@@ -431,11 +430,10 @@ namespace BrainNotFound.Paper.Controllers
                 .First();
 
             // Fetch all students that took this test
-            var students = _context.StudentTestAssignments
+            var studentTestAssignments = _context.StudentTestAssignments
                 .Include(sta => sta.TestSchedule)
                 .Include(sta => sta.ApplicationUser)
                 .Where(sta => sta.TestSchedule.TestId == test.TestId)
-                .Select(sta => sta.ApplicationUser)
                 .ToList();
 
             // Fetch all questions that need to graded
@@ -460,7 +458,7 @@ namespace BrainNotFound.Paper.Controllers
                 jQuestion.questionNumber = questionNumber++;
 
                 JArray jStudentAnswers = new JArray();
-                foreach (var student in students)
+                foreach (var student in studentTestAssignments.Select(sta => sta.ApplicationUser).ToList())
                 {
                    
                    dynamic jStudentAnswer = new JObject();
@@ -471,15 +469,16 @@ namespace BrainNotFound.Paper.Controllers
 
                    if (studentAnswer == null)
                    {
-                       jStudentAnswer.answer = "The student did not provide an answer";
-                       jStudentAnswer.pointsEarned = 0;
-                       jStudentAnswer.comment = "Comments can not given";
+                       jStudentAnswer.answered = false;
                    }
                    else
                    {
+                       jStudentAnswer.answered = true;
                        jStudentAnswer.answer = studentAnswer.EssayAnswerGiven;
                        jStudentAnswer.pointsEarned = studentAnswer.PointsEarned;
                        jStudentAnswer.comment = studentAnswer.Comments;
+                       jStudentAnswer.answerId = studentAnswer.AnswerId;
+
                    }
 
                    jStudentAnswers.Add(jStudentAnswer);
@@ -493,7 +492,7 @@ namespace BrainNotFound.Paper.Controllers
 
             string strTest = JsonConvert.SerializeObject(jEssayQuestions);
             ViewBag.Test = test;
-            ViewBag.Students = students;
+            ViewBag.Assigments = studentTestAssignments;
             ViewBag.EssayQuestions = strTest;
 
             return View();

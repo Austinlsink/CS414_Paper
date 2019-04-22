@@ -55,6 +55,11 @@ namespace BrainNotFound.Paper
                 .HasForeignKey(p => p.MultipleChoiceAnswerId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<StudentEssayAnswer>()
+           .Property(b => b.PointsEarned)
+           .HasDefaultValue(-1);
+
+
             base.OnModelCreating(builder);
 
         }

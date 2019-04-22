@@ -49,9 +49,18 @@
 
 
                             <select class=" form-control selectpicker" id="studentPicker">
-                                @foreach (ApplicationUser student in ViewBag.Students)
+                                @foreach (StudentTestAssignment assigment in ViewBag.Assigments)
                                 {
-                                    <option value="@student.Id" data-content="<i class='fa fa-circle text-danger' aria-hidden='true'></i> @student.FullName"></option>
+                                    if (assigment.Submitted)
+                                    {
+
+                                        <option value="@assigment.ApplicationUser.Id" data-content="<i class='fa fa-circle'  style='color:orange' aria-hidden='true'></i> @assigment.ApplicationUser.FullName"></option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@assigment.ApplicationUser.Id" data-content="<i class='fa fa-circle'  style='color:darkred' aria-hidden='true'></i>  @assigment.ApplicationUser.FullName"></option>
+                                    }
+
                                 }
 
                             </select>
@@ -84,73 +93,20 @@
     <div class="col-md-8 col-sm-6 col-xs-12">
         <div class="x_panel">
             <div class="x_title">
-                <h2><i class="fa fa-question-circle"></i> | Current Question</h2>
+                <h2><i class="fa fa-question-circle"></i> Current Question</h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                 </ul>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-
-                <div class="row">
-                    <div class="col-md-6 col-sm-6 col-xs-6 tile ">
-                        <span>Student</span>
-                        <p><strong>Abmael Fernandes da Silva Jr</strong></p>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6 tile ">
-                        <span>Question</span>
-                        <p><strong>1/5</strong></p>
-                    </div>
+                <div id="GradeQuestionLoading" class="text-center">
+                    <i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+                    <p>Loading...</p>
                 </div>
-                <div class="ln_solid"></div>
-                <div class="row">
-                    <div class="col-xs-3 text-right">
-                        <label>Question #1 </label>
-                    </div>
-                    <div class="col-xs-9">
-                        <p>Marklkjfhal skdjfhansvsdo ilfjkgahsfdalsk jdfhaldkvnsjdcna lksdfjahsfaiusfwefn alsidfukjas.df halsdkfjas lcjknaskldfj asdhf ajsdf halkd jfahdlf kjad</p>
-                    </div>
+                <div id="gradeQuestionCotainer">
 
-                </div>
 
-                <br />
-                <br />
-                <div class="row">
-                    <div class="col-xs-3 text-right">
-                        <label>Student's answer</label>
-                    </div>
-                    <div class="col-xs-9">
-                        <p>Marklkjfhal skdjfhansvsdo ilfjkgahsfdalsk jdfhaldkvnsjdcna lksdfjahsfaiusfwefn alsidfukjas.df halsdkfjas lcjknaskldfj asdhf ajsdf halkd jfahdlf kjad</p>
-                    </div>
-                    <div class="col-xs-3 text-right">
-                        <label>Expected answer</label>
-                    </div>
-                    <div class="col-xs-9">
-                        <p>Marklkjfhal skdjfhansvsdo ilfjkgahsfdalsk jdfhaldkvnsjdcna lksdfjahsfaiusfwefn alsidfukjas.df halsdkfjas lcjknaskldfj asdhf ajsdf halkd jfahdlf kjad</p>
-                    </div>
-                </div>
-
-                <br />
-                <br />
-                <div class="row">
-                    <div class="form-group  col-xs-12">
-                        <label>Comments</label>
-                        <textarea class="" id="InstructorAnswer"></textarea>
-                    </div>
-                    <div class="col-xs-12 ">
-                        <label>Points</label>
-                        <div class="form-inline">
-                            <input type="number" placeholder="pts" class="form-control" />
-                            <span>/15</span>
-
-                        </div>
-
-                    </div>
-                </div>
-                <div class="ln_solid"></div>
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <button type="button" class="pull-right btn btn-info">Grade</button>
-                    <button type="button" class="pull-right btn btn-danger">Cancel</button>
                 </div>
             </div>
         </div>
@@ -174,7 +130,6 @@
 
 @section TemplateSnippets
     {
-
     <script type="text/x-handlebars-template" id="displayQuestionsTable">
         {{! Display Essay test question in a table }}
         <table class="table table-hover" id="gradeTest" style=" cursor: pointer;">
@@ -186,15 +141,18 @@
             </thead>
             <tbody>
                 {{#each essayQuestions}}
-                <tr id="{{questionId}}" class="questionRow {{#if selected}}bg-info{{/if}}">
+                <tr id="{{questionId}}" class="questionRow {{#if selected}}bg-info{{/if}}" data-selected="{{#if selected}}true{{else}}false{{/if}}">
                     <th scope="row" class="text-center">
                         {{questionNumber}}
                         <br />
-
+                        {{#if answered}}
                         {{#if graded}}
-                        <i class="fa fa-circle text-success"></i>
+                        <i class="fa fa-circle" style="color:green"></i>
                         {{else}}
-                        <i class="fa fa-circle text-warning"></i>
+                        <i class="fa fa-circle" style="color:orange"></i>
+                        {{/if}}
+                        {{else}}
+                        <i class="fa fa-circle"  style="color:darkred"></i>
                         {{/if}}
                     </th>
                     <td>{{content}}</td>
@@ -202,5 +160,81 @@
                 {{/each}}
             </tbody>
         </table>
+    </script>
+
+    <script type="text/x-handlebars-template" id="displayGradeQuestion">
+        {{! Display the grade question partial }}
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-6 tile ">
+                <span>Student</span>
+                <p><strong>{{studentAnswer.studentFullName}}</strong></p>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-6 tile ">
+                <span>Question</span>
+                <p><strong>{{questionNumber}}/{{totalQuestions}}</strong></p>
+            </div>
+        </div>
+        <div class="ln_solid"></div>
+        <div class="row">
+            <div class="col-xs-4 text-right">
+                <label>Question #{{questionNumber}} </label>
+            </div>
+            <div class="col-xs-8">
+                <p>{{content}}</p>
+            </div>
+
+        </div>
+
+        <br />
+        <br />
+        <div class="row">
+            <div class="col-xs-4 text-right">
+                <label>Student's answer</label>
+            </div>
+            <div class="col-xs-8">
+                <p>{{#if studentAnswer.answer}}{{studentAnswer.answer}}{{else}}<span class="text-danger">No answer submitted</span>{{/if}}</p>
+            </div>
+            <div class="col-xs-4 text-right">
+                <label>Expected answer</label>
+            </div>
+            <div class="col-xs-8">
+                <p>{{expectedAnswer}}</p>
+            </div>
+        </div>
+
+        <br />
+        <br />
+        <div class="row">
+            <div class="form-group  col-xs-12">
+                <label>Comments</label>
+                {{#if studentAnswer.answer}}
+                <textarea id="InstructorComment">{{studentAnswer.comment}}</textarea>
+                {{else}}
+                <textarea disabled="disabled" id="InstructorAnswer">Comments can not be made</textarea>
+                {{/if}}
+            </div>
+            <div class="col-xs-12 ">
+                <label>Points</label>
+                <div class="form-inline">
+                    {{#if studentAnswer.answer}}
+                    <input id="pointsEarned" type="number" placeholder="pts" min="0" max="{{pointValue}}" class="form-control" {{#if graded}} value="{{studentAnswer.pointsEarned}}" {{/if}} />
+
+                    {{else}}
+                    <input type="number" disabled="disabled" class="form-control" value="0" />
+                    {{/if}}
+                    <span>/{{pointValue}}</span>
+                    <br />
+                    <span class="text-danger hidden" id="pointsEarnedErrorMessage">Please enter the points earned.</span>
+                </div>
+            </div>
+        </div>
+        <div class="ln_solid"></div>
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            {{#if studentAnswer.answer}}
+            <button type="button" class="pull-right btn btn-info" id="submitGrade" data-questionId="{{questionId}}" data-answerId="{{studentAnswer.answerId}}">Grade & Next</button>
+            {{else}}
+            <button type="button" class="pull-right btn btn-info">Next</button>
+            {{/if}}
+        </div>
     </script>
 }

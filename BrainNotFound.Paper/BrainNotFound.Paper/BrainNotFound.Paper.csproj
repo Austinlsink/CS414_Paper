@@ -6,6 +6,11 @@
     <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Migrations\20190422174936_AddedDefaultValueForPointsEarned.cs" />
+    <Compile Remove="Migrations\20190422174936_AddedDefaultValueForPointsEarned.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="12.1.2" />
