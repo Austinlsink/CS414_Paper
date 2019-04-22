@@ -367,7 +367,7 @@
     <script src="~/js/TakeTest.js" type="text/javascript"></script>
 
     <!--Timer for how long the test lasts-->
-    <script>
+    <script type="text/javascript">
         var timeLimit = "@ViewBag.TestSchedule.IsTimeUnlimited";
         if (timeLimit === "True")
         {
@@ -393,7 +393,7 @@
                 document.getElementById("timerScroll").innerHTML = "EXPIRED";
                 document.getElementById("TimeLimitStats").innerHTML = "EXPIRED";
 
-                //$("#TimerOutModal").modal("toggle");
+                $("#TimerOutModal").modal("toggle");
             }
         }, 1000);
     </script>
