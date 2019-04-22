@@ -39,3 +39,22 @@ $("button#YesDelete").click(function () {
 $("#MessageClose").click(function () {
     location.reload();
 })
+
+//$(".reviewStudentTest").click(function () {
+//    var id = $(this).attr("data-studentId");
+//    console.log(id);
+
+//    $.ajax({
+//        url: "/api/Tests/ReviewStudentTest/",
+//        type: "POST",
+//        contentType: "application/json",
+//        // Data fetched from the form
+//        data: id,
+//        success: function (result) {
+//            console.log("Success");
+//        },
+//        error: function (xhr, status, error) {
+//            console.log("Failed");
+//        }
+//    })
+//})

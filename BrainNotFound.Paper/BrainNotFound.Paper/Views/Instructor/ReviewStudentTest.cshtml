@@ -11,45 +11,6 @@
 
 }
 <div class="row">
-    <!--List of all of the students-->
-    <div class="col-md-4 col-sm-6 col-xs-12">
-        <div class="x_panel">
-            <div class="x_title">
-                <h2><i class="fa fa-question-circle"></i> Student Tests</h2>
-                <ul class="nav navbar-right panel_toolbox">
-                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                </ul>
-                <div class="clearfix"></div>
-            </div>
-            <div class="x_content">
-                <div class="table-responsive">
-                    <table id="UnscheduledTestTable" class="table table-striped jambo_table bulk_action ">
-                        <thead>
-                            <tr class="headings">
-                                <th class="column-title">Student Name </th>
-
-                                <th class="column-title no-link last">
-                                    <span class="nobr">Action</span>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var student in ViewBag.Students)
-                            {
-                                <tr class="odd pointer">
-                                    <td class=" ">@student.FullName</td>
-                                    <td class=" last">
-                                        <a asp-controller="Instructor" asp-action="ReviewStudentTest" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Review </a>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-    </div>
     <div class="col-md-8 col-sm-6 col-xs-12">
         <div class="x_panel">
             <div class="x_title">
@@ -268,3 +229,7 @@
         </div>
     }
 </div>
+
+@section scripts {
+    <script type="text/javascript" src="~/js/ReviewTest.js"></script>
+}
