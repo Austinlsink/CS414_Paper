@@ -398,7 +398,7 @@ namespace BrainNotFound.Paper.Controllers
         }
 
         [HttpGet, Route("Tests/ReviewStudentTest/View/{DepartmentCode}/{CourseCode}/{URLSafeName}")]
-        public IActionResult ReviewStudentTest(string DepartmentCode, string CourseCode, string URLSafeName)
+        public async Task<IActionResult> ReviewStudentTest(string DepartmentCode, string CourseCode, string URLSafeName)
         {
             // Get Test info
             var Instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
@@ -453,6 +453,16 @@ namespace BrainNotFound.Paper.Controllers
                 .Where(mc => mc.TestSection.TestId == test.TestId)
                 .ToList();
 
+            var studentTestAssignments = _context.StudentTestAssignments.Where(x => x.TestSchedule.TestId == test.TestId ).ToList();
+            List<ApplicationUser> students = new List<ApplicationUser>();
+            foreach(StudentTestAssignment sta in studentTestAssignments)
+            {
+                ApplicationUser student = await _userManager.FindByIdAsync(sta.StudentId);
+                students.Add(student);
+            }
+
+            ViewBag.Students = students;
+         
             return View();
         }
 
