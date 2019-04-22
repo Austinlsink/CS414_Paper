@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -21,6 +22,7 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 		public bool Submitted { get; set; }
         public bool Signed { get; set; }
 		public float Grade { get; set; }
+        public DateTime StartedTime { get; set; }
 
         [NotMapped]
         public int totalPoints { get; set; }
