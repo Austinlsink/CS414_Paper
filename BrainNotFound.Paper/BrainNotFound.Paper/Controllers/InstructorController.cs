@@ -445,52 +445,56 @@ namespace BrainNotFound.Paper.Controllers
                 .ToList();
 
             // Fetch all student answers for this test
-            var sea = _context.StudentEssayAnswers.ToList();
+            var essayAnswers = _context.StudentEssayAnswers
+                .Include(sea => sea.TestSchedule)
+                .Where(sea => sea.TestSchedule.TestId == test.TestId)
+                .ToList();
 
-
-            
             // create the JObject to be passed to the front End
             JArray jEssayQuestions = new JArray();
+            var questionNumber = 1;
             foreach (var essayQuestion in questions)
             {
                 dynamic jQuestion = essayQuestion.ToJObject();
                 jQuestion.selected = false;
+                jQuestion.questionNumber = questionNumber++;
 
                 JArray jStudentAnswers = new JArray();
                 foreach (var student in students)
                 {
-                    dynamic jStudentAnswer = new JObject();
-                    var studentAnswer = sea.Where(sa => sa.StudentId == student.Id).FirstOrDefault();
-                    jStudentAnswer.studentId = student.Id;
-                    jStudentAnswer.studentFullName = student.FullName;
+                   
+                   dynamic jStudentAnswer = new JObject();
+                   var studentAnswer = essayAnswers.Where(sa => sa.StudentId == student.Id && sa.QuestionId == essayQuestion.QuestionId).FirstOrDefault();
+                    
+                   jStudentAnswer.studentId = student.Id;
+                   jStudentAnswer.studentFullName = student.FullName;
 
-                    if (studentAnswer == null)
-                    {
-                        jStudentAnswer.answer = "The student did not provide an answer";
-                        jStudentAnswer.pointsEarned = 0;
-                        jStudentAnswer.comment = "Comments can not given";
-                    }
-                    else
-                    {
-                        jStudentAnswer.answer = studentAnswer.EssayAnswerGiven;
-                        jStudentAnswer.pointsEarned = studentAnswer.PointsEarned;
-                        jStudentAnswer.comment = studentAnswer.Comments;
-                    }
+                   if (studentAnswer == null)
+                   {
+                       jStudentAnswer.answer = "The student did not provide an answer";
+                       jStudentAnswer.pointsEarned = 0;
+                       jStudentAnswer.comment = "Comments can not given";
+                   }
+                   else
+                   {
+                       jStudentAnswer.answer = studentAnswer.EssayAnswerGiven;
+                       jStudentAnswer.pointsEarned = studentAnswer.PointsEarned;
+                       jStudentAnswer.comment = studentAnswer.Comments;
+                   }
 
-                    jStudentAnswers.Add(jStudentAnswers);
-
+                   jStudentAnswers.Add(jStudentAnswer);
+                   
                 }
-
-                
                 jQuestion.studentAnswers = jStudentAnswers;
 
                 jEssayQuestions.Add(jQuestion);
 
             }
 
+            string strTest = JsonConvert.SerializeObject(jEssayQuestions);
             ViewBag.Test = test;
             ViewBag.Students = students;
-            ViewBag.EssayQuestions = JsonConvert.SerializeObject(jEssayQuestions);
+            ViewBag.EssayQuestions = strTest;
 
             return View();
         }
