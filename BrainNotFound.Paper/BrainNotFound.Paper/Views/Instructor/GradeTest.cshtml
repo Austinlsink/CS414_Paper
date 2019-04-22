@@ -34,11 +34,11 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Grade by</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                             <div id="gender" class="btn-group" data-toggle="buttons">
-                                <label class="btn btn-primary btn-sm col-xs-6">
-                                    <input type="radio" name="gradyBy"> &nbsp; Student &nbsp;
+                                <label class="btn btn-primary btn-sm col-xs-6" data-radio="true">
+                                    <input type="radio" name="gradyBy" value="student" checked="checked"> &nbsp; Student &nbsp;
                                 </label>
-                                <label class="btn btn-default btn-sm col-xs-6">
-                                    <input type="radio" name="gradyBy" /> Questions
+                                <label class="btn btn-default btn-sm col-xs-6" data-radio="true">
+                                    <input type="radio" name="gradyBy" value="questions" /> Questions
                                 </label>
                             </div>
                         </div>
@@ -79,13 +79,7 @@
                 <div id="questionTableContainer">
 
                 </div>
-                <div class="ln_solid"></div>
-                <div class="row">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <button type="button" class="btn btn-info"><i class="fa fa-angle-left"></i> Previous</button>
-                        <button type="button" class="pull-right btn btn-info">Next <i class="fa fa-angle-right"></i></button>
-                    </div>
-                </div>
+                
             </div>
         </div>
 
@@ -122,9 +116,9 @@
     <script type="text/javascript" src="~/vendors/handlebars/handlebars-v4.1.1.js"></script>
     <script type="text/javascript" src="~/js/GradeTest.js"></script>
 
-        <script type="text/javascript">
+    <script type="text/javascript">
             essayQuestions = @Html.Raw(ViewBag.EssayQuestions);
-        </script>
+    </script>
 
 }
 
@@ -152,7 +146,7 @@
                         <i class="fa fa-circle" style="color:orange"></i>
                         {{/if}}
                         {{else}}
-                        <i class="fa fa-circle"  style="color:darkred"></i>
+                        <i class="fa fa-circle" style="color:darkred"></i>
                         {{/if}}
                     </th>
                     <td>{{content}}</td>
@@ -172,6 +166,89 @@
             <div class="col-md-6 col-sm-6 col-xs-6 tile ">
                 <span>Question</span>
                 <p><strong>{{questionNumber}}/{{totalQuestions}}</strong></p>
+            </div>
+        </div>
+        <div class="ln_solid"></div>
+        <div class="row">
+            <div class="col-xs-4 text-right">
+                <label>Question #{{questionNumber}} </label>
+            </div>
+            <div class="col-xs-8">
+                <p>{{content}}</p>
+            </div>
+
+        </div>
+
+        <br />
+        <br />
+        <div class="row">
+            <div class="col-xs-4 text-right">
+                <label>Student's answer</label>
+            </div>
+            <div class="col-xs-8">
+                <p>{{#if studentAnswer.answer}}{{studentAnswer.answer}}{{else}}<span class="text-danger">No answer submitted</span>{{/if}}</p>
+            </div>
+            <div class="col-xs-4 text-right">
+                <label>Expected answer</label>
+            </div>
+            <div class="col-xs-8">
+                <p>{{expectedAnswer}}</p>
+            </div>
+        </div>
+
+        <br />
+        <br />
+        <div class="row">
+            <div class="form-group  col-xs-12">
+                <label>Comments</label>
+                {{#if studentAnswer.answer}}
+                <textarea id="InstructorComment">{{studentAnswer.comment}}</textarea>
+                {{else}}
+                <textarea disabled="disabled" id="InstructorAnswer">Comments can not be made</textarea>
+                {{/if}}
+            </div>
+            <div class="col-xs-12 ">
+                <label>Points</label>
+                <div class="form-inline">
+                    {{#if studentAnswer.answer}}
+                    <input id="pointsEarned" type="number" placeholder="pts" min="0" max="{{pointValue}}" class="form-control" {{#if graded}} value="{{studentAnswer.pointsEarned}}" {{/if}} />
+
+                    {{else}}
+                    <input type="number" disabled="disabled" class="form-control" value="0" />
+                    {{/if}}
+                    <span>/{{pointValue}}</span>
+                    <br />
+                    <span class="text-danger hidden" id="pointsEarnedErrorMessage">Please enter the points earned.</span>
+                </div>
+            </div>
+        </div>
+        <div class="ln_solid"></div>
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            {{#if studentAnswer.answer}}
+            <button type="button" class="pull-right btn btn-info" id="submitGrade" data-questionId="{{questionId}}" data-answerId="{{studentAnswer.answerId}}">Grade & Next</button>
+            {{else}}
+            <button type="button" class="pull-right btn btn-info">Next</button>
+            {{/if}}
+        </div>
+    </script>
+
+
+    <script type="text/x-handlebars-template" id="displayGradeQuestion2">
+        {{! Display the grade question partial }}
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-6 tile ">
+                <span>Student</span>
+                <p><strong>{{studentAnswer.studentFullName}}</strong></p>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-6 tile ">
+                <span>Students</span>
+                <p><strong>{{StudentNumber}}/{{totalStudents}}</strong></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <button type="button" class="btn btn-info"><i class="fa fa-angle-left"></i> Previous</button>
+                <button type="button" class="pull-right btn btn-info">Next <i class="fa fa-angle-right"></i></button>
             </div>
         </div>
         <div class="ln_solid"></div>
