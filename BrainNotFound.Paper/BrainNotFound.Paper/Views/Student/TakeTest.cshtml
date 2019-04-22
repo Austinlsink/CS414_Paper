@@ -227,11 +227,25 @@
                                             </div>
                                             <div class=" col-md-5 col-sm-5 col-xs-12">
                                                 <select data-matchingAnswerSideId="@mqs.MatchingAnswerSideId" data-mQuestionId="@q.QuestionId" data-matchingQuestionSideId="@mqs.MatchingQuestionSideId" class="form-control MatchingAnswerOptions" required="">
-                                                    <option value="">Choose..</option>
-                                                    @foreach (MatchingAnswerSide mas in q.MatchingAnswerSides)
+                                                    @if (q.studentMatchingAnswers.Where(x => x.MatchingQuestionSideId == mqs.MatchingQuestionSideId).Any())
                                                     {
-                                                        <option value="@mas.MatchingAnswerSideId">@mas.MatchingAnswer</option>
+                                                        @foreach (MatchingAnswerSide mas in q.MatchingAnswerSides)
+                                                        {
+                                                            if (q.studentMatchingAnswers.Where(x => x.MatchingQuestionSideId == mqs.MatchingQuestionSideId && x.MatchingAnswerSideId == mas.MatchingAnswerSideId).Any())
+                                                            {
+                                                                <option value="@mas.MatchingAnswerSideId">@mas.MatchingAnswer</option>
+                                                            }
+                                                        }
                                                     }
+                                                    else
+                                                    {
+                                                        <option value="">Choose..</option>
+                                                        @foreach (MatchingAnswerSide mas in q.MatchingAnswerSides)
+                                                        {
+                                                            <option value="@mas.MatchingAnswerSideId">@mas.MatchingAnswer</option>
+                                                        }
+                                                    }
+
                                                 </select>
                                             </div>
                                         }
@@ -393,7 +407,7 @@
                 document.getElementById("timerScroll").innerHTML = "EXPIRED";
                 document.getElementById("TimeLimitStats").innerHTML = "EXPIRED";
 
-                $("#TimerOutModal").modal("toggle");
+                //$("#TimerOutModal").modal("toggle");
             }
         }, 1000);
     </script>

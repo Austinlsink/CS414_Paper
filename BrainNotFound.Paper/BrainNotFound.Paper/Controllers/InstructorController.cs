@@ -397,6 +397,65 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        [HttpGet, Route("Tests/ReviewStudentTest/View/{DepartmentCode}/{CourseCode}/{URLSafeName}")]
+        public IActionResult ReviewStudentTest(string DepartmentCode, string CourseCode, string URLSafeName)
+        {
+            // Get Test info
+            var Instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
+            var test = _context.Tests
+                .Include(t => t.Course)
+                    .ThenInclude(c => c.Department)
+                .Include(t => t.TestSchedules)
+                .Where(t => t.URLSafeName == URLSafeName && t.Course.CourseCode == CourseCode && t.InstructorId == Instructor.Id)
+                .First();
+
+            ViewBag.Test = test;
+
+            // Grab the points for the test
+            var param = new SqlParameter[] {
+                    new SqlParameter() {
+                        ParameterName = "@returnVal",
+                        SqlDbType =  SqlDbType.Int,
+                        Direction = ParameterDirection.Output
+                    },
+                    new SqlParameter() {
+                        ParameterName = "@inputTestId",
+                        SqlDbType =  SqlDbType.BigInt,
+                        Direction = ParameterDirection.Input,
+                        Value = test.TestId
+                    }};
+
+            _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetTotalTestPoints @inputTestId", param);
+            if (Convert.IsDBNull(param[0].Value))
+                ViewBag.TotalPoints = 0;
+            else
+                ViewBag.TotalPoints = (int)param[0].Value;
+
+            // Grab the test sections for the test
+            var testSections = _context.TestSections
+                .Include(ts => ts.Questions)
+                .Where(x => x.TestId == test.TestId)
+                .ToList();
+
+            int totalQuestions = 0;
+            foreach (TestSection ts in testSections)
+            {
+                totalQuestions += ts.Questions.Count;
+            }
+            ViewBag.TotalQuestions = totalQuestions;
+            ViewBag.TestSections = testSections;
+
+            // Grabs all multiple choice questions
+            ViewBag.MultipleChoiceQuestions = _context.Questions
+                .Include(mc => mc.TestSection)
+                .Include(mc => mc.MultipleChoiceAnswers)
+                .Where(mc => mc.TestSection.TestId == test.TestId)
+                .ToList();
+
+            return View();
+        }
+
         // Allows the user to Edit a test information, add and remove sections
         [HttpGet, Route("Tests/Edit/{DepartmentCode}/{CourseCode}/{URLSafeName}")]
         public IActionResult EditTest(string DepartmentCode, string CourseCode, string URLSafeName)
@@ -445,52 +504,56 @@ namespace BrainNotFound.Paper.Controllers
                 .ToList();
 
             // Fetch all student answers for this test
-            var sea = _context.StudentEssayAnswers.ToList();
+            var essayAnswers = _context.StudentEssayAnswers
+                .Include(sea => sea.TestSchedule)
+                .Where(sea => sea.TestSchedule.TestId == test.TestId)
+                .ToList();
 
-
-            
             // create the JObject to be passed to the front End
             JArray jEssayQuestions = new JArray();
+            var questionNumber = 1;
             foreach (var essayQuestion in questions)
             {
                 dynamic jQuestion = essayQuestion.ToJObject();
                 jQuestion.selected = false;
+                jQuestion.questionNumber = questionNumber++;
 
                 JArray jStudentAnswers = new JArray();
                 foreach (var student in students)
                 {
-                    dynamic jStudentAnswer = new JObject();
-                    var studentAnswer = sea.Where(sa => sa.StudentId == student.Id).FirstOrDefault();
-                    jStudentAnswer.studentId = student.Id;
-                    jStudentAnswer.studentFullName = student.FullName;
+                   
+                   dynamic jStudentAnswer = new JObject();
+                   var studentAnswer = essayAnswers.Where(sa => sa.StudentId == student.Id && sa.QuestionId == essayQuestion.QuestionId).FirstOrDefault();
+                    
+                   jStudentAnswer.studentId = student.Id;
+                   jStudentAnswer.studentFullName = student.FullName;
 
-                    if (studentAnswer == null)
-                    {
-                        jStudentAnswer.answer = "The student did not provide an answer";
-                        jStudentAnswer.pointsEarned = 0;
-                        jStudentAnswer.comment = "Comments can not given";
-                    }
-                    else
-                    {
-                        jStudentAnswer.answer = studentAnswer.EssayAnswerGiven;
-                        jStudentAnswer.pointsEarned = studentAnswer.PointsEarned;
-                        jStudentAnswer.comment = studentAnswer.Comments;
-                    }
+                   if (studentAnswer == null)
+                   {
+                       jStudentAnswer.answer = "The student did not provide an answer";
+                       jStudentAnswer.pointsEarned = 0;
+                       jStudentAnswer.comment = "Comments can not given";
+                   }
+                   else
+                   {
+                       jStudentAnswer.answer = studentAnswer.EssayAnswerGiven;
+                       jStudentAnswer.pointsEarned = studentAnswer.PointsEarned;
+                       jStudentAnswer.comment = studentAnswer.Comments;
+                   }
 
-                    jStudentAnswers.Add(jStudentAnswers);
-
+                   jStudentAnswers.Add(jStudentAnswer);
+                   
                 }
-
-                
                 jQuestion.studentAnswers = jStudentAnswers;
 
                 jEssayQuestions.Add(jQuestion);
 
             }
 
+            string strTest = JsonConvert.SerializeObject(jEssayQuestions);
             ViewBag.Test = test;
             ViewBag.Students = students;
-            ViewBag.EssayQuestions = JsonConvert.SerializeObject(jEssayQuestions);
+            ViewBag.EssayQuestions = strTest;
 
             return View();
         }

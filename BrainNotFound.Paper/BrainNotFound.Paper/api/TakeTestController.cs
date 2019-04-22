@@ -59,7 +59,7 @@ namespace BrainNotFound.Paper.api
             {
                 studentTestAssignment.Submitted = true;
                 studentTestAssignment.Signed = isPledgeSigned;
-                _context.SaveChanges(); 
+                _context.SaveChanges();
                 return Json(new { success = true });
             }
         }
@@ -83,9 +83,9 @@ namespace BrainNotFound.Paper.api
             List<Question> testSectionQuestions = new List<Question>();
 
             // Grab all of the questions for each test section
-            foreach(TestSection ts in testSections)
+            foreach (TestSection ts in testSections)
             {
-                foreach(Question q in allQuestions)
+                foreach (Question q in allQuestions)
                 {
                     if (q.TestSectionId == ts.TestSectionId)
                     {
@@ -96,8 +96,8 @@ namespace BrainNotFound.Paper.api
 
             // Grab all of the student answers
             var allStudentAnswers = _context.StudentAnswers.Where(x => x.TestScheduleId == testSchedule.TestScheduleId).ToList();
-            
-            if(testSectionQuestions.Count == allStudentAnswers.Count)
+
+            if (testSectionQuestions.Count == allStudentAnswers.Count)
             {
                 return Json(new { success = true });
             }
@@ -125,44 +125,51 @@ namespace BrainNotFound.Paper.api
 
             // Grab the student information
             var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
-
+            var testTime = _context.StudentTestAssignments.Where(x => x.StudentId == student.Id && x.TestScheduleId == testScheduleId).First();
             // Find the student answer
             var studentAnswer = _context.StudentMatchingAnswers.Where(x => x.MatchingAnswerSideId == matchingAnswerSideId && x.MatchingQuestionSideId == matchingQuestionSideId).FirstOrDefault();
 
-            if (studentAnswer == null)
+            if (testTime.StartedTime.AddMinutes(50) < DateTime.UtcNow)
             {
-                StudentAnswer newStudentAnswer = new StudentAnswer()
+                if (studentAnswer == null)
                 {
-                    QuestionId = questionId,
-                    TestScheduleId = testScheduleId,
-                    StudentId = student.Id
-                };
-                _context.StudentAnswers.Add(newStudentAnswer);
+                    StudentAnswer newStudentAnswer = new StudentAnswer()
+                    {
+                        QuestionId = questionId,
+                        TestScheduleId = testScheduleId,
+                        StudentId = student.Id
+                    };
+                    _context.StudentAnswers.Add(newStudentAnswer);
 
-                StudentMatchingAnswer newStudentMatchingAnswer = new StudentMatchingAnswer()
+                    StudentMatchingAnswer newStudentMatchingAnswer = new StudentMatchingAnswer()
+                    {
+                        AnswerId = newStudentAnswer.AnswerId,
+                        MatchingAnswerSideId = matchingAnswerSideId,
+                        MatchingQuestionSideId = matchingQuestionSideId
+                    };
+
+                    _context.StudentMatchingAnswers.Add(newStudentMatchingAnswer);
+                    _context.SaveChanges();
+
+                    return Json(new { success = true });
+                }
+                else
                 {
-                    AnswerId = newStudentAnswer.AnswerId,
-                    MatchingAnswerSideId = matchingAnswerSideId,
-                    MatchingQuestionSideId = matchingQuestionSideId
-                };
+                    StudentAnswer newStudentAnswer = new StudentAnswer()
+                    {
+                        QuestionId = questionId,
+                        TestScheduleId = testScheduleId,
+                        StudentId = student.Id
+                    };
 
-                _context.StudentMatchingAnswers.Add(newStudentMatchingAnswer);
-                _context.SaveChanges();
-
-                return Json(new { success = true });
+                    studentAnswer.AnswerId = newStudentAnswer.AnswerId;
+                    _context.StudentMatchingAnswers.Update(studentAnswer);
+                    return Json(new { success = true });
+                }
             }
             else
             {
-                StudentAnswer newStudentAnswer = new StudentAnswer()
-                {
-                    QuestionId = questionId,
-                    TestScheduleId = testScheduleId,
-                    StudentId = student.Id
-                };
-
-                studentAnswer.AnswerId = newStudentAnswer.AnswerId;
-                _context.StudentMatchingAnswers.Update(studentAnswer);
-                return Json(new { success = true });
+                return Json(new { success = false });
             }
         }
 
@@ -176,67 +183,75 @@ namespace BrainNotFound.Paper.api
         {
             // Parse the information from the JObject
             dynamic multipleChoiceInfo = JsonData;
-            long questionId = (long) multipleChoiceInfo.QuestionId;
+            long questionId = (long)multipleChoiceInfo.QuestionId;
             string answer = multipleChoiceInfo.Answer;
-            long testScheduleId = (long) multipleChoiceInfo.TestScheduleId;
-            long mcAnswerId = (long) multipleChoiceInfo.MCAnswerId;
-            bool isSelected = (bool) multipleChoiceInfo.IsSelected;
+            long testScheduleId = (long)multipleChoiceInfo.TestScheduleId;
+            long mcAnswerId = (long)multipleChoiceInfo.MCAnswerId;
+            bool isSelected = (bool)multipleChoiceInfo.IsSelected;
 
             var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
             var studentAnswer = _context.StudentAnswers.Include(x => x.StudentMultipleChoiceAnswers).Where(x => x.QuestionId == questionId && x.TestScheduleId == testScheduleId && x.StudentId == student.Id).FirstOrDefault();
-            
-            // If studentAnswer is empty, create a new student answer and add a list of StudentMultipleChoiceAnswer
-            if (studentAnswer == null)
+            var testTime = _context.StudentTestAssignments.Where(x => x.StudentId == student.Id && x.TestScheduleId == testScheduleId).First();
+
+            if (testTime.StartedTime.AddMinutes(50) < DateTime.UtcNow)
             {
-                StudentAnswer newStudentAnswer = new StudentAnswer()
+                // If studentAnswer is empty, create a new student answer and add a list of StudentMultipleChoiceAnswer
+                if (studentAnswer == null)
                 {
-                    QuestionId = questionId,
-                    TestScheduleId = testScheduleId,
-                    StudentId = student.Id
-                };
+                    StudentAnswer newStudentAnswer = new StudentAnswer()
+                    {
+                        QuestionId = questionId,
+                        TestScheduleId = testScheduleId,
+                        StudentId = student.Id
+                    };
 
-                List<StudentMultipleChoiceAnswer> answersGiven = new List<StudentMultipleChoiceAnswer>();
-                answersGiven.Add(new StudentMultipleChoiceAnswer()
-                {
-                    MultipleChoiceAnswerId = mcAnswerId,
-                    AnswerId = newStudentAnswer.AnswerId                    
-                });
-
-                newStudentAnswer.StudentMultipleChoiceAnswers = answersGiven;
-
-                _context.StudentAnswers.Add(newStudentAnswer);
-                _context.SaveChanges();
-
-                return Json(new { success = true });
-            }
-            // If the studentAnswer already exists, modify the MultipleChoiceAnswer list
-            else
-            {
-                if (isSelected)
-                {
-                    StudentMultipleChoiceAnswer newChoice = new StudentMultipleChoiceAnswer()
+                    List<StudentMultipleChoiceAnswer> answersGiven = new List<StudentMultipleChoiceAnswer>();
+                    answersGiven.Add(new StudentMultipleChoiceAnswer()
                     {
                         MultipleChoiceAnswerId = mcAnswerId,
-                        AnswerId = studentAnswer.AnswerId
-                    
-                    };
-                    studentAnswer.StudentMultipleChoiceAnswers.Add(newChoice);
+                        AnswerId = newStudentAnswer.AnswerId
+                    });
+
+                    newStudentAnswer.StudentMultipleChoiceAnswers = answersGiven;
+
+                    _context.StudentAnswers.Add(newStudentAnswer);
                     _context.SaveChanges();
+
+                    return Json(new { success = true });
                 }
+                // If the studentAnswer already exists, modify the MultipleChoiceAnswer list
                 else
                 {
-                    var answerRetrived = _context.StudentMultipleChoiceAnswers.Where(x => x.MultipleChoiceAnswerId == mcAnswerId && x.AnswerId == studentAnswer.AnswerId).FirstOrDefault();
-                    studentAnswer.StudentMultipleChoiceAnswers.Remove(answerRetrived);
-
-                    if(studentAnswer.StudentMultipleChoiceAnswers.Count == 0)
+                    if (isSelected)
                     {
-                        _context.StudentAnswers.Remove(studentAnswer);
+                        StudentMultipleChoiceAnswer newChoice = new StudentMultipleChoiceAnswer()
+                        {
+                            MultipleChoiceAnswerId = mcAnswerId,
+                            AnswerId = studentAnswer.AnswerId
+
+                        };
+                        studentAnswer.StudentMultipleChoiceAnswers.Add(newChoice);
+                        _context.SaveChanges();
+                    }
+                    else
+                    {
+                        var answerRetrived = _context.StudentMultipleChoiceAnswers.Where(x => x.MultipleChoiceAnswerId == mcAnswerId && x.AnswerId == studentAnswer.AnswerId).FirstOrDefault();
+                        studentAnswer.StudentMultipleChoiceAnswers.Remove(answerRetrived);
+
+                        if (studentAnswer.StudentMultipleChoiceAnswers.Count == 0)
+                        {
+                            _context.StudentAnswers.Remove(studentAnswer);
+                        }
+
+                        _context.SaveChanges();
                     }
 
-                    _context.SaveChanges();
+                    return Json(new { success = true });
                 }
-
-                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { success = false });
             }
         }
 
@@ -250,33 +265,42 @@ namespace BrainNotFound.Paper.api
         {
             // Parse the information from the JObject
             dynamic trueFalseInfo = data;
-            long questionId = (long) trueFalseInfo.QuestionId;
-            bool answer = (bool) trueFalseInfo.Answer;
-            long testScheduleId = (long) trueFalseInfo.TestScheduleId;
+            long questionId = (long)trueFalseInfo.QuestionId;
+            bool answer = (bool)trueFalseInfo.Answer;
+            long testScheduleId = (long)trueFalseInfo.TestScheduleId;
 
             var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
 
             var studentAnswer = _context.StudentTrueFalseAnswers.Where(x => x.QuestionId == questionId && x.TestScheduleId == testScheduleId && x.StudentId == student.Id).FirstOrDefault();
-            
-            if(studentAnswer == null)
-            {
-                StudentTrueFalseAnswer TFAnswer = new StudentTrueFalseAnswer()
-                {
-                    TrueFalseAnswerGiven = answer,
-                    StudentId = student.Id,
-                    TestScheduleId = testScheduleId,
-                    QuestionId = questionId
-                };
+            var testTime = _context.StudentTestAssignments.Where(x => x.StudentId == student.Id && x.TestScheduleId == testScheduleId).First();
 
-                _context.StudentAnswers.Add(TFAnswer);
-                _context.SaveChanges();
+            if (testTime.StartedTime.AddMinutes(50) < DateTime.UtcNow)
+            {
+                if (studentAnswer == null)
+                {
+                    StudentTrueFalseAnswer TFAnswer = new StudentTrueFalseAnswer()
+                    {
+                        TrueFalseAnswerGiven = answer,
+                        StudentId = student.Id,
+                        TestScheduleId = testScheduleId,
+                        QuestionId = questionId
+                    };
+
+                    _context.StudentAnswers.Add(TFAnswer);
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    studentAnswer.TrueFalseAnswerGiven = answer;
+                    _context.SaveChanges();
+                }
+                return Json(new { success = true });
             }
             else
             {
-                studentAnswer.TrueFalseAnswerGiven = answer;
-                _context.SaveChanges();
+                return Json(new { success = false });
             }
-            return Json(new { success = true });
+                
         }
 
         /// <summary>
@@ -296,28 +320,37 @@ namespace BrainNotFound.Paper.api
             var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
 
             var studentAnswer = _context.StudentEssayAnswers.Where(x => x.QuestionId == questionId && x.StudentId == student.Id && x.TestScheduleId == testScheduleId).FirstOrDefault();
+            var testTime = _context.StudentTestAssignments.Where(x => x.StudentId == student.Id && x.TestScheduleId == testScheduleId).First();
 
-            if (studentAnswer == null)
+            if (testTime.StartedTime.AddMinutes(50) < DateTime.UtcNow)
             {
-                StudentEssayAnswer essayAnswer = new StudentEssayAnswer()
+                if (studentAnswer == null)
                 {
-                    TestScheduleId = testScheduleId,
-                    EssayAnswerGiven = studentEssayAnswer,
-                    QuestionId = questionId,
-                    StudentId = student.Id
-                };
+                    StudentEssayAnswer essayAnswer = new StudentEssayAnswer()
+                    {
+                        TestScheduleId = testScheduleId,
+                        EssayAnswerGiven = studentEssayAnswer,
+                        QuestionId = questionId,
+                        StudentId = student.Id
+                    };
 
-                _context.StudentEssayAnswers.Add(essayAnswer);
-                _context.StudentTestAssignments.Where(x => x.TestScheduleId == testScheduleId && x.StudentId == student.Id).First().ManualGradingRequired = true;
-                _context.SaveChanges();
+                    _context.StudentEssayAnswers.Add(essayAnswer);
+                    _context.StudentTestAssignments.Where(x => x.TestScheduleId == testScheduleId && x.StudentId == student.Id).First().ManualGradingRequired = true;
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    studentAnswer.EssayAnswerGiven = studentEssayAnswer;
+                    _context.SaveChanges();
+                }
+
+                return Json(new { success = true });
             }
             else
             {
-                studentAnswer.EssayAnswerGiven = studentEssayAnswer;
-                _context.SaveChanges();
+                return Json(new { success = false });
             }
-
-            return Json(new { success = true });
+               
         }
 
         #endregion save student answers

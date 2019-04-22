@@ -3,7 +3,7 @@
 /**********************************************************************/
 $(document).ready(function () {
     compile_template();
-    initialize_page();
+    init_page();
 })
 
 /**********************************************************************/
@@ -11,7 +11,7 @@ $(document).ready(function () {
 /**********************************************************************/
 
 var template = {}; // Compiled templaes
-var essayQuestions = {}; // Essay questions
+var essayQuestions = []; // Essay questions
 
 /**********************************************************************/
 /*                             Functions                              */
@@ -27,28 +27,20 @@ function compile_template() {
 }
 
 // Initialize page data using the templates
-function initialize_page() {
-    var templateData = {
-        essayQuestions: [
-            {
-                questionId: 101,
-                questionNumber: 1,
-                content: "Talk about the beloved country that Bima is from",
-                expectedAnswer: "Something that says that Brazil is cool ans awesome!",
-                pointValue: 23,
-                selected: true,
-                studentAnswers: [{
-                    studentId: "AbmaelSilva",
-                    studentFullName : "Abmael Fernandes da Silva Jr",
-                    answer: "Brazil is simply cool!",
-                    comment: "You forgot the Awesome Part",
-                    pointsEarned: 20
-                }]
-            }]
-    }
-    //$("#questionTableContainer").html(template.displayQuestionsTable(templateData));
-
-    //$("#QuestionsLoading").addClass("hidden");
-
+function init_page() {
     console.log(essayQuestions);
+
+    var selectedStudentId = $("#studentPicker").val();
+    console.log(selectedStudentId);
 }
+
+// Renders the Questions Table based on the selected student
+function RenderQuestionsTable(studentId) {
+    var templateData = { essayQuestions: essayQuestions }
+    var renderedQuestionsTable = template.displayQuestionsTable(templateData)
+    $("#questionTableContainer").html(renderedQuestionsTable);
+
+    $("#QuestionsLoading").addClass("hidden");
+}
+
+

@@ -48,10 +48,10 @@
                         <div class="col-md-9 col-sm-9 col-xs-12">
 
 
-                            <select class=" form-control selectpicker">
-                                @foreach (var student in ViewBag.Students)
+                            <select class=" form-control selectpicker" id="studentPicker">
+                                @foreach (ApplicationUser student in ViewBag.Students)
                                 {
-                                    <option data-content="<i class='fa fa-circle text-danger' aria-hidden='true'></i> @student.FullName"></option>
+                                    <option value="@student.Id" data-content="<i class='fa fa-circle text-danger' aria-hidden='true'></i> @student.FullName"></option>
                                 }
 
                             </select>
@@ -167,7 +167,7 @@
     <script type="text/javascript" src="~/js/GradeTest.js"></script>
 
         <script type="text/javascript">
-            essayQuestions = @ViewBag.EssayQuestions;
+            essayQuestions = @Html.Raw(ViewBag.EssayQuestions);
         </script>
 
 }
