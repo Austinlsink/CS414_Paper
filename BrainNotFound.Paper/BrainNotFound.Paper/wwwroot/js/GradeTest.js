@@ -100,6 +100,18 @@ function render_grade_question() {
     $("#gradeQuestionCotainer").html(renderedQuestionsTable);
     $("#GradeQuestionLoading").addClass("hidden");
 }
+
+// Array search Function
+function findWithAttr(array, attr, value) {
+    for (var i = 0; i < array.length; i += 1) {
+        if (array[i][attr] === value) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+
 /**********************************************************************/
 /*                           Event Handlers                           */
 /**********************************************************************/
@@ -185,8 +197,6 @@ $("#gradeQuestionCotainer").on("click", "#submitGrade", function () {
 
                     console.log(essayQuestions);
                     render_question_table(questionId);
-                    render_grade_question();
-
 
                 }
                 else {
