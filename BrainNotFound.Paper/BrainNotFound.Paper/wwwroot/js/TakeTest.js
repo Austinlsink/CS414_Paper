@@ -88,6 +88,32 @@ $("button#submitTest").click(function () {
     }
 })
 
+// Save Matching choice questions
+$(".MatchingAnswerOptions").change(function () {
+    var TestScheduleId = $("input#testScheduleId").val();
+    var MatchingAnswerSideId = $(this).attr("data-matchingAnswerSideId");
+    var MatchingQuestionSideId = $(this).attr("data-matchingQuestionSideId");
+    var QuestionId = $(this).attr("data-mQuestionId");
+    console.log(MatchingAnswerSideId, MatchingQuestionSideId, QuestionId);
+
+    var JsonData = JSON.stringify({ TestScheduleId: TestScheduleId, MatchingAnswerSideId: MatchingAnswerSideId, MatchingQuestionSideId: MatchingQuestionSideId, QuestionId: QuestionId })
+
+
+    $.ajax({
+        url: "/api/Tests/SaveMatchingChoiceAnswer/",
+        type: "POST",
+        contentType: "application/json",
+        // Data fetched from the form
+        data: JsonData,
+        success: function (result) {
+            console.log("Success");
+        },
+        error: function (xhr, status, error) {
+            console.log("Failed");
+        }
+    })
+})
+
 // Save multiple choice questions
 $("a.multipleChoiceOption").click(function () {
     // Toggles true/False and changes the button color

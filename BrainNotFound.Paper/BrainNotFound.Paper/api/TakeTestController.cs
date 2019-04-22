@@ -65,47 +65,6 @@ namespace BrainNotFound.Paper.api
         }
 
         /// <summary>
-        /// Saves and updates the student's essay answer
-        /// </summary>
-        /// <param name="JsonData">JObject: QuestionId, TestScheduleId, StudentEssayAnswer</param>
-        /// <returns>Json result of true once the essay question is saved</returns>
-        [HttpPost, Route("SaveEssayAnswer")]
-        public JsonResult SaveEssayAnswer(JObject JsonData)
-        {
-            // Parse the information from the JObject
-            dynamic multipleChoiceInfo = JsonData;
-            long questionId = (long)multipleChoiceInfo.QuestionId;
-            long testScheduleId = (long)multipleChoiceInfo.TestScheduleId;
-            string studentEssayAnswer = multipleChoiceInfo.StudentEssayAnswer;
-
-            var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
-
-            var studentAnswer = _context.StudentEssayAnswers.Where(x => x.QuestionId == questionId && x.StudentId == student.Id && x.TestScheduleId == testScheduleId).FirstOrDefault();
-
-            if (studentAnswer == null)
-            {
-                StudentEssayAnswer essayAnswer = new StudentEssayAnswer()
-                {
-                    TestScheduleId = testScheduleId,
-                    EssayAnswerGiven = studentEssayAnswer,
-                    QuestionId = questionId,
-                    StudentId = student.Id                    
-                };
-
-                _context.StudentEssayAnswers.Add(essayAnswer);
-                _context.StudentTestAssignments.Where(x => x.TestScheduleId == testScheduleId && x.StudentId == student.Id).First().ManualGradingRequired = true;
-                _context.SaveChanges();
-            }
-            else
-            {
-                studentAnswer.EssayAnswerGiven = studentEssayAnswer;
-                _context.SaveChanges();
-            }
-
-            return Json(new { success = true });
-        }
-
-        /// <summary>
         /// Confirms if all the questions are answered when the test is submitted.
         /// </summary>
         /// <param name="jsonObject">JObject: TestScheduleId</param>
@@ -148,6 +107,64 @@ namespace BrainNotFound.Paper.api
             }
         }
 
+        #region save student answers
+
+        /// <summary>
+        /// Saves or updates the matching choice answer that the student selects
+        /// </summary>
+        /// <param name="JsonData">JObject: questionId, answer, TestScheduleId, MultipleChoiceAnswerId, IsSelected</param>
+        /// <returns>Json result of true once the question is either saved or updated</returns>
+        [HttpPost, Route("SaveMatchingChoiceAnswer")]
+        public JsonResult SaveMatchingChoiceAnswer(JObject JsonData)
+        {
+            dynamic matchingInfo = JsonData;
+            long testScheduleId = (long)matchingInfo.TestScheduleId;
+            long matchingAnswerSideId = (long)matchingInfo.MatchingAnswerSideId;
+            long matchingQuestionSideId = (long)matchingInfo.MatchingQuestionSideId;
+            long questionId = (long)matchingInfo.QuestionId;
+
+            // Grab the student information
+            var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
+            // Find the student answer
+            var studentAnswer = _context.StudentMatchingAnswers.Where(x => x.MatchingAnswerSideId == matchingAnswerSideId && x.MatchingQuestionSideId == matchingQuestionSideId).FirstOrDefault();
+
+            if (studentAnswer == null)
+            {
+                StudentAnswer newStudentAnswer = new StudentAnswer()
+                {
+                    QuestionId = questionId,
+                    TestScheduleId = testScheduleId,
+                    StudentId = student.Id
+                };
+                _context.StudentAnswers.Add(newStudentAnswer);
+
+                StudentMatchingAnswer newStudentMatchingAnswer = new StudentMatchingAnswer()
+                {
+                    AnswerId = newStudentAnswer.AnswerId,
+                    MatchingAnswerSideId = matchingAnswerSideId,
+                    MatchingQuestionSideId = matchingQuestionSideId
+                };
+
+                _context.StudentMatchingAnswers.Add(newStudentMatchingAnswer);
+                _context.SaveChanges();
+
+                return Json(new { success = true });
+            }
+            else
+            {
+                StudentAnswer newStudentAnswer = new StudentAnswer()
+                {
+                    QuestionId = questionId,
+                    TestScheduleId = testScheduleId,
+                    StudentId = student.Id
+                };
+
+                studentAnswer.AnswerId = newStudentAnswer.AnswerId;
+                _context.StudentMatchingAnswers.Update(studentAnswer);
+                return Json(new { success = true });
+            }
+        }
 
         /// <summary>
         /// Saves or updates the multiple choice answer that the student selects
@@ -197,14 +214,12 @@ namespace BrainNotFound.Paper.api
             {
                 if (isSelected)
                 {
-                    // var answerRetrived = _context.StudentMultipleChoiceAnswers.Where(x => x.AnswerId == studentAnswer.AnswerId && x.MultipleChoiceAnswerId == mcAnswerId).First();
                     StudentMultipleChoiceAnswer newChoice = new StudentMultipleChoiceAnswer()
                     {
                         MultipleChoiceAnswerId = mcAnswerId,
                         AnswerId = studentAnswer.AnswerId
                     
                     };
-                    //_context.StudentMultipleChoiceAnswers.Add(newChoice);
                     studentAnswer.StudentMultipleChoiceAnswers.Add(newChoice);
                     _context.SaveChanges();
                 }
@@ -215,7 +230,6 @@ namespace BrainNotFound.Paper.api
 
                     if(studentAnswer.StudentMultipleChoiceAnswers.Count == 0)
                     {
-                       // _context.StudentMultipleChoiceAnswers.Remove(answerRetrived);
                         _context.StudentAnswers.Remove(studentAnswer);
                     }
 
@@ -264,5 +278,48 @@ namespace BrainNotFound.Paper.api
             }
             return Json(new { success = true });
         }
+
+        /// <summary>
+        /// Saves and updates the student's essay answer
+        /// </summary>
+        /// <param name="JsonData">JObject: QuestionId, TestScheduleId, StudentEssayAnswer</param>
+        /// <returns>Json result of true once the essay question is saved</returns>
+        [HttpPost, Route("SaveEssayAnswer")]
+        public JsonResult SaveEssayAnswer(JObject JsonData)
+        {
+            // Parse the information from the JObject
+            dynamic multipleChoiceInfo = JsonData;
+            long questionId = (long)multipleChoiceInfo.QuestionId;
+            long testScheduleId = (long)multipleChoiceInfo.TestScheduleId;
+            string studentEssayAnswer = multipleChoiceInfo.StudentEssayAnswer;
+
+            var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
+            var studentAnswer = _context.StudentEssayAnswers.Where(x => x.QuestionId == questionId && x.StudentId == student.Id && x.TestScheduleId == testScheduleId).FirstOrDefault();
+
+            if (studentAnswer == null)
+            {
+                StudentEssayAnswer essayAnswer = new StudentEssayAnswer()
+                {
+                    TestScheduleId = testScheduleId,
+                    EssayAnswerGiven = studentEssayAnswer,
+                    QuestionId = questionId,
+                    StudentId = student.Id
+                };
+
+                _context.StudentEssayAnswers.Add(essayAnswer);
+                _context.StudentTestAssignments.Where(x => x.TestScheduleId == testScheduleId && x.StudentId == student.Id).First().ManualGradingRequired = true;
+                _context.SaveChanges();
+            }
+            else
+            {
+                studentAnswer.EssayAnswerGiven = studentEssayAnswer;
+                _context.SaveChanges();
+            }
+
+            return Json(new { success = true });
+        }
+
+        #endregion save student answers
     }
 }
