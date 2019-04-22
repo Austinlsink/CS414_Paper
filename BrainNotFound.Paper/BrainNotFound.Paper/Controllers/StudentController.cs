@@ -59,6 +59,21 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("Dashboard")]
         public IActionResult Index()
         {
+            // Find the student information and his test assignments
+            var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            var studentTestAssignments = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).Where(x => x.StudentId == student.Id).ToList();
+
+            // Distinguish between upcoming tests and previous tests
+            var upcomingTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime > DateTime.Now && sta.Submitted == false).Select(sta => sta.TestSchedule).ToList();
+            var previousTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime < DateTime.Now || sta.Submitted == true).Select(sta => sta.TestSchedule).ToList();
+            ViewBag.UpcomingTests = upcomingTests;
+            ViewBag.PreviousTests = previousTests;
+
+            // Grab each tests course and department information
+            var courses = _context.Courses.ToList();
+            var departments = _context.Departments.ToList();
+            ViewBag.Courses = courses;
+            ViewBag.Departments = departments;
             return View();
         }
 
