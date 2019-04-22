@@ -10,10 +10,10 @@ namespace BrainNotFound.Paper.Services
         public static class Instruction
         {
             public const string TrueFalse = "Determine if each statement is True or False.";
-            public const string MultipleChoice = "Chose the best choice for each question.";
-            public const string Matching = "Match each concept to it's corrent.";
-            public const string FillInTheBlank = "Fill in the blank with the correct word.";
-            public const string Essay = "Answer each essay question.";
+            public const string MultipleChoice = "Choose the best option(s) for each question.";
+            public const string Matching = "Match each concept to it's correct answer. Answers may be used once or more than once.";
+            public const string FillInTheBlank = "Fill in the blank(s) with the correct word(s).";
+            public const string Essay = "Answer each essay question to the best of your ability. Partial credit will be given.";
         }
 
         public static class Header
