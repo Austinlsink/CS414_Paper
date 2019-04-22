@@ -1,0 +1,57 @@
+@using BrainNotFound.Paper.Models.BusinessModels;
+@using BrainNotFound.Paper.Services;
+@model Test;
+@{
+    Test test = ViewBag.Test;
+    List<Section> sections = ViewBag.Sections;
+
+    ViewData["Title"] = "View " + test.TestName + " - Instructor";
+}
+<div class="row">
+    <!--List of all of the students-->
+    <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2><i class="fa fa-question-circle"></i> Students</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="table-responsive">
+                    <table id="students" class="table table-striped jambo_table bulk_action ">
+                        <thead>
+                            <tr class="headings">
+                                <th class="column-title">Student Name </th>
+
+                                <th class="column-title no-link last">
+                                    <span class="nobr">Action</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var student in ViewBag.Students)
+                            {
+                                <tr class="odd pointer">
+                                    <td class=" ">@student.FullName</td>
+                                    <td class=" last">
+                                        <a class="btn btn-info btn-xs reviewStudentTest" data-DepartmentCode="@ViewBag.Test.Course.Department.DepartmentCode" data-CourseCode="@ViewBag.Test.Course.CourseCode" data-URLSafeName="@ViewBag.Test.URLSafeName" data-StudentId="@student.Id"><i class="fa fa-pencil"></i> Review </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div id="placeholder"></div>
+
+   
+</div>
+
+@section scripts {
+    <script type="text/javascript" src="~/js/ReviewTest.js"></script>
+}

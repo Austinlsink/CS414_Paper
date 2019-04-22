@@ -2666,13 +2666,13 @@ function init_morris_charts() {
         Morris.Donut({
             element: 'graph_donut',
             data: [
-                { label: 'A', value: 9 },
-                { label: 'B', value: 15 },
-                { label: 'C', value: 10 },
-                { label: 'D', value: 4 },
+                { label: 'A', value: 25 },
+                { label: 'B', value: 35 },
+                { label: 'C', value: 20 },
+                { label: 'D', value: 9 },
                 { label: 'F', value: 2 }
             ],
-            colors: ['#2B3080', '#A3A8FF', '#5760FF', '#525480', '#454CCC'],
+            colors: ['darkgreen', 'yellowgreen', 'gold', 'orangered', 'red'],
             formatter: function (y) {
                 return y + " students";
             },
