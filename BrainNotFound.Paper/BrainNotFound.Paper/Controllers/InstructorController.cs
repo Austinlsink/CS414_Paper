@@ -397,6 +397,65 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        [HttpGet, Route("Tests/ReviewStudentTest/View/{DepartmentCode}/{CourseCode}/{URLSafeName}")]
+        public IActionResult ReviewStudentTest(string DepartmentCode, string CourseCode, string URLSafeName)
+        {
+            // Get Test info
+            var Instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
+            var test = _context.Tests
+                .Include(t => t.Course)
+                    .ThenInclude(c => c.Department)
+                .Include(t => t.TestSchedules)
+                .Where(t => t.URLSafeName == URLSafeName && t.Course.CourseCode == CourseCode && t.InstructorId == Instructor.Id)
+                .First();
+
+            ViewBag.Test = test;
+
+            // Grab the points for the test
+            var param = new SqlParameter[] {
+                    new SqlParameter() {
+                        ParameterName = "@returnVal",
+                        SqlDbType =  SqlDbType.Int,
+                        Direction = ParameterDirection.Output
+                    },
+                    new SqlParameter() {
+                        ParameterName = "@inputTestId",
+                        SqlDbType =  SqlDbType.BigInt,
+                        Direction = ParameterDirection.Input,
+                        Value = test.TestId
+                    }};
+
+            _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetTotalTestPoints @inputTestId", param);
+            if (Convert.IsDBNull(param[0].Value))
+                ViewBag.TotalPoints = 0;
+            else
+                ViewBag.TotalPoints = (int)param[0].Value;
+
+            // Grab the test sections for the test
+            var testSections = _context.TestSections
+                .Include(ts => ts.Questions)
+                .Where(x => x.TestId == test.TestId)
+                .ToList();
+
+            int totalQuestions = 0;
+            foreach (TestSection ts in testSections)
+            {
+                totalQuestions += ts.Questions.Count;
+            }
+            ViewBag.TotalQuestions = totalQuestions;
+            ViewBag.TestSections = testSections;
+
+            // Grabs all multiple choice questions
+            ViewBag.MultipleChoiceQuestions = _context.Questions
+                .Include(mc => mc.TestSection)
+                .Include(mc => mc.MultipleChoiceAnswers)
+                .Where(mc => mc.TestSection.TestId == test.TestId)
+                .ToList();
+
+            return View();
+        }
+
         // Allows the user to Edit a test information, add and remove sections
         [HttpGet, Route("Tests/Edit/{DepartmentCode}/{CourseCode}/{URLSafeName}")]
         public IActionResult EditTest(string DepartmentCode, string CourseCode, string URLSafeName)
