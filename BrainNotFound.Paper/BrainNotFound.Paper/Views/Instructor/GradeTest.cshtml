@@ -1,0 +1,206 @@
+@using BrainNotFound.Paper.Models.BusinessModels;
+@using BrainNotFound.Paper.Services;
+
+@{
+    Test test = ViewBag.Test;
+    List<Section> sections = ViewBag.Sections;
+
+    ViewData["Title"] = "Grade " + test.Course.Department.DepartmentCode + test.Course.CourseCode + " " + test.TestName + " - Instructor";
+}
+
+<div class="row">
+
+    <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2><i class="fa fa-question-circle"></i> Grade Test</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+
+                <div class="form-horizontal form-label-left">
+                    <div class="form-group">
+
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Test</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control has-feedback-right" readonly="readonly" placeholder="@(test.Course.Department.DepartmentCode + test.Course.CourseCode + " - " + test.TestName)">
+                            <span class="fa fa-file-text-o form-control-feedback right" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Grade by</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <div id="gender" class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-primary btn-sm col-xs-6">
+                                    <input type="radio" name="gradyBy"> &nbsp; Student &nbsp;
+                                </label>
+                                <label class="btn btn-default btn-sm col-xs-6">
+                                    <input type="radio" name="gradyBy" /> Questions
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Students</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+
+
+                            <select class=" form-control selectpicker">
+                                @foreach (var student in ViewBag.Students)
+                                {
+                                    <option data-content="<i class='fa fa-circle text-danger' aria-hidden='true'></i> @student.FullName"></option>
+                                }
+
+                            </select>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="ln_solid"></div>
+                <div id="QuestionsLoading" class="text-center">
+                    <i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+                    <p>Loading...</p>
+                </div>
+                <div id="questionTableContainer">
+
+                </div>
+                <div class="ln_solid"></div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <button type="button" class="btn btn-info"><i class="fa fa-angle-left"></i> Previous</button>
+                        <button type="button" class="pull-right btn btn-info">Next <i class="fa fa-angle-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-8 col-sm-6 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2><i class="fa fa-question-circle"></i> | Current Question</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-6 tile ">
+                        <span>Student</span>
+                        <p><strong>Abmael Fernandes da Silva Jr</strong></p>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 tile ">
+                        <span>Question</span>
+                        <p><strong>1/5</strong></p>
+                    </div>
+                </div>
+                <div class="ln_solid"></div>
+                <div class="row">
+                    <div class="col-xs-3 text-right">
+                        <label>Question #1 </label>
+                    </div>
+                    <div class="col-xs-9">
+                        <p>Marklkjfhal skdjfhansvsdo ilfjkgahsfdalsk jdfhaldkvnsjdcna lksdfjahsfaiusfwefn alsidfukjas.df halsdkfjas lcjknaskldfj asdhf ajsdf halkd jfahdlf kjad</p>
+                    </div>
+
+                </div>
+
+                <br />
+                <br />
+                <div class="row">
+                    <div class="col-xs-3 text-right">
+                        <label>Student's answer</label>
+                    </div>
+                    <div class="col-xs-9">
+                        <p>Marklkjfhal skdjfhansvsdo ilfjkgahsfdalsk jdfhaldkvnsjdcna lksdfjahsfaiusfwefn alsidfukjas.df halsdkfjas lcjknaskldfj asdhf ajsdf halkd jfahdlf kjad</p>
+                    </div>
+                    <div class="col-xs-3 text-right">
+                        <label>Expected answer</label>
+                    </div>
+                    <div class="col-xs-9">
+                        <p>Marklkjfhal skdjfhansvsdo ilfjkgahsfdalsk jdfhaldkvnsjdcna lksdfjahsfaiusfwefn alsidfukjas.df halsdkfjas lcjknaskldfj asdhf ajsdf halkd jfahdlf kjad</p>
+                    </div>
+                </div>
+
+                <br />
+                <br />
+                <div class="row">
+                    <div class="form-group  col-xs-12">
+                        <label>Comments</label>
+                        <textarea class="" id="InstructorAnswer"></textarea>
+                    </div>
+                    <div class="col-xs-12 ">
+                        <label>Points</label>
+                        <div class="form-inline">
+                            <input type="number" placeholder="pts" class="form-control" />
+                            <span>/15</span>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="ln_solid"></div>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <button type="button" class="pull-right btn btn-info">Grade</button>
+                    <button type="button" class="pull-right btn btn-danger">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts
+    {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+    <script src="~/vendors/autosize/dist/autosize.min.js"></script>
+    <script type="text/javascript" src="~/vendors/handlebars/handlebars-v4.1.1.js"></script>
+    <script type="text/javascript" src="~/js/GradeTest.js"></script>
+
+        <script type="text/javascript">
+            essayQuestions = @ViewBag.EssayQuestions;
+        </script>
+
+}
+
+@section TemplateSnippets
+    {
+
+    <script type="text/x-handlebars-template" id="displayQuestionsTable">
+        {{! Display Essay test question in a table }}
+        <table class="table table-hover" id="gradeTest" style=" cursor: pointer;">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Question</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each essayQuestions}}
+                <tr id="{{questionId}}" class="questionRow {{#if selected}}bg-info{{/if}}">
+                    <th scope="row" class="text-center">
+                        {{questionNumber}}
+                        <br />
+
+                        {{#if graded}}
+                        <i class="fa fa-circle text-success"></i>
+                        {{else}}
+                        <i class="fa fa-circle text-warning"></i>
+                        {{/if}}
+                    </th>
+                    <td>{{content}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </script>
+}

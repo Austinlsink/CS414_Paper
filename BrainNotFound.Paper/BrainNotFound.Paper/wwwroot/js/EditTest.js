@@ -1677,7 +1677,6 @@ function stripe() {
             hasBackground = true;
         }
     });
-
 }
 
 function l(i) {

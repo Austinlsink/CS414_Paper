@@ -101,8 +101,8 @@ namespace BrainNotFound.Paper.Controllers
 
         public async Task<IActionResult> ForceStudentLogin()
         {
+            //var result = await _signInManager.PasswordSignInAsync("AngellaCetta", "AngellaCetta", false, false);
             var result = await _signInManager.PasswordSignInAsync("BobbyeRhym", "BobbyeRhym", false, false);
-
             if (result.Succeeded)
             {
                 return RedirectToAction("Index", "Student");

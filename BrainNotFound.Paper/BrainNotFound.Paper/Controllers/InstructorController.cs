@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using BrainNotFound.Paper.Services;
 using System.Data.SqlClient;
 using System.Data;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace BrainNotFound.Paper.Controllers
 {
@@ -19,7 +21,7 @@ namespace BrainNotFound.Paper.Controllers
     [Route("Instructor")]
     public class InstructorController : Controller
     {
-        
+
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly PaperDbContext _context;
 
@@ -29,7 +31,7 @@ namespace BrainNotFound.Paper.Controllers
         {
             _userManager = userManager;
             _context = context;
-            
+
         }
 
         [HttpGet, Route("")]
@@ -100,9 +102,9 @@ namespace BrainNotFound.Paper.Controllers
 
 
             List<ApplicationUser> students = new List<ApplicationUser>();
-            foreach(Enrollment e in enrollment)
+            foreach (Enrollment e in enrollment)
             {
-                foreach(ApplicationUser student in allStudents)
+                foreach (ApplicationUser student in allStudents)
                 {
                     if (e.StudentId == student.Id)
                     {
@@ -241,7 +243,7 @@ namespace BrainNotFound.Paper.Controllers
 
             var unscheduledTests = instructorTests.Except(upcomingTests).Except(previousTests).ToList();
 
-          
+
             ViewBag.UpcomingTests = upcomingTests;
             ViewBag.PreviousTests = previousTests;
             ViewBag.UnscheduledTests = unscheduledTests;
@@ -270,7 +272,7 @@ namespace BrainNotFound.Paper.Controllers
         public IActionResult Tests()
         {
             var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
-            
+
             // Find all of the previous and upcoming tests for the instructor
             var instructorScheduledTests = _context.TestSchedules.Include(x => x.Test).Where(x => x.Test.applicationUser.Id == instructor.Id).ToList();
             var upcomingTests = _context.TestSchedules.Include(ts => ts.Test).Where(x => x.EndTime > DateTime.Now).Select(tts => tts.Test).Distinct().ToList();
@@ -346,7 +348,7 @@ namespace BrainNotFound.Paper.Controllers
                 .Include(t => t.Course)
                     .ThenInclude(c => c.Department)
                 .Include(t => t.TestSchedules)
-                .Where(t => t.URLSafeName == URLSafeName &&  t.Course.CourseCode == CourseCode &&  t.InstructorId == Instructor.Id)
+                .Where(t => t.URLSafeName == URLSafeName && t.Course.CourseCode == CourseCode && t.InstructorId == Instructor.Id)
                 .First();
 
             ViewBag.Test = test;
@@ -370,7 +372,7 @@ namespace BrainNotFound.Paper.Controllers
                 ViewBag.TotalPoints = 0;
             else
                 ViewBag.TotalPoints = (int)param[0].Value;
-            
+
             // Grab the test sections for the test
             var testSections = _context.TestSections
                 .Include(ts => ts.Questions)
@@ -378,23 +380,23 @@ namespace BrainNotFound.Paper.Controllers
                 .ToList();
 
             int totalQuestions = 0;
-            foreach(TestSection ts in testSections)
+            foreach (TestSection ts in testSections)
             {
                 totalQuestions += ts.Questions.Count;
             }
             ViewBag.TotalQuestions = totalQuestions;
             ViewBag.TestSections = testSections;
-                                   
+
             // Grabs all multiple choice questions
             ViewBag.MultipleChoiceQuestions = _context.Questions
                 .Include(mc => mc.TestSection)
                 .Include(mc => mc.MultipleChoiceAnswers)
                 .Where(mc => mc.TestSection.TestId == test.TestId)
                 .ToList();
-            
+
             return View();
         }
-        
+
         // Allows the user to Edit a test information, add and remove sections
         [HttpGet, Route("Tests/Edit/{DepartmentCode}/{CourseCode}/{URLSafeName}")]
         public IActionResult EditTest(string DepartmentCode, string CourseCode, string URLSafeName)
@@ -406,10 +408,90 @@ namespace BrainNotFound.Paper.Controllers
             course.DepartmentCode = department.DepartmentCode;
             var sections = _context.Sections.Where(s => s.InstructorId == Instructor.Id && s.CourseId == course.CourseId).ToList();
 
-            ViewBag.Sections = sections;
             ViewBag.Test = test;
             ViewBag.Course = course;
-         
+            ViewBag.Sections = sections;
+
+            return View();
+
+        }
+
+        // Allows the instructor to grade a test
+        [HttpGet, Route("Tests/Grade/{DepartmentCode}/{CourseCode}/{URLSafeName}")]
+        public IActionResult GradeTest(string DepartmentCode, string CourseCode, string URLSafeName)
+        {
+
+            var Instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+            var test = _context.Tests
+                .Include(t => t.Course)
+                    .ThenInclude(c => c.Department)
+                .Where(t => t.URLSafeName == URLSafeName &&
+                            t.Course.CourseCode == CourseCode &&
+                            t.Course.Department.DepartmentCode == DepartmentCode)
+                .First();
+
+            // Fetch all students that took this test
+            var students = _context.StudentTestAssignments
+                .Include(sta => sta.TestSchedule)
+                .Include(sta => sta.ApplicationUser)
+                .Where(sta => sta.TestSchedule.TestId == test.TestId)
+                .Select(sta => sta.ApplicationUser)
+                .ToList();
+
+            // Fetch all questions that need to graded
+            var questions = _context.Essays
+                .Include(e => e.TestSection)
+                .Where(e => e.TestSection.TestId == test.TestId)
+                .ToList();
+
+            // Fetch all student answers for this test
+            var sea = _context.StudentEssayAnswers.ToList();
+
+
+            
+            // create the JObject to be passed to the front End
+            JArray jEssayQuestions = new JArray();
+            foreach (var essayQuestion in questions)
+            {
+                dynamic jQuestion = essayQuestion.ToJObject();
+                jQuestion.selected = false;
+
+                JArray jStudentAnswers = new JArray();
+                foreach (var student in students)
+                {
+                    dynamic jStudentAnswer = new JObject();
+                    var studentAnswer = sea.Where(sa => sa.StudentId == student.Id).FirstOrDefault();
+                    jStudentAnswer.studentId = student.Id;
+                    jStudentAnswer.studentFullName = student.FullName;
+
+                    if (studentAnswer == null)
+                    {
+                        jStudentAnswer.answer = "The student did not provide an answer";
+                        jStudentAnswer.pointsEarned = 0;
+                        jStudentAnswer.comment = "Comments can not given";
+                    }
+                    else
+                    {
+                        jStudentAnswer.answer = studentAnswer.EssayAnswerGiven;
+                        jStudentAnswer.pointsEarned = studentAnswer.PointsEarned;
+                        jStudentAnswer.comment = studentAnswer.Comments;
+                    }
+
+                    jStudentAnswers.Add(jStudentAnswers);
+
+                }
+
+                
+                jQuestion.studentAnswers = jStudentAnswers;
+
+                jEssayQuestions.Add(jQuestion);
+
+            }
+
+            ViewBag.Test = test;
+            ViewBag.Students = students;
+            ViewBag.EssayQuestions = JsonConvert.SerializeObject(jEssayQuestions);
+
             return View();
         }
         #endregion Test Actions
@@ -417,9 +499,9 @@ namespace BrainNotFound.Paper.Controllers
         #region Create Test Partials
 
         // When you press save on the information, this happens
-       [HttpPost, Route("Tests/Partials/EditNameAndCourse")]
-       public ActionResult PartialEditNameAndCourse(Test test)
-       {
+        [HttpPost, Route("Tests/Partials/EditNameAndCourse")]
+        public ActionResult PartialEditNameAndCourse(Test test)
+        {
             //grab a copy of the test from the database
             var dbTest = _context.Tests.Find(test.TestId);
 
@@ -437,10 +519,10 @@ namespace BrainNotFound.Paper.Controllers
             var department = _context.Departments.Find(course.DepartmentId);
             _context.Tests.Update(dbTest);
             _context.SaveChanges();
-        
-           //When you press save, redirect back to the edit test page
-           return RedirectToAction("EditTest", "Instructor", new { DepartmentCode = department.DepartmentCode, CourseCode = course.CourseCode, URLSafeName = dbTest.URLSafeName });
-       }
+
+            //When you press save, redirect back to the edit test page
+            return RedirectToAction("EditTest", "Instructor", new { DepartmentCode = department.DepartmentCode, CourseCode = course.CourseCode, URLSafeName = dbTest.URLSafeName });
+        }
 
         #endregion Create Test Partials
 

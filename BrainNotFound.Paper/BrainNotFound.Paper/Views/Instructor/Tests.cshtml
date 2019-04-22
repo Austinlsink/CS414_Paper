@@ -110,8 +110,8 @@
                                 <td class=" ">@DepartmentCodeAndCourseCode</td>
                                 <td class=" ">@test.TestSchedules.Where(x => x.TestId == test.TestId).First().EndTime</td>
                                 <td class=" last">
+                                    <a asp-controller="Instructor" asp-action="GradeTest" asp-route-DepartmentCode="@currentDepartment.DepartmentCode" asp-route-CourseCode="@currentCourse.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i> Grade </a>
                                     <a asp-controller="Instructor" asp-action="ViewTest" asp-route-DepartmentCode="@currentDepartment.DepartmentCode" asp-route-CourseCode="@currentCourse.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                    <button type="submit" data-target="#ConfirmModal" data-testId="@test.TestId" class="btn btn-danger btn-xs confirmDelete"><i class="fa fa-trash-o"></i> Delete </button>
                                 </td>
                             </tr>
                         }
