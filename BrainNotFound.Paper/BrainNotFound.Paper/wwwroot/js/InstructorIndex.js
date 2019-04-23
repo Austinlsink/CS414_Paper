@@ -5,7 +5,7 @@
         Morris.Donut({
             element: 'graph_donut',
             data: [
-                { label: 'JJ', value: 25 },
+                { label: 'z', value: 25 },
                 { label: 'B', value: 35 },
                 { label: 'C', value: 20 },
                 { label: 'D', value: 9 },
@@ -15,28 +15,17 @@
             formatter: function (y) {
                 return y + " students";
             },
-            resize: true
+            resize: false
         });
-
     }
-
 };
 
 // Save Matching choice questions
 $(".TestChartSelection").change(function () {
-
-
     $.ajax({
-        url: "/api/Tests/SaveMatchingChoiceAnswer/",
-        type: "POST",
-        contentType: "application/json",
-        // Data fetched from the form
-        data: JsonData,
+        url: "/Instructor/Chart",
         success: function (result) {
-            console.log("Success");
-        },
-        error: function (xhr, status, error) {
-            console.log("Failed");
+            $("#graph_donut").html(result);
         }
-    })
+    });
 })

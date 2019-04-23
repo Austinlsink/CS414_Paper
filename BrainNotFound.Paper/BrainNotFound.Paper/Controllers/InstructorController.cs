@@ -64,6 +64,12 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        [HttpGet, Route("Chart")]
+        public IActionResult Chart()
+        {
+            return PartialView();
+        }
+
         /// <summary>
         /// Allows the instructor to view his profile
         /// </summary>
@@ -667,6 +673,7 @@ namespace BrainNotFound.Paper.Controllers
 
             return View();
         }
+
         #endregion Test Actions
 
         #region Create Test Partials
