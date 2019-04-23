@@ -12,7 +12,6 @@
         <tr></tr>
     </table>
 </div>
-<div id="demo"></div>
 
 <!--Display tests that need to be graded-->
 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -74,7 +73,19 @@
 <div class="col-md-6 col-sm-6 col-xs-12">
     <div class="x_panel">
         <div class="x_title">
+
             <h2>Midterm Exam <small>CS361 - Java Programming</small></h2>
+            <div class="form-group">
+                <label class="control-label col-md-4 col-sm-3 col-xs-12">Select Test</label>
+                <div class="col-md-10 col-sm-9 col-xs-12">
+                    <select class=" form-control">
+                        @foreach (Test t in ViewBag.Tests)
+                        {
+                            <option value="@t.TestId"> @t.TestName</option>
+                        }
+                    </select>
+                </div>
+            </div>
             <ul class="nav navbar-right panel_toolbox">
                 <li>
                     <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -130,5 +141,5 @@
 <div class="clearfix"></div>
 
 @section scripts {
-<script type="text/javascript" src="~/js/InstructorIndex.js"></script>
+    <script type="text/javascript" src="~/js/InstructorIndex.js"></script>
 }
