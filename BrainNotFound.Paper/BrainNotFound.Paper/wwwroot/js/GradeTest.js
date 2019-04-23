@@ -26,18 +26,29 @@ function compile_template() {
     // Delete the template from the DOM
     $("#displayQuestionsTable").remove();
 
-    // Compile display grade question
+    // Compile display grade question grade by student
     var htmlDisplayGradeQuestion = $("#displayGradeQuestion").text();
     template.displayGradeQuestion = Handlebars.compile(htmlDisplayGradeQuestion);
 
     // Delete the template from the DOM
     $("#displayGradeQuestion").remove();
+
+    // Compile display grade question grade by question
+    var htmlDisplayGradeQuestion2 = $("#displayGradeQuestion2").text();
+    template.displayGradeQuestion2 = Handlebars.compile(htmlDisplayGradeQuestion2);
+
+    // Delete the template from the DOM
+    $("#displayGradeQuestion2").remove();
+
 }
 
 // Initialize page data using the templates
 function init_page() {
-    // Get the student id of the selected student
-    render_question_table();
+    var gradeBy = $("input[name='gradyBy']:checked").val();
+    console.log(gradeBy);
+    if (gradeBy === "student") {
+        render_question_table();
+    }
 }
 
 // Renders the Questions Table based on a student
@@ -155,12 +166,7 @@ $("#gradeQuestionCotainer").on("click", "#submitGrade", function () {
     var questionId = $(this).attr("data-questionId");
     var studentId = $("#studentPicker").val();
     var hasError = false;
-
-    console.log("answerId: " + answerId);
-    console.log("comment: " + comment);
-    console.log("pointsEarned: " + pointsEarned);
-    console.log("questionId: " + questionId);
-
+    
     // Error check the earned points
     if (pointsEarned == "") {
         $("#pointsEarnedErrorMessage").removeClass("hidden");
@@ -195,9 +201,14 @@ $("#gradeQuestionCotainer").on("click", "#submitGrade", function () {
                         .studentAnswers.find(sa => sa.studentId === studentId)
                         .pointsEarned = pointsEarned;
 
-                    console.log(essayQuestions);
-                    render_question_table(questionId);
+                    var index = essayQuestions.findIndex(eq => eq.questionId == questionId);
 
+
+                    var nextQuestionId;
+                    if (index < essayQuestions.length - 1 ) {
+                        nextQuestionId = essayQuestions[index + 1].questionId;
+                    }
+                    render_question_table(nextQuestionId);
                 }
                 else {
                     console.log(result);
@@ -206,5 +217,15 @@ $("#gradeQuestionCotainer").on("click", "#submitGrade", function () {
             }
         })
     }
+})
+
+// Toggle the Radio Button
+$("label[data-radio='true']").click(function () {
+    $(this).removeClass("btn-default").addClass("btn-primary");
+    $(this).siblings().removeClass("btn-primary").addClass("btn-default");
+})
+
+// Grade test by question
+$("input[type='radio'][name='gradeBy']").change(function () {
 
 })
