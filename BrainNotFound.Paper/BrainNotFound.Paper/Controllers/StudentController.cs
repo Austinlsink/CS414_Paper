@@ -43,11 +43,6 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        [HttpGet, Route("Settings")]
-        public IActionResult Settings()
-        {
-            return View();
-        }
         #endregion Student profile and Settings controllers
 
         /// <summary>

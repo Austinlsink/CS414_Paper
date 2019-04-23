@@ -4,15 +4,6 @@
     ViewData["Title"] = "Dashboard - Instructor";
 }
 
-
-<button onclick="GetAllStudents()">Get all Students</button>
-<button onclick="GetHostInfo()">GetHostInfo</button>
-<div id="test">
-    <table class="table">
-        <tr></tr>
-    </table>
-</div>
-
 <!--Display tests that need to be graded-->
 <div class="col-md-6 col-sm-6 col-xs-12">
     <div class="x_panel">
@@ -77,6 +68,8 @@
                 <label class="control-label col-md-4 col-sm-3 col-xs-12">Select Test</label>
                 <div class="col-md-10 col-sm-9 col-xs-12">
                     <select class=" form-control TestChartSelection">
+                        <option value="">--Select Test--</option>
+
                         @foreach (Test t in ViewBag.Tests)
                         {
                             <option value="@t.TestId"> @t.TestName</option>
@@ -88,7 +81,11 @@
         </div>
     </div>
 </div>
-<div id="graph_donut"></div>
+<div class="row">
+    <div class="col-sm-6">
+        <div id="graph"></div>
+    </div>
+</div>
 <!-- /Pie chart -->
 
 <div class="clearfix"></div>

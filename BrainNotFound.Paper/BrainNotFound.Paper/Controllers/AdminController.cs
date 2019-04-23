@@ -105,15 +105,6 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        /// <summary>
-        /// Displays the Settings page for the Admin profile.
-        /// </summary>
-        /// <returns>Settings View</returns>
-        [HttpGet, Route("Settings")]
-        public IActionResult Settings()
-        {
-            return View();
-        }
         #endregion admin controllers
 
         #region create administrator controllers

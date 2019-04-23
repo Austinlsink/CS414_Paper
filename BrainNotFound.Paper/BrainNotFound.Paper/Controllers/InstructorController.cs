@@ -307,16 +307,6 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        /// <summary>
-        /// Allows the instructor to view his settings
-        /// </summary>
-        /// <returns>Settings View</returns>
-        [HttpGet, Route("Settings")]
-        public IActionResult Settings()
-        {
-            return View();
-        }
-
         #endregion Courses and Sections Actions
 
         #region Test Actions

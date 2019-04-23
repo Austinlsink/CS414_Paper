@@ -27,7 +27,7 @@ $(".TestChartSelection").change(function () {
     $.ajax({
         url: "/Instructor/Chart/" + TestId,
         success: function (result) {
-            $("#graph_donut").html(result);
+            $("#graph").html(result);
         }
     });
 })
