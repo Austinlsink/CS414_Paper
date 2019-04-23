@@ -22,8 +22,10 @@
 
 // Save Matching choice questions
 $(".TestChartSelection").change(function () {
+    var TestId = $(this).val();
+    console.log(TestId);
     $.ajax({
-        url: "/Instructor/Chart",
+        url: "/Instructor/Chart/" + TestId,
         success: function (result) {
             $("#graph_donut").html(result);
         }

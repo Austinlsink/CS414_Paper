@@ -64,9 +64,10 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        [HttpGet, Route("Chart")]
-        public IActionResult Chart()
+        [HttpGet, Route("Chart/{TestId}")]
+        public IActionResult Chart(long TestId)
         {
+           ViewBag.Test = _context.Tests.Where(x => x.TestId == TestId).First();
             return PartialView();
         }
 

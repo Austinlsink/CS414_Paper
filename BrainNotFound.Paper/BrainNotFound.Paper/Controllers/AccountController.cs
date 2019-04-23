@@ -21,7 +21,7 @@ namespace BrainNotFound.Paper.Controllers
 
         // Routes Start
 
-        [HttpGet, Route("/")]
+        //[HttpGet, Route("/")]
         public IActionResult Login()
         {
             return View();
@@ -30,7 +30,7 @@ namespace BrainNotFound.Paper.Controllers
 
 
         
-        [HttpPost, Route("/")]
+       // [HttpPost, Route("/")]
         public async Task<ActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
@@ -70,7 +70,7 @@ namespace BrainNotFound.Paper.Controllers
             return RedirectToAction("Login", "Account");
         }
 
-        //[HttpGet, Route("/")]
+        [HttpGet, Route("/")]
         public IActionResult ForceLogin()
         {
             return View("LoginOptions");
