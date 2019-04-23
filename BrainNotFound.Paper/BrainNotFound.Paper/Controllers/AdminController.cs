@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using BrainNotFound.Paper.Models.BusinessModels;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 using Microsoft.AspNetCore.Http;
 using System.Data.SqlClient;
 using System.Data;
@@ -42,7 +40,7 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("")]
         [HttpGet, Route("Index")]
         [HttpGet, Route("Dashboard")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             // Fetch Number of Students in the system
             SqlParameter[] @params1 = {
@@ -51,6 +49,21 @@ namespace BrainNotFound.Paper.Controllers
             _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetNumberOfStudents", @params1);
             ViewBag.NumberOfStudents = @params1[0].Value;
 
+            // Fetch the Number of Students that have not been assigned to a course
+            var allStudents = await _userManager.GetUsersInRoleAsync("Student");
+            var enrollments = _context.Enrollments.ToList();
+
+            List<ApplicationUser> studentsNotEnrolled = new List<ApplicationUser>();
+            foreach (ApplicationUser student in allStudents)
+            {
+                if (!(enrollments.Where(x => x.StudentId == student.Id).Any()))
+                {
+                    studentsNotEnrolled.Add(student);
+                }
+            }
+            ViewBag.StudentsNotEnrolled = studentsNotEnrolled;
+
+
             //Fetch the number of Instructors in the system
             SqlParameter[] @params2 = {
                 new SqlParameter("@returnVal", SqlDbType.Int) {Direction = ParameterDirection.Output}
@@ -58,12 +71,31 @@ namespace BrainNotFound.Paper.Controllers
             _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetNumberOfInstructors", @params2);
             ViewBag.NumberOfInstructors = @params2[0].Value;
 
+            // Fetch the Number of Students that have not been assigned to teach
+            var allInstructors = await _userManager.GetUsersInRoleAsync("Instructor");
+            var sections = _context.Sections.ToList();
+
+            List<ApplicationUser> instructorsNotAssigned = new List<ApplicationUser>();
+            foreach (ApplicationUser instructor in allInstructors)
+            {
+                if (!(sections.Where(x => x.InstructorId == instructor.Id).Any()))
+                {
+                    instructorsNotAssigned.Add(instructor);
+                }
+            }
+            ViewBag.InstructorsNotAssigned = instructorsNotAssigned;
+
             //Fetch the number of Departments in the system
             SqlParameter[] @params3 = {
                 new SqlParameter("@returnVal", SqlDbType.Int) {Direction = ParameterDirection.Output}
             };
             _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetNumberOfDepartments", @params3);
             ViewBag.NumberOfDepartments = @params3[0].Value;
+
+            ViewBag.Departments = _context.Departments.ToList();
+
+            // Fetch the number of Courses in the system
+            ViewBag.Courses = _context.Courses.ToList();
 
             //Fetch the number of Tests in the system
             SqlParameter[] @params4 = {
@@ -430,11 +462,11 @@ namespace BrainNotFound.Paper.Controllers
             return RedirectToAction("Departments", "Admin");
         }
 
-       /// <summary>
-       /// Allows the admin to create a new department
-       /// </summary>
-       /// <param name="model">Department object that contains the new department to save</param>
-       /// <returns>Redirects to the Departments page</returns>
+        /// <summary>
+        /// Allows the admin to create a new department
+        /// </summary>
+        /// <param name="model">Department object that contains the new department to save</param>
+        /// <returns>Redirects to the Departments page</returns>
         [HttpPost, Route("Departments/New")]
         public IActionResult NewDepartment(Department model)
         {
@@ -678,14 +710,14 @@ namespace BrainNotFound.Paper.Controllers
             return RedirectToAction("ViewSection", "Admin", new { code, section.SectionNumber });
         }
 
-       /// <summary>
-       /// Allows the admin to assign a student to a section
-       /// </summary>
-       /// <param name="user">ApplicationUser object that contains the student information</param>
-       /// <param name="section">Specific section</param>
-       /// <param name="course">Course object that contains information for the section</param>
-       /// <param name="department">Department object that contains information for the section</param>
-       /// <returns>Redirects to the ViewSection page</returns>
+        /// <summary>
+        /// Allows the admin to assign a student to a section
+        /// </summary>
+        /// <param name="user">ApplicationUser object that contains the student information</param>
+        /// <param name="section">Specific section</param>
+        /// <param name="course">Course object that contains information for the section</param>
+        /// <param name="department">Department object that contains information for the section</param>
+        /// <returns>Redirects to the ViewSection page</returns>
         [HttpPost, Route("AssignStudent")]
         public async Task<IActionResult> AssignStudent(ApplicationUser user, Section section, Course course, Department department)
         {
