@@ -43,27 +43,26 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Students</label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-
-
-                            <select class=" form-control selectpicker" id="studentPicker">
-                                @foreach (StudentTestAssignment assigment in ViewBag.Assigments)
-                                {
-                                    if (assigment.Submitted)
+                    <div id="selectContainer">
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Students</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <select class=" form-control selectpicker" id="studentPicker">
+                                    @foreach (StudentTestAssignment assigment in ViewBag.Assigments)
                                     {
+                                        if (assigment.Submitted)
+                                        {
 
-                                        <option value="@assigment.ApplicationUser.Id" data-content="<i class='fa fa-circle'  style='color:orange' aria-hidden='true'></i> @assigment.ApplicationUser.FullName"></option>
+                                            <option value="@assigment.ApplicationUser.Id" data-content="<i class='fa fa-circle'  style='color:orange' aria-hidden='true'></i> @assigment.ApplicationUser.FullName"></option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@assigment.ApplicationUser.Id" data-content="<i class='fa fa-circle'  style='color:darkred' aria-hidden='true'></i>  @assigment.ApplicationUser.FullName"></option>
+                                        }
+
                                     }
-                                    else
-                                    {
-                                        <option value="@assigment.ApplicationUser.Id" data-content="<i class='fa fa-circle'  style='color:darkred' aria-hidden='true'></i>  @assigment.ApplicationUser.FullName"></option>
-                                    }
-
-                                }
-
-                            </select>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
@@ -79,7 +78,7 @@
                 <div id="questionTableContainer">
 
                 </div>
-                
+
             </div>
         </div>
 
@@ -106,8 +105,6 @@
         </div>
     </div>
 </div>
-
-
 
 @section Scripts
     {
@@ -188,12 +185,14 @@
             <div class="col-xs-8">
                 <p>{{#if studentAnswer.answer}}{{studentAnswer.answer}}{{else}}<span class="text-danger">No answer submitted</span>{{/if}}</p>
             </div>
+            {{#if expectedAnswer}}
             <div class="col-xs-4 text-right">
                 <label>Expected answer</label>
             </div>
             <div class="col-xs-8">
                 <p>{{expectedAnswer}}</p>
             </div>
+            {{/if}}
         </div>
 
         <br />
@@ -242,13 +241,15 @@
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6 tile ">
                 <span>Students</span>
-                <p><strong>{{StudentNumber}}/{{totalStudents}}</strong></p>
+                <p><strong>{{studentNumber}}/{{totalStudents}}</strong></p>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
-                <button type="button" class="btn btn-info"><i class="fa fa-angle-left"></i> Previous</button>
-                <button type="button" class="pull-right btn btn-info">Next <i class="fa fa-angle-right"></i></button>
+                
+                <button type="button" id="previousStudent" class="btn btn-info btn-sm" {{#if isFirst}}disabled{{/if}} data-currentStudent="{{studentAnswer.studentId}}"><i class="fa fa-angle-left"></i> Previous</button>
+                
+                <button type="button" id="nextStudent" class="pull-right btn btn-info btn-sm" {{#if isLast}}disabled{{/if}} data-currentStudent="{{studentAnswer.studentId}}">Next <i class="fa fa-angle-right"></i></button>
             </div>
         </div>
         <div class="ln_solid"></div>
@@ -261,7 +262,6 @@
             </div>
 
         </div>
-
         <br />
         <br />
         <div class="row">

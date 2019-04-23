@@ -12,6 +12,7 @@ $(document).ready(function () {
 
 var template = {}; // Compiled templaes
 var essayQuestions = []; // Essay questions
+var gradeByState = "student";
 
 /**********************************************************************/
 /*                             Functions                              */
@@ -46,7 +47,15 @@ function compile_template() {
 
 // Initialize page data using the templates
 function init_page() {
-    render_question_table_by_student();
+    
+    switch (gradeByState) {
+        case "student":
+            render_question_table_by_student();
+            break;
+        case "question":
+            render_question_table_by_question();
+            break;
+    }
 }
 
 /**********************************************************************/
@@ -92,12 +101,12 @@ function render_question_table_by_student(questionSelectedId = null) {
     render_grade_question_by_student();
 }
 
+/**********************************************************************/
+
 // Renders the Questions Table based on a question
 function render_question_table_by_question(questionSelectedId = null) {
     var questions = [];
     var selectedFlag = true;
-
-
 
     // Formats the template data for each question
     essayQuestions.forEach(function (essayQuestion) {
@@ -105,7 +114,7 @@ function render_question_table_by_question(questionSelectedId = null) {
         var isSelected;
 
         // Checks if all students answers have been graded
-        studentAnswers.forEach(function (studentAnswer) {
+        essayQuestion.studentAnswers.forEach(function (studentAnswer) {
             if (studentAnswer.answered && studentAnswer.pointsEarned < 0) {
                 questionGraded = false;
             }
@@ -127,6 +136,7 @@ function render_question_table_by_question(questionSelectedId = null) {
             answered: true,
             graded: questionGraded
         });
+        
     });
 
     // Bilds and places rendered table in the DOM
@@ -136,6 +146,8 @@ function render_question_table_by_question(questionSelectedId = null) {
 
     // Hides the loading div
     $("#QuestionsLoading").addClass("hidden");
+
+    render_grade_question_by_question();
 }
 
 /**********************************************************************/
@@ -160,6 +172,34 @@ function render_grade_question_by_student() {
 }
 
 /**********************************************************************/
+
+// Render grade question by question
+function render_grade_question_by_question() {
+    // Gather information
+    var studentId = $("#studentPicker").val();
+    var questionId = $(".questionRow[data-selected='true']").attr("id");
+
+    // Formats the template data for a question
+    var currentQuestion = essayQuestions.find(eq => eq.questionId == questionId);
+
+    var studentAnswer = currentQuestion.studentAnswers.find(sa => sa.studentId === studentId);
+    currentQuestion.studentNumber = currentQuestion.studentAnswers.findIndex(sa => sa.studentId === studentId) + 1;
+
+    var graded = studentAnswer.pointsEarned >= 0;
+    currentQuestion.studentAnswer = studentAnswer;
+    currentQuestion.graded = graded;
+    currentQuestion.totalStudents = currentQuestion.studentAnswers.length;
+
+    // Disables the next and previous buttons
+    currentQuestion.isLast = currentQuestion.totalStudents == currentQuestion.studentNumber;
+    currentQuestion.isFirst = currentQuestion.studentNumber == 1;
+
+    var renderedGradeQuestion = template.displayGradeQuestion2(currentQuestion)
+    $("#gradeQuestionCotainer").html(renderedGradeQuestion);
+    $("#GradeQuestionLoading").addClass("hidden");
+}
+
+/**********************************************************************/
 /*                           Event Handlers                           */
 /**********************************************************************/
 
@@ -169,7 +209,14 @@ $("#studentPicker").change(function () {
     $("#QuestionsLoading").removeClass("hidden");
 
     // Fetch selected student and display table
-    render_question_table_by_student();
+    switch (gradeByState) {
+        case "student":
+            render_question_table_by_student();
+            break;
+        case "question":
+            render_question_table_by_question();
+            break;
+    }
 })
 
 /**********************************************************************/
@@ -179,7 +226,14 @@ $("#questionTableContainer").on("click", ".questionRow", function () {
     $(".questionRow[data-selected='true']").attr("data-selected", false).removeClass("bg-info");
     $(this).attr("data-selected", true).addClass("bg-info");
 
-    render_grade_question_by_student();
+    switch (gradeByState) {
+        case "student":
+            render_grade_question_by_student();
+            break;
+        case "question":
+            render_grade_question_by_question();
+            break;
+    }
 })
 
 /**********************************************************************/
@@ -274,12 +328,15 @@ $("label[data-radio='true']").click(function () {
 // Grade test by question
 $("input[name='gradeBy']").change(function () {
     var gradeBy = $(this).val();
+    gradeByState = gradeBy;
 
     if (gradeBy == "student") {
         render_question_table_by_student();
-        console.log("Grade by student Selected");
-    } else if (gradeBy == "question"){
-        console.log("Grade by Question Selected");
+        $("#selectContainer").removeClass("hidden");
+    } else if (gradeBy == "question") {
+        render_question_table_by_question();
+        $("#selectContainer").addClass("hidden");
+
     }
 
 })
