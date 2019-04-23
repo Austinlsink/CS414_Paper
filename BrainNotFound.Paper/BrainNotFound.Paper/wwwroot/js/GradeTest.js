@@ -380,7 +380,7 @@ $("#gradeQuestionCotainer").on("click", "#submitGrade", function () {
                             render_question_table_by_question(questionId, false, nextStudentId);
                             break;
                     }
-                    
+                    display_student_picker();
                 }
                 else {
                     console.log(result);
