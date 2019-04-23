@@ -46,22 +46,8 @@
                     <div id="selectContainer">
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Students</label>
-                            <div class="col-md-9 col-sm-9 col-xs-12">
-                                <select class=" form-control selectpicker" id="studentPicker">
-                                    @foreach (StudentTestAssignment assigment in ViewBag.Assigments)
-                                    {
-                                        if (assigment.Submitted)
-                                        {
+                            <div class="col-md-9 col-sm-9 col-xs-12" id="dropdownContainer">
 
-                                            <option value="@assigment.ApplicationUser.Id" data-content="<i class='fa fa-circle'  style='color:orange' aria-hidden='true'></i> @assigment.ApplicationUser.FullName"></option>
-                                        }
-                                        else
-                                        {
-                                            <option value="@assigment.ApplicationUser.Id" data-content="<i class='fa fa-circle'  style='color:darkred' aria-hidden='true'></i>  @assigment.ApplicationUser.FullName"></option>
-                                        }
-
-                                    }
-                                </select>
                             </div>
                         </div>
                     </div>
@@ -224,7 +210,7 @@
         <div class="ln_solid"></div>
         <div class="col-md-12 col-sm-12 col-xs-12">
             {{#if studentAnswer.answer}}
-            <button type="button" class="pull-right btn btn-info" id="submitGrade" data-questionId="{{questionId}}" data-answerId="{{studentAnswer.answerId}}">Grade & Next</button>
+            <button type="button" class="pull-right btn btn-info" id="submitGrade" data-questionId="{{questionId}}" data-answerId="{{studentAnswer.answerId}}" data-studentId="{{studentAnswer.studentId}}">Grade & Next</button>
             {{else}}
             <button type="button" class="pull-right btn btn-info">Next</button>
             {{/if}}
@@ -238,6 +224,7 @@
             <div class="col-md-6 col-sm-6 col-xs-6 tile ">
                 <span>Student</span>
                 <p><strong>{{studentAnswer.studentFullName}}</strong></p>
+                <input type="hidden" id="currentStudentId" value="{{studentAnswer.studentId}}" />
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6 tile ">
                 <span>Students</span>
@@ -246,10 +233,10 @@
         </div>
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
-                
-                <button type="button" id="previousStudent" class="btn btn-info btn-sm" {{#if isFirst}}disabled{{/if}} data-currentStudent="{{studentAnswer.studentId}}"><i class="fa fa-angle-left"></i> Previous</button>
-                
-                <button type="button" id="nextStudent" class="pull-right btn btn-info btn-sm" {{#if isLast}}disabled{{/if}} data-currentStudent="{{studentAnswer.studentId}}">Next <i class="fa fa-angle-right"></i></button>
+
+                <button type="button" id="previousStudent" class="btn btn-info btn-sm" {{#if isFirst}} disabled{{/if}} data-studentId="{{studentAnswer.studentId}}" data-questionId="{{questionId}}"><i class="fa fa-angle-left"></i> Previous</button>
+
+                <button type="button" id="nextStudent" class="pull-right btn btn-info btn-sm" {{#if isLast}} disabled{{/if}} data-studentId="{{studentAnswer.studentId}}" data-questionId="{{questionId}}">Next <i class="fa fa-angle-right"></i></button>
             </div>
         </div>
         <div class="ln_solid"></div>
@@ -308,10 +295,17 @@
         <div class="ln_solid"></div>
         <div class="col-md-12 col-sm-12 col-xs-12">
             {{#if studentAnswer.answer}}
-            <button type="button" class="pull-right btn btn-info" id="submitGrade" data-questionId="{{questionId}}" data-answerId="{{studentAnswer.answerId}}">Grade & Next</button>
-            {{else}}
-            <button type="button" class="pull-right btn btn-info">Next</button>
+            <button type="button" class="pull-right btn btn-info" id="submitGrade" data-questionId="{{questionId}}" data-answerId="{{studentAnswer.answerId}}" data-studentId="{{studentAnswer.studentId}}">Grade & Next</button>
+
             {{/if}}
         </div>
+    </script>
+
+    <script type="text/x-handlebars-template" id="selectPicker">
+        <select class=" form-control" id="studentPicker">
+            {{#each students}}
+            <option value="{{studentId}}" data-content="<i class='fa fa-circle' style='color:{{#if missing}}darkred{{else}}{{#if done}}green{{else}}orange{{/if}}{{/if}}' aria-hidden='true'></i> {{studentFullName}}"></option>
+            {{/each}}
+        </select>
     </script>
 }

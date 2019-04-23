@@ -41,13 +41,22 @@ function compile_template() {
     // Delete the template from the DOM
     $("#displayGradeQuestion2").remove();
 
+    // Compile display selectPicker
+    var selectPicker = $("#selectPicker").text();
+    template.displaySelectPicker = Handlebars.compile(selectPicker);
+
+    // Delete the template from the DOM
+    $("#selectPicker").remove();
+
 }
 
 /**********************************************************************/
 
 // Initialize page data using the templates
 function init_page() {
-    
+    display_student_picker();
+
+
     switch (gradeByState) {
         case "student":
             render_question_table_by_student();
@@ -56,6 +65,46 @@ function init_page() {
             render_question_table_by_question();
             break;
     }
+}
+
+/**********************************************************************/
+
+// Displays the select picker and initializes
+function display_student_picker() {
+
+    var students = [];
+    var allStudents = essayQuestions[0].studentAnswers;
+
+    allStudents.forEach(function (student) {
+        var done = true;
+        var missing = true;
+
+        essayQuestions.forEach(function (question) {
+            studentAnswer = question.studentAnswers.find(sa => sa.studentId == student.studentId);
+
+            if (studentAnswer.answered && missing) {
+                missing = false;
+            }
+            if (studentAnswer.pointsEarned < 0 && done) {
+                done = false;
+            }
+        });
+
+        students.push({
+            studentId: student.studentId,
+            studentFullName: student.studentFullName,
+            done: done,
+            missing: missing
+        })
+    });
+
+    console.log(students);
+    var renderedPicker = template.displaySelectPicker({ students: students });
+    $("#dropdownContainer").html(renderedPicker);
+
+    $("#studentPicker").selectpicker();
+
+
 }
 
 /**********************************************************************/
@@ -104,7 +153,7 @@ function render_question_table_by_student(questionSelectedId = null) {
 /**********************************************************************/
 
 // Renders the Questions Table based on a question
-function render_question_table_by_question(questionSelectedId = null) {
+function render_question_table_by_question(questionSelectedId = null, Cascade = true, studentToLoad = null) {
     var questions = [];
     var selectedFlag = true;
 
@@ -146,8 +195,11 @@ function render_question_table_by_question(questionSelectedId = null) {
 
     // Hides the loading div
     $("#QuestionsLoading").addClass("hidden");
-
-    render_grade_question_by_question();
+    if (Cascade) {
+        render_grade_question_by_question();
+    } else {
+        render_grade_question_by_question(studentToLoad);
+    }
 }
 
 /**********************************************************************/
@@ -174,9 +226,12 @@ function render_grade_question_by_student() {
 /**********************************************************************/
 
 // Render grade question by question
-function render_grade_question_by_question() {
+function render_grade_question_by_question(studentId = null, studentToLoadId) {
     // Gather information
-    var studentId = $("#studentPicker").val();
+    if (studentId == null) {
+        studentId = $("#studentPicker").val();
+    }
+    
     var questionId = $(".questionRow[data-selected='true']").attr("id");
 
     // Formats the template data for a question
@@ -197,6 +252,8 @@ function render_grade_question_by_question() {
     var renderedGradeQuestion = template.displayGradeQuestion2(currentQuestion)
     $("#gradeQuestionCotainer").html(renderedGradeQuestion);
     $("#GradeQuestionLoading").addClass("hidden");
+
+    
 }
 
 /**********************************************************************/
@@ -204,7 +261,7 @@ function render_grade_question_by_question() {
 /**********************************************************************/
 
 // Student select change 
-$("#studentPicker").change(function () {
+$("#dropdownContainer").on("change", "#studentPicker", function () {
     // Displays the loading div
     $("#QuestionsLoading").removeClass("hidden");
 
@@ -231,7 +288,9 @@ $("#questionTableContainer").on("click", ".questionRow", function () {
             render_grade_question_by_student();
             break;
         case "question":
-            render_grade_question_by_question();
+            var currentStudent = $("#currentStudentId").val();
+
+            render_grade_question_by_question(currentStudent);
             break;
     }
 })
@@ -260,7 +319,7 @@ $("#gradeQuestionCotainer").on("click", "#submitGrade", function () {
     var comment = $.trim($("#InstructorComment").val());
     var pointsEarned = $.trim($("#pointsEarned").val());
     var questionId = $(this).attr("data-questionId");
-    var studentId = $("#studentPicker").val();
+    var studentId = $(this).attr("data-studentId");
     var hasError = false;
     
     // Error check the earned points
@@ -282,6 +341,7 @@ $("#gradeQuestionCotainer").on("click", "#submitGrade", function () {
             data: JsonData,
             success: function (result) {
                 if (result.success) {
+
                     // Updates the local versin of the data
                     essayQuestions
                         .find(eq => eq.questionId == questionId)
@@ -296,15 +356,31 @@ $("#gradeQuestionCotainer").on("click", "#submitGrade", function () {
                         .find(eq => eq.questionId == questionId)
                         .studentAnswers.find(sa => sa.studentId === studentId)
                         .pointsEarned = pointsEarned;
-
+                    
                     var index = essayQuestions.findIndex(eq => eq.questionId == questionId);
+                    // Saves and takes you to the next question/Student
+                    switch (gradeByState) {
+                        case "student":
+                            
+                            var nextQuestionId;
+                            if (index < essayQuestions.length - 1) {
+                                nextQuestionId = essayQuestions[index + 1].questionId;
+                            }
+                            render_question_table_by_student(nextQuestionId);
+                            break;
+                        case "question":
+                            var currentStudentIndex = essayQuestions
+                                .find(eq => eq.questionId == questionId)
+                                .studentAnswers.findIndex(sa => sa.studentId === studentId)
 
+                            var nextStudentId = currentStudentIndex = essayQuestions
+                                .find(eq => eq.questionId == questionId)
+                                .studentAnswers[currentStudentIndex + 1].studentId;
 
-                    var nextQuestionId;
-                    if (index < essayQuestions.length - 1 ) {
-                        nextQuestionId = essayQuestions[index + 1].questionId;
+                            render_question_table_by_question(questionId, false, nextStudentId);
+                            break;
                     }
-                    render_question_table_by_student(nextQuestionId);
+                    display_student_picker();
                 }
                 else {
                     console.log(result);
@@ -336,7 +412,42 @@ $("input[name='gradeBy']").change(function () {
     } else if (gradeBy == "question") {
         render_question_table_by_question();
         $("#selectContainer").addClass("hidden");
-
     }
-
 })
+
+/**********************************************************************/
+
+// Previous student Student 
+$("#gradeQuestionCotainer").on("click", "#previousStudent", function () {
+
+    var questionId = $(this).attr("data-questionId");
+    var studentId = $(this).attr("data-studentId");
+    var currentStudentIndex = essayQuestions
+        .find(eq => eq.questionId == questionId)
+        .studentAnswers.findIndex(sa => sa.studentId === studentId)
+
+    var previousStudentId = currentStudentIndex = essayQuestions
+        .find(eq => eq.questionId == questionId)
+        .studentAnswers[currentStudentIndex - 1].studentId;
+
+    render_grade_question_by_question(previousStudentId);
+})
+
+/**********************************************************************/
+
+// next student Student 
+$("#gradeQuestionCotainer").on("click", "#nextStudent", function () {
+
+    var questionId = $(this).attr("data-questionId");
+    var studentId = $(this).attr("data-studentId");
+    var currentStudentIndex = essayQuestions
+        .find(eq => eq.questionId == questionId)
+        .studentAnswers.findIndex(sa => sa.studentId === studentId)
+
+    var nextStudentId = currentStudentIndex = essayQuestions
+        .find(eq => eq.questionId == questionId)
+        .studentAnswers[currentStudentIndex + 1].studentId;
+
+    render_grade_question_by_question(nextStudentId);
+})
+
