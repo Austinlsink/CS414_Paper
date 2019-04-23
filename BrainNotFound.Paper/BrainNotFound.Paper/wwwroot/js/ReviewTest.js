@@ -3,7 +3,6 @@
     var DepartmentCode = $(this).attr("data-DepartmentCode");
     var CourseCode = $(this).attr("data-CourseCode");
     var URLSafeName = $(this).attr("data-URLSafeName");
-    console.log(StudentId, DepartmentCode, CourseCode, URLSafeName);
 
     $.ajax({
         url: "/Instructor/Tests/ReviewStudentTest/" + DepartmentCode  + "/" + CourseCode + "/" + URLSafeName + "/" + StudentId,

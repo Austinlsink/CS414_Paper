@@ -6,15 +6,15 @@
     List<Section> sections = ViewBag.Sections;
 
     ViewData["Title"] = "View " + test.TestName + " - Instructor";
-    int testScheduleCounter = 1;
     int option = 97;
 
 }
 <div class="row">
-    <div class="col-md-8 col-sm-6 col-xs-12">
+    <div class="col-md-12 col-sm-6 col-xs-12">
         <div class="x_panel">
             <div class="x_title">
-                <h2><i class="fa fa-file-text-o"></i> @(test.Course.Department.DepartmentCode) @(test.Course.CourseCode) - @(" " + test.TestName) Review Test</h2>
+                <h2><i class="fa fa-file-text-o"></i> Review Test for @ViewBag.Student.FullName</h2>
+                <h2> @(test.Course.Department.DepartmentCode) @(test.Course.CourseCode) - @(" " + test.TestName)</h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                 </ul>
@@ -53,9 +53,9 @@
                     </div>
                 </div>
                 <div class="clearfix"></div>
-
                 <!-- END: Statistics -->
-                <!-- START: Schedule -->
+
+                @*<!-- START: Schedule -->
                 <h3>Schedule</h3>
                 <hr />
 
@@ -93,9 +93,7 @@
                         <!-- TODO: Add table Rows-->
                     </tbody>
                 </table>
-                <!-- END: Schedule -->
-                <!-- START: New Test Schedule -->
-                <!-- END: New Test Schedule -->
+                <!-- END: Schedule -->*@
             </div>
         </div>
     </div>
@@ -103,8 +101,8 @@
     <!-- True false section template-->
     @foreach (TestSection ts in ViewBag.TestSections)
     {
-        <div class="col-md-4 col-sm-6 col-xs-12"></div>
-        <div class="col-md-8 col-sm-6 col-xs-12">
+        <div class="col-md-12 col-sm-6 col-xs-12"></div>
+        <div class="col-md-12 col-sm-6 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
                     <h2><i class="fa fa-info-circle"></i> | @DefaultTestSectionText.Header.Get(ts.QuestionType)</h2>
@@ -231,5 +229,5 @@
 </div>
 
 @section scripts {
-    <script type="text/javascript" src="~/js/ReviewTest.js"></script>
+    <link href="~/css/custom.css" rel="stylesheet">
 }
