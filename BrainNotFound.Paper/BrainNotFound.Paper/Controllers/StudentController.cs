@@ -239,7 +239,7 @@ namespace BrainNotFound.Paper.Controllers
                             totalQuestions += 1;
                             break;
                         case QuestionType.Essay:
-                            var studentEssayAnswer = _context.StudentEssayAnswers.Where(sea => sea.QuestionId == testSections[j].Questions[i].QuestionId && sea.TestScheduleId == studentTestAssignment.TestScheduleId).FirstOrDefault();
+                            var studentEssayAnswer = _context.StudentEssayAnswers.Where(sea => sea.QuestionId == testSections[j].Questions[i].QuestionId && sea.TestScheduleId == studentTestAssignment.TestScheduleId ).FirstOrDefault();
 
                             if (studentEssayAnswer == null)
                             {

@@ -42,17 +42,17 @@ function compile_template() {
 
 }
 
+/**********************************************************************/
+
 // Initialize page data using the templates
 function init_page() {
-    var gradeBy = $("input[name='gradyBy']:checked").val();
-    console.log(gradeBy);
-    if (gradeBy === "student") {
-        render_question_table();
-    }
+    render_question_table_by_student();
 }
 
+/**********************************************************************/
+
 // Renders the Questions Table based on a student
-function render_question_table(questionSelectedId = null) {
+function render_question_table_by_student(questionSelectedId = null) {
 
     var studentId = $("#studentPicker").val();
     var questions = []
@@ -89,15 +89,62 @@ function render_question_table(questionSelectedId = null) {
     $("#QuestionsLoading").addClass("hidden");
 
     // Render the grade question partial
-    render_grade_question();
+    render_grade_question_by_student();
 }
 
+// Renders the Questions Table based on a question
+function render_question_table_by_question(questionSelectedId = null) {
+    var questions = [];
+    var selectedFlag = true;
+
+
+
+    // Formats the template data for each question
+    essayQuestions.forEach(function (essayQuestion) {
+        var questionGraded = true;
+        var isSelected;
+
+        // Checks if all students answers have been graded
+        studentAnswers.forEach(function (studentAnswer) {
+            if (studentAnswer.answered && studentAnswer.pointsEarned < 0) {
+                questionGraded = false;
+            }
+        });
+
+        // sets the flag color
+        if (questionSelectedId == null) {
+            isSelected = selectedFlag;
+            selectedFlag = false;
+        } else {
+            isSelected = essayQuestion.questionId == questionSelectedId;
+        }
+
+        questions.push({
+            questionId: essayQuestion.questionId,
+            questionNumber: essayQuestion.questionNumber,
+            content: essayQuestion.content,
+            selected: isSelected,
+            answered: true,
+            graded: questionGraded
+        });
+    });
+
+    // Bilds and places rendered table in the DOM
+    var templateData = { essayQuestions: questions }
+    var renderedQuestionsTable = template.displayQuestionsTable(templateData)
+    $("#questionTableContainer").html(renderedQuestionsTable);
+
+    // Hides the loading div
+    $("#QuestionsLoading").addClass("hidden");
+}
+
+/**********************************************************************/
+
 // Render grade question
-function render_grade_question() {
+function render_grade_question_by_student() {
     // Gather information
     var studentId = $("#studentPicker").val();
     var questionId = $(".questionRow[data-selected='true']").attr("id");
-
 
     // Formats the template data for a question
     var currentQuestion = essayQuestions.find(eq => eq.questionId == questionId);
@@ -112,17 +159,6 @@ function render_grade_question() {
     $("#GradeQuestionLoading").addClass("hidden");
 }
 
-// Array search Function
-function findWithAttr(array, attr, value) {
-    for (var i = 0; i < array.length; i += 1) {
-        if (array[i][attr] === value) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-
 /**********************************************************************/
 /*                           Event Handlers                           */
 /**********************************************************************/
@@ -133,16 +169,20 @@ $("#studentPicker").change(function () {
     $("#QuestionsLoading").removeClass("hidden");
 
     // Fetch selected student and display table
-    render_question_table();
+    render_question_table_by_student();
 })
+
+/**********************************************************************/
 
 // Question list select click
 $("#questionTableContainer").on("click", ".questionRow", function () {
     $(".questionRow[data-selected='true']").attr("data-selected", false).removeClass("bg-info");
     $(this).attr("data-selected", true).addClass("bg-info");
 
-    render_grade_question();
+    render_grade_question_by_student();
 })
+
+/**********************************************************************/
 
 // Error check points earned
 $("#gradeQuestionCotainer").on("change", "input#pointsEarned", function () {
@@ -157,6 +197,8 @@ $("#gradeQuestionCotainer").on("change", "input#pointsEarned", function () {
         $(this).val(min);
     }
 })
+
+/**********************************************************************/
 
 // Submits grade to server
 $("#gradeQuestionCotainer").on("click", "#submitGrade", function () {
@@ -208,7 +250,7 @@ $("#gradeQuestionCotainer").on("click", "#submitGrade", function () {
                     if (index < essayQuestions.length - 1 ) {
                         nextQuestionId = essayQuestions[index + 1].questionId;
                     }
-                    render_question_table(nextQuestionId);
+                    render_question_table_by_student(nextQuestionId);
                 }
                 else {
                     console.log(result);
@@ -219,13 +261,25 @@ $("#gradeQuestionCotainer").on("click", "#submitGrade", function () {
     }
 })
 
+/**********************************************************************/
+
 // Toggle the Radio Button
 $("label[data-radio='true']").click(function () {
     $(this).removeClass("btn-default").addClass("btn-primary");
     $(this).siblings().removeClass("btn-primary").addClass("btn-default");
 })
 
+/**********************************************************************/
+
 // Grade test by question
-$("input[type='radio'][name='gradeBy']").change(function () {
+$("input[name='gradeBy']").change(function () {
+    var gradeBy = $(this).val();
+
+    if (gradeBy == "student") {
+        render_question_table_by_student();
+        console.log("Grade by student Selected");
+    } else if (gradeBy == "question"){
+        console.log("Grade by Question Selected");
+    }
 
 })
