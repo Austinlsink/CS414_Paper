@@ -247,9 +247,9 @@
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 
-                <button type="button" id="previousStudent" class="btn btn-info btn-sm" {{#if isFirst}}disabled{{/if}} data-currentStudent="{{studentAnswer.studentId}}"><i class="fa fa-angle-left"></i> Previous</button>
+                <button type="button" id="previousStudent" class="btn btn-info btn-sm" {{#if isFirst}}disabled{{/if}} data-currentStudent="{{studentAnswer.studentId}}" data-questionId="{{questionId}}"><i class="fa fa-angle-left"></i> Previous</button>
                 
-                <button type="button" id="nextStudent" class="pull-right btn btn-info btn-sm" {{#if isLast}}disabled{{/if}} data-currentStudent="{{studentAnswer.studentId}}">Next <i class="fa fa-angle-right"></i></button>
+                <button type="button" id="nextStudent" class="pull-right btn btn-info btn-sm" {{#if isLast}}disabled{{/if}} data-currentStudent="{{studentAnswer.studentId}}" data-questionId="{{questionId}}">Next <i class="fa fa-angle-right"></i></button>
             </div>
         </div>
         <div class="ln_solid"></div>
