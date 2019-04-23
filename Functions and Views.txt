@@ -1,0 +1,22 @@
+ADMIN
+"Get students not enrolled in any sections" : V_UnenrolledStudents (VIEW)
+"Get instructors not teaching a section" : V_UnassignedInstructors (VIEW)
+
+INSTRUCTORS
+"Able to see how each student does on each test in each course?" : 
+
+"How the single section did on a test (A's, B's, etc. for a section)" : GetSectionLetterGradeStats(@inputTestId BIGINT, @sectionId BIGINT)
+	JSON Object returned:  '{"NumberOfAs":"numOfAs", "NumberOfBs":"numOfBs", "NumberOfCs":"numOfCs", "NumberOfDs":"numOfDs", "NumberOfFs":"numOfFs"}
+
+Extra: Get the test average as a percentage grade : GetSectionTestAverage(@inputSectionId BIGINT, @inputTestId BIGINT) (FUNCTION--Returns a JSON object)
+	JSON Object returned : {"SectionAverage":"the test average for the section"}
+
+"How all sections did on a test (A's, B's, etc. for all sections of a course)" : 
+	NOTE: I would suggest just running the GetSectionLetterGradeStats() function multiple times,
+	      using different section IDs each time.
+
+STUDENTS
+"Last test score" : 
+	NOTE: May require a "time submitted" column on the StudentTestAssignment table...
+"Previous test scores" : STUDENT_GetAllTestGrades(@inputStudentId BIGINT) (FUNCTION--Returns a JSON object)
+	JSON Object returned: {"StudentTestGrades":["firstTestValue", "secondTestValue", etc.]}
