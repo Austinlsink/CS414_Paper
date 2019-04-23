@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using BrainNotFound.Paper.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using BrainNotFound.Paper.Models.BusinessModels;
 using Microsoft.EntityFrameworkCore;
-using BrainNotFound.Paper.Services;
 using System.Data.SqlClient;
 using System.Data;
 using Newtonsoft.Json.Linq;
@@ -21,19 +18,27 @@ namespace BrainNotFound.Paper.Controllers
     [Route("Instructor")]
     public class InstructorController : Controller
     {
-
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly PaperDbContext _context;
 
         #region instructor controllers
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="userManager">Gives access to all of the user profiles</param>
+        /// <param name="context">Gives access to the databse</param>
         public InstructorController(
             UserManager<ApplicationUser> userManager, PaperDbContext context)
         {
             _userManager = userManager;
             _context = context;
-
         }
 
+        /// <summary>
+        /// Allows the instructor to view his dashboard, and gives him quick access to certain items
+        /// </summary>
+        /// <returns>Index view</returns>
         [HttpGet, Route("")]
         [HttpGet, Route("Index")]
         [HttpGet, Route("Dashboard")]
@@ -48,6 +53,10 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Allows the instructor to view his profile
+        /// </summary>
+        /// <returns>Profile View</returns>
         [HttpGet, Route("Profile")]
         public async Task<IActionResult> Profile()
         {
@@ -57,6 +66,10 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Allows the instrutor to edit his profile
+        /// </summary>
+        /// <returns>EditProfile view</returns>
         [HttpGet, Route("Profile/Edit")]
         public async Task<IActionResult> EditProfile()
         {
@@ -66,6 +79,11 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Saves the edited changes to the instructor's profile
+        /// </summary>
+        /// <param name="user">ApplicationUser object that contains the new information</param>
+        /// <returns>Redirects to the Profile View</returns>
         [HttpPost, Route("Profile/Edit")]
         public async Task<IActionResult> EditProfile(ApplicationUser user)
         {
@@ -86,6 +104,11 @@ namespace BrainNotFound.Paper.Controllers
         #endregion instructor controllers
 
         #region student controllers
+
+        /// <summary>
+        /// Allows the instructor to view all of the students enrolled in his sections
+        /// </summary>
+        /// <returns>Students View</returns>
         [HttpGet, Route("Students")]
         public async Task<IActionResult> Students()
         {
@@ -99,7 +122,6 @@ namespace BrainNotFound.Paper.Controllers
 
             // Find all of the students that the instructor teaches
             var allStudents = (await _userManager.GetUsersInRoleAsync("Student")).OrderBy(o => o.FirstName).ToList();
-
 
             List<ApplicationUser> students = new List<ApplicationUser>();
             foreach (Enrollment e in enrollment)
@@ -120,6 +142,11 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Allows the instructor to view a specific student's profile
+        /// </summary>
+        /// <param name="username">Search criteria for finding the specific student</param>
+        /// <returns>ViewStudentProfile view</returns>
         [HttpGet, Route("ViewStudentProfile/{username}")]
         public async Task<IActionResult> ViewStudentProfile(String username)
         {
@@ -152,6 +179,7 @@ namespace BrainNotFound.Paper.Controllers
 
             return View();
         }
+
         #endregion student controllers
 
         #region Courses and Sections Actions
@@ -159,6 +187,7 @@ namespace BrainNotFound.Paper.Controllers
         /// Allows the instructor to view a specific course and all of the sections that he teaches
         /// </summary>
         /// <param name="code">DpartmentCode + CourseCode</param>
+        /// <returns>ViewCourse View</returns>
         [HttpGet, Route("Courses/{code}")]
         public async Task<IActionResult> ViewCourse(String code)
         {
@@ -197,12 +226,15 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Allows the instructor to a view a course's section
+        /// </summary>
+        /// <param name="code">DepartmentCode + CourseCode</param>
+        /// <param name="sectionNumber">Search criteria for the specific section number to view</param>
+        /// <returns>ViewSection view</returns>
         [HttpGet, Route("Courses/{code}/{sectionNumber}")]
         public async Task<IActionResult> ViewSection(string code, int sectionNumber)
         {
-            //ViewData["message"] = code;
-            //return View("TestView");
-
             string departmentCode = code.Substring(0, 2);
             string courseCode = code.Substring(2, 3);
 
@@ -243,7 +275,6 @@ namespace BrainNotFound.Paper.Controllers
 
             var unscheduledTests = instructorTests.Except(upcomingTests).Except(previousTests).ToList();
 
-
             ViewBag.UpcomingTests = upcomingTests;
             ViewBag.PreviousTests = previousTests;
             ViewBag.UnscheduledTests = unscheduledTests;
@@ -251,23 +282,30 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+
         [HttpGet, Route("Tests/EssayGrading")]
         public IActionResult EssayGrading()
         {
             return View();
         }
 
+        /// <summary>
+        /// Allows the instructor to view his settings
+        /// </summary>
+        /// <returns>Settings View</returns>
         [HttpGet, Route("Settings")]
         public IActionResult Settings()
         {
             return View();
         }
 
-
         #endregion Courses and Sections Actions
 
         #region Test Actions
-        //Displays all tests created by an Instructor
+        /// <summary>
+        /// Allows the instructor to view all of his tests
+        /// </summary>
+        /// <returns>Tests View</returns>
         [HttpGet, Route("Tests")]
         public IActionResult Tests()
         {
@@ -282,8 +320,6 @@ namespace BrainNotFound.Paper.Controllers
             var instructorTests = _context.Tests.Include(x => x.TestSchedules).Where(x => x.InstructorId == instructor.Id).ToList();
             var unscheduledTests = instructorTests.Except(instructorScheduledTests.Select(x => x.Test)).ToList();
 
-
-
             // Grab the courses and departments
             var courses = _context.Courses.ToList();
             var departments = _context.Departments.ToList();
@@ -296,7 +332,10 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        // First Step in Creating a test
+        /// <summary>
+        /// Allows the instructor to create the first part of the test
+        /// </summary>
+        /// <returns>CreateTest View</returns>
         [HttpGet, Route("Tests/CreateTest")]
         public IActionResult CreateTest()
         {
@@ -320,7 +359,11 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
-        // Saves the new test to the database
+        /// <summary>
+        /// Saves the created test to the database
+        /// </summary>
+        /// <param name="test">Test object that contains information</param>
+        /// <returns>Redirects to the EditTest page</returns>
         [HttpPost, Route("Tests/CreateTest")]
         public IActionResult CreateTest(Test test)
         {
@@ -337,6 +380,13 @@ namespace BrainNotFound.Paper.Controllers
             return RedirectToAction("EditTest", "Instructor", new { DepartmentCode = department.DepartmentCode, CourseCode = course.CourseCode, URLSafeName = test.URLSafeName });
         }
 
+        /// <summary>
+        /// Allows the instructor to view a specific test
+        /// </summary>
+        /// <param name="DepartmentCode">string parameter that distinguishes which department the test belongs to</param>
+        /// <param name="CourseCode">string parameter that distinguishes which course the test belongs to</param>
+        /// <param name="URLSafeName">string url</param>
+        /// <returns>ViewTest View</returns>
         [HttpGet, Route("Tests/ViewTest/View/{DepartmentCode}/{CourseCode}/{URLSafeName}")]
         public IActionResult ViewTest(string DepartmentCode, string CourseCode, string URLSafeName)
         {
@@ -396,6 +446,13 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Allows the instructor to review all the student's tests for a specific test
+        /// </summary>
+        /// <param name="DepartmentCode">string parameter that distinguishes which department the test belongs to</param>
+        /// <param name="CourseCode">string parameter that distinguishes which course the test belongs to</param>
+        /// <param name="URLSafeName">string url</param>
+        /// <returns>ReviewTest View</returns>
         [HttpGet, Route("Tests/ReviewTest/View/{DepartmentCode}/{CourseCode}/{URLSafeName}")]
         public async Task<IActionResult> ReviewTest(string DepartmentCode, string CourseCode, string URLSafeName)
         {
@@ -411,47 +468,6 @@ namespace BrainNotFound.Paper.Controllers
 
             ViewBag.Test = test;
 
-            // Grab the points for the test
-            var param = new SqlParameter[] {
-                    new SqlParameter() {
-                        ParameterName = "@returnVal",
-                        SqlDbType =  SqlDbType.Int,
-                        Direction = ParameterDirection.Output
-                    },
-                    new SqlParameter() {
-                        ParameterName = "@inputTestId",
-                        SqlDbType =  SqlDbType.BigInt,
-                        Direction = ParameterDirection.Input,
-                        Value = test.TestId
-                    }};
-
-            _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetTotalTestPoints @inputTestId", param);
-            if (Convert.IsDBNull(param[0].Value))
-                ViewBag.TotalPoints = 0;
-            else
-                ViewBag.TotalPoints = (int)param[0].Value;
-
-            // Grab the test sections for the test
-            var testSections = _context.TestSections
-                .Include(ts => ts.Questions)
-                .Where(x => x.TestId == test.TestId)
-                .ToList();
-
-            int totalQuestions = 0;
-            foreach (TestSection ts in testSections)
-            {
-                totalQuestions += ts.Questions.Count;
-            }
-            ViewBag.TotalQuestions = totalQuestions;
-            ViewBag.TestSections = testSections;
-
-            // Grabs all multiple choice questions
-            ViewBag.MultipleChoiceQuestions = _context.Questions
-                .Include(mc => mc.TestSection)
-                .Include(mc => mc.MultipleChoiceAnswers)
-                .Where(mc => mc.TestSection.TestId == test.TestId)
-                .ToList();
-
             var studentTestAssignments = _context.StudentTestAssignments.Where(x => x.TestSchedule.TestId == test.TestId ).ToList();
             List<ApplicationUser> students = new List<ApplicationUser>();
             foreach(StudentTestAssignment sta in studentTestAssignments)
@@ -465,6 +481,14 @@ namespace BrainNotFound.Paper.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Allows the instructor to review the specified student's test
+        /// </summary>
+        /// <param name="DepartmentCode">string parameter that distinguishes which department the test belongs to</param>
+        /// <param name="CourseCode">string parameter that distinguishes which course the test belongs to</param>
+        /// <param name="URLSafeName">string url</param>
+        /// <param name="StudentId">string parameter of the specific student</param>
+        /// <returns></returns>
         [HttpGet, Route("Tests/ReviewStudentTest/{DepartmentCode}/{CourseCode}/{URLSafeName}/{StudentId}")]
         public async Task<IActionResult> ReviewStudentTest(string DepartmentCode, string CourseCode, string URLSafeName, string StudentId)
         {
@@ -526,8 +550,13 @@ namespace BrainNotFound.Paper.Controllers
             return PartialView();
         }
 
-
-        // Allows the user to Edit a test information, add and remove sections
+        /// <summary>
+        /// Allows the instructor to edit a test's information and add and remove sections
+        /// </summary>
+        /// <param name="DepartmentCode">string parameter that distinguishes which department the test belongs to</param>
+        /// <param name="CourseCode">string parameter that distinguishes which course the test belongs to</param>
+        /// <param name="URLSafeName">string url</param>
+        /// <returns></returns>
         [HttpGet, Route("Tests/Edit/{DepartmentCode}/{CourseCode}/{URLSafeName}")]
         public IActionResult EditTest(string DepartmentCode, string CourseCode, string URLSafeName)
         {
@@ -543,7 +572,6 @@ namespace BrainNotFound.Paper.Controllers
             ViewBag.Sections = sections;
 
             return View();
-
         }
 
         // Allows the instructor to grade a test
