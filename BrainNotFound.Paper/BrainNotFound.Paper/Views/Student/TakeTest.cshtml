@@ -382,15 +382,7 @@
 
     <!--Timer for how long the test lasts-->
     <script type="text/javascript">
-        var timeLimit = "@ViewBag.TestSchedule.IsTimeUnlimited";
-        if (timeLimit === "True")
-        {
-            var deadline = new Date("@ViewBag.TestSchedule.EndTime").getTime();
-        }
-        else
-        {
-            var deadline = new Date("@ViewBag.TestSchedule.TimeLimit").getTime();
-        }
+        var deadline = new Date("@ViewBag.TimeLimit").getTime();
 
         var x = setInterval(function () {
             var now = new Date().getTime();
@@ -407,7 +399,7 @@
                 document.getElementById("timerScroll").innerHTML = "EXPIRED";
                 document.getElementById("TimeLimitStats").innerHTML = "EXPIRED";
 
-                //$("#TimerOutModal").modal("toggle");
+                $("#TimerOutModal").modal("toggle");
             }
         }, 1000);
     </script>

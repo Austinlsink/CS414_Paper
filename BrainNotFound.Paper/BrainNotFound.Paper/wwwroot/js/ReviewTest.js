@@ -14,7 +14,6 @@
             $("#placeholder").html(result);
         },
         error: function (xhr, status, error) {
-            console.log("Failed");
         }
     })
 })

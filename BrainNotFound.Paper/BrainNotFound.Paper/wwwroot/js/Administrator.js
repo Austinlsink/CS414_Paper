@@ -30,7 +30,6 @@ $("button#EditSaveChanges").click(function () {
     var admin = {};
     $.each(editAdminForm.serializeArray(), function (i, field) {
         admin[field.name] = field.value;
-        console.log(admin[field.name]);
     });
 
     // Creates, submits, and responds to Ajax Call
@@ -42,11 +41,9 @@ $("button#EditSaveChanges").click(function () {
         data: JSON.stringify(admin, username),
         success: function (result) {
             // Close the modal window
-            console.log(result.message);
             location.reload();
         },
         error: function (xhr, status, error) {
-            console.log(xhr.responseText);
             var err = JSON.parse(xhr.responseText);
 
             // Places validation on the First Name Field
@@ -87,11 +84,9 @@ $("button#CreateAdmin").click(function () {
         data: JSON.stringify(admin),
         success: function (result) {
             // Close the modal window
-            console.log(result.message);
             location.reload();
         },
         error: function (xhr, status, error) {
-            console.log(xhr.responseText);
             var err = JSON.parse(xhr.responseText);
 
             // Places validation on the First Name Field

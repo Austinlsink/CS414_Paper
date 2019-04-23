@@ -183,6 +183,24 @@ namespace BrainNotFound.Paper.Controllers
             // Grab the testschedule and its ID to pass as a hidden parameter to the ajax call
             ViewBag.TestSchedule = studentTestAssignment.TestSchedule;
 
+            //Set the student's start time
+            if (studentTestAssignment.StartedTime.Equals("0001-01-01 00:00:00.0000000"))
+            {
+                studentTestAssignment.StartedTime = DateTime.Now;
+            }
+
+            // Set the time limit for the test
+            DateTime dateTime = new DateTime();
+            if (studentTestAssignment.TestSchedule.IsTimeUnlimited)
+            {
+                dateTime = studentTestAssignment.TestSchedule.EndTime;
+            }
+            else
+            {
+                dateTime = studentTestAssignment.StartedTime.AddMinutes(studentTestAssignment.TestSchedule.TimeLimit);
+            }
+            ViewBag.TimeLimit = dateTime;
+
             // Grab the test sections for the test
             var testSections = _context.TestSections
                 .Include(ts => ts.Questions)
@@ -292,8 +310,7 @@ namespace BrainNotFound.Paper.Controllers
                 totalPoints.totalPoints = 0;
             else
                 totalPoints.totalPoints = (int)param[0].Value;
-
-            studentTestAssignment.StartedTime = DateTime.Now;
+           
             _context.SaveChanges();
 
             ViewBag.TotalPoints = totalPoints;
