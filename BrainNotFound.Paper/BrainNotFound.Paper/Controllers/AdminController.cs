@@ -92,10 +92,8 @@ namespace BrainNotFound.Paper.Controllers
             _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetNumberOfDepartments", @params3);
             ViewBag.NumberOfDepartments = @params3[0].Value;
 
-            ViewBag.Departments = _context.Departments.ToList();
-
-            // Fetch the number of Courses in the system
-            ViewBag.Courses = _context.Courses.ToList();
+            ViewBag.Departments = _context.Departments.Include(x => x.Courses).ToList();
+            ViewBag.Sections = _context.Sections.ToList();
 
             //Fetch the number of Tests in the system
             SqlParameter[] @params4 = {

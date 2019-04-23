@@ -7,6 +7,56 @@
     <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
         <div class="tile-stats">
             <div class="icon">
+                <i class="fa fa-mortar-board"></i>
+            </div>
+            <div class="count">@ViewBag.Departments.Count</div>
+
+            <h3>Total Departments</h3>
+
+            @if (ViewBag.Departments.Count > 0)
+            {
+                <div class="x_content">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Department</th>
+                                <th># of Courses</th>
+                                <th># of Sections</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (Department d in ViewBag.Departments)
+                            {
+                                int courseCounter = 0;
+                                foreach (Course c in d.Courses)
+                                {
+                                    foreach (Section s in ViewBag.Sections)
+                                    {
+                                        if (s.CourseId == c.CourseId)
+                                        {
+                                            courseCounter++;
+                                        }
+                                    }
+                                }
+                                <tr>
+                                    <td>@d.DepartmentName</td>
+                                    <td>@d.Courses.Count</td>
+                                    <td>@courseCounter</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p>No Teachers to be displayed</p>
+            }
+        </div>
+    </div>
+    <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="tile-stats">
+            <div class="icon">
                 <i class="fa fa-users"></i>
             </div>
             <div class="count">@ViewBag.NumberOfStudents</div>
@@ -82,44 +132,7 @@
             }
         </div>
     </div>
-    <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <div class="tile-stats">
-            <div class="icon">
-                <i class="fa fa-mortar-board"></i>
-            </div>
-            <div class="count">@ViewBag.Departments.Count</div>
 
-            <h3>Total Departments</h3>
-
-            @if (ViewBag.Departments.Count > 0)
-            {
-                <div class="x_content">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Department</th>
-                                <th># of Courses</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (Department d in ViewBag.Departments)
-                            {
-                                <tr>
-                                    <td>@d.DepartmentName</td>
-                                    <td>Assign to Sections</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            }
-            else
-            {
-                <p>No Teachers to be displayed</p>
-            }
-            <p>Lorem ipsum psdea itgum rixt.</p>
-        </div>
-    </div>
     <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
         <div class="tile-stats">
             <div class="icon">
