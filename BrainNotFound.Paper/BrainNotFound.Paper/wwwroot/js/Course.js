@@ -106,7 +106,6 @@ $("#SaveCourseChanges").click(function () {
             location.reload();
         },
         error: function (xhr, status, error) {
-            console.log(xhr);
             var err = JSON.parse(xhr.responseText);
 
             // Places validation on the Course Code Field
@@ -171,7 +170,6 @@ $("button#CreateCourse").click(function () {
             location.reload();
         },
         error: function (xhr, status, error) {
-            console.log(xhr);
             var err = JSON.parse(xhr.responseText);
 
             // Places validation on the Course Code Field

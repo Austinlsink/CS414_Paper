@@ -1,28 +1,140 @@
-﻿@{
+﻿@using BrainNotFound.Paper.Models.BusinessModels
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<!-- top tiles -->
-<div class="row tile_count">
-    <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-users"></i> Number of Students</span>
-        <div class="count">@ViewBag.NumberOfStudents</div>
-    </div>
-    <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-users"></i> Number of Instructors</span>
-        <div class="count">@ViewBag.NumberOfInstructors</div>
-    </div>
-    <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-mortar-board"></i> Number of Departments</span>
-        <div class="count green">@ViewBag.NumberOfDepartments</div>
-    </div>
-    <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-file-text"></i> Number of Tests</span>
-        <div class="count">@ViewBag.NumberOfTests</div>
+<div class="row">
+    <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="tile-stats">
+            <div class="icon">
+                <i class="fa fa-users"></i>
+            </div>
+            <div class="count">@ViewBag.NumberOfStudents</div>
+
+            <h3>Total Students</h3>
+            <br />
+            <div class="count"><h4>Students Not enrolled: @ViewBag.StudentsNotEnrolled.Count</h4></div>
+            <div class="x_content">
+                @if (ViewBag.StudentsNotEnrolled.Count > 0)
+                {
+                    <div class="x_content">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (ApplicationUser student in ViewBag.StudentsNotEnrolled)
+                                {
+                                    <tr>
+                                        <td>@student.FullName</td>
+                                        <td>Assign to Section</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <p>No students to be displayed</p>
+                }
+            </div>
+        </div>
     </div>
 
+    <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="tile-stats">
+            <div class="icon">
+                <i class="fa fa-users"></i>
+            </div>
+            <div class="count">@ViewBag.NumberOfInstructors</div>
+            <h3>Total Instructors</h3>
+            <br />
+            <div class="count"><h4>Teachers Not Assigned: @ViewBag.InstructorsNotAssigned.Count</h4></div>
+            @if (ViewBag.InstructorsNotAssigned.Count > 0)
+            {
+                <div class="x_content">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (ApplicationUser instructor in ViewBag.InstructorsNotAssigned)
+                            {
+                                <tr>
+                                    <td>@instructor.FullName</td>
+                                    <td>Assign to Sections</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p>No Teachers to be displayed</p>
+            }
+        </div>
+    </div>
+    <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="tile-stats">
+            <div class="icon">
+                <i class="fa fa-mortar-board"></i>
+            </div>
+            <div class="count">@ViewBag.Departments.Count</div>
+
+            <h3>Total Departments</h3>
+
+            @if (ViewBag.Departments.Count > 0)
+            {
+                <div class="x_content">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Department</th>
+                                <th># of Courses</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (Department d in ViewBag.Departments)
+                            {
+                                <tr>
+                                    <td>@d.DepartmentName</td>
+                                    <td>Assign to Sections</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p>No Teachers to be displayed</p>
+            }
+            <p>Lorem ipsum psdea itgum rixt.</p>
+        </div>
+    </div>
+    <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="tile-stats">
+            <div class="icon">
+                <i class="fa fa-file-text"></i>
+            </div>
+            <div class="count">@ViewBag.NumberOfTests</div>
+
+            <h3>Total Tests</h3>
+            <p>Lorem ipsum psdea itgum rixt.</p>
+        </div>
+    </div>
 </div>
-<!-- /top tiles -->
+
+
+
 <!-- pie chart -->
 <div class="col-md-6 col-sm-6 col-xs-12">
     <div class="x_panel">
