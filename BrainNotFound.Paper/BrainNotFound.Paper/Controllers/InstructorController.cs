@@ -45,10 +45,21 @@ namespace BrainNotFound.Paper.Controllers
         public async Task<IActionResult> Index()
         {
             var instructor = await _userManager.GetUserAsync(HttpContext.User);
-            var essayGrading = _context.StudentTestAssignments
-                                .Include(x => x.TestSchedule)
-                                    .ThenInclude(x => x.Test)
-                                .Where(x => x.ManualGradingRequired == true && x.TestSchedule.Test.InstructorId == instructor.Id).ToList();
+
+            // Grab all of the instructor's tests
+            //ViewBag.Tests = _context.Tests.Include(x => x.TestSchedules).Include(x => x.Course).ThenInclude(x => x.Department).Where(x => x.InstructorId == instructor.Id).ToList();
+
+            var essayGrading = _context.StudentEssayAnswers.Include(x => x.TestSchedule).ThenInclude(x => x.Test).Where(x => x.PointsEarned == -1 && x.TestSchedule.Test.InstructorId == instructor.Id).Distinct().ToList();
+
+            List<Test> tests = new List<Test>();
+            foreach(StudentEssayAnswer sea in essayGrading)
+            {
+                if(!(tests.Where(x => x.TestId == sea.TestSchedule.TestId).Any())){
+                    var test = _context.Tests.Include(x => x.TestSchedules).Include(x => x.Course).ThenInclude(x => x.Department).Where(x => x.TestId == sea.TestSchedule.TestId).FirstOrDefault();
+                    tests.Add(test);
+                }
+            }
+            ViewBag.Tests = tests;
             ViewBag.EssayGrading = essayGrading;
             return View();
         }
