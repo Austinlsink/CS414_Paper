@@ -229,7 +229,7 @@ namespace BrainNotFound.Paper.Controllers
                     {
                         case QuestionType.TrueFalse:
                             var studentTFAnswer = _context.StudentTrueFalseAnswers
-                                .Where(stfa => stfa.QuestionId == testSections[j].Questions[i].QuestionId && stfa.TestScheduleId == studentTestAssignment.TestScheduleId)
+                                .Where(stfa => stfa.QuestionId == testSections[j].Questions[i].QuestionId && stfa.TestScheduleId == studentTestAssignment.TestScheduleId && stfa.StudentId == student.Id)
                                 .FirstOrDefault();
 
                             if (studentTFAnswer == null)
@@ -244,7 +244,7 @@ namespace BrainNotFound.Paper.Controllers
                             break;
                             
                         case QuestionType.MultipleChoice:
-                            var studentMCAnswers = _context.StudentAnswers.Include(sa => sa.StudentMultipleChoiceAnswers).Where(sa => sa.QuestionId == testSections[j].Questions[i].QuestionId && sa.TestScheduleId == studentTestAssignment.TestScheduleId).FirstOrDefault();
+                            var studentMCAnswers = _context.StudentAnswers.Include(sa => sa.StudentMultipleChoiceAnswers).Where(sa => sa.QuestionId == testSections[j].Questions[i].QuestionId && sa.TestScheduleId == studentTestAssignment.TestScheduleId && sa.StudentId == student.Id).FirstOrDefault();
 
                             if (studentMCAnswers == null)
                             {
@@ -257,7 +257,7 @@ namespace BrainNotFound.Paper.Controllers
                             totalQuestions += 1;
                             break;
                         case QuestionType.Essay:
-                            var studentEssayAnswer = _context.StudentEssayAnswers.Where(sea => sea.QuestionId == testSections[j].Questions[i].QuestionId && sea.TestScheduleId == studentTestAssignment.TestScheduleId ).FirstOrDefault();
+                            var studentEssayAnswer = _context.StudentEssayAnswers.Where(sea => sea.QuestionId == testSections[j].Questions[i].QuestionId && sea.TestScheduleId == studentTestAssignment.TestScheduleId && sea.StudentId == student.Id).FirstOrDefault();
 
                             if (studentEssayAnswer == null)
                             {
@@ -272,7 +272,7 @@ namespace BrainNotFound.Paper.Controllers
                         case QuestionType.Matching:
                             var studentMatchingAnswer = _context.StudentMatchingAnswers
                                                             .Include(x => x.StudentAnswer)
-                                                            .Where(x => x.StudentAnswer.QuestionId == testSections[j].Questions[i].QuestionId).ToList();
+                                                            .Where(x => x.StudentAnswer.QuestionId == testSections[j].Questions[i].QuestionId && x.StudentAnswer.StudentId == student.Id).ToList();
 
                             if (studentMatchingAnswer == null)
                             {
