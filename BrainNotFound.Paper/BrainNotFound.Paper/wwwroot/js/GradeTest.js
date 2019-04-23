@@ -336,7 +336,19 @@ $("input[name='gradeBy']").change(function () {
     } else if (gradeBy == "question") {
         render_question_table_by_question();
         $("#selectContainer").addClass("hidden");
-
     }
+})
 
+/**********************************************************************/
+
+// Next Student 
+$("#gradeQuestionCotainer").on("click", "#previousStudent", function () {
+
+    var questionId = $(this).attr("data-questionId");
+    var currentStudentId = $(this).attr("data-currentStudent");
+    var currentStudentIndex = essayQuestions
+        .find(eq => eq.questionId == questionId)
+        .studentAnswers.findIndex(sa => sa.studentId === studentId)
+
+    console.log(currentStudentIndex);
 })
