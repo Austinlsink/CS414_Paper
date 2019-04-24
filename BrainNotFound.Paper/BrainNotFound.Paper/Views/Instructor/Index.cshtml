@@ -29,21 +29,21 @@
                     <tbody>
                         @if (ViewBag.Tests.Count > 0)
                         {
-                            @foreach (Test t in ViewBag.Tests)
+                            @foreach (TestSchedule ts in ViewBag.EssayGrading)
                             {
                                 int essayCounter = 0;
-                                foreach (StudentEssayAnswer sea in ViewBag.EssayGrading)
+                                foreach (StudentTestAssignment sta in ts.StudentTestAssignments)
                                 {
-                                    if (sea.TestSchedule.TestId == t.TestId)
+                                    if (ts.TestScheduleId == sta.TestScheduleId)
                                     {
                                         essayCounter++;
                                     }
                                 }
                                 <tr>
-                                    <td>@t.TestName</td>
+                                    <td>@ts.Test.TestName</td>
                                     <td>@essayCounter</td>
                                     <td>
-                                        <a asp-controller="Instructor" asp-action="GradeTest" asp-route-DepartmentCode="@t.Course.Department.DepartmentCode" asp-route-CourseCode="@t.Course.CourseCode" asp-route-URLSafeName="@t.URLSafeName" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i> Grade </a>
+                                        <a asp-controller="Instructor" asp-action="GradeTest" asp-route-DepartmentCode="@ts.Test.Course.Department.DepartmentCode" asp-route-CourseCode="@ts.Test.Course.CourseCode" asp-route-URLSafeName="@ts.Test.URLSafeName" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i> Grade </a>
                                     </td>
                                 </tr>
                             }

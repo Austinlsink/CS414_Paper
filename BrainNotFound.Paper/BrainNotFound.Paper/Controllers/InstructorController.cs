@@ -47,21 +47,23 @@ namespace BrainNotFound.Paper.Controllers
         {
             var instructor = await _userManager.GetUserAsync(HttpContext.User);
 
-            // Grab all of the instructor's tests
-            //ViewBag.Tests = _context.Tests.Include(x => x.TestSchedules).Include(x => x.Course).ThenInclude(x => x.Department).Where(x => x.InstructorId == instructor.Id).ToList();
+            var gradingTests = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).Where(x => x.TestSchedule.Test.InstructorId == instructor.Id && x.ManualGradingRequired).Select(x => x.TestSchedule).Include(x => x.StudentTestAssignments).Distinct().ToList();
 
-            var essayGrading = _context.StudentEssayAnswers.Include(x => x.TestSchedule).ThenInclude(x => x.Test).Where(x => x.PointsEarned == -1 && x.TestSchedule.Test.InstructorId == instructor.Id).Distinct().ToList();
+
+            var studentEssays = _context.StudentEssayAnswers.Include(x => x.TestSchedule).ThenInclude(x => x.Test).ThenInclude(x => x.Course).ThenInclude(x => x.Department).Where(x => x.PointsEarned == -1 && x.TestSchedule.Test.InstructorId == instructor.Id).Distinct().ToList();
 
             List<Test> tests = new List<Test>();
-            foreach(StudentEssayAnswer sea in essayGrading)
+            foreach (StudentEssayAnswer sea in studentEssays)
             {
-                if(!(tests.Where(x => x.TestId == sea.TestSchedule.TestId).Any())){
+                if (!(tests.Where(x => x.TestId == sea.TestSchedule.TestId).Any()))
+                {
                     var test = _context.Tests.Include(x => x.TestSchedules).Include(x => x.Course).ThenInclude(x => x.Department).Where(x => x.TestId == sea.TestSchedule.TestId).FirstOrDefault();
                     tests.Add(test);
                 }
             }
-            ViewBag.Tests = tests;
-            ViewBag.EssayGrading = essayGrading;
+            ViewBag.StudentEssays = studentEssays;
+            ViewBag.EssayGrading = gradingTests;
+            ViewBag.Tests = _context.Tests.Where(x => x.InstructorId == instructor.Id).ToList();
             return View();
         }
 

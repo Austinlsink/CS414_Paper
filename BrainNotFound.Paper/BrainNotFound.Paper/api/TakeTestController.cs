@@ -59,6 +59,7 @@ namespace BrainNotFound.Paper.api
             {
                 studentTestAssignment.Submitted = true;
                 studentTestAssignment.Signed = isPledgeSigned;
+                studentTestAssignment.ManualGradingRequired = true;
                 _context.SaveChanges();
                 return Json(new { success = true });
             }
@@ -205,12 +206,14 @@ namespace BrainNotFound.Paper.api
                         StudentId = student.Id
                     };
 
-                    List<StudentMultipleChoiceAnswer> answersGiven = new List<StudentMultipleChoiceAnswer>();
-                    answersGiven.Add(new StudentMultipleChoiceAnswer()
+                    List<StudentMultipleChoiceAnswer> answersGiven = new List<StudentMultipleChoiceAnswer>
                     {
-                        MultipleChoiceAnswerId = mcAnswerId,
-                        AnswerId = newStudentAnswer.AnswerId
-                    });
+                        new StudentMultipleChoiceAnswer()
+                        {
+                            MultipleChoiceAnswerId = mcAnswerId,
+                            AnswerId = newStudentAnswer.AnswerId
+                        }
+                    };
 
                     newStudentAnswer.StudentMultipleChoiceAnswers = answersGiven;
 
