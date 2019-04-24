@@ -145,6 +145,7 @@
                         int countMC = 1;
                         foreach (Question q in ts.Questions)
                         {
+                            q.MultipleChoiceAnswers.ShuffleList();
                             <div class="col-md-12 col-sm-12 col-xs-12 questionRow" style="padding: 20px 0 10px 0">
                                 <div class="col-md-1 col-sm-1 col-xs-3 text-center">
                                     <span id="pointValue-56789"><span class="pointValue" id="pointValue">(@q.PointValue</span> pts.)</span>
