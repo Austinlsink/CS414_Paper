@@ -382,7 +382,7 @@
 
     <!--Timer for how long the test lasts-->
     <script type="text/javascript">
-        var deadline = new Date("@ViewBag.TimeLimit").getTime();
+        var deadline = new Date("@ViewBag.StopTimer").getTime();
 
         var x = setInterval(function () {
             var now = new Date().getTime();
@@ -399,7 +399,7 @@
                 document.getElementById("timerScroll").innerHTML = "EXPIRED";
                 document.getElementById("TimeLimitStats").innerHTML = "EXPIRED";
 
-                //$("#TimerOutModal").modal("toggle");
+                $("#TimerOutModal").modal("toggle");
             }
         }, 1000);
     </script>

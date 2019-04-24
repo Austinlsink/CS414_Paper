@@ -179,14 +179,14 @@ namespace BrainNotFound.Paper.Controllers
             ViewBag.TestSchedule = studentTestAssignment.TestSchedule;
 
             //Set the student's start time
-            if (studentTestAssignment.StartedTime.Equals("0001-01-01 00:00:00.0000000"))
+            if (studentTestAssignment.StartedTime == new DateTime(0001, 01, 01, 00,00, 00, 0000000))
             {
                 studentTestAssignment.StartedTime = DateTime.Now;
             }
 
             // Set the time limit for the test
             DateTime dateTime = new DateTime();
-            if (studentTestAssignment.TestSchedule.IsTimeUnlimited)
+            if (studentTestAssignment.TestSchedule.TimeLimit == 0)
             {
                 dateTime = studentTestAssignment.TestSchedule.EndTime;
             }
@@ -194,7 +194,9 @@ namespace BrainNotFound.Paper.Controllers
             {
                 dateTime = studentTestAssignment.StartedTime.AddMinutes(studentTestAssignment.TestSchedule.TimeLimit);
             }
-            ViewBag.TimeLimit = dateTime;
+
+            ViewBag.StopTimer = dateTime;
+           
 
             // Grab the test sections for the test
             var testSections = _context.TestSections
