@@ -7,6 +7,11 @@
     ViewData["Title"] = "Edit " + test.TestName + " - Instructor";
 }
 
+<!--Save Button-->
+<div style="width: 100px; background-color: #808080; border-radius: 6px; z-index: 10; position: fixed; right: 0; bottom: 5px; height: 30px; padding:6px;">
+    <a style="color:aliceblue" asp-controller="Instructor" asp-action="ViewTest" asp-route-DepartmentCode="@test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Course.CourseCode" asp-route-URLSafeName="@test.URLSafeName"> Save & View</a>
+</div>
+
 <div class="row" id="TestInformationSection">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
