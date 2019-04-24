@@ -246,9 +246,9 @@ namespace BrainNotFound.Paper.Controllers
             var courses = _context.Courses.ToList();
             var departments = _context.Departments.ToList();
 
-            // Find any StudentEssayAnswers
-            var studentEssayAnswers = _context.StudentEssayAnswers.Where(x => previousTests.Any(y => y.TestId == x.TestSchedule.TestId)).ToList();
-            ViewBag.StudentEssayAnswers = studentEssayAnswers;
+            // Find any tests that need manual grading
+            var manualGradingRequired = _context.StudentTestAssignments.Where(x => previousTests.Any(y => y.TestId == x.TestSchedule.TestId)).ToList();
+            ViewBag.ManualGradingRequired = manualGradingRequired;
 
             ViewBag.UpcomingTests = upcomingTests;
             ViewBag.PreviousTests = previousTests;
@@ -320,9 +320,9 @@ namespace BrainNotFound.Paper.Controllers
             var courses = _context.Courses.ToList();
             var departments = _context.Departments.ToList();
 
-            // Find any StudentEssayAnswers
-            var studentEssayAnswers = _context.StudentEssayAnswers.Where(x => previousTests.Any(y => y.TestId == x.TestSchedule.TestId)).ToList();
-            ViewBag.StudentEssayAnswers = studentEssayAnswers;
+            // Find any tests that need manual grading
+            var manualGradingRequired = _context.StudentTestAssignments.Where(x => previousTests.Any(y => y.TestId == x.TestSchedule.TestId)).ToList();
+            ViewBag.ManualGradingRequired = manualGradingRequired;
 
             ViewBag.UpcomingTests = upcomingTests;
             ViewBag.PreviousTests = previousTests;
@@ -371,9 +371,10 @@ namespace BrainNotFound.Paper.Controllers
             var courses = _context.Courses.ToList();
             var departments = _context.Departments.ToList();
 
-            // Find any StudentEssayAnswers
+            // Find any tests that need manual grading
             var manualGradingRequired = _context.StudentTestAssignments.Where(x => previousTests.Any(y => y.TestId == x.TestSchedule.TestId)).ToList();
             ViewBag.ManualGradingRequired = manualGradingRequired;
+
             ViewBag.UpcomingTests = upcomingTests;
             ViewBag.PreviousTests = previousTests;
             ViewBag.UnscheduledTests = unscheduledTests;

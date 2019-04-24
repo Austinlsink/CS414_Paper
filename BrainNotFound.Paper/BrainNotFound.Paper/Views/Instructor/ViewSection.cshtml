@@ -232,8 +232,8 @@
     </div>
     @if (ViewBag.PreviousTests.Count > 0)
     {
-        List<StudentEssayAnswer> studentEssayAnswers = new List<StudentEssayAnswer>();
-        studentEssayAnswers = ViewBag.StudentEssayAnswers;
+        List<StudentTestAssignment> ManualGradingRequired = new List<StudentTestAssignment>();
+        ManualGradingRequired = ViewBag.ManualGradingRequired;
         <div class="x_content">
             <div class="table-responsive">
                 <table id="PreviousTestTable" class="table table-striped jambo_table bulk_action ">
@@ -261,7 +261,7 @@
                                     <a asp-controller="Instructor" asp-action="ViewTest" asp-route-DepartmentCode="@test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Course.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View</a>
                                     <a asp-controller="Instructor" asp-action="ReviewTest" asp-route-DepartmentCode="@test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Course.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-dark btn-xs"><i class="fa fa-folder"></i> View Student Tests </a>
 
-                                    @if (studentEssayAnswers.Where(x => x.TestSchedule.TestId == test.TestId && x.PointsEarned == -1).Any())
+                                    @if (ManualGradingRequired.Where(x => x.TestSchedule.TestId == test.TestId && x.ManualGradingRequired == true).Any())
                                     {
                                         <a asp-controller="Instructor" asp-action="GradeTest" asp-route-DepartmentCode="@test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Course.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i> Grade</a>
                                     }
