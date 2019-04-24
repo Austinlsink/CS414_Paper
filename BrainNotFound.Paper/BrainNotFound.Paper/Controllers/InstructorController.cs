@@ -482,6 +482,11 @@ namespace BrainNotFound.Paper.Controllers
             // Grab the test sections for the test
             var testSections = _context.TestSections
                 .Include(ts => ts.Questions)
+                    .ThenInclude(x => x.MultipleChoiceAnswers)
+                .Include(ts => ts.Questions)
+                    .ThenInclude(x => x.MatchingQuestionSides)
+                .Include(x => x.Questions)
+                    .ThenInclude(x => x.MatchingAnswerSides)
                 .Where(x => x.TestId == test.TestId)
                 .ToList();
 

@@ -161,8 +161,7 @@
                                     <p><strong>@countMC.</strong> @q.Content</p>
                                 </div>
                                 <div class="col-md-1"></div>
-                                <div class="form-group col-md-11 col-sm-11 col-xs-12">
-
+                                <div class="form-group col-md-10 col-sm-11 col-xs-12">
                                     @{
                                         option = 97;
                                         foreach (MultipleChoiceAnswer mca in q.MultipleChoiceAnswers)
@@ -175,6 +174,7 @@
                                             {
                                                 <a class="btn btn-default btn-block text-left multipleChoiceOption" data-mcQuestionId="@q.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="false"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
                                             }
+
                                             @if (mca.IsCorrect == true && q.studentMultipleChoiceAnswers.Where(smca => smca.MultipleChoiceAnswerId == mca.MultipleChoiceAnswerId).Any())
                                             {
                                                 <div class="form-group col-md-1 col-sm-1 col-xs-2">
@@ -191,6 +191,12 @@
                                             {
                                                 <div class="form-group col-md-1 col-sm-1 col-xs-2">
                                                     <span class="question-correct"><i class="fa fa-check"></i></span>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="form-group col-md-1 col-sm-1 col-xs-2">
+                                                    <span class="question-wrong"><i class="fa fa-close"></i></span>
                                                 </div>
                                             }
                                             option++;
