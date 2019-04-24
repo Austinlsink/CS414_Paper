@@ -23,6 +23,7 @@
                                     <th class="column-title">Name </th>
                                     <th class="column-title">Course</th>
                                     <th class="column-title">Availability</th>
+                                    <th class="column-title">In Progress</th>
                                     <th class="column-title no-link last">
                                         <span class="nobr">Action</span>
                                     </th>
@@ -36,19 +37,44 @@
                                 {
                                     <tr class="odd pointer">
                                         <td class=" ">@test.TestName</td>
-                                        @{
-                                            string DepartmentCodeAndCourseCode;
-                                            List<Course> courses = ViewBag.Courses;
-                                            List<Department> departments = ViewBag.Departments;
-                                            Course currentCourse = courses.Where(c => c.CourseId == test.CourseId).First();
-                                            Department currentDepartment = departments.Where(d => d.DepartmentId == currentCourse.DepartmentId).First();
-                                            DepartmentCodeAndCourseCode = currentDepartment.DepartmentCode + " " + currentCourse.CourseCode;
-                                        }
-                                        <td class=" ">@DepartmentCodeAndCourseCode</td>
+                                        <td class=" ">@test.Course.Department.DepartmentCode @test.Course.CourseCode</td>
                                         <td class=" ">@test.TestSchedules.Where(x => x.TestId == test.TestId).FirstOrDefault().GetAvailability()</td>
+                                        @{
+                                            bool inProgress = true;
+                                            foreach (TestSchedule ts in ViewBag.InProgress)
+                                            {
+                                                foreach (StudentTestAssignment sta in ts.StudentTestAssignments)
+                                                {
+                                                    if (ts.TestId == test.TestId)
+                                                    {
+                                                        if (sta.TestScheduleId == ts.TestScheduleId && sta.StartedTime < new DateTime(0001, 01, 02, 00, 00, 00, 0000000))
+                                                        {
+                                                            inProgress = false;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        @if (inProgress)
+                                        {
+                                        <td>&#x2713;</td>
+                                        }
+                                        else
+                                        {
+                                        <td>&chi;</td>
+                                        }
+
                                         <td class=" last">
-                                            <a asp-controller="Instructor" asp-action="EditTest" asp-route-DepartmentCode="@currentDepartment.DepartmentCode" asp-route-CourseCode="@currentCourse.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                            <button type="submit" data-target="#ConfirmModal" data-testId="@test.TestId" class="btn btn-danger btn-xs confirmDelete"><i class="fa fa-trash-o"></i> Delete </button>
+                                            @if (inProgress)
+                                            {
+                                                <a asp-controller="Instructor" asp-action="ViewTest" asp-route-DepartmentCode="@test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Course.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View</a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-controller="Instructor" asp-action="ViewTest" asp-route-DepartmentCode="@test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Course.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View</a>
+                                                <a asp-controller="Instructor" asp-action="EditTest" asp-route-DepartmentCode="@test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Course.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                                <button type="submit" data-target="#ConfirmModal" data-testId="@test.TestId" class="btn btn-danger btn-xs confirmDelete"><i class="fa fa-trash-o"></i> Delete </button>
+                                            }
                                         </td>
                                     </tr>
                                 }
@@ -97,20 +123,12 @@
                         {
                             <tr class="odd pointer">
                                 <td class=" ">@test.TestName</td>
-                                @{
-                                    string DepartmentCodeAndCourseCode;
-                                    List<Course> courses = ViewBag.Courses;
-                                    List<Department> departments = ViewBag.Departments;
-                                    Course currentCourse = courses.Where(c => c.CourseId == test.CourseId).First();
-                                    Department currentDepartment = departments.Where(d => d.DepartmentId == currentCourse.DepartmentId).First();
-                                    DepartmentCodeAndCourseCode = currentDepartment.DepartmentCode + " " + currentCourse.CourseCode;
-                                }
-                                <td class=" ">@DepartmentCodeAndCourseCode</td>
-                                <td class=" ">@test.TestSchedules.Where(x => x.TestId == test.TestId).First().EndTime</td>
+                                <td class=" ">@test.Course.Department.DepartmentCode @test.Course.CourseCode</td>
+                                <td class=" ">@test.TestSchedules.Where(x => x.TestId == test.TestId).First().GetAvailability()</td>
                                 <td class=" last">
-                                    <a asp-controller="Instructor" asp-action="GradeTest" asp-route-DepartmentCode="@currentDepartment.DepartmentCode" asp-route-CourseCode="@currentCourse.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i> Grade </a>
-                                    <a asp-controller="Instructor" asp-action="ViewTest" asp-route-DepartmentCode="@currentDepartment.DepartmentCode" asp-route-CourseCode="@currentCourse.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View Test</a>
-                                    <a asp-controller="Instructor" asp-action="ReviewTest" asp-route-DepartmentCode="@currentDepartment.DepartmentCode" asp-route-CourseCode="@currentCourse.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-dark btn-xs"><i class="fa fa-folder"></i> View Student Tests </a>
+                                    <a asp-controller="Instructor" asp-action="GradeTest" asp-route-DepartmentCode="@test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Course.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i> Grade </a>
+                                    <a asp-controller="Instructor" asp-action="ViewTest" asp-route-DepartmentCode="@test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Course.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View</a>
+                                    <a asp-controller="Instructor" asp-action="ReviewTest" asp-route-DepartmentCode="@test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Course.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-dark btn-xs"><i class="fa fa-folder"></i> View Student Tests </a>
                                 </td>
                             </tr>
                         }
@@ -220,7 +238,7 @@
 
 
 @section scripts
-{
+    {
     <!--CreateTest functions-->
     <script type="text/javascript" src="~/js/Tests.js"></script>
 

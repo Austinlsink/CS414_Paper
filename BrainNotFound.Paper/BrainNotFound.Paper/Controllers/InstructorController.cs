@@ -322,8 +322,11 @@ namespace BrainNotFound.Paper.Controllers
 
             // Find all of the previous and upcoming tests for the instructor
             var instructorScheduledTests = _context.TestSchedules.Include(x => x.Test).Where(x => x.Test.applicationUser.Id == instructor.Id).ToList();
-            var upcomingTests = _context.TestSchedules.Include(ts => ts.Test).Where(x => x.EndTime > DateTime.Now).Select(tts => tts.Test).Distinct().ToList();
-            var previousTests = _context.TestSchedules.Include(ts => ts.Test).Where(x => x.EndTime < DateTime.Now).Select(tts => tts.Test).Distinct().ToList();
+            var upcomingTests = _context.TestSchedules.Include(ts => ts.Test).ThenInclude(x => x.Course).ThenInclude(x => x.Department).Where(x => x.EndTime > DateTime.Now).Select(tts => tts.Test).Distinct().ToList();
+            var previousTests = _context.TestSchedules.Include(ts => ts.Test).ThenInclude(x => x.Course).ThenInclude(x => x.Department).Where(x => x.EndTime < DateTime.Now).Select(tts => tts.Test).Distinct().ToList();
+
+            var studentTestAssignments = _context.TestSchedules.Include(x => x.StudentTestAssignments).Where(x => upcomingTests.Any(y => y.TestId == x.TestId)).ToList();
+            ViewBag.InProgress = studentTestAssignments;
 
             // Find all unscheduled tests
             var instructorTests = _context.Tests.Include(x => x.TestSchedules).Where(x => x.InstructorId == instructor.Id).ToList();
