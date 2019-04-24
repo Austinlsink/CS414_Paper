@@ -3,6 +3,7 @@ using System.Linq;
 using BrainNotFound.Paper.Models.BusinessModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BrainNotFound.Paper.api
 {
@@ -35,32 +36,31 @@ namespace BrainNotFound.Paper.api
         [HttpPost, Route("DeleteTest")]
         public JsonResult DeleteTest([FromBody] long testId)
         {
-            var test = _context.Tests.Find(testId);
-            int countError = 0;
-            var testSectionSchedules = _context.TestSchedules.Where(ts => ts.TestId == test.TestId).ToList();
             string ProgressMessage = String.Empty;
             string PastMessage = String.Empty;
             string SuccessMessage = String.Empty;
+            int countError = 0;
 
-            foreach (TestSchedule schedule in testSectionSchedules)
+            var test = _context.Tests.Include(x => x.TestSchedules).Where(x => x.TestId == testId).First();
+
+            var testSectionSchedules = _context.TestSchedules.Where(ts => ts.TestId == test.TestId).ToList();
+
+            var questions = _context.Questions.Include(x => x.TestSection).Where(x => testSectionSchedules.Any(y => y.TestId == x.TestSection.TestId)).ToList();
+
+            for (int i = 0; i < questions.Count; i++)
             {
-                // Parsing the date
-                if (schedule.StartTime < DateTime.Now)
-                {
-                    PastMessage = " For record purposes, previously taken tests cannot be deleted.";
-                    countError++;
-                }
+                _context.Questions.Remove(questions[i]);
             }
-            if (countError == 0)
+
+            for (int i = 0; i < testSectionSchedules.Count; i++)
             {
-                _context.Tests.Remove(test);
-                _context.SaveChanges();
-                return Json(new { success = true, message = "The test was successfully deleted"});
+                _context.TestSchedules.Remove(testSectionSchedules[i]);
             }
-            else
-            {
-                return Json(new { success = false, error = ProgressMessage + PastMessage});
-            }
+
+            _context.Tests.Remove(test);
+            _context.SaveChanges();
+            return Json(new { success = true, message = "The test was successfully deleted" });
+
         }
     }
 }
