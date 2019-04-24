@@ -15,11 +15,22 @@ BEGIN
 
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
+		-- If the essay has been graded
 		IF ((SELECT PointsEarned
 			  FROM StudentAnswers
 			 WHERE StudentAnswers.AnswerId = @currentAnswerId) >= 0)
 		BEGIN
-			-- Add the points to the corresponding StudentTestAssignment using the StudentAnswers's TestScheduleId in a subquerey
+			-- Add the points to the corresponding StudentTestAssignment using the StudentAnswers's TestScheduleId and StudentId in subqueries
+			UPDATE StudentTestAssignments
+			   SET Grade = Grade +(SELECT PointsEarned
+									 FROM StudentAnswers
+									WHERE AnswerId = @currentAnswerId)
+			 WHERE TestScheduleId = (SELECT TestScheduleId
+									   FROM StudentAnswers
+									  WHERE AnswerId = @currentAnswerId)
+			  AND StudentId = (SELECT StudentId
+							 	 FROM StudentAnswers
+								WHERE AnswerId = @currentAnswerId);
 		END;
 
 		FETCH NEXT FROM essayAnswerIdCursor INTO @currentAnswerId;

@@ -11,12 +11,10 @@ INSTRUCTORS
 Extra: Get the test average as a percentage grade : GetSectionTestAverage(@inputSectionId BIGINT, @inputTestId BIGINT) (FUNCTION--Returns a JSON object)
 	JSON Object returned : {"SectionAverage":"the test average for the section"}
 
-"How all sections did on a test (A's, B's, etc. for all sections of a course)" : 
-	NOTE: I would suggest just running the GetSectionLetterGradeStats() function multiple times,
-	      using different section IDs each time.
+"How all sections did on a test (A's, B's, etc. for all sections of a course)" : GetLetterGradeStats(@inputTestId BIGINT) (FUNCTION--Returns a JSON object)
+	JSON Object returned : {"NumberOfAs":"numOfAs", "NumberOfBs":"numOfBs", "NumberOfCs":"numOfCs", "NumberOfDs":"numOfDs", "NumberOfFs":"numOfFs"}
+	(NOTE: This is technically for one test, assuming that a test can only be taken by ONE course)
 
 STUDENTS
-"Last test score" : 
-	NOTE: May require a "time submitted" column on the StudentTestAssignment table...
 "Previous test scores" : STUDENT_GetAllTestGrades(@inputStudentId BIGINT) (FUNCTION--Returns a JSON object)
 	JSON Object returned: {"StudentTestGrades":["firstTestValue", "secondTestValue", etc.]}
