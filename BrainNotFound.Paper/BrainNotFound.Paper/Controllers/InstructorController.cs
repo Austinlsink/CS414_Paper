@@ -11,6 +11,7 @@ using System.Data.SqlClient;
 using System.Data;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using System.Web;
 
 namespace BrainNotFound.Paper.Controllers
 {
@@ -380,7 +381,7 @@ namespace BrainNotFound.Paper.Controllers
             var department = _context.Departments.Find(course.DepartmentId);
             test.applicationUser = Instructor;
             test.IsVisible = false;
-            test.URLSafeName = test.TestName.Replace(" ", "_");
+            test.URLSafeName = HttpUtility.HtmlEncode(test.TestName);
 
             _context.Tests.Add(test);
             _context.SaveChanges();
