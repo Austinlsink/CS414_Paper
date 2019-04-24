@@ -257,6 +257,8 @@ namespace BrainNotFound.Paper.Controllers
             string departmentCode = code.Substring(0, 2);
             string courseCode = code.Substring(2, 3);
 
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
             // Find the department associated with the course by DepartmentCode and add it to the ViewBag
             var department = _context.Departments.Where(d => d.DepartmentCode == departmentCode).First();
             ViewBag.department = department;
@@ -285,14 +287,30 @@ namespace BrainNotFound.Paper.Controllers
             var sectionMeetingTimeList = _context.SectionMeetingTimes.ToList();
             ViewBag.sectionMeetingTimeList = sectionMeetingTimeList;
 
-            // Find all of the tests for this course
-            var instructor = await _userManager.GetUserAsync(HttpContext.User);
-            var instructorTests = _context.TestSchedules.Include(x => x.Test).ThenInclude(x => x.applicationUser).Where(x => x.Test.applicationUser.Id == instructor.Id).ToList();
+            // Find all of the previous and upcoming tests for the instructor
+            var instructorScheduledTests = _context.TestSchedules.Include(x => x.Test).Where(x => x.Test.applicationUser.Id == instructor.Id).ToList();
+            var upcomingTests = _context.TestSchedules.Include(ts => ts.Test).ThenInclude(x => x.Course).ThenInclude(x => x.Department).Where(x => x.EndTime > DateTime.Now).Select(tts => tts.Test).Distinct().ToList();
+            var previousTests = _context.TestSchedules.Include(ts => ts.Test).ThenInclude(x => x.Course).ThenInclude(x => x.Department).Where(x => x.EndTime < DateTime.Now).Select(tts => tts.Test).Distinct().ToList();
 
-            var upcomingTests = instructorTests.Where(x => x.EndTime > DateTime.Now).ToList();
-            var previousTests = instructorTests.Where(x => x.EndTime < DateTime.Now).ToList();
+            // Find all of the StudentTestAssignments for the upcoming tests
+            var upcomingStudentTestAssignments = _context.TestSchedules.Include(x => x.StudentTestAssignments).Where(x => upcomingTests.Any(y => y.TestId == x.TestId)).ToList();
+            ViewBag.InProgress = upcomingStudentTestAssignments;
 
-            var unscheduledTests = instructorTests.Except(upcomingTests).Except(previousTests).ToList();
+            // Find all unscheduled tests
+            var instructorTests = _context.Tests.Include(x => x.TestSchedules).Where(x => x.InstructorId == instructor.Id).ToList();
+            var unscheduledTests = instructorTests.Except(instructorScheduledTests.Select(x => x.Test)).ToList();
+            foreach (Test t in unscheduledTests)
+            {
+                upcomingTests.Add(t);
+            }
+
+            // Grab the courses and departments
+            var courses = _context.Courses.ToList();
+            var departments = _context.Departments.ToList();
+
+            // Find any StudentEssayAnswers
+            var studentEssayAnswers = _context.StudentEssayAnswers.Where(x => previousTests.Any(y => y.TestId == x.TestSchedule.TestId)).ToList();
+            ViewBag.StudentEssayAnswers = studentEssayAnswers;
 
             ViewBag.UpcomingTests = upcomingTests;
             ViewBag.PreviousTests = previousTests;
@@ -341,8 +359,10 @@ namespace BrainNotFound.Paper.Controllers
             var courses = _context.Courses.ToList();
             var departments = _context.Departments.ToList();
 
-            ViewBag.Courses = courses;
-            ViewBag.Departments = departments;
+            // Find any StudentEssayAnswers
+            var studentEssayAnswers = _context.StudentEssayAnswers.Where(x => previousTests.Any(y => y.TestId == x.TestSchedule.TestId)).ToList();
+            ViewBag.StudentEssayAnswers = studentEssayAnswers;
+
             ViewBag.UpcomingTests = upcomingTests;
             ViewBag.PreviousTests = previousTests;
             ViewBag.UnscheduledTests = unscheduledTests;
