@@ -128,7 +128,7 @@
                                         <td class=" ">@String.Format("{0:f}", test.Test.TestSchedules.Select(x => x.StartTime).First())</td>
                                         <td class=" ">@String.Format("{0:f}", test.Test.TestSchedules.Select(x => x.EndTime).First())</td>
                                         <td class=" last">
-                                            <a class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                            <a asp-controller="Instructor" asp-action="ViewTest" asp-route-DepartmentCode="@test.Test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Test.Course.CourseCode" asp-route-URLSafeName="@test.Test.URLSafeName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View</a>
                                         </td>
                                     </tr>
                                 }
@@ -183,7 +183,7 @@
                                 <td class=" ">@String.Format("{0:f}", test.Test.TestSchedules.Select(x => x.StartTime).First())</td>
                                 <td class=" ">@String.Format("{0:f}", test.Test.TestSchedules.Select(x => x.EndTime).First())</td>
                                 <td class=" last">
-                                    <a class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                    <a asp-controller="Instructor" asp-action="ViewTest" asp-route-DepartmentCode="@test.Test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Test.Course.CourseCode" asp-route-URLSafeName="@test.Test.URLSafeName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View</a>
                                 </td>
                             </tr>
                         }

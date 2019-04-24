@@ -1,4 +1,5 @@
 @using BrainNotFound.Paper.Models.BusinessModels
+@using BrainNotFound.Paper.Services
 
 <div class="">
     <div class="row">
@@ -39,31 +40,7 @@
                                                 <td>@ts.TestSchedule.Test.TestName</td>
                                                 <td>@ts.TestSchedule.EndTime</td>
                                                 <td>@ts.Grade/@ts.totalPoints</td>
-                                                <!--Calculate Letter grade-->
-                                                @{ 
-                                                    char letterGrade;
-                                                    float value = ts.Grade / ts.totalPoints * 100;
-                                                    if(value > 90)
-                                                    {
-                                                        letterGrade = 'A';
-                                                    }
-                                                    else if(value > 80){
-                                                        letterGrade = 'B';
-                                                    }
-                                                    else if(value > 70)
-                                                    {
-                                                        letterGrade = 'C';
-                                                    }
-                                                    else if (value > 60)
-                                                    {
-                                                        letterGrade = 'D';
-                                                    }
-                                                    else
-                                                    {
-                                                        letterGrade = 'F';
-                                                    }
-                                                }
-                                                <td>@letterGrade</td>
+                                                <td>@LetterGrade.CalculateLetterGrade(ts.Grade, ts.totalPoints)</td>
                                             </tr>
                                         }
                                     }
