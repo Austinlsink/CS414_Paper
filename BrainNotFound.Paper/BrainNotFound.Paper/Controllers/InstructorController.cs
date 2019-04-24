@@ -325,12 +325,17 @@ namespace BrainNotFound.Paper.Controllers
             var upcomingTests = _context.TestSchedules.Include(ts => ts.Test).ThenInclude(x => x.Course).ThenInclude(x => x.Department).Where(x => x.EndTime > DateTime.Now).Select(tts => tts.Test).Distinct().ToList();
             var previousTests = _context.TestSchedules.Include(ts => ts.Test).ThenInclude(x => x.Course).ThenInclude(x => x.Department).Where(x => x.EndTime < DateTime.Now).Select(tts => tts.Test).Distinct().ToList();
 
-            var studentTestAssignments = _context.TestSchedules.Include(x => x.StudentTestAssignments).Where(x => upcomingTests.Any(y => y.TestId == x.TestId)).ToList();
-            ViewBag.InProgress = studentTestAssignments;
+            // Find all of the StudentTestAssignments for the upcoming tests
+            var upcomingStudentTestAssignments = _context.TestSchedules.Include(x => x.StudentTestAssignments).Where(x => upcomingTests.Any(y => y.TestId == x.TestId)).ToList();
+            ViewBag.InProgress = upcomingStudentTestAssignments;
 
             // Find all unscheduled tests
             var instructorTests = _context.Tests.Include(x => x.TestSchedules).Where(x => x.InstructorId == instructor.Id).ToList();
             var unscheduledTests = instructorTests.Except(instructorScheduledTests.Select(x => x.Test)).ToList();
+            foreach(Test t in unscheduledTests)
+            {
+                upcomingTests.Add(t);
+            }
 
             // Grab the courses and departments
             var courses = _context.Courses.ToList();
