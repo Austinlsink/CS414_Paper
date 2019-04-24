@@ -46,7 +46,7 @@
                                                     <td>@ts.Grade/@ts.totalPoints</td>
                                                     @if (StudentEssayAnswers.Where(x => x.TestSchedule.TestId == ts.TestSchedule.TestId && x.PointsEarned == -1).Any())
                                                     {
-                                                        <td>Essay are being graded</td>
+                                                        <td>Essays are being graded</td>
                                                     }
                                                     else
                                                     {
