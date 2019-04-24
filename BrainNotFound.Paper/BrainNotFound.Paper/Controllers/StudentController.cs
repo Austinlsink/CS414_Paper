@@ -337,7 +337,15 @@ namespace BrainNotFound.Paper.Controllers
             ViewBag.TestSchedule = studentTestAssignment.TestSchedule; // Grab the testschedule and its ID to pass as a hidden parameter to the ajax call
 
             // Grab the test sections for the test
-            var testSections = _context.TestSections.Include(ts => ts.Questions).ThenInclude(q => q.MultipleChoiceAnswers).Where(x => x.TestId == studentTestAssignment.TestSchedule.TestId).ToList();
+            var testSections = _context.TestSections
+                .Include(ts => ts.Questions)
+                    .ThenInclude(q => q.MultipleChoiceAnswers)
+                .Include(x => x.Questions)
+                    .ThenInclude(x => x.MatchingQuestionSides)
+                .Include(x => x.Questions)
+                    .ThenInclude(x => x.MatchingAnswerSides)
+                .Where(x => x.TestId == studentTestAssignment.TestSchedule.TestId)
+                .ToList();
             ViewBag.TestSections = testSections;
 
             var studentAnswers = _context.StudentAnswers
@@ -396,6 +404,21 @@ namespace BrainNotFound.Paper.Controllers
                             else
                             {
                                 testSections[j].Questions[i].studentEssayAnswer = studentEssayAnswer.EssayAnswerGiven;
+                            }
+                            totalQuestions += 1;
+                            break;
+                        case QuestionType.Matching:
+                            var studentMatchingAnswer = _context.StudentMatchingAnswers
+                                                            .Include(x => x.StudentAnswer)
+                                                            .Where(x => x.StudentAnswer.QuestionId == testSections[j].Questions[i].QuestionId && x.StudentAnswer.StudentId == student.Id).ToList();
+
+                            if (studentMatchingAnswer == null)
+                            {
+                                testSections[j].Questions[i].studentMatchingAnswers = new List<StudentMatchingAnswer>(); ;
+                            }
+                            else
+                            {
+                                testSections[j].Questions[i].studentMatchingAnswers = studentMatchingAnswer;
                             }
                             totalQuestions += 1;
                             break;
