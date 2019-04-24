@@ -1,5 +1,5 @@
 @using BrainNotFound.Paper.Models.BusinessModels;
-@using System.Text.RegularExpressions;
+@using BrainNotFound.Paper.Services;
 @model BrainNotFound.Paper.Models.BusinessModels.ApplicationUser;
 
 @{
@@ -41,7 +41,7 @@
                             <li>
                                 <i class="fa fa-user user-profile-icon"> @ViewBag.profile.UserName</i>
                             <li>
-                                <i class="fa fa-phone user-profile-icon"> @Regex.Replace(ViewBag.profile.PhoneNumber, @"(\d{3})(\d{3})(\d{4})", "($1) $2-$3")</i>
+                                <i class="fa fa-phone user-profile-icon"> @(ViewBag.profile.PhoneNumber == null ? " " : PhoneNumber.CalculatePhoneNumber(ViewBag.profile.PhoneNumber))</i>
                             </li>
                         </ul>
                         <br />

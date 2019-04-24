@@ -1,5 +1,5 @@
 @model BrainNotFound.Paper.Models.BusinessModels.ApplicationUser;
-
+@using BrainNotFound.Paper.Services;
 @{
     ViewData["Title"] = "Profile - Admin";
 }
@@ -45,7 +45,7 @@
                             <li>
                                 <a><i class="fa fa-user user-profile-icon"></i>&nbsp;&nbsp; @ViewBag.profile.UserName</a>
                             <li>
-                                <a><i class="fa fa-phone user-profile-icon"></i>&nbsp;&nbsp; @ViewBag.profile.PhoneNumber</a>
+                                <a><i class="fa fa-phone user-profile-icon"></i>&nbsp;&nbsp; @(ViewBag.profile.PhoneNumber == null ? " " : PhoneNumber.CalculatePhoneNumber(ViewBag.profile.PhoneNumber))</a>
                             </li>
                         </ul>
                         <br />
@@ -67,7 +67,7 @@
 </div>
 
 @section scripts
-{
+    {
     <!--Administrator functions-->
     <script type="text/javascript" src="~/js/Administrator.js"></script>
 }

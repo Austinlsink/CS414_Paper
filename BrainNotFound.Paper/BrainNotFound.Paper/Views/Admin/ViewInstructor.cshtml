@@ -1,5 +1,5 @@
-@using System.Text.RegularExpressions;
 @model BrainNotFound.Paper.Models.BusinessModels.ApplicationUser;
+@using BrainNotFound.Paper.Services;
 @{
     ViewData["Title"] = "View Instructor - Admin";
 }
@@ -36,7 +36,7 @@
                         </div>
                     </div>
                     <div class="col-md-10 col-sm-10 col-xs-12">
-                        <h3>@ViewBag.profile.FirstName @ViewBag.profile.LastName @ViewBag.profile.Id</h3>
+                        <h3>@ViewBag.profile.FirstName @ViewBag.profile.LastName</h3>
 
                         <ul class="list-unstyled user_data">
                             <li>
@@ -48,7 +48,7 @@
                             <li>
                                 <i class="fa fa-user user-profile-icon"> @ViewBag.profile.UserName</i>
                             <li>
-                                <i class="fa fa-phone user-profile-icon"> @Convert.ToInt64(ViewBag.profile.PhoneNumber).ToString("###-###-####")</i>
+                                <i class="fa fa-phone user-profile-icon"> @(ViewBag.profile.PhoneNumber == null ? " " : PhoneNumber.CalculatePhoneNumber(ViewBag.profile.PhoneNumber))</i>
                             </li>
                         </ul>
                         <br />

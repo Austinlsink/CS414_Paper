@@ -1,4 +1,5 @@
 @using BrainNotFound.Paper.Models.BusinessModels;
+@using BrainNotFound.Paper.Services;
 @model ApplicationUser;
 
 @{
@@ -40,7 +41,7 @@
                                 <tr class="odd pointer">
                                     <td class=" ">@admin.FirstName</td>
                                     <td class=" ">@admin.LastName</td>
-                                    <td class=" ">@Convert.ToInt64(admin.PhoneNumber).ToString("###-###-####")</td>
+                                    <td class=" ">@(admin.PhoneNumber == null ? " " : PhoneNumber.CalculatePhoneNumber(admin.PhoneNumber))</td>
                                     <td class=" ">@admin.Email</td>
                                     <td>
                                         <button type="button" id="ViewAdmin" data-target="#ViewAdminModal" data-toggle="modal" value="@admin.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </button>

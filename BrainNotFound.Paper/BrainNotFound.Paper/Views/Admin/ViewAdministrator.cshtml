@@ -1,4 +1,5 @@
 @model BrainNotFound.Paper.Models.BusinessModels.ApplicationUser;
+@using BrainNotFound.Paper.Services;
 @{
     ViewData["Title"] = "View Administrator - Admin";
 }
@@ -25,7 +26,7 @@
                 <li>
                     <i class="fa fa-user user-profile-icon"> @ViewBag.admin.UserName</i>
                 <li>
-                    <i class="fa fa-phone user-profile-icon"> @Convert.ToInt64(ViewBag.admin.PhoneNumber).ToString("###-###-####")</i>
+                    <i class="fa fa-phone user-profile-icon"> @(ViewBag.admin.PhoneNumber == null ? " " : PhoneNumber.CalculatePhoneNumber(ViewBag.admin.PhoneNumber))</i>
                 </li>
             </ul>
             <br />

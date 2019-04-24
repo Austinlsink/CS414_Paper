@@ -170,7 +170,7 @@ namespace BrainNotFound.Paper.Controllers
         public async Task<IActionResult> ViewStudentProfile(String username)
         {
             ApplicationUser instructor = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
-            var student = await _userManager.FindByNameAsync(username);
+            ApplicationUser student = await _userManager.FindByNameAsync(username);
             var enrollment = _context.Enrollments.Where(e => e.StudentId == student.Id).ToList();
             var allSections = _context.Sections.ToList();
             var allMeetingTimes = _context.SectionMeetingTimes.ToList();

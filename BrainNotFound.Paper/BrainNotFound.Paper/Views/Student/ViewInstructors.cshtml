@@ -1,5 +1,5 @@
-@using BrainNotFound.Paper.Models.BusinessModels
-@using System.Text.RegularExpressions
+@using BrainNotFound.Paper.Models.BusinessModels;
+@using BrainNotFound.Paper.Services;
 
 @{
     ViewData["Title"] = "View Instructor - Student";
@@ -22,7 +22,7 @@
                             <br />
                             <ul class="list-unstyled">
                                 <li><i class="fa fa-building"></i> Address: @i.Address  @i.City, @i.State  @i.ZipCode </li>
-                                <li><i class="fa fa-phone"></i> Phone #: </li>
+                                <li><i class="fa fa-phone"></i> Phone #: @(i.PhoneNumber == null ? " " : PhoneNumber.CalculatePhoneNumber(i.PhoneNumber))</li>
                                 <li><i class="fa fa-at user-profile-icon"></i> Email #: @i.Email</li>
                             </ul>
                         </div>

@@ -1,4 +1,5 @@
 @using BrainNotFound.Paper.Models.BusinessModels;
+@using BrainNotFound.Paper.Services;
 @model ApplicationUser;
 
 @{
@@ -36,7 +37,7 @@
                                 <tr class="odd pointer">
                                     <td class=" ">@instructor.FirstName</td>
                                     <td class=" ">@instructor.LastName</td>
-                                    <td class=" ">@instructor.PhoneNumber</td>
+                                    <td class=" ">@(instructor.PhoneNumber == null ? " " : PhoneNumber.CalculatePhoneNumber(instructor.PhoneNumber))</td>
                                     <td class=" ">@instructor.Email</td>
                                     <td>
                                         <a asp-controller="Admin" asp-action="ViewInstructor" asp-route-UserName="@instructor.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
