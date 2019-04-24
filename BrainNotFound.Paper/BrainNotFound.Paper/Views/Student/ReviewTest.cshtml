@@ -272,6 +272,18 @@
                                                     }
                                                 </select>
                                             </div>
+                                            @if (q.studentMatchingAnswers.Where(x => x.MatchingAnswerSideId == mqs.MatchingAnswerSideId && x.MatchingQuestionSideId == mqs.MatchingQuestionSideId).Any())
+                                            {
+                                                <div class="form-group col-md-1 col-sm-1 col-xs-2">
+                                                    <span class="question-correct"><i class="fa fa-check"></i></span>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="form-group col-md-1 col-sm-1 col-xs-2">
+                                                    <span class="question-wrong"><i class="fa fa-close"></i></span>
+                                                </div>
+                                            }
                                         }
                                     </div>
                                 </div>
