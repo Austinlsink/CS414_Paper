@@ -3,56 +3,68 @@
 
 <div class="">
     <div class="row">
-        <div class="col-md-6 col-sm-6 col-xs-12">
-            @foreach (Enrollment e in ViewBag.Enrollments)
-            {
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>@e.Section.Course.Department.DepartmentCode @e.Section.Course.CourseCode - @e.Section.SectionNumber</h2>
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li>
-                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="x_content">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Assignment</th>
-                                    <th>Date</th>
-                                    <th>Grade Points</th>
-                                    <th>Letter Grade</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (ViewBag.Grades.Count > 0)
-                                {
-                                    @foreach (StudentTestAssignment ts in ViewBag.Grades)
+        <div class="col-md-8 col-sm-12 col-xs-12">
+            @{
+                List<StudentEssayAnswer> StudentEssayAnswers = new List<StudentEssayAnswer>();
+                StudentEssayAnswers = ViewBag.StudentEssayAnswers;
+
+                @foreach (Enrollment e in ViewBag.Enrollments)
+                {
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>@e.Section.Course.Department.DepartmentCode @e.Section.Course.CourseCode - @e.Section.SectionNumber</h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                                <li>
+                                    <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></a>
+                                </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Assignment</th>
+                                        <th>Date Completed</th>
+                                        <th>Grade Points</th>
+                                        <th>Letter Grade</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (ViewBag.Grades.Count > 0)
                                     {
-                                        if (e.Section.Course.CourseId == ts.TestSchedule.Test.Course.CourseId)
+                                        @foreach (StudentTestAssignment ts in ViewBag.Grades)
                                         {
-                                            <tr>
-                                                <td>@ts.TestSchedule.Test.TestName</td>
-                                                <td>@ts.TestSchedule.EndTime</td>
-                                                <td>@ts.Grade/@ts.totalPoints</td>
-                                                <td>@LetterGrade.CalculateLetterGrade(ts.Grade, ts.totalPoints)</td>
-                                            </tr>
+                                            if (e.Section.Course.CourseId == ts.TestSchedule.Test.Course.CourseId)
+                                            {
+                                                <tr>
+                                                    <td>@ts.TestSchedule.Test.TestName</td>
+                                                    <td>@ts.TestSchedule.EndTime</td>
+                                                    <td>@ts.Grade/@ts.totalPoints</td>
+                                                    @if (StudentEssayAnswers.Where(x => x.TestSchedule.TestId == ts.TestSchedule.TestId && x.PointsEarned == -1).Any())
+                                                    {
+                                                        <td>Essay are being graded</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>@LetterGrade.CalculateLetterGrade(ts.Grade, ts.totalPoints)</td>
+                                                    }
+                                                </tr>
+                                            }
                                         }
                                     }
-                                }
-                                else
-                                {
-                                    <tr>There are no grades to be displayed.</tr>
-                                }
-                            </tbody>
-                        </table>
+                                    else
+                                    {
+                                        <tr>There are no grades to be displayed.</tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
+                }
             }
         </div>
     </div>

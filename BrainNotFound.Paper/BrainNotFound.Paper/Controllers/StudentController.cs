@@ -471,6 +471,9 @@ namespace BrainNotFound.Paper.Controllers
                     grades[i].totalPoints = (int) param[0].Value;
             }
 
+            var studentEssayAnswers = _context.StudentEssayAnswers.Where(x => grades.Any(y => y.TestSchedule.TestId == x.TestSchedule.TestId)).ToList();
+            ViewBag.StudentEssayAnswers = studentEssayAnswers;
+
             ViewBag.Grades = grades;
 
             return View();
