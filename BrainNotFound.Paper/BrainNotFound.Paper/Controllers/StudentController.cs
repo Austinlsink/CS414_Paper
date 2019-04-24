@@ -426,6 +426,7 @@ namespace BrainNotFound.Paper.Controllers
                 }
             }
             ViewBag.TotalQuestions = totalQuestions;
+            ViewBag.EssayComments = _context.StudentEssayAnswers.ToList();
 
             // Get the student's grades
             var grades = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).Where(x => x.StudentId == student.Id && x.Submitted == true && x.TestScheduleId == testScheduleId).First();

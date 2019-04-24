@@ -234,9 +234,16 @@
                                 <div class="clearfix"></div>
                                 <br />
                                 <div class="col-md-1 col-sm-1 col-xs-3 text-center"></div>
-                                <div class="col-md-11 col-sm-11 col-xs-12">
-                                    <textarea disabled="disabled" class="bg-default-light">Teacher comments: (please write words and not gobbeldygook...) </textarea>
-                                </div>
+                                @foreach (StudentEssayAnswer sea in ViewBag.EssayComments)
+                                {
+                                    if (sea.QuestionId == q.QuestionId)
+                                    {
+                                        <div class="col-md-11 col-sm-11 col-xs-12">
+                                            <textarea disabled="disabled" class="bg-default-light">@sea.Comments</textarea>
+                                        </div>
+                                    }
+                                }
+
                             </div>
                         }
                         break;
