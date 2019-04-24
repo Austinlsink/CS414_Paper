@@ -102,15 +102,14 @@
             @if (ViewBag.UpcomingTests.Count > 0)
             {
                 <div class="x_content">
-                    <p>Click checkbox to select multiple courses.</p>
                     <div class="table-responsive">
-                        <table id="UpcomingTestsTable" class="table table-striped jambo_table bulk_action ">
+                        <table id="UpcomingTestTable" class="table table-striped jambo_table bulk_action ">
                             <thead>
                                 <tr class="headings">
                                     <th class="column-title">Name </th>
                                     <th class="column-title">Course</th>
-                                    <th class="column-title">Start Time</th>
-                                    <th class="column-title">End Time</th>
+                                    <th class="column-title">Availability</th>
+                                    <th class="column-title">In Progress</th>
                                     <th class="column-title no-link last">
                                         <span class="nobr">Action</span>
                                     </th>
@@ -120,15 +119,48 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (TestSchedule test in ViewBag.UpcomingTests)
+                                @foreach (Test test in ViewBag.UpcomingTests)
                                 {
                                     <tr class="odd pointer">
-                                        <td class=" ">@test.Test.TestName</td>
-                                        <td class=" ">@ViewBag.department.DepartmentCode @ViewBag.course.CourseCode</td>
-                                        <td class=" ">@String.Format("{0:f}", test.Test.TestSchedules.Select(x => x.StartTime).First())</td>
-                                        <td class=" ">@String.Format("{0:f}", test.Test.TestSchedules.Select(x => x.EndTime).First())</td>
+                                        <td class=" ">@test.TestName</td>
+                                        <td class=" ">@test.Course.Department.DepartmentCode @test.Course.CourseCode</td>
+                                        <td class=" ">@(test.TestSchedules.Where(x => x.TestId == test.TestId).FirstOrDefault() == null ? "Unscheduled" : test.TestSchedules.Where(x => x.TestId == test.TestId).FirstOrDefault().GetAvailability())</td>
+                                        @{
+                                            bool inProgress = false;
+                                            foreach (TestSchedule ts in ViewBag.InProgress)
+                                            {
+                                                foreach (StudentTestAssignment sta in ts.StudentTestAssignments)
+                                                {
+                                                    if (ts.TestId == test.TestId)
+                                                    {
+                                                        if (!(sta.TestScheduleId == ts.TestScheduleId && sta.StartedTime < new DateTime(0001, 01, 02, 00, 00, 00, 0000000)))
+                                                        {
+                                                            inProgress = true;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        @if (inProgress)
+                                        {
+                                            <td>&#x2713;</td>
+                                        }
+                                        else
+                                        {
+                                            <td>&chi;</td>
+                                        }
+
                                         <td class=" last">
-                                            <a asp-controller="Instructor" asp-action="ViewTest" asp-route-DepartmentCode="@test.Test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Test.Course.CourseCode" asp-route-URLSafeName="@test.Test.URLSafeName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View</a>
+                                            @if (inProgress)
+                                            {
+                                                <a asp-controller="Instructor" asp-action="ViewTest" asp-route-DepartmentCode="@test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Course.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View</a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-controller="Instructor" asp-action="ViewTest" asp-route-DepartmentCode="@test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Course.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View</a>
+                                                <a asp-controller="Instructor" asp-action="EditTest" asp-route-DepartmentCode="@test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Course.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                                <button type="submit" data-target="#ConfirmModal" data-testId="@test.TestId" class="btn btn-danger btn-xs confirmDelete"><i class="fa fa-trash-o"></i> Delete </button>
+                                            }
                                         </td>
                                     </tr>
                                 }
@@ -156,34 +188,39 @@
     </div>
     @if (ViewBag.PreviousTests.Count > 0)
     {
+        List<StudentEssayAnswer> studentEssayAnswers = new List<StudentEssayAnswer>();
+        studentEssayAnswers = ViewBag.StudentEssayAnswers;
         <div class="x_content">
-            <p>Click checkbox to select multiple courses.</p>
             <div class="table-responsive">
-                <table id="PreviousTestsTable" class="table table-striped jambo_table bulk_action ">
+                <table id="PreviousTestTable" class="table table-striped jambo_table bulk_action ">
                     <thead>
                         <tr class="headings">
                             <th class="column-title">Name </th>
                             <th class="column-title">Course</th>
-                            <th class="column-title">Start Time</th>
-                            <th class="column-title">End Time</th>
+                            <th class="column-title">Date Completed</th>
                             <th class="column-title no-link last">
                                 <span class="nobr">Action</span>
                             </th>
                             <th class="bulk-actions" colspan="7">
-                                <a class="antoo" style="color:#fff; if;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                                <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (TestSchedule test in ViewBag.PreviousTests)
+                        @foreach (Test test in ViewBag.PreviousTests)
                         {
                             <tr class="odd pointer">
-                                <td class=" ">@test.Test.TestName</td>
-                                <td class=" ">@ViewBag.department.DepartmentCode @ViewBag.course.CourseCode</td>
-                                <td class=" ">@String.Format("{0:f}", test.Test.TestSchedules.Select(x => x.StartTime).First())</td>
-                                <td class=" ">@String.Format("{0:f}", test.Test.TestSchedules.Select(x => x.EndTime).First())</td>
+                                <td class=" ">@test.TestName</td>
+                                <td class=" ">@test.Course.Department.DepartmentCode @test.Course.CourseCode</td>
+                                <td class=" ">@test.TestSchedules.Where(x => x.TestId == test.TestId).First().GetAvailability()</td>
                                 <td class=" last">
-                                    <a asp-controller="Instructor" asp-action="ViewTest" asp-route-DepartmentCode="@test.Test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Test.Course.CourseCode" asp-route-URLSafeName="@test.Test.URLSafeName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View</a>
+                                    <a asp-controller="Instructor" asp-action="ViewTest" asp-route-DepartmentCode="@test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Course.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View</a>
+                                    <a asp-controller="Instructor" asp-action="ReviewTest" asp-route-DepartmentCode="@test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Course.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-dark btn-xs"><i class="fa fa-folder"></i> View Student Tests </a>
+
+                                    @if (studentEssayAnswers.Where(x => x.TestSchedule.TestId == test.TestId && x.PointsEarned == -1).Any())
+                                    {
+                                        <a asp-controller="Instructor" asp-action="GradeTest" asp-route-DepartmentCode="@test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Course.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i> Grade</a>
+                                    }
                                 </td>
                             </tr>
                         }
@@ -218,7 +255,7 @@
             $('#PreviousTestsTable').DataTable({
                 "order": [2, 'asc'],
                 "columnDefs": [
-                    { "orderable": false, "targets": [4] }
+                    { "orderable": false, "targets": [3] }
                 ],
             });
         });
