@@ -208,6 +208,7 @@
                         int matchingCount = 1;
                         foreach (Question q in ts.Questions)
                         {
+                            q.MatchingQuestionSides.ShuffleList();
                             <div class="x_panel">
                                 <div class="x_content">
                                     <div class="col-md-12 col-sm-12 col-xs-12 questionRow" style="padding: 20px 0 10px 0">
@@ -399,7 +400,7 @@
                 document.getElementById("timerScroll").innerHTML = "EXPIRED";
                 document.getElementById("TimeLimitStats").innerHTML = "EXPIRED";
 
-                $("#TimerOutModal").modal("toggle");
+                //$("#TimerOutModal").modal("toggle");
             }
         }, 1000);
     </script>
