@@ -52,16 +52,6 @@ namespace BrainNotFound.Paper.Controllers
 
             var studentEssays = _context.StudentEssayAnswers.Include(x => x.TestSchedule).ThenInclude(x => x.Test).ThenInclude(x => x.Course).ThenInclude(x => x.Department).Where(x => x.PointsEarned == -1 && x.TestSchedule.Test.InstructorId == instructor.Id).Distinct().ToList();
 
-            List<Test> tests = new List<Test>();
-            foreach (StudentEssayAnswer sea in studentEssays)
-            {
-                if (!(tests.Where(x => x.TestId == sea.TestSchedule.TestId).Any()))
-                {
-                    var test = _context.Tests.Include(x => x.TestSchedules).Include(x => x.Course).ThenInclude(x => x.Department).Where(x => x.TestId == sea.TestSchedule.TestId).FirstOrDefault();
-                    tests.Add(test);
-                }
-            }
-            ViewBag.StudentEssays = studentEssays;
             ViewBag.EssayGrading = gradingTests;
             ViewBag.Tests = _context.Tests.Where(x => x.InstructorId == instructor.Id).ToList();
             return View();
@@ -382,9 +372,8 @@ namespace BrainNotFound.Paper.Controllers
             var departments = _context.Departments.ToList();
 
             // Find any StudentEssayAnswers
-            var studentEssayAnswers = _context.StudentEssayAnswers.Where(x => previousTests.Any(y => y.TestId == x.TestSchedule.TestId)).ToList();
-            ViewBag.StudentEssayAnswers = studentEssayAnswers;
-
+            var manualGradingRequired = _context.StudentTestAssignments.Where(x => previousTests.Any(y => y.TestId == x.TestSchedule.TestId)).ToList();
+            ViewBag.ManualGradingRequired = manualGradingRequired;
             ViewBag.UpcomingTests = upcomingTests;
             ViewBag.PreviousTests = previousTests;
             ViewBag.UnscheduledTests = unscheduledTests;
