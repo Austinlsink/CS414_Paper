@@ -395,7 +395,7 @@ namespace BrainNotFound.Paper.Controllers
         /// <param name="CourseCode">string parameter that distinguishes which course the test belongs to</param>
         /// <param name="URLSafeName">string url</param>
         /// <returns>ViewTest View</returns>
-        [HttpGet, Route("Tests/ViewTest/View/{DepartmentCode}/{CourseCode}/{URLSafeName}")]
+        [HttpGet, Route("Tests/View/{DepartmentCode}/{CourseCode}/{URLSafeName}")]
         public IActionResult ViewTest(string DepartmentCode, string CourseCode, string URLSafeName)
         {
             // Get Test info

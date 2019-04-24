@@ -22,8 +22,7 @@
                                 <tr class="headings">
                                     <th class="column-title">Name </th>
                                     <th class="column-title">Course</th>
-                                    <th class="column-title">Start Time</th>
-                                    <th class="column-title">End Time</th>
+                                    <th class="column-title">Availability</th>
                                     <th class="column-title no-link last">
                                         <span class="nobr">Action</span>
                                     </th>
@@ -46,8 +45,7 @@
                                             DepartmentCodeAndCourseCode = currentDepartment.DepartmentCode + " " + currentCourse.CourseCode;
                                         }
                                         <td class=" ">@DepartmentCodeAndCourseCode</td>
-                                        <td class=" ">@test.TestSchedules.Where(x => x.TestId == test.TestId).First().StartTime</td>
-                                        <td class=" ">@test.TestSchedules.Where(x => x.TestId == test.TestId).First().EndTime</td>
+                                        <td class=" ">@test.TestSchedules.Where(x => x.TestId == test.TestId).First().GetAvailability()</td>
                                         <td class=" last">
                                             <a asp-controller="Instructor" asp-action="EditTest" asp-route-DepartmentCode="@currentDepartment.DepartmentCode" asp-route-CourseCode="@currentCourse.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
                                             <button type="submit" data-target="#ConfirmModal" data-testId="@test.TestId" class="btn btn-danger btn-xs confirmDelete"><i class="fa fa-trash-o"></i> Delete </button>

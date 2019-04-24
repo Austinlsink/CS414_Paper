@@ -31,7 +31,7 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 
         public string GetAvailability()
         {
-            return StartTime.ToString("MM / dd / yyyy hh: mm tt") + " - " + EndTime.ToString("MM / dd / yyyy hh: mm tt");
+            return StartTime.ToString("ddd, MMM d, hh:mm tt") + "  -  " + EndTime.ToString("ddd, MMM d, hh:mm tt");
         }
     }
 }
