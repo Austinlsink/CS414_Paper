@@ -122,12 +122,14 @@
                                         <input type="text" name="testScheduleDateTime" id="testScheduleDateTime" class="form-control" value="01/01/2016 - 01/25/2016">
                                     </div>
                                 </div>
+                                <span class="text-danger hidden" id="startTimeErrorMessage">The start time must be in the future</span>
                             </div>
                         </fieldset>
                     </div>
                     <div class="col-md-2 col-sm-8 col-xs-12">
                         Time Limit (Minutes)
                         <input type="number" id="TimeLimit" class="form-control" name="TimeLimit" required="" value="50">
+                        <span class="text-danger hidden" id="timeLimitErrorMessage">The time limit must be grater then zero</span>
                     </div>
                     <div class="col-md-2 col-sm-4 col-xs-12">
                         <div class="checkbox">

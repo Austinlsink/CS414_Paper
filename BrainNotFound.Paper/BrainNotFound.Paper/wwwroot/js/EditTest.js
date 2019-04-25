@@ -230,6 +230,10 @@ function resetNewSchedule() {
     //hides the students table
     $("div#StudentsInSectionTableContainer").removeClass("show").addClass("hidden");
     $("div#SectionNotSelectedContainer").removeClass("hidden").addClass("show");
+
+    // Resets error messages
+    $("#startTimeErrorMessage").addClass("hidden");
+    $("#timeLimitErrorMessage").addClass("hidden");
 }
 
 // -- Event Handlers
@@ -398,11 +402,28 @@ $("button#SaveNewTestSchedule").click(function () {
         contentType: 'application/json; charset=utf-8',
         data: JsonData,
         success: function (result) {
+
+            console.log(result);
             if (result.success) {
                 Update_TestAssignmentTable();
                 resetNewSchedule();
             }
             else {
+                if (result.errorMessage.DateTimeError) {
+                    $("#startTimeErrorMessage").removeClass("hidden");
+                }
+                else {
+                    $("#startTimeErrorMessage").addClass("hidden");
+                }
+
+
+                if (result.errorMessage.TimeLimitError) {
+                    $("#timeLimitErrorMessage").removeClass("hidden");
+                }
+                else {
+                    $("#timeLimitErrorMessage").addClass("hidden");
+                }
+
                 console.log(result);
             }
             // TODO: Display if Sections were already assigned

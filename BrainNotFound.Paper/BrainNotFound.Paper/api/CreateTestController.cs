@@ -642,18 +642,30 @@ namespace BrainNotFound.Paper.api
 
             if (parsedStartDateTime < DateTime.Now)
             {
-                errorMessages.Add(new JProperty("DateTimeError", "The test date must be set to today's date or further."));
+                errorMessages.Add(new JProperty("DateTimeError", true));
                 errorCount++;
+            }
+            else
+            {
+                errorMessages.Add(new JProperty("DateTimeError", false));
             }
             if (timeLimit <= 0)
             {
-                errorMessages.Add(new JProperty("TimeLimitError", "The test time must be set and must be greater than 0. "));
+                errorMessages.Add(new JProperty("TimeLimitError", true));
                 errorCount++;
+            }
+            else
+            {
+                errorMessages.Add(new JProperty("TimeLimitError", false));
             }
             if (studentIds.Count <= 0 && sectionIds.Count <= 0)
             {
-                errorMessages.Add(new JProperty("StudentSectionErrorMessage", "The test must be assigned at least one section or at least one student"));
+                errorMessages.Add(new JProperty("StudentSectionErrorMessage", true ));
                 errorCount++;
+            }
+            else
+            {
+                errorMessages.Add(new JProperty("StudentSectionErrorMessage", false));
             }
             if (errorCount > 0)
             {
@@ -748,9 +760,19 @@ namespace BrainNotFound.Paper.api
                     }
                 }
 
-                if (entireSectionsAssigned.Any())
+                if(StudentsAssignedIds.Any())
                 {
-                    testScheduleJObject.Assigmnet += "Sections " + String.Join(", ", entireSectionsAssigned.ToArray());
+                    if (entireSectionsAssigned.Any())
+                    {
+                        
+                        testScheduleJObject.Assigmnet += "Section(s) " + String.Join(", ", entireSectionsAssigned.ToArray());
+                        testScheduleJObject.Assigmnet += " & ";
+                    }
+                    testScheduleJObject.Assigmnet += StudentsAssignedIds.Count + " Student(s)";
+                }
+                else
+                {
+                    testScheduleJObject.Assigmnet += "Section(S) " + String.Join(", ", entireSectionsAssigned.ToArray());
                 }
 
                 // Sets TestScheduleId
