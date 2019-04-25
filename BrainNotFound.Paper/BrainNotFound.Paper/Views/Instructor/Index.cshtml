@@ -22,7 +22,6 @@
                     <thead>
                         <tr>
                             <th>Test Name</th>
-                            <th># of Essays</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -31,17 +30,8 @@
                         {
                             @foreach (TestSchedule ts in ViewBag.EssayGrading)
                             {
-                                int essayCounter = 0;
-                                foreach (StudentTestAssignment sta in ts.StudentTestAssignments)
-                                {
-                                    if (ts.TestScheduleId == sta.TestScheduleId)
-                                    {
-                                        essayCounter++;
-                                    }
-                                }
                                 <tr>
                                     <td>@ts.Test.TestName</td>
-                                    <td>@essayCounter</td>
                                     <td>
                                         <a asp-controller="Instructor" asp-action="GradeTest" asp-route-DepartmentCode="@ts.Test.Course.Department.DepartmentCode" asp-route-CourseCode="@ts.Test.Course.CourseCode" asp-route-URLSafeName="@ts.Test.URLSafeName" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i> Grade </a>
                                     </td>
