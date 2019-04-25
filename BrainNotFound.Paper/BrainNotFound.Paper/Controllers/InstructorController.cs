@@ -49,11 +49,36 @@ namespace BrainNotFound.Paper.Controllers
 
             var gradingTests = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).Where(x => x.TestSchedule.Test.InstructorId == instructor.Id && x.ManualGradingRequired).Select(x => x.TestSchedule).Include(x => x.StudentTestAssignments).Distinct().ToList();
 
+            var allTests = _context.Tests.Where(x => x.InstructorId == instructor.Id).ToList();
 
             var studentEssays = _context.StudentEssayAnswers.Include(x => x.TestSchedule).ThenInclude(x => x.Test).ThenInclude(x => x.Course).ThenInclude(x => x.Department).Where(x => x.PointsEarned == -1 && x.TestSchedule.Test.InstructorId == instructor.Id).Distinct().ToList();
 
+            // Find all completed tests to show statistics
+            var count = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).Where(x => x.TestSchedule.Test.InstructorId == instructor.Id).ToList();
+
+            List<Test> completedTests = new List<Test>();
+            foreach (Test t in allTests)
+            {
+                int counter = 0;
+                foreach (StudentTestAssignment sta in count)
+                {
+                    if (sta.TestSchedule.TestId == t.TestId && sta.Submitted)
+                    {
+                        counter++;
+                    }
+                }
+                if(_context.TestSchedules.Where(x => x.TestId == t.TestId).ToList().Count != 0)
+                {
+                    if (counter == _context.TestSchedules.Where(x => x.TestId == t.TestId).ToList().Count)
+                    {
+                        completedTests.Add(t);
+                    }
+                }
+            }
+
             ViewBag.EssayGrading = gradingTests;
-            ViewBag.Tests = _context.Tests.Where(x => x.InstructorId == instructor.Id).ToList();
+            ViewBag.Tests = allTests;
+            ViewBag.CompletedTests = completedTests;
             return View();
         }
 
