@@ -38,16 +38,7 @@
                                 {
                                     <tr class="odd pointer">
                                         <td class=" ">@ts.Test.TestName</td>
-                                        @{
-                                            string DepartmentCodeAndCourseCode;
-                                            List<Course> courses = ViewBag.Courses;
-                                            List<Department> departments = ViewBag.Departments;
-                                            Course currentCourse = courses.Where(c => c.CourseId == ts.Test.CourseId).First();
-                                            Department currentDepartment = departments.Where(d => d.DepartmentId == currentCourse.DepartmentId).First();
-                                            DepartmentCodeAndCourseCode = currentDepartment.DepartmentCode + " " + currentCourse.CourseCode;
-
-                                        }
-                                        <td class=" ">@DepartmentCodeAndCourseCode</td>
+                                        <td class=" ">@ts.Test.Course.Department.DepartmentCode @ts.Test.Course.CourseCode</td>
                                         <td class=" ">@String.Format("{0:f}", ts.StartTime)</td>
                                         <td class=" ">@String.Format("{0:f}", ts.EndTime)</td>
                                         <td class=" last">
@@ -78,7 +69,7 @@
 <!--View all previous tests-->
 <div class="x_panel">
     <div class="x_title">
-        <h2><i class="fa fa-file-text"></i> Previous Tests</h2>
+        <h2><i class="fa fa-file-text"></i> Completed Tests</h2>
         <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
         </ul>
@@ -108,16 +99,7 @@
                         {
                             <tr class="odd pointer">
                                 <td class=" ">@ts.Test.TestName</td>
-                                @{
-                                    string DepartmentCodeAndCourseCode;
-                                    List<Course> courses = ViewBag.Courses;
-                                    List<Department> departments = ViewBag.Departments;
-                                    Course currentCourse = courses.Where(c => c.CourseId == ts.Test.CourseId).First();
-                                    Department currentDepartment = departments.Where(d => d.DepartmentId == currentCourse.DepartmentId).First();
-                                    DepartmentCodeAndCourseCode = currentDepartment.DepartmentCode + " " + currentCourse.CourseCode;
-
-                                }
-                                <td class=" ">@DepartmentCodeAndCourseCode</td>
+                                <td class=" ">@ts.Test.Course.Department.DepartmentCode @ts.Test.Course.CourseCode</td>
                                 <td class=" ">@String.Format("{0:f}", ts.Test.TestSchedules.Select(x => x.StartTime).First())</td>
                                 <td class=" last">
                                     <a asp-controller="Student" asp-action="ReviewTest" asp-route-testScheduleId="@ts.TestScheduleId" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Review </a>

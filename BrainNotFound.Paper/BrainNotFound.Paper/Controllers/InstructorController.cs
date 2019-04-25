@@ -352,8 +352,8 @@ namespace BrainNotFound.Paper.Controllers
 
             // Find all of the previous and upcoming tests for the instructor
             var instructorScheduledTests = _context.TestSchedules.Include(x => x.Test).Where(x => x.Test.applicationUser.Id == instructor.Id).ToList();
-            var upcomingTests = _context.TestSchedules.Include(ts => ts.Test).ThenInclude(x => x.Course).ThenInclude(x => x.Department).Where(x => x.EndTime > DateTime.Now).Select(tts => tts.Test).Distinct().ToList();
-            var previousTests = _context.TestSchedules.Include(ts => ts.Test).ThenInclude(x => x.Course).ThenInclude(x => x.Department).Where(x => x.EndTime < DateTime.Now).Select(tts => tts.Test).Distinct().ToList();
+            var upcomingTests = _context.TestSchedules.Include(ts => ts.Test).ThenInclude(x => x.Course).ThenInclude(x => x.Department).Where(x => x.EndTime > DateTime.Now && x.Test.InstructorId == instructor.Id).Select(tts => tts.Test).Distinct().ToList();
+            var previousTests = _context.TestSchedules.Include(ts => ts.Test).ThenInclude(x => x.Course).ThenInclude(x => x.Department).Where(x => x.EndTime < DateTime.Now && x.Test.InstructorId == instructor.Id).Select(tts => tts.Test).Distinct().ToList();
 
             // Find all of the StudentTestAssignments for the upcoming tests
             var upcomingStudentTestAssignments = _context.TestSchedules.Include(x => x.StudentTestAssignments).Where(x => upcomingTests.Any(y => y.TestId == x.TestId)).ToList();

@@ -222,7 +222,7 @@
                                 @if (q.studentEssayAnswer == null)
                                 {
                                     <div class="col-md-11 col-sm-11 col-xs-12">
-                                        <textarea disabled="disabled" class="studentEssayQuestionAnswer" data-essayQuestionId="@q.QuestionId"></textarea>
+                                        <textarea disabled="disabled" class="studentEssayQuestionAnswer" data-essayQuestionId="@q.QuestionId">--Essay not answered--</textarea>
                                     </div>
                                 }
                                 else
@@ -243,7 +243,6 @@
                                         </div>
                                     }
                                 }
-
                             </div>
                         }
                         break;

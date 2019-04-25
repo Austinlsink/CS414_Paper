@@ -140,11 +140,14 @@ namespace BrainNotFound.Paper.Controllers
 
             // Find all of the tests for this course
             var student = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
-            var studentTestAssignments = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).Where(x => x.StudentId == student.Id).ToList();
+            ViewBag.Student = student;
 
-            // Distinguish the tests as either upcoming or previous
-            var upcomingTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime > DateTime.Now).Select(sta => sta.TestSchedule.Test).Where(sta => sta.CourseId == course.CourseId).ToList();
-            var previousTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime < DateTime.Now).Select(sta => sta.TestSchedule.Test).Where(sta => sta.CourseId == course.CourseId).ToList();
+            var studentTestAssignments = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).ThenInclude(x => x.Course).ThenInclude(x => x.Department).Where(x => x.StudentId == student.Id && x.TestSchedule.Test.CourseId == course.CourseId).Distinct().ToList();
+
+            // Distinguish between upcoming tests and previous tests
+            var upcomingTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime > DateTime.Now && sta.Submitted == false).Select(sta => sta.TestSchedule).ToList();
+            var previousTests = studentTestAssignments.Where(sta => sta.TestSchedule.EndTime < DateTime.Now || sta.Submitted == true).Select(sta => sta.TestSchedule).ToList();
+
             ViewBag.UpcomingTests = upcomingTests;
             ViewBag.PreviousTests = previousTests;
 
