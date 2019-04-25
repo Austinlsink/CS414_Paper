@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BrainNotFound.Paper.Models.BusinessModels;
+using BrainNotFound.Paper.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -50,7 +51,7 @@ namespace BrainNotFound.Paper.api
 
             ApplicationUser student = await _userManager.FindByNameAsync(User.Identity.Name);
 
-            var studentTestAssignment = _context.StudentTestAssignments.Where(x => x.StudentId == student.Id && x.TestScheduleId == testScheduleId).FirstOrDefault();
+            var studentTestAssignment = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).ThenInclude(x => x.TestSections).Where(x => x.StudentId == student.Id && x.TestScheduleId == testScheduleId).FirstOrDefault();
             if (studentTestAssignment == null)
             {
                 return Json(new { success = false });
@@ -59,7 +60,12 @@ namespace BrainNotFound.Paper.api
             {
                 studentTestAssignment.Submitted = true;
                 studentTestAssignment.Signed = isPledgeSigned;
-                studentTestAssignment.ManualGradingRequired = true;
+
+                // Look for any essay questions that will need to be manually graded
+                if(studentTestAssignment.TestSchedule.Test.TestSections.Where(x => x.QuestionType == QuestionType.Essay).Any())
+                {
+                    studentTestAssignment.ManualGradingRequired = true;
+                }
                 _context.SaveChanges();
                 return Json(new { success = true });
             }
