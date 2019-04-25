@@ -36,8 +36,10 @@
                                 <tbody>
                                     @if (ViewBag.Grades.Count > 0)
                                     {
+                                        bool isFirstPass = true;
                                         @foreach (StudentTestAssignment ts in ViewBag.Grades)
                                         {
+                                            
                                             if (e.Section.Course.CourseId == ts.TestSchedule.Test.Course.CourseId)
                                             {
                                                 <tr>
@@ -54,6 +56,16 @@
                                                     }
                                                 </tr>
                                             }
+                                            else
+                                            {
+                                                if (isFirstPass)
+                                                {
+                                                    <tr>
+                                                        <td colspan="4">There are no grades to be displayed</td>
+                                                    </tr>
+                                                }
+                                            }
+                                            isFirstPass = false;
                                         }
                                     }
                                     else
