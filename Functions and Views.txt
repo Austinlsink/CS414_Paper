@@ -3,18 +3,25 @@ ADMIN
 "Get instructors not teaching a section" : V_UnassignedInstructors (VIEW)
 
 INSTRUCTORS
-"Able to see how each student does on each test in each course?" : 
+"Able to see how each student does on each test in each course?" :
+	GetAllStudentsTestGradesPerCourse(@inputCourseId BIGINT) (PROCEDURE)
+	NOTE: Is kinda like returning a cursor
+	NOTE: The "grade" being returned is really just the number of points the student got on that test--it's not actually the percentage grade.
 
-"How the single section did on a test (A's, B's, etc. for a section)" : GetSectionLetterGradeStats(@inputTestId BIGINT, @sectionId BIGINT)
+"How the single section did on a test (A's, B's, etc. for a section)" :
+	GetSectionLetterGradeStats(@inputTestId BIGINT, @sectionId BIGINT)
 	JSON Object returned:  '{"NumberOfAs":"numOfAs", "NumberOfBs":"numOfBs", "NumberOfCs":"numOfCs", "NumberOfDs":"numOfDs", "NumberOfFs":"numOfFs"}
 
-Extra: Get the test average as a percentage grade : GetSectionTestAverage(@inputSectionId BIGINT, @inputTestId BIGINT) (FUNCTION--Returns a JSON object)
+Extra: Get the test average as a percentage grade :
+	GetSectionTestAverage(@inputSectionId BIGINT, @inputTestId BIGINT) (FUNCTION--Returns a JSON object)
 	JSON Object returned : {"SectionAverage":"the test average for the section"}
 
-"How all sections did on a test (A's, B's, etc. for all sections of a course)" : GetLetterGradeStats(@inputTestId BIGINT) (FUNCTION--Returns a JSON object)
+"How all sections did on a test (A's, B's, etc. for all sections of a course)" :
+	GetLetterGradeStats(@inputTestId BIGINT) (FUNCTION--Returns a JSON object)
 	JSON Object returned : {"NumberOfAs":"numOfAs", "NumberOfBs":"numOfBs", "NumberOfCs":"numOfCs", "NumberOfDs":"numOfDs", "NumberOfFs":"numOfFs"}
 	(NOTE: This is technically for one test, assuming that a test can only be taken by ONE course)
 
 STUDENTS
-"Previous test scores" : STUDENT_GetAllTestGrades(@inputStudentId BIGINT) (FUNCTION--Returns a JSON object)
+"Previous test scores" :
+	STUDENT_GetAllTestGrades(@inputStudentId BIGINT) (FUNCTION--Returns a JSON object)
 	JSON Object returned: {"StudentTestGrades":["firstTestValue", "secondTestValue", etc.]}
