@@ -161,7 +161,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var s in ViewBag.StudentsNotEnrolled)
+                                @foreach (ApplicationUser s in ViewBag.StudentsNotEnrolled)
                                 {
                                     <tr class="odd pointer">
                                         <td class=" ">@s.FirstName </td>
