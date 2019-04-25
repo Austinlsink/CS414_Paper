@@ -10,17 +10,6 @@
             <div class="x_panel">
                 <div class="x_title">
                     <h2><i class="fa fa-pie-chart"></i> Section Information</h2>
-                    @*<ul class="nav navbar-right panel_toolbox">
-                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-edit"></i></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a>Edit information</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>*@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
@@ -120,31 +109,28 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var s in ViewBag.students)
+                                @foreach (var e in ViewBag.enrollment)
                                 {
-                                    foreach (var e in ViewBag.enrollment)
+                                    if (e.SectionId == ViewBag.section.SectionId)
                                     {
-                                        if (s.Id == e.StudentId && e.SectionId == ViewBag.section.SectionId)
-                                        {
-                                            <tr class="odd pointer">
-                                                <td class=" ">@s.FirstName </td>
-                                                <td class=" ">@s.LastName </td>
-                                                <td class=" ">@s.Classification </td>
-                                                <td class=" last">
-                                                    <form asp-controller="Admin" asp-action="UnassignStudent">
-                                                        <a asp-controller="Admin" asp-action="ViewStudent" asp-route-UserName="@s.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                                        <a asp-controller="Admin" asp-action="EditStudent" asp-route-UserName="@s.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                                        <button type="submit" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Unassign </button>
-                                                        <input type="hidden" name="UserName" value="@s.UserName" />
-                                                        <input type="hidden" name="SectionId" value="@ViewBag.section.SectionId" />
-                                                        <input type="hidden" name="SectionNumber" value="@ViewBag.section.SectionNumber" />
-                                                        <input type="hidden" name="CourseCode" value="@ViewBag.course.CourseCode" />
-                                                        <input type="hidden" name="CourseId" value="@ViewBag.section.CourseId" />
-                                                        <input type="hidden" name="DepartmentCode" value="@ViewBag.department.DepartmentCode" />
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        }
+                                        <tr class="odd pointer">
+                                            <td class=" ">@e.ApplicationUser.FirstName </td>
+                                            <td class=" ">@e.ApplicationUser.LastName </td>
+                                            <td class=" ">@e.ApplicationUser.Classification </td>
+                                            <td class=" last">
+                                                <form asp-controller="Admin" asp-action="UnassignStudent">
+                                                    <a asp-controller="Admin" asp-action="ViewStudent" asp-route-UserName="@e.ApplicationUser.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                                    <a asp-controller="Admin" asp-action="EditStudent" asp-route-UserName="@e.ApplicationUser.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                                    <button type="submit" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Unassign </button>
+                                                    <input type="hidden" name="UserName" value="@e.ApplicationUser.UserName" />
+                                                    <input type="hidden" name="SectionId" value="@ViewBag.section.SectionId" />
+                                                    <input type="hidden" name="SectionNumber" value="@ViewBag.section.SectionNumber" />
+                                                    <input type="hidden" name="CourseCode" value="@ViewBag.course.CourseCode" />
+                                                    <input type="hidden" name="CourseId" value="@ViewBag.section.CourseId" />
+                                                    <input type="hidden" name="DepartmentCode" value="@ViewBag.department.DepartmentCode" />
+                                                </form>
+                                            </td>
+                                        </tr>
                                     }
                                 }
                             </tbody>
@@ -175,32 +161,26 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @{
-                                    IEnumerable<Enrollment> enrolled = ViewBag.enrollment;
-                                }
-                                @foreach (var s in ViewBag.students)
+                                @foreach (var s in ViewBag.StudentsNotEnrolled)
                                 {
-                                    if ((enrolled.Any(x => x.StudentId == s.Id) && enrolled.Any(x => x.SectionId == ViewBag.section.SectionId)))
-                                    {
-                                        <tr class="odd pointer">
-                                            <td class=" ">@s.FirstName </td>
-                                            <td class=" ">@s.LastName </td>
-                                            <td class=" ">@s.Classification </td>
-                                            <td class=" last">
-                                                <form asp-controller="Admin" asp-action="AssignStudent">
-                                                    <a asp-controller="Admin" asp-action="ViewStudent" asp-route-UserName="@s.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                                    <a asp-controller="Admin" asp-action="EditStudent" asp-route-UserName="@s.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                                    <input type="hidden" name="UserName" value="@s.UserName" />
-                                                    <input type="hidden" name="SectionNumber" value="@ViewBag.section.SectionNumber" />
-                                                    <input type="hidden" name="SectionId" value="@ViewBag.section.SectionId" />
-                                                    <input type="hidden" name="CourseCode" value="@ViewBag.course.CourseCode" />
-                                                    <input type="hidden" name="CourseId" value="@ViewBag.section.CourseId" />
-                                                    <input type="hidden" name="DepartmentCode" value="@ViewBag.department.DepartmentCode" />
-                                                    <button type="submit" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Assign </button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    }
+                                    <tr class="odd pointer">
+                                        <td class=" ">@s.FirstName </td>
+                                        <td class=" ">@s.LastName </td>
+                                        <td class=" ">@s.Classification </td>
+                                        <td class=" last">
+                                            <form asp-controller="Admin" asp-action="AssignStudent">
+                                                <a asp-controller="Admin" asp-action="ViewStudent" asp-route-UserName="@s.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                                <a asp-controller="Admin" asp-action="EditStudent" asp-route-UserName="@s.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                                <input type="hidden" name="UserName" value="@s.UserName" />
+                                                <input type="hidden" name="SectionNumber" value="@ViewBag.section.SectionNumber" />
+                                                <input type="hidden" name="SectionId" value="@ViewBag.section.SectionId" />
+                                                <input type="hidden" name="CourseCode" value="@ViewBag.course.CourseCode" />
+                                                <input type="hidden" name="CourseId" value="@ViewBag.section.CourseId" />
+                                                <input type="hidden" name="DepartmentCode" value="@ViewBag.department.DepartmentCode" />
+                                                <button type="submit" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Assign </button>
+                                            </form>
+                                        </td>
+                                    </tr>
                                 }
                             </tbody>
                         </table>
@@ -213,7 +193,7 @@
 </div>
 
 @section scripts
-{
+    {
     <!--Datatable script for the students enrolled table-->
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
