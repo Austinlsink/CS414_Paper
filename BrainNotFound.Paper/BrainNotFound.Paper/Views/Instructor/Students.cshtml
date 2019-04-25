@@ -10,44 +10,48 @@
         <div class="x_panel">
             <div class="x_title">
                 <h2><i class="fa fa-users"></i> Students</h2>
-               
+
                 <div class="clearfix"></div>
             </div>
-
-            <div class="x_content">
-                <p>@ViewBag.errorMessage</p>
-                <div class="table-responsive">
-                    <table id="studentTable" class="table table-striped jambo_table bulk_action ">
-                        <thead>
-                            <tr class="headings">
-                                <th class="column-title">First Name </th>
-                                <th class="column-title">Last name </th>
-                                <th class="column-title">Classification </th>
-                                <th class="column-title no-link last">
-                                    <span class="nobr">Action</span>
-                                </th>
-                                <th class="bulk-actions" colspan="7">
-                                    <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var s in ViewBag.students)
-                            {
-                                <tr class="odd pointer">
-                                    <td class="">@s.FirstName </td>
-                                    <td class="">@s.LastName </td>
-                                    <td class="">@s.Classification </td>
-                                    <td class="">
-                                        <a asp-controller="Instructor" asp-action="ViewStudentProfile" asp-route-UserName="@s.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                    </td>
+            @if (ViewBag.Students == null)
+            {
+                <p>You have no assigned students. Please contact your administrator if this is an error.</p>
+            }
+            else
+            {
+                <div class="x_content">
+                    <div class="table-responsive">
+                        <table id="studentTable" class="table table-striped jambo_table bulk_action ">
+                            <thead>
+                                <tr class="headings">
+                                    <th class="column-title">First Name </th>
+                                    <th class="column-title">Last name </th>
+                                    <th class="column-title">Classification </th>
+                                    <th class="column-title no-link last">
+                                        <span class="nobr">Action</span>
+                                    </th>
+                                    <th class="bulk-actions" colspan="7">
+                                        <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                                    </th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach (var s in ViewBag.students)
+                                {
+                                    <tr class="odd pointer">
+                                        <td class="">@s.FirstName </td>
+                                        <td class="">@s.LastName </td>
+                                        <td class="">@s.Classification </td>
+                                        <td class="">
+                                            <a asp-controller="Instructor" asp-action="ViewStudentProfile" asp-route-UserName="@s.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
-
+            }
         </div>
     </div>
 </div>

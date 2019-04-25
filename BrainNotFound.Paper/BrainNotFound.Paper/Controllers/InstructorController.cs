@@ -127,29 +127,37 @@ namespace BrainNotFound.Paper.Controllers
 
             // Find all of the sections that the instructor teaches
             var sections = _context.Sections.Where(s => s.InstructorId == instructor.Id).ToList();
-
-            // Get the enrollment table
-            var enrollment = _context.Enrollments.ToList();
-
-            // Find all of the students that the instructor teaches
-            var allStudents = (await _userManager.GetUsersInRoleAsync("Student")).OrderBy(o => o.FirstName).ToList();
-
-            List<ApplicationUser> students = new List<ApplicationUser>();
-            foreach (Enrollment e in enrollment)
+            
+            if(sections.Count == 0)
             {
-                foreach (ApplicationUser student in allStudents)
+                ViewBag.students = null;
+            }
+            else
+            {
+                // Get the enrollment table
+                var enrollment = _context.Enrollments.ToList();
+
+                // Find all of the students that the instructor teaches
+                var allStudents = (await _userManager.GetUsersInRoleAsync("Student")).ToList();
+
+                List<ApplicationUser> students = new List<ApplicationUser>();
+                foreach (Enrollment e in enrollment)
                 {
-                    if (e.StudentId == student.Id)
+                    foreach (ApplicationUser student in allStudents)
                     {
-                        if (!(students.Where(s => s.Id == student.Id).Any()))
+                        if (e.StudentId == student.Id && sections.Any(x => x.SectionId == e.SectionId))
                         {
-                            students.Add(student);
+                            if (!(students.Where(s => s.Id == student.Id).Any()))
+                            {
+                                students.Add(student);
+                            }
                         }
                     }
                 }
-            }
 
-            ViewBag.students = students;
+                ViewBag.students = students;
+            }
+            
             return View();
         }
 
