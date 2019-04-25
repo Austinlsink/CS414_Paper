@@ -469,6 +469,8 @@ namespace BrainNotFound.Paper.Controllers
         {
             // Get the courses that the student is enrolled in
             ApplicationUser student = await _userManager.FindByNameAsync(User.Identity.Name);
+            ViewBag.Student = student;
+
             var enrollments = _context.Enrollments.Include(x => x.Section).ThenInclude(x => x.Course).ThenInclude(x => x.Department).Where(x => x.StudentId == student.Id).ToList();
             ViewBag.Enrollments = enrollments;
 

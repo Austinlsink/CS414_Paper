@@ -44,7 +44,7 @@
                                                     <td>@ts.TestSchedule.Test.TestName</td>
                                                     <td>@ts.TestSchedule.EndTime</td>
                                                     <td>@ts.Grade/@ts.totalPoints</td>
-                                                    @if (StudentEssayAnswers.Where(x => x.TestSchedule.TestId == ts.TestSchedule.TestId && x.PointsEarned == -1).Any())
+                                                    @if (StudentEssayAnswers.Where(x => x.TestSchedule.TestId == ts.TestSchedule.TestId && ViewBag.Student.Id == x.StudentId && x.PointsEarned == -1).Any())
                                                     {
                                                         <td>Essays are being graded</td>
                                                     }
