@@ -61,6 +61,69 @@ namespace BrainNotFound.Paper.Controllers
         public IActionResult Chart(long TestId)
         {
            ViewBag.Test = _context.Tests.Where(x => x.TestId == TestId).First();
+            int total = 0;
+
+            // Grab the points for the test
+            var param = new SqlParameter[] {
+                    new SqlParameter() {
+                        ParameterName = "@returnVal",
+                        SqlDbType =  SqlDbType.Int,
+                        Size = 32000,
+                        Direction = ParameterDirection.Output
+                    },
+                    new SqlParameter() {
+                        ParameterName = "@inputTestId",
+                        SqlDbType =  SqlDbType.BigInt,
+                        Direction = ParameterDirection.Input,
+                        Value = TestId
+                    }};
+
+            _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.[GetAs] @inputTestId", param);
+
+            if (Convert.IsDBNull(param[0].Value))
+                ViewBag.As = 0;
+            else
+                ViewBag.As = int.Parse(param[0].Value.ToString());
+
+            total += int.Parse(param[0].Value.ToString());
+
+            _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.[GetBs] @inputTestId", param);
+
+            if (Convert.IsDBNull(param[0].Value))
+                ViewBag.Bs = 0;
+            else
+                ViewBag.Bs = int.Parse(param[0].Value.ToString());
+
+            total += int.Parse(param[0].Value.ToString());
+
+            _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.[GetCs] @inputTestId", param);
+
+            if (Convert.IsDBNull(param[0].Value))
+                ViewBag.Cs = 0;
+            else
+                ViewBag.Cs = int.Parse(param[0].Value.ToString());
+
+            total += int.Parse(param[0].Value.ToString());
+
+            _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.[GetDs] @inputTestId", param);
+
+            if (Convert.IsDBNull(param[0].Value))
+                ViewBag.Ds = 0;
+            else
+                ViewBag.Ds = int.Parse(param[0].Value.ToString());
+
+            total += int.Parse(param[0].Value.ToString());
+
+            _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.[GetFs] @inputTestId", param);
+
+            if (Convert.IsDBNull(param[0].Value))
+                ViewBag.Fs = 0;
+            else
+                ViewBag.Fs = int.Parse(param[0].Value.ToString());
+
+            total += int.Parse(param[0].Value.ToString());
+            ViewBag.Total = total;
+
             return PartialView();
         }
 
