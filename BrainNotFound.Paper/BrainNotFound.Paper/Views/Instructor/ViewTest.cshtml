@@ -155,10 +155,10 @@
                                     @if (((TrueFalse)q).TrueFalseAnswer == true)
                                     {
                                         <div id="gender" class="btn-group" data-toggle="buttons">
-                                            <label class="btn btn-primary btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
+                                            <label class="btn btn-primary btn-sm " disabled data-questionType="trueFalse" data-toogled-class="btn-primary">
                                                 <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
                                             </label>
-                                            <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
+                                            <label class="btn btn-default btn-sm" disabled data-questionType="trueFalse" data-toogled-class="btn-danger">
                                                 <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
                                             </label>
                                         </div>
@@ -166,10 +166,10 @@
                                     else
                                     {
                                         <div id="gender" class="btn-group" data-toggle="buttons">
-                                            <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-primary">
+                                            <label class="btn btn-default btn-sm" disabled data-questionType="trueFalse" data-toogled-class="btn-primary">
                                                 <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
                                             </label>
-                                            <label class="btn btn-default btn-sm" data-questionType="trueFalse" data-toogled-class="btn-danger">
+                                            <label class="btn btn-default btn-sm" disabled data-questionType="trueFalse" data-toogled-class="btn-danger">
                                                 <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
                                             </label>
                                         </div>
@@ -199,11 +199,11 @@
                                         {
                                             if (mca.IsCorrect)
                                             {
-                                                <a class="btn btn-primary btn-block text-left multipleChoiceOption" data-mcQuestionId="@q.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="true"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
+                                                <a class="btn btn-primary btn-block text-left multipleChoiceOption" disabled data-mcQuestionId="@q.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="true"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
                                             }
                                             else
                                             {
-                                                <a class="btn btn-default btn-block text-left multipleChoiceOption" data-mcQuestionId="@q.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="true"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
+                                                <a class="btn btn-default btn-block text-left multipleChoiceOption"  disabled data-mcQuestionId="@q.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="true"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
                                             }
                                             option++;
                                         }
@@ -224,11 +224,15 @@
                                 <div class="col-md-11 col-sm-11 col-xs-11">
                                     <p><strong>@essayCount.</strong> @q.Content</p>
                                 </div>
-                                <div class="col-md-1 col-sm-1 col-xs-3 text-center">
-                                </div>
-                                <div class="col-md-11 col-sm-11 col-xs-12">
-                                    <textarea class="studentEssayQuestionAnswer" disabled="disabled" data-essayQuestionId="@q.QuestionId">@(((Essay)q).ExpectedEssayAnswer)</textarea>
-                                </div>
+                                @if (((Essay)q).ExpectedEssayAnswer != string.Empty)
+                                {
+                                    <div class="col-md-1 col-sm-1 col-xs-3 text-center">
+                                    </div>
+                                    <div class="col-md-11 col-sm-11 col-xs-12">
+                                        <textarea class="studentEssayQuestionAnswer" disabled="disabled" data-essayQuestionId="@q.QuestionId">@(((Essay)q).ExpectedEssayAnswer)</textarea>
+                                    </div>
+                                }
+
                             </div>
                         }
                         break;

@@ -7,9 +7,10 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
             <div class="x_title">
-                <h2><i class="fa fa-file-text"></i> Upcoming Tests</h2>
+                <h2><i class="fa fa-file-text"></i> Current Tests</h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a id="newTest"><i class="fa fa-plus"></i> New Test</a></li>
                 </ul>
                 <div class="clearfix"></div>
             </div>
@@ -23,7 +24,7 @@
                                     <th class="column-title">Name </th>
                                     <th class="column-title">Course</th>
                                     <th class="column-title">Availability</th>
-                                    <th class="column-title">In Progress</th>
+                                    <th class="column-title">Status</th>
                                     <th class="column-title no-link last">
                                         <span class="nobr">Action</span>
                                     </th>
@@ -57,11 +58,11 @@
                                         }
                                         @if (inProgress)
                                         {
-                                            <td>&#x2713;</td>
+                                            <td>In Progress</td>
                                         }
                                         else
                                         {
-                                            <td>&chi;</td>
+                                            <td>Upcoming</td>
                                         }
 
                                         <td class=" last">
@@ -180,6 +181,55 @@
                 <div class="modal-footer">
                     <button id="MessageClose" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Timer ran out timer-->
+<div id="NewTestModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title"><i class="fa fa-file-text"></i> New Test</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="form-horizontal form-label-left">
+                        <div class="form-group">
+                            <label class="control-label col-md-3" for="first-name">
+                                Test Name <span class="required">*</span>
+                            </label>
+                            <div class="col-md-7">
+                                <input type="text" placeholder="Test Name" id="newTestName" required="required" class="form-control col-md-7 col-xs-12">
+
+                                <span class="text-danger hidden" id="newTestNameErrorMessage">Please enter a test name</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3" for="last-name">
+                                Last Name <span class="required">*</span>
+                            </label>
+                            <div class="col-md-7">
+                                <select id="newTestCourse" class="form-control">
+                                    <option selected>--Choose option--</option>
+                                    @foreach (Course course in ViewBag.CoursesTaught)
+                                    {
+                                        <option value="@course.CourseId">@(course.DepartmentCode + course.CourseCode + " " + course.Name)</option>
+                                    }
+                                </select>
+                                <span class="text-danger hidden" id="newTestCourseErrorMessage">Please select a course</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="modal-footer">
+                <button id="submitNewTest" class="btn btn-success">Create</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>

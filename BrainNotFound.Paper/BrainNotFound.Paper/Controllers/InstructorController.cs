@@ -446,6 +446,23 @@ namespace BrainNotFound.Paper.Controllers
         {
             var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
 
+            List<Course> coursesTaught = new List<Course>();
+            var sectionsTaught = _context.Sections.Where(S => S.InstructorId == instructor.Id);
+            var departments = _context.Departments.ToList();
+
+            // Gets all courses tought by instructor removing duplicates from sections
+            foreach (var section in sectionsTaught)
+            {
+                var currentCourse = _context.Courses.Where(c => c.CourseId == section.CourseId).First();
+                if (coursesTaught.Contains(currentCourse) == false)
+                {
+                    currentCourse.DepartmentCode = (departments.Where(d => d.DepartmentId == currentCourse.DepartmentId).First()).DepartmentCode;
+                    coursesTaught.Add(currentCourse);
+                }
+            }
+
+            ViewBag.CoursesTaught = coursesTaught;
+
             // Find all of the previous and upcoming tests for the instructor
             var instructorScheduledTests = _context.TestSchedules.Include(x => x.Test).Where(x => x.Test.applicationUser.Id == instructor.Id).ToList();
             var upcomingTests = _context.TestSchedules.Include(ts => ts.Test).ThenInclude(x => x.Course).ThenInclude(x => x.Department).Where(x => x.EndTime > DateTime.Now && x.Test.InstructorId == instructor.Id).Select(tts => tts.Test).Distinct().ToList();
@@ -465,7 +482,6 @@ namespace BrainNotFound.Paper.Controllers
 
             // Grab the courses and departments
             var courses = _context.Courses.ToList();
-            var departments = _context.Departments.ToList();
 
             // Find any tests that need manual grading
             var manualGradingRequired = _context.StudentTestAssignments.Where(x => previousTests.Any(y => y.TestId == x.TestSchedule.TestId)).ToList();
@@ -486,6 +502,7 @@ namespace BrainNotFound.Paper.Controllers
         {
             var Instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
             var departments = _context.Departments;
+            
             List<Course> coursesTaught = new List<Course>();
             var sectionsTaught = _context.Sections.Where(S => S.InstructorId == Instructor.Id);
 
@@ -517,7 +534,7 @@ namespace BrainNotFound.Paper.Controllers
             var department = _context.Departments.Find(course.DepartmentId);
             test.applicationUser = Instructor;
             test.IsVisible = false;
-            test.URLSafeName = HttpUtility.HtmlEncode(test.TestName);
+            test.URLSafeName = test.TestName.Replace(" ", "_");
 
             _context.Tests.Add(test);
             _context.SaveChanges();

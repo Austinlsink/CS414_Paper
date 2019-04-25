@@ -11,7 +11,7 @@ namespace BrainNotFound.Paper.Models.BusinessModels
 		
 		public bool IsVisible {get; set;} // Whether the test is visible to students or not
         [Required]
-        [StringLength(25, MinimumLength = 1, ErrorMessage ="There must be a name for the test.")]
+        [StringLength(50, MinimumLength = 1, ErrorMessage ="There must be a name for the test.")]
 		public string TestName {get; set;}
 
         public string URLSafeName { get; set; }

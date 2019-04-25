@@ -3,11 +3,6 @@
 // PNotify Stack
 var myStack = { "dir1": "down", "dir2": "right", "push": "top" };
 
-// Variables for this Page
-var TotalPoints = 0;
-var NumberOfQuestions = 0;
-var NumberOfSections = 0;
-
 // Tracks the assigment
 var SectionsAssigned = [];
 var IndivisualsAssigned = [];
@@ -33,7 +28,6 @@ function init_testSections() {
                 result.testSections.forEach(function (testSection) {
                     //console.log(testSection);
                     $("#TestSections").append(DisplayTestSectionTemplate(testSection));
-                    NumberOfSections += 1;
 
                     // Adds each question to its section
 
@@ -76,6 +70,7 @@ function init_testSections() {
                             break;
                     }
                 })
+                Update_TestStatistics();
                 stripe();
             }
             else {
@@ -121,7 +116,33 @@ function init_daterangepicker_TestSchedule() {
 
 // Updates the statistics in the information section of the test
 function Update_TestStatistics() {
-    $("#TotalPointsStats").text(TotalPoints);
+    // Variables for this Page
+    var TotalPoints = 0;
+    var NumberOfQuestions = 0;
+    var NumberOfSections = 0;
+
+    // Counts the total points
+    var testId = $("#TestId").val();
+    $.ajax({
+        url: "/api/CreateTest/GetTotalPoints/" + testId,
+        type: "GET",
+        success: function (result) {
+            if (result.success) {
+                TotalPoints = result.totalPoints;
+                $("#TotalPointsStats").text(TotalPoints);
+            }
+            else {
+                console.log(result.errorMessage);
+            }
+        },
+    })
+
+    // Counts how many question are in the test
+    NumberOfQuestions = $(".questionRow").length;
+
+    // Counts how many sections are in the test
+    NumberOfSections = $("#TestSections").children().length;
+    
     $("#TotalQuestionsStats").text(NumberOfQuestions);
     $("#TotalSectionsStats").text(NumberOfSections);
 }
@@ -239,16 +260,32 @@ function resetNewSchedule() {
 // -- Event Handlers
 
 // input fiels change event
+$("#TimeLimit").change(function () {
+    var timeLimit = $(this).val();
+
+    if (timeLimit <= 0) {
+        $(this).val(1);
+    }
+})
+
 
 // Updates the point value in the database for every question
 $("#TestSections").on("change", ".pointValue", function () {
+    
+    var min = 1;
+    var pointValue = $(this).val();
     // Gets the infotmetion about the question
     var questionId = $(this).attr("data-questionId");
-    var currentPointValue = $(this).attr("data-currentPointValue");
-    $(this).attr("data-currentPointValue", pointValue);
-    var pointValue = $(this).val();
+
+// Check if value exceeds max or is below the minimum
+    if (pointValue <= min) {
+        $(this).val(min);
+        pointValue = min;
+    }
 
     var JsonData = JSON.stringify({ questionId: questionId, pointValue: pointValue })
+
+    
     //console.log(JsonData);
     // send the information to the server
     $.ajax({
@@ -258,10 +295,6 @@ $("#TestSections").on("change", ".pointValue", function () {
         data: JsonData,
         success: function (result) {
             if (result.success) {
-
-                TotalPoints -= parseInt(result.oldPointValue);
-                TotalPoints += parseInt(pointValue);
-
                 Update_TestStatistics();
             }
             else {
@@ -487,8 +520,7 @@ $("#TestSections").on("click", "button#setQuestionType", function () {
                     }));
 
                 $(SectionTypeContainer).remove();
-
-                NumberOfSections += 1;
+                
                 Update_TestStatistics();
             }
             else {
@@ -618,6 +650,8 @@ $("#TestSections").on("click", "button.saveNewTrueFalseQuestion", function () {
                     $(newQuestionContainer).remove();
 
                     stripe();
+
+                    Update_TestStatistics();
                 }
                 else {
                     console.log(result)
@@ -717,6 +751,8 @@ $("#TestSections").on("click", ".saveNewMultipleChoiceQuestion", function () {
                     $(newQuestionContainer).remove();
 
                     stripe();
+
+                    Update_TestStatistics();
                     // ADD-NOTIFICATION
                 }
                 else {
@@ -758,7 +794,7 @@ $("#TestSections").on("click", "button.saveNewEssayQuestion", function () {
 
                     // Remove new essay question form
                     $(newQuestionContainer).remove();
-
+                    Update_TestStatistics();
                     // ADD-NOTIFICATION
                     new PNotify({
                         title: 'Animate.css Effect',
@@ -1337,8 +1373,8 @@ $("#TestSections").on("click", ".saveMatchingQuestion", function () {
 
                     $(newQuestionContainer).remove();
                     stripe();
-                    // ADD-NOTIFICATION
-                    log(result);
+
+                    Update_TestStatistics();
                 }
                 else {
                     console.log(result)
@@ -1676,10 +1712,10 @@ $(document).ready(function () {
     register_partials();
     init_daterangepicker_TestSchedule();
     init_students_datatable();
-    Update_TestStatistics();
     Update_TestAssignmentTable();
     init_testSections();
     stripe();
+    Update_TestStatistics();
 
 })
 

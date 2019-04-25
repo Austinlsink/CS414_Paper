@@ -103,6 +103,7 @@
                                 <li>
                                     <a asp-controller="Instructor" asp-action="Students"><i class="fa fa-users"></i> Students </a>
                                 </li>
+                                <li><a asp-controller="Instructor" asp-action="Tests"><i class="fa fa-file-text"></i> Tests </a></li>
                                 <li>
                                     <a><i class="fa fa-book"></i> Courses <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
@@ -121,17 +122,6 @@
                                         }
                                     </ul>
                                 </li>
-
-                                <li>
-                                    <a><i class="fa fa-file-text"></i> Tests <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a asp-controller="Instructor" asp-action="Tests">View All</a></li>
-                                        <li><a asp-controller="Instructor" asp-action="CreateTest">Create A Test</a></li>
-                                        <li><a asp-controller="Nick" asp-action="NickSandbox">Nick Sandbox</a></li>
-                                        <li><a asp-controller="Bima" asp-action="Run">Bima Sandbox</a></li>
-                                    </ul>
-                                </li>
-
                             </ul>
                         </div>
                     </div>

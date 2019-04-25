@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using BrainNotFound.Paper.Models.BusinessModels;
@@ -35,6 +37,34 @@ namespace BrainNotFound.Paper.api
         #endregion Initialize Controllers
 
         // TODO Lacy - Create controller for the matching question
+        [HttpPost, Route("NewTest")]
+        public JsonResult NewTest([FromBody] JObject jsonData)
+        {
+            // Parse the information from the JObject
+            dynamic json = jsonData;
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
+            string testName = json.testName;
+            var courseId = json.couseId;
+
+            Test newTest = new Test()
+            {
+                TestName = testName,
+                CourseId = courseId,
+                URLSafeName = testName.Replace(" ", "_"),
+                InstructorId = instructor.Id
+            };
+
+            _context.Tests.Add(newTest);
+            _context.SaveChanges();
+
+
+           return Json(new { success = true, test = newTest });
+        }
+
+
+
+
 
         #region get different question types
 
@@ -772,7 +802,7 @@ namespace BrainNotFound.Paper.api
                 }
                 else
                 {
-                    testScheduleJObject.Assigmnet += "Section(S) " + String.Join(", ", entireSectionsAssigned.ToArray());
+                    testScheduleJObject.Assigmnet += "Section(s) " + String.Join(", ", entireSectionsAssigned.ToArray());
                 }
 
                 // Sets TestScheduleId
@@ -1029,7 +1059,7 @@ namespace BrainNotFound.Paper.api
 
             if (instructor.Id == section.Test.InstructorId)
             {
-                if(section.QuestionType == QuestionType.Matching)
+                if (section.QuestionType == QuestionType.Matching)
                 {
                     foreach(var question in section.Questions)
                     {
@@ -1046,8 +1076,47 @@ namespace BrainNotFound.Paper.api
             }
             else
             {
-                return Json(new { success = false, error = "Anathorized action" });
+                return Json(new { success = false, error = "Access Denied" });
             }
         }
+
+        [HttpGet, Route("GetTotalPoints/{testId}")]
+        public JsonResult GetTotalPoints(long testId)
+        {
+            var test = _context.Tests.Find(testId);
+            var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
+
+            if (instructor.Id == test.InstructorId)
+            {
+                // Grab the points for the test
+                var param = new SqlParameter[] {
+                    new SqlParameter() {
+                        ParameterName = "@returnVal",
+                        SqlDbType =  SqlDbType.Int,
+                        Direction = ParameterDirection.Output
+                    },
+                    new SqlParameter() {
+                        ParameterName = "@inputTestId",
+                        SqlDbType =  SqlDbType.BigInt,
+                        Direction = ParameterDirection.Input,
+                        Value = testId
+                    }};
+
+                _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetTotalTestPoints @inputTestId", param);
+
+
+                if (Convert.IsDBNull(param[0].Value))
+                    return Json(new { success = false, errorMessage = "Invalid testId" });
+                else
+                    return Json(new { success = true, totalPoints = (int)param[0].Value });
+
+            }
+            else
+            {
+                return Json(new { success = false, error = "Access Denied" });
+            }
+        }
+
+            
     }
 }

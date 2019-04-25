@@ -7,10 +7,10 @@
     ViewData["Title"] = "Edit " + test.TestName + " - Instructor";
 }
 
-<!--Save Button-->
+<!--Save Button
 <div style="width: 100px; background-color: #808080; border-radius: 6px; z-index: 10; position: fixed; right: 0; bottom: 5px; height: 30px; padding:6px;">
     <a style="color:aliceblue" asp-controller="Instructor" asp-action="ViewTest" asp-route-DepartmentCode="@test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Course.CourseCode" asp-route-URLSafeName="@test.URLSafeName"> Save & View</a>
-</div>
+</div>-->
 
 <div class="row" id="TestInformationSection">
     <div class="col-md-12 col-sm-12 col-xs-12">
@@ -53,7 +53,6 @@
                     </form>
                 </div>
                 <!-- END: Edit test name section-->
-
                 <!-- START: Statistics -->
                 <h3>General</h3>
                 <hr />
@@ -86,7 +85,6 @@
                 </div>
                 <div class="clearfix"></div>
                 <!-- END: Statistics -->
-
                 <!-- START: Schedule -->
                 <h3>Schedule</h3>
                 <hr />
@@ -107,7 +105,6 @@
                     <tbody></tbody>
                 </table>
                 <!-- END: Schedule -->
-
                 <!-- START: New Test Schedule -->
                 <div id="NewScheduleContainer" class="well hidden">
                     <h4><i class="fa fa-calendar"></i> New Schedule</h4>
@@ -128,7 +125,7 @@
                     </div>
                     <div class="col-md-2 col-sm-8 col-xs-12">
                         Time Limit (Minutes)
-                        <input type="number" id="TimeLimit" class="form-control" name="TimeLimit" required="" value="50">
+                        <input type="number" id="TimeLimit" min="1" class="form-control" name="TimeLimit" required="" value="50">
                         <span class="text-danger hidden" id="timeLimitErrorMessage">The time limit must be grater then zero</span>
                     </div>
                     <div class="col-md-2 col-sm-4 col-xs-12">
@@ -257,6 +254,7 @@
             <div class="clearfix"></div>
             <div class="text-center">
                 <button type="button" id="AddTestSectionBtn" class="btn btn-lg btn-round btn-primary"><i class="fa fa-plus"></i> &nbsp;Add Section</button>
+                <a asp-controller="Instructor" asp-action="ViewTest" asp-route-DepartmentCode="@test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Course.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn  btn-round btn-lg btn-success pull-right"><i class="fa fa-check"></i> Finish</a>
             </div>
         </div>
     </div>
@@ -282,7 +280,7 @@
 
 
 @section Scripts
-{
+    {
     <script src="~/vendors/autosize/dist/autosize.min.js"></script>
     <script type="text/javascript" src="~/vendors/handlebars/handlebars-v4.1.1.js"></script>
     <script type="text/javascript" src="~/js/EditTest.js"></script>
