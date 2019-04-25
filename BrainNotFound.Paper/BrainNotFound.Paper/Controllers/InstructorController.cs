@@ -78,14 +78,14 @@ namespace BrainNotFound.Paper.Controllers
 
             ViewBag.EssayGrading = gradingTests;
             ViewBag.Tests = allTests;
-            ViewBag.CompletedTests = completedTests;
+            ViewBag.CompletedTests = completedTests.OrderBy(x => x.TestName);
             return View();
         }
 
         [HttpGet, Route("Chart/{TestId}")]
         public IActionResult Chart(long TestId)
         {
-           ViewBag.Test = _context.Tests.Where(x => x.TestId == TestId).First();
+           ViewBag.Test = _context.Tests.Include(x => x.Course).ThenInclude(x => x.Department).Where(x => x.TestId == TestId).First();
             int total = 0;
 
             // Grab the points for the test

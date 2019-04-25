@@ -5,15 +5,10 @@
 }
 
 <!--Display tests that need to be graded-->
-<div class="col-md-6 col-sm-6 col-xs-12">
+<div class="col-md-5 col-sm-6 col-xs-12">
     <div class="x_panel">
         <div class="x_title">
-            <h2>Student/Section Tests Requiring Grading</h2>
-            <ul class="nav navbar-right panel_toolbox">
-                <li>
-                    <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                </li>
-            </ul>
+            <h3>Student/Section Tests Requiring Grading</h3>
             <div class="clearfix"></div>
         </div>
         <div class="x_content2">
@@ -51,14 +46,14 @@
 </div>
 
 <!-- pie chart -->
-<div class="col-md-6 col-sm-6 col-xs-12">
+<div class="col-md-7 col-sm-6 col-xs-12">
     <div class="x_panel">
         <div class="x_title">
             <div class="form-group">
                 <h3 class="control-label col-md-12 col-sm-3 col-xs-12">View Statistics for a Completed Test</h3>
-                <div class="col-md-10 col-sm-9 col-xs-12">
+                <div class="col-md-12 col-sm-9 col-xs-12">
                     <select class=" form-control TestChartSelection">
-                        <option value="">--Select Test--</option>
+                        <option value="">-- Select Test --</option>
 
                         @foreach (Test t in ViewBag.CompletedTests)
                         {
