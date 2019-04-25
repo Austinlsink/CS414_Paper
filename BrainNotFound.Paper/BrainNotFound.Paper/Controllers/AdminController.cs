@@ -628,7 +628,7 @@ namespace BrainNotFound.Paper.Controllers
             _context.Sections.Add(newSection);
             _context.SaveChanges();
 
-            return RedirectToAction("Index", "Admin");
+            return RedirectToAction("ViewSection", "Admin", new { code, section.SectionNumber });
         }
 
         /// <summary>
