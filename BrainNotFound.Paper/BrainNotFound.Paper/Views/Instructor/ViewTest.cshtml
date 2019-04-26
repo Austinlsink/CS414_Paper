@@ -185,7 +185,7 @@
                         {
                             <div class="col-md-12 col-sm-12 col-xs-12 questionRow" style="padding: 20px 0 10px 0">
                                 <div class="col-md-1 col-sm-1 col-xs-3 text-center">
-                                    <span id="pointValue-56789"><span class="pointValue" id="pointValue">(@q.PointValue</span> pts.)</span>
+                                    <span id="pointValue-56789"><span class="pointValue" id="pointValue">(@(q.PointValue * q.MultipleChoiceAnswers.Count)</span> pts. each)</span>
                                 </div>
                                 <div class="col-md-11 col-sm-11 col-xs-11">
                                     <p><strong>@countMC.</strong> @q.Content</p>

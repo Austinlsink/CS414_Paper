@@ -145,10 +145,11 @@
                         int countMC = 1;
                         foreach (Question q in ts.Questions)
                         {
+                            int totalPoints = 0;
                             q.MultipleChoiceAnswers.ShuffleList();
                             <div class="col-md-12 col-sm-12 col-xs-12 questionRow" style="padding: 20px 0 10px 0">
                                 <div class="col-md-1 col-sm-1 col-xs-3 text-center">
-                                    <span id="pointValue-56789"><span class="pointValue" id="pointValue">(@q.PointValue</span> pts.)</span>
+                                    <span id="pointValue-56789"><span class="pointValue" id="pointValue">(@(q.PointValue * q.MultipleChoiceAnswers.Count)</span> pts.)</span>
                                 </div>
                                 <div class="col-md-11 col-sm-11 col-xs-11">
                                     <p><strong>@countMC.</strong> @q.Content</p>
@@ -169,6 +170,7 @@
                                                 <a class="btn btn-default btn-block text-left multipleChoiceOption" data-mcQuestionId="@q.QuestionId" data-mcanswerId="@mca.MultipleChoiceAnswerId" data-isSelected="false"><span class="pull-left"><strong>@Convert.ToChar(option). </strong> @mca.MultipleChoiceAnswerOption</span>&nbsp;</a>
                                             }
                                             option++;
+                                            totalPoints += mca.Question.PointValue
                                         }
                                     }
                                 </div>
