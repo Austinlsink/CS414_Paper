@@ -2,6 +2,7 @@
 var adminId;
 var username;
 
+
 $("button#ViewAdmin").click(function () {
     var username = $(this).val();
     $.ajax({

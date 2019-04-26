@@ -99,7 +99,7 @@
                                             <td>@day</td>
                                             <td>
                                                 <a asp-controller="Admin" asp-action="ViewSection" asp-route-code="@ViewBag.department.DepartmentCode@ViewBag.course.CourseCode" asp-route-sectionNumber="@s.SectionNumber" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                                <a asp-controller="Admin" asp-action="ViewSection" asp-route-code="@ViewBag.department.DepartmentCode@ViewBag.course.CourseCode" asp-route-sectionNumber="@s.SectionNumber" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Delete </a>
+                                                <button id="ConfirmSectionDelete" type="submit" data-target="#ConfirSectionmModal" data-DepartmentCode="@ViewBag.department.DepartmentCode" data-CourseCode="@ViewBag.course.CourseCode" data-SectionId="@s.SectionId" data-SectionNumber="@s.SectionNumber" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </button>
                                             </td>
                                         </tr>
                                     }
@@ -117,7 +117,42 @@
         </div>
     </div>
 </div>
+<!-- Confirm Deleting Modal-->
+<div id="ConfirmSectionModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
 
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel2">Warning: Deleting Section</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this section?</p>
+                <div class="modal-footer">
+                    <button id="YesSectionDelete" type="button" class="btn btn-default">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Message Modal-->
+<div id="ErrorSectionModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel2">Delete Section Error</h4>
+            </div>
+            <div class="modal-body">
+                <p id="errorMessagePlaceHolder"></p>
+                <div class="modal-footer">
+                    <button id="MessageClose" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!--Edit Course Modal-->
 <div id="EditCourseModal" class="modal fade post-using-ajax" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">

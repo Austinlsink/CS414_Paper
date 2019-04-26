@@ -1,5 +1,49 @@
 ﻿// Global variable for deleting the course
 var deleteCourseId;
+var departmentCode;
+var courseCode;
+var sectionNumber;
+var sectionId;
+
+// Display a confirmation modal if the user wants to delete a section
+$("button#ConfirmSectionDelete").click(function () {
+    departmentCode = $(this).attr("data-DepartmentCode");
+    courseCode = $(this).attr("data-CourseCode");
+    sectionNumber = $(this).attr("data-SectionNumber");
+    sectionId = $(this).attr("data-SectionId");
+    console.log(departmentCode, courseCode, sectionNumber);
+    $("#ConfirmSectionModal").modal("toggle");
+})
+
+// Delete a section if the user specifies yes on the confirmation modal
+$("button#YesSectionDelete").click(function () {
+    // Gets the department Id to be deleted
+    $("#ConfirmSectionModal").modal("hide");
+
+    var JsonData = JSON.stringify({ DepartmentCode: departmentCode, CourseCode: courseCode, SectionNumber: sectionNumber, SectionId: sectionId });
+    
+    $.ajax({
+        url: "/api/Course/DeleteSection/",
+        type: "POST",
+        contentType: 'application/json; charset=utf-8',
+        data: JsonData,
+        success: function (result) {
+            if (result.success) {
+                $("#errorMessagePlaceHolder").text(result.message)
+                $("h4#MessageModal").text("Success!");
+                $("div#ErrorSectionModal").modal("toggle");
+                reload();
+            }
+            else {
+                // Displays the error message to the user
+                $("h4#MessageModal").text("Error!");
+                $("#errorMessagePlaceHolder").text(result.message)
+                $("div#ErrorSectionModal").modal("toggle");
+            }
+        }
+    })
+})
+
 
 // Resets the new course form modal if the user cancels it
 $("button#CancelCreateCourse").click(function () {

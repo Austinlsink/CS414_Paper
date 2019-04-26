@@ -64,6 +64,16 @@
                                 <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                             </div>
                         </div>
+                        <!--Classification field-->
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
+                                Classification
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input value="@ViewBag.student.Classification" asp-for="Classification" type="text" class="form-control has-feedback-left">
+                                <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                            </div>
+                        </div>
                         <!--Email field-->
                         <div class="form-group">
                             <label for="dept-name" class="control-label col-md-3 col-sm-3 col-xs-12">Email </label>

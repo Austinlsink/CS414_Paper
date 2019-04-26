@@ -3,6 +3,7 @@ using BrainNotFound.Paper.Models.BusinessModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace BrainNotFound.Paper.api
 {
@@ -40,6 +41,36 @@ namespace BrainNotFound.Paper.api
             _context.Courses.Add(course);
             _context.SaveChanges();
             return Json(new { success = true });
+        }
+
+        /// <summary>
+        /// Allows the admin to remove a section if there are no students attached to it
+        /// </summary>
+        /// <param name="courseId">Search criteria for finding the specific course</param>
+        /// <returns>Json object either true if the course was successfully removed; otherwise, false.</returns>
+        [HttpPost, Route("DeleteSection")]
+        public JsonResult DeleteSection([FromBody]JObject JsonData)
+        {
+            dynamic data = JsonData;
+            string departmentCode = data.DepartmentCode;
+            string courseCode = data.CourseCode;
+            int sectionNumber = (int)data.SectionNumber;
+            long sectionId = (long)data.SectionId;
+
+            var section = _context.Sections.Where(x => x.SectionId == sectionId).First();
+
+            var enrollments = _context.Enrollments.Where(x => x.SectionId == section.SectionId).ToList();
+
+            if(enrollments.Count > 0)
+            {
+                return Json(new { success = false, message = "Please unassign all students before removing this section"});
+            }
+            else
+            {
+                _context.Sections.Remove(section);
+                _context.SaveChanges();
+                return Json(new { success = true, message = $"{departmentCode} {courseCode} Section - {sectionNumber} was successfully deleted!"});
+            }
         }
 
         /// <summary>
