@@ -24,7 +24,9 @@ namespace BrainNotFound.Paper.Controllers
         [HttpGet, Route("/")]
         public IActionResult Login()
         {
+            ViewBag.loginError = false;
             return View();
+
         }
 
 
@@ -42,10 +44,10 @@ namespace BrainNotFound.Paper.Controllers
                     return RedirectToAction("LoginReroute", "Account");
                 }
             }
+            ViewBag.loginError = true;
 
-            ViewData["Message"] += ModelState.ErrorCount.ToString();
             // If we got this far, something failed, redisplay form
-            return View("TestView");
+            return View();
         }
 
         public ActionResult LoginReroute()

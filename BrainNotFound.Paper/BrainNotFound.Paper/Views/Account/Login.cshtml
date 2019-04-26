@@ -44,18 +44,24 @@
                             <input type="password" asp-for="Password" class="form-control" placeholder="Password" required="" />
                         </div>
                         <div>
-                            <button class="btn btn-default submit" type="submit" >Log in</button>
+                            <button class="btn btn-default submit" type="submit">Log in</button>
                         </div>
 
                         <div class="clearfix"></div>
-                        <br />
-                        <div class="separator">
-                            <div>
-                            </div>
-                        </div>
+                        @if (ViewBag.loginError)
+                        {
+                            <span class="text-danger">Invalid username or password</span>
+                        }
                     </form>
+                    <ul>
+                        <li><a asp-action="ForceAdminLogin" asp-controller="Account">Log in as Administrator</a></li>
+                        <li><a asp-action="ForceInstructorLogin" asp-controller="Account">Log in as Instructor</a>               </li>
+                        <li><a asp-action="ForceStudentLogin" asp-controller="Account">Log in as Student</a>                     </li>
+
+                    </ul>
+
                 </section>
-            </div>           
+            </div>
         </div>
     </div>
 </body>

@@ -34,9 +34,9 @@ namespace BrainNotFound.Paper
             services.AddDbContext<PaperDbContext>(options =>
             {
 
-            //options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTestKara"),                // VisualStudios MSSql Server For Kara to BLOW UP!
-            options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTest"),
-            optionsBuilders => optionsBuilders.MigrationsAssembly("BrainNotFound.Paper"));
+                //options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTestKara"),                // VisualStudios MSSql Server For Kara to BLOW UP!
+                options.UseSqlServer(Configuration.GetConnectionString("PaperBrainTest"),
+                optionsBuilders => optionsBuilders.MigrationsAssembly("BrainNotFound.Paper"));
             });
 
             // This adds a referance to our actuall database
@@ -58,7 +58,8 @@ namespace BrainNotFound.Paper
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddMvc().AddJsonOptions(options => {
+            services.AddMvc().AddJsonOptions(options =>
+            {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
         }
@@ -66,15 +67,16 @@ namespace BrainNotFound.Paper
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //}
+            //else
+            //{
 
+            //    app.UseStatusCodePagesWithReExecute("/Error", "?statusCode={0}");
+            //}
+            app.UseStatusCodePagesWithReExecute("/Error", "?statusCode={0}");
             app.UseStaticFiles();
 
             app.UseAuthentication();
