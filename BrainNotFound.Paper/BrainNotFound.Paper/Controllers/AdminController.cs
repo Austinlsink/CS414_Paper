@@ -681,11 +681,11 @@ namespace BrainNotFound.Paper.Controllers
             if(studentsNotEnrolled.Count > 0)
             {
                 studentsNotEnrolled.AddRange(studentsNotEnrolledInSection);
-                ViewBag.StudentsNotEnrolled = studentsNotEnrolled;
+                ViewBag.StudentsNotEnrolled = studentsNotEnrolled.Distinct();
             }
             else
             {
-                ViewBag.StudentsNotEnrolled = studentsNotEnrolledInSection;
+                ViewBag.StudentsNotEnrolled = studentsNotEnrolledInSection.Distinct();
             }
 
             // Find all the SectionMeetingTimes and add them to the ViewBag
