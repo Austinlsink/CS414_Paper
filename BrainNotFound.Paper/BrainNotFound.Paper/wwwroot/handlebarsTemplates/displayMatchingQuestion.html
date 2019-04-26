@@ -39,14 +39,12 @@
                             </thead>
                             <tbody>
                                 {{#each matchingGroups}}
+                                {{#each matchs}}
                                 <tr>
-                                    <td>
-                                        {{#each matchs}}
-                                        <p><i class="fa fa-caret-right"></i> {{match}}</p>
-                                        {{/each}}
-                                    </td>
-                                    <td><p><i class="fa fa-caret-right"></i> {{matchAnswer}}</p></td>
+                                    <td><i class="fa fa-caret-right"></i> {{match}}</td>
+                                    <td><i class="fa fa-caret-right"></i> {{answer}}</td>
                                 </tr>
+                                {{/each}}
                                 {{/each}}
                             </tbody>
                         </table>

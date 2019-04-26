@@ -539,6 +539,8 @@ namespace BrainNotFound.Paper.Controllers
             _context.Tests.Add(test);
             _context.SaveChanges();
 
+            
+
             return RedirectToAction("EditTest", "Instructor", new { DepartmentCode = department.DepartmentCode, CourseCode = course.CourseCode, URLSafeName = test.URLSafeName });
         }
 

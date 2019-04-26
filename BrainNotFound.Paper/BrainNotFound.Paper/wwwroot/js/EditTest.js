@@ -30,44 +30,47 @@ function init_testSections() {
                     $("#TestSections").append(DisplayTestSectionTemplate(testSection));
 
                     // Adds each question to its section
+                    if (testSection.questions.length > 0) {
 
-                    switch (testSection.sectionType) {
-                        case "TrueFalse":
-                            testSection.questions.forEach(function (question) {
-                                $("#questionsContainer-" + testSection.sectionId)
-                                    .append(DisplayTrueFalseQuestionsTemplate(question));
-                            });
-                            break;
-                        case "MultipleChoice":
-                            testSection.questions.forEach(function (question) {
-
-                                $("#questionsContainer-" + question.sectionId)
-                                    .append(DisplayMultipleChoiceQuestionTemplate(question));
-
-                                // Adds the question options to the questions
-                                $("#multipleChoiceOptionsContainer-" + question.questionId).empty();
-                                question.multipleChoiceAnswers.forEach(function (questionOption) {
-                                    $("#multipleChoiceOptionsContainer-" + question.questionId)
-                                        .append(DisplayMultipleChoiceQuestionOptionTemplate(questionOption));
+                        $("#noQuestionMessage-" + testSection.sectionId).addClass("hidden");
+                        switch (testSection.sectionType) {
+                            case "TrueFalse":
+                                testSection.questions.forEach(function (question) {
+                                    $("#questionsContainer-" + testSection.sectionId)
+                                        .append(DisplayTrueFalseQuestionsTemplate(question));
                                 });
-                            });
-                            break;
+                                break;
+                            case "MultipleChoice":
+                                testSection.questions.forEach(function (question) {
 
-                        case "Essay":
-                            testSection.questions.forEach(function (question) {
-                                $("#questionsContainer-" + question.sectionId)
-                                    .append(DisplayEssayQuestionTemplate(question));
-                            })
+                                    $("#questionsContainer-" + question.sectionId)
+                                        .append(DisplayMultipleChoiceQuestionTemplate(question));
 
-                            break;
-                        case "Matching":
-                            testSection.questions.forEach(function (question) {
-                                question.jasonData = JSON.stringify(question);
+                                    // Adds the question options to the questions
+                                    $("#multipleChoiceOptionsContainer-" + question.questionId).empty();
+                                    question.multipleChoiceAnswers.forEach(function (questionOption) {
+                                        $("#multipleChoiceOptionsContainer-" + question.questionId)
+                                            .append(DisplayMultipleChoiceQuestionOptionTemplate(questionOption));
+                                    });
+                                });
+                                break;
 
-                                $("#questionsContainer-" + question.sectionId)
-                                    .append(DisplayMatchingQuestionTemplate(question));
-                            })
-                            break;
+                            case "Essay":
+                                testSection.questions.forEach(function (question) {
+                                    $("#questionsContainer-" + question.sectionId)
+                                        .append(DisplayEssayQuestionTemplate(question));
+                                })
+
+                                break;
+                            case "Matching":
+                                testSection.questions.forEach(function (question) {
+                                    question.jasonData = JSON.stringify(question);
+
+                                    $("#questionsContainer-" + question.sectionId)
+                                        .append(DisplayMatchingQuestionTemplate(question));
+                                })
+                                break;
+                        }
                     }
                 })
                 Update_TestStatistics();
@@ -142,7 +145,7 @@ function Update_TestStatistics() {
 
     // Counts how many sections are in the test
     NumberOfSections = $("#TestSections").children().length;
-    
+
     $("#TotalQuestionsStats").text(NumberOfQuestions);
     $("#TotalSectionsStats").text(NumberOfSections);
 }
@@ -271,13 +274,13 @@ $("#TimeLimit").change(function () {
 
 // Updates the point value in the database for every question
 $("#TestSections").on("change", ".pointValue", function () {
-    
+
     var min = 1;
     var pointValue = $(this).val();
     // Gets the infotmetion about the question
     var questionId = $(this).attr("data-questionId");
 
-// Check if value exceeds max or is below the minimum
+    // Check if value exceeds max or is below the minimum
     if (pointValue <= min) {
         $(this).val(min);
         pointValue = min;
@@ -285,7 +288,7 @@ $("#TestSections").on("change", ".pointValue", function () {
 
     var JsonData = JSON.stringify({ questionId: questionId, pointValue: pointValue })
 
-    
+
     //console.log(JsonData);
     // send the information to the server
     $.ajax({
@@ -520,7 +523,7 @@ $("#TestSections").on("click", "button#setQuestionType", function () {
                     }));
 
                 $(SectionTypeContainer).remove();
-                
+
                 Update_TestStatistics();
             }
             else {
@@ -647,6 +650,7 @@ $("#TestSections").on("click", "button.saveNewTrueFalseQuestion", function () {
                     $("#questionsContainer-" + sectionId)
                         .append(DisplayTrueFalseQuestionsTemplate(result.question));
 
+                    $("#noQuestionMessage-" + sectionId).addClass("hidden");
                     $(newQuestionContainer).remove();
 
                     stripe();
@@ -741,6 +745,7 @@ $("#TestSections").on("click", ".saveNewMultipleChoiceQuestion", function () {
                     $("#questionsContainer-" + result.question.sectionId)
                         .append(DisplayMultipleChoiceQuestionTemplate(result.question));
 
+                    $("#noQuestionMessage-" + testSectionId).addClass("hidden");
                     // Adds the question options to the questions
                     $("#multipleChoiceOptionsContainer-" + result.question.questionId).empty();
                     result.question.multipleChoiceAnswers.forEach(function (questionOption) {
@@ -792,6 +797,7 @@ $("#TestSections").on("click", "button.saveNewEssayQuestion", function () {
                     $("#questionsContainer-" + result.question.sectionId)
                         .append(DisplayEssayQuestionTemplate(result.question));
 
+                    $("#noQuestionMessage-" + testSectionId).addClass("hidden");
                     // Remove new essay question form
                     $(newQuestionContainer).remove();
                     Update_TestStatistics();
@@ -902,11 +908,18 @@ $("#confirmDeletion").click(function () {
             data: JsonData,
             success: function (result) {
                 if (result.success) {
+                    
+                    if ($("#questionContainer-" + questionId).parent().find(".questionRow").length <= 1) {
+                        $("#questionContainer-" + questionId).parent().children(":first").removeClass("hidden");
+                    }
+
                     $("#questionContainer-" + questionId).remove();
 
                     $('#confirm-deletion-modal').modal('toggle');
 
                     stripe();
+                    
+
                     // ADD-NOTIFICATION
                 }
                 else {
@@ -1371,6 +1384,7 @@ $("#TestSections").on("click", ".saveMatchingQuestion", function () {
                     $("#questionsContainer-" + result.question.sectionId)
                         .append(DisplayMatchingQuestionTemplate(result.question));
 
+                    $("#noQuestionMessage-" + testSectionId).addClass("hidden");
                     $(newQuestionContainer).remove();
                     stripe();
 

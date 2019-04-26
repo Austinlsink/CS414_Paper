@@ -45,7 +45,7 @@ namespace BrainNotFound.Paper.api
             var instructor = _context.ApplicationUsers.Where(u => u.UserName == User.Identity.Name).First();
 
             string testName = json.testName;
-            var courseId = json.couseId;
+            var courseId = json.courseId;
 
             Test newTest = new Test()
             {
@@ -57,9 +57,9 @@ namespace BrainNotFound.Paper.api
 
             _context.Tests.Add(newTest);
             _context.SaveChanges();
+            var returnTest = _context.Tests.Include(t => t.Course).ThenInclude(c => c.Department).Where(t => t.TestId == newTest.TestId).First();
 
-
-           return Json(new { success = true, test = newTest });
+            return Json(new { success = true, test = returnTest });
         }
 
 
@@ -1108,7 +1108,11 @@ namespace BrainNotFound.Paper.api
                 if (Convert.IsDBNull(param[0].Value))
                     return Json(new { success = false, errorMessage = "Invalid testId" });
                 else
-                    return Json(new { success = true, totalPoints = (int)param[0].Value });
+                {
+                    int points = (int)param[0].Value;
+                    return Json(new { success = true, totalPoints = points });
+                }
+                    
 
             }
             else

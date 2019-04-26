@@ -79,6 +79,9 @@ $("#submitNewTest").click(function () {
         var courseId = $("#newTestCourse").val();
         var jsonData = JSON.stringify({ courseId: courseId, testName: testName });
 
+        console.log(window.location);
+
+        
         $.ajax({
             url: "/api/CreateTest/NewTest/",
             type: "POST",
@@ -87,29 +90,11 @@ $("#submitNewTest").click(function () {
             data: jsonData,
             success: function (result) {
                 if (result.success) {
-                    window.location.href = "http://stackoverflow.com";
+                    console.log(result.test);
+                    window.location.href = window.location.origin + "/Instructor/Tests/Edit/" + result.test.course.department.departmentCode + "/" + result.test.course.courseCode + "/" + result.test.urlSafeName;
                 }
                 console.log("Success");
             }
         })
     }
 })
-
-//$(".reviewStudentTest").click(function () {
-//    var id = $(this).attr("data-studentId");
-//    console.log(id);
-
-//    $.ajax({
-//        url: "/api/Tests/ReviewStudentTest/",
-//        type: "POST",
-//        contentType: "application/json",
-//        // Data fetched from the form
-//        data: id,
-//        success: function (result) {
-//            console.log("Success");
-//        },
-//        error: function (xhr, status, error) {
-//            console.log("Failed");
-//        }
-//    })
-//})

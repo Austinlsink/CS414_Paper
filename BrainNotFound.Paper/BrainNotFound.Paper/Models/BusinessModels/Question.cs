@@ -93,6 +93,7 @@ namespace BrainNotFound.Paper.Models.BusinessModels
                 {
                     dynamic Jmatch = new JObject();
                     Jmatch.match = match.Content;
+                    Jmatch.answer = answerContent;
                     jMatchs.Add(Jmatch);
                 }
 
