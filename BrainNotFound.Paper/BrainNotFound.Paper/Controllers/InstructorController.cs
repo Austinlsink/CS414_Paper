@@ -468,8 +468,9 @@ namespace BrainNotFound.Paper.Controllers
             var departments = _context.Departments.ToList();
 
             // Find any tests that need manual grading
-            var manualGradingRequired = _context.StudentTestAssignments.Where(x => previousTests.Any(y => y.TestId == x.TestSchedule.TestId)).ToList();
-            ViewBag.ManualGradingRequired = manualGradingRequired;
+            var studentEssayAnswers = _context.StudentEssayAnswers.Include(x => x.TestSchedule).ThenInclude(x => x.Test).Where(x => previousTests.Any(y => y.TestId == x.TestSchedule.TestId)).ToList();
+            ViewBag.StudentEssayAnswers = studentEssayAnswers;
+
 
             ViewBag.UpcomingTests = upcomingTests;
             ViewBag.PreviousTests = previousTests;

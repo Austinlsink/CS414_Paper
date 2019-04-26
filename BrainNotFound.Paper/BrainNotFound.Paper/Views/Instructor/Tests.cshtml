@@ -102,8 +102,6 @@
     </div>
     @if (ViewBag.PreviousTests.Count > 0)
     {
-        List<StudentTestAssignment> ManualGradingRequired = new List<StudentTestAssignment>();
-        ManualGradingRequired = ViewBag.ManualGradingRequired;
         <div class="x_content">
             <div class="table-responsive">
                 <table id="PreviousTestTable" class="table table-striped jambo_table bulk_action ">
@@ -123,6 +121,7 @@
                     <tbody>
                         @foreach (Test test in ViewBag.PreviousTests)
                         {
+                            bool isFirstPass = true;
                             <tr class="odd pointer">
                                 <td class=" ">@test.TestName</td>
                                 <td class=" ">@test.Course.Department.DepartmentCode @test.Course.CourseCode</td>
@@ -130,10 +129,16 @@
                                 <td class=" last">
                                     <a asp-controller="Instructor" asp-action="ViewTest" asp-route-DepartmentCode="@test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Course.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View</a>
                                     <a asp-controller="Instructor" asp-action="ReviewTest" asp-route-DepartmentCode="@test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Course.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-dark btn-xs"><i class="fa fa-folder"></i> View Student Tests </a>
-
-                                    @if (ManualGradingRequired.Where(x => x.TestSchedule.TestId == test.TestId && x.ManualGradingRequired == true).Any())
+                                    @foreach (StudentEssayAnswer sea in ViewBag.StudentEssayAnswers)
                                     {
-                                        <a asp-controller="Instructor" asp-action="GradeTest" asp-route-DepartmentCode="@test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Course.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i> Grade</a>
+                                        if (sea.TestSchedule.TestId == test.TestId && sea.PointsEarned == -1)
+                                        {
+                                            if (isFirstPass)
+                                            {
+                                                <a asp-controller="Instructor" asp-action="GradeTest" asp-route-DepartmentCode="@test.Course.Department.DepartmentCode" asp-route-CourseCode="@test.Course.CourseCode" asp-route-URLSafeName="@test.URLSafeName" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i> Grade</a>
+                                            }
+                                            isFirstPass = false;
+                                        }
                                     }
                                 </td>
                             </tr>
