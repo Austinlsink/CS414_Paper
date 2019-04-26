@@ -109,29 +109,26 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var e in ViewBag.enrollment)
+                                @foreach (ApplicationUser e in ViewBag.enrollment)
                                 {
-                                    if (e.SectionId == ViewBag.section.SectionId)
-                                    {
-                                        <tr class="odd pointer">
-                                            <td class=" ">@e.ApplicationUser.FirstName </td>
-                                            <td class=" ">@e.ApplicationUser.LastName </td>
-                                            <td class=" ">@e.ApplicationUser.Classification </td>
-                                            <td class=" last">
-                                                <form asp-controller="Admin" asp-action="UnassignStudent">
-                                                    <a asp-controller="Admin" asp-action="ViewStudent" asp-route-UserName="@e.ApplicationUser.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                                    <a asp-controller="Admin" asp-action="EditStudent" asp-route-UserName="@e.ApplicationUser.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                                    <button type="submit" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Unassign </button>
-                                                    <input type="hidden" name="UserName" value="@e.ApplicationUser.UserName" />
-                                                    <input type="hidden" name="SectionId" value="@ViewBag.section.SectionId" />
-                                                    <input type="hidden" name="SectionNumber" value="@ViewBag.section.SectionNumber" />
-                                                    <input type="hidden" name="CourseCode" value="@ViewBag.course.CourseCode" />
-                                                    <input type="hidden" name="CourseId" value="@ViewBag.section.CourseId" />
-                                                    <input type="hidden" name="DepartmentCode" value="@ViewBag.department.DepartmentCode" />
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    }
+                                    <tr class="odd pointer">
+                                        <td class=" ">@e.FirstName </td>
+                                        <td class=" ">@e.LastName </td>
+                                        <td class=" ">@e.Classification </td>
+                                        <td class=" last">
+                                            <form asp-controller="Admin" asp-action="UnassignStudent">
+                                                <a asp-controller="Admin" asp-action="ViewStudent" asp-route-UserName="@e.UserName" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                                <a asp-controller="Admin" asp-action="EditStudent" asp-route-UserName="@e.UserName" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                                <button type="submit" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Unassign </button>
+                                                <input type="hidden" name="UserName" value="@e.UserName" />
+                                                <input type="hidden" name="SectionId" value="@ViewBag.section.SectionId" />
+                                                <input type="hidden" name="SectionNumber" value="@ViewBag.section.SectionNumber" />
+                                                <input type="hidden" name="CourseCode" value="@ViewBag.course.CourseCode" />
+                                                <input type="hidden" name="CourseId" value="@ViewBag.section.CourseId" />
+                                                <input type="hidden" name="DepartmentCode" value="@ViewBag.department.DepartmentCode" />
+                                            </form>
+                                        </td>
+                                    </tr>
                                 }
                             </tbody>
                         </table>
@@ -192,8 +189,7 @@
     </div>
 </div>
 
-@section scripts
-    {
+@section scripts{
     <!--Datatable script for the students enrolled table-->
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
