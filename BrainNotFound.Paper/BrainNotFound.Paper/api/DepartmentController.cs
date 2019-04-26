@@ -37,6 +37,24 @@ namespace BrainNotFound.Paper.api
         [HttpPost, Route("New")]
         public IActionResult New([FromBody] Department department)
         {
+            var departmentLookUpByDC = _context.Departments.Where(d => d.DepartmentCode == department.DepartmentCode).FirstOrDefault();
+            var departmentLookUpByDN = _context.Departments.Where(d =>  d.DepartmentName == department.DepartmentName).FirstOrDefault();
+
+            if (departmentLookUpByDC != null || departmentLookUpByDN != null)
+            {
+                string DeparmentCodeError = "";
+                string DeparmentNameError = "";
+
+                if (departmentLookUpByDC != null)
+                    DeparmentCodeError = "Department code must be unique";
+
+                if (departmentLookUpByDN != null)
+                    DeparmentNameError = "Department name must be unique";
+
+
+                return Json(new { sucess = false, DeparmentCodeError, DeparmentNameError });
+            }
+
             _context.Departments.Add(department);
             _context.SaveChanges();
             return Json(new { sucess = true });

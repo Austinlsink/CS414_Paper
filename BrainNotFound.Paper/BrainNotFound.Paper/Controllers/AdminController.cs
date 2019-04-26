@@ -446,28 +446,12 @@ namespace BrainNotFound.Paper.Controllers
             var depart = _context.Departments.Find(dept.DepartmentId);
             depart.DepartmentCode = dept.DepartmentCode;
             depart.DepartmentName = dept.DepartmentName;
-
             _context.SaveChanges();
 
             return RedirectToAction("Departments", "Admin");
         }
 
-        /// <summary>
-        /// Allows the admin to create a new department
-        /// </summary>
-        /// <param name="model">Department object that contains the new department to save</param>
-        /// <returns>Redirects to the Departments page</returns>
-        [HttpPost, Route("Departments/New")]
-        public IActionResult NewDepartment(Department model)
-        {
-            if (!ModelState.IsValid)
-                return PartialView();
-
-            _context.Departments.Add(model);
-            _context.SaveChanges();
-
-            return RedirectToAction("Departments", "Admin");
-        }
+    
 
         #endregion Department controllers
 

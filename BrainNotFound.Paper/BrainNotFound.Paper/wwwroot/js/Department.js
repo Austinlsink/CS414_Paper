@@ -19,6 +19,7 @@ $("button#CancelCreateDepartment").click(function () {
     newDepartmentForm.trigger("reset");
     $("#departmentCodeErrorMessage").empty();
     $("#departmentNameErrorMessage").empty();
+    $("#errorMessage").addClass("hidden");
 });
 
 
@@ -84,14 +85,22 @@ $("button#CreateDepartment").click(function () {
         data: JSON.stringify(department),
         success: function (result) {
             // Close the modal window
-            location.reload();
+            console.log(result);
+            if (result.sucess) {
+                location.reload();
+            }
+            else {
+                $("#departmentCodeErrorMessage").text(result.deparmentCodeError);
+                $("#departmentNameErrorMessage").text(result.deparmentNameError);
+            }
+            
         },
         error: function (xhr, status, error) {
             var err = JSON.parse(xhr.responseText);
-            
+            $("#errorMessage").addClass("hidden");
             // Places validation on the Department Code Field
             if (typeof err.errors.DepartmentCode === "undefined") {
-                $("#departmentCodeErrorMessage").empty();
+                
             }
             else {
                 $("#departmentCodeErrorMessage").html(err.errors.DepartmentCode[0]);

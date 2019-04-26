@@ -1,0 +1,6 @@
+-- deletes test from database
+delete from StudentMatchingAnswers
+delete from MatchingQuestionSides
+delete from StudentMultipleChoiceAnswers
+delete from questions
+delete from tests
