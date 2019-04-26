@@ -669,12 +669,29 @@ namespace BrainNotFound.Paper.Controllers
             ViewBag.enrollment = enrollment;
 
             //Find all students not enrolled in the course
-            var studentsNotEnrolled = _context.Enrollments.Include(x => x.ApplicationUser).Include(x => x.Section).Where(x => x.SectionId != section.SectionId).Select(x => x.ApplicationUser).Except(enrollment).Distinct();
+            var studentsNotEnrolledInSection = _context.Enrollments.Include(x => x.ApplicationUser).Include(x => x.Section).Where(x => x.SectionId != section.SectionId).Select(x => x.ApplicationUser).Except(enrollment).Distinct();
+
+            List<ApplicationUser> studentsNotEnrolled = new List<ApplicationUser>();
+            foreach(ApplicationUser s in students)
+            {
+                if (!enrollment.Contains(s))
+                    studentsNotEnrolled.Add(s);
+            }
+
+            if(studentsNotEnrolled.Count > 0)
+            {
+                studentsNotEnrolled.AddRange(studentsNotEnrolledInSection);
+                ViewBag.StudentsNotEnrolled = studentsNotEnrolled;
+            }
+            else
+            {
+                ViewBag.StudentsNotEnrolled = studentsNotEnrolledInSection;
+            }
 
             // Find all the SectionMeetingTimes and add them to the ViewBag
             var sectionMeetingTimeList = _context.SectionMeetingTimes.ToList();
             ViewBag.sectionMeetingTimeList = sectionMeetingTimeList;
-            ViewBag.StudentsNotEnrolled = studentsNotEnrolled;
+            
 
             ViewBag.Message = message;
 
