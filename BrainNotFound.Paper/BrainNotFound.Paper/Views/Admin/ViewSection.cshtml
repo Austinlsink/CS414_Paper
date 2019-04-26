@@ -86,6 +86,13 @@
                 <!--Students who are in this section-->
                 <div class="x_title">
                     <h2><i class="fa fa-users"></i> Students enrolled</h2>
+                    @if (ViewBag.Message != String.Empty)
+                    { <br />
+                        <div>
+                            &nbsp;&nbsp; <span><i class="fa fa-warning"></i> @ViewBag.Message</span>
+                        </div>
+                    }
+
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                     </ul>

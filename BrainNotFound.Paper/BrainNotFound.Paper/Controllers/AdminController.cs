@@ -639,7 +639,7 @@ namespace BrainNotFound.Paper.Controllers
         /// <param name="sectionNumber">section number for the corresonding course</param>
         /// <returns>View Section View</returns>
         [HttpGet, Route("Sections/View/{code}/{sectionNumber}")]
-        public async Task<IActionResult> ViewSection(string code, int sectionNumber)
+        public async Task<IActionResult> ViewSection(string code, int sectionNumber, string message = "")
         {
             string departmentCode = code.Substring(0, 2);
             string courseCode = code.Substring(2, 3);
@@ -676,6 +676,7 @@ namespace BrainNotFound.Paper.Controllers
             ViewBag.sectionMeetingTimeList = sectionMeetingTimeList;
             ViewBag.StudentsNotEnrolled = studentsNotEnrolled;
 
+            ViewBag.Message = message;
 
             return View();
         }
@@ -714,20 +715,33 @@ namespace BrainNotFound.Paper.Controllers
         /// <param name="department">Department object that contains information for the section</param>
         /// <returns>Redirects to the ViewSection page</returns>
         [HttpPost, Route("AssignStudent")]
-        public async Task<IActionResult> AssignStudent(ApplicationUser user, Section section, Course course, Department department)
+        public async Task<IActionResult> AssignStudent(ApplicationUser user, Section s, Course course, Department department)
         {
             string code = department.DepartmentCode + course.CourseCode;
 
             var student = await _userManager.FindByNameAsync(user.UserName);
 
-            Enrollment enroll = new Enrollment();
-            enroll.SectionId = section.SectionId;
-            enroll.StudentId = student.Id;
+            var section = _context.Sections.Where(x => x.SectionId == s.SectionId).FirstOrDefault();
 
-            _context.Enrollments.Add(enroll);
-            _context.SaveChanges();
+            // Verify that the student being assigned does not go over capacity
+            var enrollments = _context.Enrollments.Include(x => x.Section).Where(x => x.SectionId == section.SectionId && x.Section.SectionNumber == section.SectionNumber).ToList();
 
-            return RedirectToAction("ViewSection", "Admin", new { code, section.SectionNumber });
+            if(section.Capacity < enrollments.Count)
+            {
+                Enrollment enroll = new Enrollment();
+                enroll.SectionId = section.SectionId;
+                enroll.StudentId = student.Id;
+
+                _context.Enrollments.Add(enroll);
+                _context.SaveChanges();
+                return RedirectToAction("ViewSection", "Admin", new { code, section.SectionNumber });
+            }
+            else
+            {
+                return RedirectToAction("ViewSection", "Admin", new { code, section.SectionNumber, message = "Cannot exceed capacity" });
+            }
+
+           
         }
 
         /// <summary>

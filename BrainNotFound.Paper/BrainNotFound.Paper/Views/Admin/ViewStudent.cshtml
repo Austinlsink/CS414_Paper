@@ -47,6 +47,9 @@
                             <li>
                                 <i class="fa fa-phone user-profile-icon"> @(ViewBag.profile.PhoneNumber == null ? " " : PhoneNumber.CalculatePhoneNumber(ViewBag.profile.PhoneNumber))</i>
                             </li>
+                            <li>
+                                <i class="fa fa-at fa-dashcube"> @ViewBag.profile.Classification</i>
+                            </li>
                         </ul>
                         <br />
                     </div>

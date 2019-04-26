@@ -25,6 +25,7 @@
                                 <th class="column-title">Salutation </th>
                                 <th class="column-title">First Name </th>
                                 <th class="column-title">Last Name </th>
+                                <th class="column-title">Classification </th>
                                 <th class="column-title">Phone Number </th>
                                 <th class="column-title">Email </th>
                                 <th class="column-title no-link last">
@@ -43,6 +44,7 @@
                                     <td class=" ">@student.Salutation</td>
                                     <td class=" ">@student.FirstName</td>
                                     <td class=" ">@student.LastName</td>
+                                    <td class=" ">@student.Classification</td>
                                     <td class=" ">@(student.PhoneNumber == null ? " " : PhoneNumber.CalculatePhoneNumber(student.PhoneNumber))</td>
                                     <td class=" ">@student.Email</td>
                                     <td>
@@ -115,6 +117,17 @@
                             <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                             <span id="StudentLastNameErrorMessage" class="text-danger"></span>
 
+                        </div>
+                    </div>
+                    <!--Classifcation field-->
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dept-code">
+                            Classification 
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="StudentLastNameInput" asp-for="Classification" type="text" class="form-control has-feedback-left" placeholder="Classifcation">
+                            <span class="fa fa-dashcube form-control-feedback left" aria-hidden="true"></span>
+                            <span id="ClassificationErrorMessage" class="text-danger"></span>
                         </div>
                     </div>
                     <!--Email field-->
@@ -194,7 +207,7 @@
                     <!--Confirm password field-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12  parsley-error">
-                           Confirm Password <span class="required">*</span>
+                            Confirm Password <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input id="StudentConfirmPasswordInput" asp-for="ConfirmPassword" type="password" class="form-control has-feedback-left" placeholder="Password">
@@ -257,7 +270,7 @@
             $('#studentTable').DataTable({
                 "order": [1, 'asc'],
                 "columnDefs": [
-                    { "orderable": false, "targets": [5] }
+                    { "orderable": false, "targets": [6] }
                 ]
             });
         });

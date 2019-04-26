@@ -92,6 +92,7 @@ namespace BrainNotFound.Paper.api
                 updateStudent.Email = user.Email;
                 updateStudent.Salutation = user.Salutation;
                 updateStudent.Password = updateStudent.Password;
+                updateStudent.Classification = user.Classification;
 
                 await _userManager.UpdateAsync(updateStudent);
 
