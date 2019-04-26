@@ -70,7 +70,14 @@ namespace BrainNotFound.Paper.Controllers
                 new SqlParameter("@returnVal", SqlDbType.Int) {Direction = ParameterDirection.Output}
             };
             _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetNumberOfInstructors", @params2);
-            ViewBag.NumberOfInstructors = @params2[0].Value;
+            if (Convert.IsDBNull(params2[0].Value))
+            {
+                ViewBag.NumberOfInstructors = 0;
+            }
+            else
+            {
+                ViewBag.NumberOfInstructors = @params2[0].Value;
+            }
 
             // Fetch the Number of Students that have not been assigned to teach
             var allInstructors = await _userManager.GetUsersInRoleAsync("Instructor");
@@ -91,7 +98,14 @@ namespace BrainNotFound.Paper.Controllers
                 new SqlParameter("@returnVal", SqlDbType.Int) {Direction = ParameterDirection.Output}
             };
             _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetNumberOfDepartments", @params3);
-            ViewBag.NumberOfDepartments = @params3[0].Value;
+            if (Convert.IsDBNull(params3[0].Value))
+            {
+                ViewBag.NumberOfDepartments = 0;
+            }
+            else
+            {
+                ViewBag.NumberOfDepartments = @params3[0].Value;
+            }
 
             ViewBag.Departments = _context.Departments.Include(x => x.Courses).ToList();
             ViewBag.Sections = _context.Sections.ToList();
@@ -101,7 +115,14 @@ namespace BrainNotFound.Paper.Controllers
                 new SqlParameter("@returnVal", SqlDbType.Int) {Direction = ParameterDirection.Output}
             };
             _context.Database.ExecuteSqlCommand("exec @returnVal=dbo.GetNumberOfTests", @params4);
-            ViewBag.NumberOfTests = @params4[0].Value;
+            if (Convert.IsDBNull(params4[0].Value))
+            {
+                ViewBag.NumberOfTests = 0;
+            }
+            else
+            {
+                ViewBag.NumberOfTests = @params4[0].Value;
+            }
 
             return View();
         }
