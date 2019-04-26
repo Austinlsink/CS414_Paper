@@ -764,7 +764,7 @@ namespace BrainNotFound.Paper.Controllers
             // Verify that the student being assigned does not go over capacity
             var enrollments = _context.Enrollments.Include(x => x.Section).Where(x => x.SectionId == section.SectionId && x.Section.SectionNumber == section.SectionNumber).ToList();
 
-            if(section.Capacity < enrollments.Count)
+            if(enrollments.Count < section.Capacity)
             {
                 Enrollment enroll = new Enrollment();
                 enroll.SectionId = section.SectionId;
