@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using System.Data.SqlClient;
 using System.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace BrainNotFound.Paper.Controllers
 {
@@ -512,7 +513,7 @@ namespace BrainNotFound.Paper.Controllers
             ViewBag.course = course;
 
             // Find the sections with the same ID as the course and add it to the ViewBag
-            var sections = _context.Sections.Where(s => s.CourseId == course.CourseId);
+            var sections = _context.Sections.Where(s => s.CourseId == course.CourseId).ToList();
             ViewBag.sectionsList = sections;
 
             // Get all of the instructors and add them to the ViewBag
@@ -664,17 +665,17 @@ namespace BrainNotFound.Paper.Controllers
             ViewBag.students = students;
 
             // Find all enrollments and add them to the ViewBag
-            var enrollment = _context.Enrollments.Include(x => x.ApplicationUser).Include(x => x.Section);
+            var enrollment = _context.Enrollments.Include(x => x.ApplicationUser).Include(x => x.Section).Where(x => x.SectionId == section.SectionId).Select(x => x.ApplicationUser);
             ViewBag.enrollment = enrollment;
 
-
             //Find all students not enrolled in the course
-            var studentsNotEnrolled = _context.Enrollments.Include(x => x.ApplicationUser).Where(x => x.SectionId != section.SectionId).Select(x => x.ApplicationUser).Distinct().ToList();
+            var studentsNotEnrolled = _context.Enrollments.Include(x => x.ApplicationUser).Include(x => x.Section).Where(x => x.SectionId != section.SectionId).Select(x => x.ApplicationUser).Except(enrollment).Distinct();
 
             // Find all the SectionMeetingTimes and add them to the ViewBag
             var sectionMeetingTimeList = _context.SectionMeetingTimes.ToList();
             ViewBag.sectionMeetingTimeList = sectionMeetingTimeList;
             ViewBag.StudentsNotEnrolled = studentsNotEnrolled;
+
 
             return View();
         }
