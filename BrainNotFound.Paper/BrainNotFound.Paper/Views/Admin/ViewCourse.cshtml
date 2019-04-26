@@ -70,35 +70,43 @@
                         </thead>
                         <tbody>
                             @{
-                                List<ApplicationUser> instructors = ViewBag.instructorList;
-                                List<SectionMeetingTime> sectionMeetingTimes = ViewBag.sectionMeetingTimeList;
-                                foreach (var s in ViewBag.sectionsList)
+                                if (ViewBag.sectionsList.Count > 0)
                                 {
-                                    // Find the instructor name for each section
-                                    String instructorName;
-
-                                    var instructor = instructors.Where(i => i.Id == s.InstructorId).First();
-                                    instructorName = instructor.FirstName + " " + instructor.LastName;
-
-                                    // Find the meeting times for each section
-                                    List<String> days = new List<string>();
-                                    var sectionMeetingTime = sectionMeetingTimes.Where(smt => smt.SectionId == s.SectionId).ToList();
-                                    foreach (SectionMeetingTime smt in sectionMeetingTime)
+                                    List<ApplicationUser> instructors = ViewBag.instructorList;
+                                    List<SectionMeetingTime> sectionMeetingTimes = ViewBag.sectionMeetingTimeList;
+                                    foreach (var s in ViewBag.sectionsList)
                                     {
-                                        days.Add(smt.Day);
-                                    }
-                                    String day = string.Join(", ", days);
+                                        // Find the instructor name for each section
+                                        String instructorName;
 
-                                    <tr>
-                                        <td>@s.SectionNumber</td>
-                                        <td>@instructorName</td>
-                                        <td>@s.Location</td>
-                                        <td>@s.Capacity</td>
-                                        <td>@day</td>
-                                        <td>
-                                            <a asp-controller="Admin" asp-action="ViewSection" asp-route-code="@ViewBag.department.DepartmentCode@ViewBag.course.CourseCode" asp-route-sectionNumber="@s.SectionNumber" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                        </td>
-                                    </tr>
+                                        var instructor = instructors.Where(i => i.Id == s.InstructorId).First();
+                                        instructorName = instructor.FirstName + " " + instructor.LastName;
+
+                                        // Find the meeting times for each section
+                                        List<String> days = new List<string>();
+                                        var sectionMeetingTime = sectionMeetingTimes.Where(smt => smt.SectionId == s.SectionId).ToList();
+                                        foreach (SectionMeetingTime smt in sectionMeetingTime)
+                                        {
+                                            days.Add(smt.Day);
+                                        }
+                                        String day = string.Join(", ", days);
+
+                                        <tr>
+                                            <td>@s.SectionNumber</td>
+                                            <td>@instructorName</td>
+                                            <td>@s.Location</td>
+                                            <td>@s.Capacity</td>
+                                            <td>@day</td>
+                                            <td>
+                                                <a asp-controller="Admin" asp-action="ViewSection" asp-route-code="@ViewBag.department.DepartmentCode@ViewBag.course.CourseCode" asp-route-sectionNumber="@s.SectionNumber" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                                <a asp-controller="Admin" asp-action="ViewSection" asp-route-code="@ViewBag.department.DepartmentCode@ViewBag.course.CourseCode" asp-route-sectionNumber="@s.SectionNumber" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Delete </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr><td>There are no Sections to be displayed</td></tr>
                                 }
                             }
                         </tbody>

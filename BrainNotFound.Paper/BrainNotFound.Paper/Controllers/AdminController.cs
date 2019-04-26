@@ -513,7 +513,7 @@ namespace BrainNotFound.Paper.Controllers
             ViewBag.course = course;
 
             // Find the sections with the same ID as the course and add it to the ViewBag
-            var sections = _context.Sections.Where(s => s.CourseId == course.CourseId);
+            var sections = _context.Sections.Where(s => s.CourseId == course.CourseId).ToList();
             ViewBag.sectionsList = sections;
 
             // Get all of the instructors and add them to the ViewBag
