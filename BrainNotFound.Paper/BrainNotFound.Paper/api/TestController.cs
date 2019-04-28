@@ -41,24 +41,47 @@ namespace BrainNotFound.Paper.api
             string SuccessMessage = String.Empty;
             int countError = 0;
 
-            var test = _context.Tests.Include(x => x.TestSchedules).Where(x => x.TestId == testId).First();
 
-            var testSectionSchedules = _context.TestSchedules.Where(ts => ts.TestId == test.TestId).ToList();
+            var MatchingQuestionSides = _context.MatchingQuestionSides
+                .Include(mqs => mqs.Question)
+                    .ThenInclude(q => q.TestSection)
+                .Where(mqs => mqs.Question.TestSection.TestId == testId);
 
-            var questions = _context.Questions.Include(x => x.TestSection).Where(x => testSectionSchedules.Any(y => y.TestId == x.TestSection.TestId)).ToList();
+            _context.MatchingQuestionSides.RemoveRange(MatchingQuestionSides);
 
-            for (int i = 0; i < questions.Count; i++)
-            {
-                _context.Questions.Remove(questions[i]);
-            }
+            var questions = _context.Questions.Include(q => q.TestSection).Where(q => q.TestSection.TestId == testId);
+            _context.Questions.RemoveRange(questions);
 
-            for (int i = 0; i < testSectionSchedules.Count; i++)
-            {
-                _context.TestSchedules.Remove(testSectionSchedules[i]);
-            }
+            var testSchedules = _context.TestSchedules.Where(ts => ts.TestId == testId);
+            _context.TestSchedules.RemoveRange(testSchedules);
 
+            var test = _context.Tests.Find(testId);
             _context.Tests.Remove(test);
+
+
+            //var test = _context.Tests.Include(x => x.TestSchedules).Where(x => x.TestId == testId).First();
+
+            //var testSectionSchedules = _context.TestSchedules.Where(ts => ts.TestId == test.TestId).ToList();
+
+            //var questions = _context.Questions.Include(x => x.TestSection).Where(x => testSectionSchedules.Any(y => y.TestId == x.TestSection.TestId)).ToList();
+
+
+            //var testSections = _context.TestSections.Where(ts => ts.TestId == testId);
+
+            //for (int i = 0; i < questions.Count; i++)
+            //{
+            //    _context.Questions.Remove(questions[i]);
+            //}
+
+            //for (int i = 0; i < testSectionSchedules.Count; i++)
+            //{
+            //    _context.TestSchedules.Remove(testSectionSchedules[i]);
+            //}
+
+            //_context.TestSections.RemoveRange(testSections);
+            
             _context.SaveChanges();
+
             return Json(new { success = true, message = "The test was successfully deleted" });
 
         }

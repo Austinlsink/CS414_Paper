@@ -1,18 +1,20 @@
 ﻿using CsvHelper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+using BrainNotFound.Paper;
+using Microsoft.AspNetCore.Http;
 
 namespace BrainNotFound.Paper.Models.BusinessModels
 {
     public class ApplicationUser : IdentityUser
     {
+        private static string defaultImagePath = "/images/profiles/default.png";
         [Required(ErrorMessage = "Please enter a first name.")]
         [StringLength(30, MinimumLength = 1)]
         [PersonalData]
@@ -48,6 +50,19 @@ namespace BrainNotFound.Paper.Models.BusinessModels
             get
             {
                 return FirstName + " " + LastName;
+            }
+        }
+
+        [NotMapped]
+        public string ImageURL
+        {
+            get
+            {
+                var userImagePath = "/images/profiles/" + UserName + ".png";
+                var imageExists = File.Exists("wwwroot" + userImagePath);
+                
+                return   imageExists ? userImagePath : defaultImagePath;
+             
             }
         }
 
