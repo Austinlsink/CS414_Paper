@@ -163,13 +163,13 @@
                                             </label>
                                         </div>
                                     }
-                                    else
+                                    else if (((TrueFalse)q).TrueFalseAnswer == false)
                                     {
                                         <div id="gender" class="btn-group" data-toggle="buttons">
                                             <label class="btn btn-default btn-sm" disabled data-questionType="trueFalse" data-toogled-class="btn-primary">
                                                 <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="true"> &nbsp; True &nbsp;
                                             </label>
-                                            <label class="btn btn-default btn-sm" disabled data-questionType="trueFalse" data-toogled-class="btn-danger">
+                                            <label class="btn btn-danger btn-sm" disabled data-questionType="trueFalse" data-toogled-class="btn-danger">
                                                 <input class="trueFalse" type="radio" name="trueFalseAnswer-@q.QuestionId" data-questionId="@q.QuestionId" value="false"> False
                                             </label>
                                         </div>
