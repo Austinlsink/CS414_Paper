@@ -776,6 +776,7 @@ namespace BrainNotFound.Paper.api
                 dynamic testScheduleJObject = new JObject();
                 testScheduleJObject.Availability = testSchedule.GetAvailability();
                 testScheduleJObject.TimeLimit = testSchedule.IsTimeUnlimited ? "Unlimited" : testSchedule.TimeLimit.ToString() + " minutes";
+                testScheduleJObject.deletable = testSchedule.StartTime > DateTime.Now;
 
                 // Checks if all students from a section were assigned
                 List<int> entireSectionsAssigned = new List<int>();
