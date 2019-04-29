@@ -34,6 +34,8 @@
     {
         username += s + ' ';
     }
+
+
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -50,7 +52,7 @@
     <!-- Font Awesome -->
     <link href="~/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <!-- Google fonts -->
-    <!-->link href="https://fonts.googleapis.com/css?family=Crimson+Text|Raleway" rel="stylesheet"-->
+    <!--link href="https://fonts.googleapis.com/css?family=Crimson+Text|Raleway" rel="stylesheet"-->
     <!-- NProgress -->
     <link href="~/vendors/nprogress/nprogress.css" rel="stylesheet">
     <!-- iCheck -->
@@ -83,7 +85,7 @@
                     <!-- menu profile quick info -->
                     <div class="profile clearfix">
                         <div class="profile_pic">
-                            <img src="~/images/profiles/Students/@(student.Id).png" alt="..." class="img-circle profile_img">
+                            <img src="@(student.ImageURL)" alt="..." class="img-circle profile_img">
                         </div>
                         <div class="profile_info">
                             <span>Welcome,</span>
@@ -137,7 +139,7 @@
                         <ul class="nav navbar-nav navbar-right">
                             <li class="">
                                 <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    <img src="~/images/profiles//Students/@(student.Id).png" alt="">@username
+                                    <img src="@(student.ImageURL)" alt="">@username
                                     <span class=" fa fa-angle-down"></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-usermenu pull-right">

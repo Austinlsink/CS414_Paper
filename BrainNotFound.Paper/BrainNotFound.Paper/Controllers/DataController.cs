@@ -12,7 +12,7 @@ namespace BrainNotFound.Paper.Controllers
 {
     public class DataController : Controller
     {
-       
+
         public IActionResult Index()
         {
             return View();
@@ -91,7 +91,7 @@ namespace BrainNotFound.Paper.Controllers
                     }
                 }
             }
-           
+
             return RedirectToAction("Index", "Data");
         }
 
@@ -339,7 +339,7 @@ namespace BrainNotFound.Paper.Controllers
                 _context.Sections.Add(section);
                 await _context.SaveChangesAsync();
             }
-            
+
 
             return RedirectToAction("Index", "Data");
         }
@@ -370,7 +370,7 @@ namespace BrainNotFound.Paper.Controllers
                 Random rand = new Random();
 
                 // Get the number of classes the student takes (range: 4-7)
-                numberOfClasses = rand.Next(4, 8);
+                numberOfClasses = rand.Next(3, 5);
 
                 // Choose 4-7 random courses/sections
                 for (int classCounter = 0; classCounter < numberOfClasses; classCounter++)
@@ -445,11 +445,15 @@ namespace BrainNotFound.Paper.Controllers
                         SectionId = selectedSection.SectionId
                     };
                     enrollments.Add(newEnrollment);
-                    _context.Enrollments.Add(newEnrollment);
                 }
             }
+
+            _context.Enrollments.AddRange(enrollments);
             _context.SaveChanges();
+
             return RedirectToAction("Index", "Data");
+
+
         }
 
         public async Task<IActionResult> RemoveEnrollments()

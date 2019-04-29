@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BrainNotFound.Paper.Models;
 using Microsoft.AspNetCore.Identity;
 using BrainNotFound.Paper.Models.BusinessModels;
-using BrainNotFound.Paper.Services;
 
 namespace BrainNotFound.Paper.Controllers
 {
@@ -29,9 +24,6 @@ namespace BrainNotFound.Paper.Controllers
 
         }
 
-
-
-        
         [HttpPost, Route("/")]
         public async Task<ActionResult> Login(LoginViewModel model)
         {

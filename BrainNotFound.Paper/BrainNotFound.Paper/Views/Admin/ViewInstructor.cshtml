@@ -31,7 +31,7 @@
                         <div class="profile_img">
                             <div id="crop-avatar">
                                 <!-- Current avatar -->
-                                <img class="img-responsive avatar-view" src="~/images/profiles/Instructors/@(ViewBag.profile.Id).png" alt="Avatar" title="Change the avatar">
+                                <img class="img-responsive avatar-view" src="@(ViewBag.profile.ImageURL)" alt="Avatar" title="Change the avatar">
                             </div>
                         </div>
                     </div>
@@ -56,7 +56,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="clearfix"></div>
 
         <div class="col-md-12 col-sm-12 col-xs-12">
@@ -71,33 +71,43 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Code</th>
-                                <th>Name</th>
-                                <th># of Sections</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var department in ViewBag.departments)
-                            {
-                                foreach (var course in ViewBag.courses)
+
+                    @if (ViewBag.courses.Count > 0)
+                    {
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Name</th>
+                                    <th># of Sections</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var department in ViewBag.departments)
                                 {
-                                    if (department.DepartmentId == course.DepartmentId)
+                                    foreach (var course in ViewBag.courses)
                                     {
-                                        <tr>
-                                            <td>@course.CourseCode</td>
-                                            <td>@course.Name</td>
-                                            <td>3</td>
-                                            <td> <a asp-controller="Admin" asp-action="ViewCourse" asp-route-code="@department.DepartmentCode@course.CourseCode" class="btn btn-primary btn-xs"> View </a> </td>
-                                        </tr>
+                                        if (department.DepartmentId == course.DepartmentId)
+                                        {
+                                            <tr>
+                                                <td>@course.CourseCode</td>
+                                                <td>@course.Name</td>
+                                                <td>3</td>
+                                                <td> <a asp-controller="Admin" asp-action="ViewCourse" asp-route-code="@department.DepartmentCode@course.CourseCode" class="btn btn-primary btn-xs"> View </a> </td>
+                                            </tr>
+                                        }
                                     }
                                 }
-                            }
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p>There are no courses assigned to this instructor</p>
+                    }
+
                 </div>
             </div>
         </div>
@@ -115,51 +125,61 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    @{
-                        int count = 1;
+                    @if (ViewBag.sections.Count > 0)
+                    {
+                        
+                            int count = 1;
 
-                        <div class="accordion" id="accordion1" role="tablist" aria-multiselectable="true">
-                            @foreach (var course in ViewBag.courses)
-                            {
-                                <div class="panel">
-                                    <a class="panel-heading collapsed" role="tab" id="@NumberToWords.HEADING@NumberToWords.IntegerToWritten(count)@count" data-toggle="collapse" data-parent="#@NumberToWords.ACCORDIAN@count" href="#@NumberToWords.COLLAPSE@NumberToWords.IntegerToWritten(count)@count" aria-expanded="false" aria-controls="@NumberToWords.COLLAPSE@NumberToWords.IntegerToWritten(count)">
-                                        <h4 class="panel-title"><i class="fa fa-book"></i>@course.CourseCode @course.Name</h4>
-                                    </a>
-                                    <div id="@NumberToWords.COLLAPSE@NumberToWords.IntegerToWritten(count)@count" class="panel-collapse collapse" role="tabpanel" aria-labelledby="@NumberToWords.HEADING@NumberToWords.IntegerToWritten(count)">
-                                        <div class="panel-body">
-                                            <table class="table table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th> Section #</th>
-                                                        <th> # of Students</th>
-                                                        <th> Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach (var s in ViewBag.sections)
-                                                    {
-                                                        foreach (var d in ViewBag.departments)
+                            <div class="accordion" id="accordion1" role="tablist" aria-multiselectable="true">
+                                @foreach (var course in ViewBag.courses)
+                                {
+                                    <div class="panel">
+                                        <a class="panel-heading collapsed" role="tab" id="@NumberToWords.HEADING@NumberToWords.IntegerToWritten(count)@count" data-toggle="collapse" data-parent="#@NumberToWords.ACCORDIAN@count" href="#@NumberToWords.COLLAPSE@NumberToWords.IntegerToWritten(count)@count" aria-expanded="false" aria-controls="@NumberToWords.COLLAPSE@NumberToWords.IntegerToWritten(count)">
+                                            <h4 class="panel-title"><i class="fa fa-book"></i>@course.CourseCode @course.Name</h4>
+                                        </a>
+                                        <div id="@NumberToWords.COLLAPSE@NumberToWords.IntegerToWritten(count)@count" class="panel-collapse collapse" role="tabpanel" aria-labelledby="@NumberToWords.HEADING@NumberToWords.IntegerToWritten(count)">
+                                            <div class="panel-body">
+
+
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th> Section #</th>
+                                                            <th> # of Students</th>
+                                                            <th> Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var s in ViewBag.sections)
                                                         {
-                                                            if (course.DepartmentId == d.DepartmentId)
+                                                            foreach (var d in ViewBag.departments)
                                                             {
-                                                                <tr>
-                                                                    <th>@s.SectionNumber</th>
-                                                                    <td>@s.Capacity</td>
-                                                                    <td> <a asp-controller="Admin" asp-action="ViewSection" asp-route-code="@d.DepartmentCode@course.CourseCode" asp-route-sectionNumber="@s.SectionNumber" class="btn btn-primary btn-xs">View </a> </td>
-                                                                </tr>
+                                                                if (course.DepartmentId == d.DepartmentId)
+                                                                {
+                                                                    <tr>
+                                                                        <th>@s.SectionNumber</th>
+                                                                        <td>@s.Capacity</td>
+                                                                        <td> <a asp-controller="Admin" asp-action="ViewSection" asp-route-code="@d.DepartmentCode@course.CourseCode" asp-route-sectionNumber="@s.SectionNumber" class="btn btn-primary btn-xs">View </a> </td>
+                                                                    </tr>
+                                                                }
                                                             }
                                                         }
-                                                    }
-                                                </tbody>
-                                            </table>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                count++;
-                            }
-                        </div>
+                                    count++;
+                                }
+                            </div>
                     }
+                    else
+                    {
+                        <p>There are no sections assigned to this instructor</p>
+                    }
+
+
                 </div>
             </div>
         </div>
