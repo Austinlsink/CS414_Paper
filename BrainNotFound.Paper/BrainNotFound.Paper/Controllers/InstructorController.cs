@@ -391,7 +391,7 @@ namespace BrainNotFound.Paper.Controllers
             ViewBag.sectionMeetingTimeList = sectionMeetingTimeList;
 
             // Find all of the previous and upcoming tests for the instructor
-            var instructorScheduledTests = _context.TestSchedules.Include(x => x.Test).Where(x => x.Test.applicationUser.Id == instructor.Id && x.Test.Course.CourseId == course.CourseId && x.Test.Course.Department.DepartmentId == department.DepartmentId && x.Test.Course.Sections.Where(s => s.SectionNumber == sectionNumber && s.CourseId == course.CourseId).First().SectionNumber == sectionNumber).ToList();
+            var instructorScheduledTests = _context.TestSchedules.Include(x => x.Test).Where(x => x.Test.applicationUser.Id == instructor.Id && x.Test.Course.CourseId == course.CourseId && x.Test.Course.Department.DepartmentId == department.DepartmentId && x.Test.Course.Sections.Where(s => s.SectionNumber == sectionNumber && s.Course.CourseId == course.CourseId).Any()).ToList();
             var upcomingTests = _context.TestSchedules.Include(ts => ts.Test).ThenInclude(x => x.Course).ThenInclude(x => x.Department).Where(x => x.EndTime > DateTime.Now && x.Test.InstructorId == instructor.Id && x.Test.Course.CourseId == course.CourseId && x.Test.Course.Department.DepartmentId == department.DepartmentId).Select(tts => tts.Test).Distinct().ToList();
             var previousTests = _context.TestSchedules.Include(ts => ts.Test).ThenInclude(x => x.Course).ThenInclude(x => x.Department).Where(x => x.EndTime < DateTime.Now && x.Test.InstructorId == instructor.Id && x.Test.Course.CourseId == course.CourseId && x.Test.Course.Department.DepartmentId == department.DepartmentId).Select(tts => tts.Test).Distinct().ToList();
 
@@ -400,7 +400,7 @@ namespace BrainNotFound.Paper.Controllers
             ViewBag.InProgress = upcomingStudentTestAssignments;
 
             // Find all unscheduled tests
-            var instructorTests = _context.Tests.Include(x => x.TestSchedules).Where(x => x.InstructorId == instructor.Id && x.Course.CourseId == course.CourseId && x.Course.Department.DepartmentId == department.DepartmentId && x.Course.Sections.Where(s => s.SectionNumber == sectionNumber && s.CourseId == course.CourseId).First().SectionNumber == sectionNumber).ToList();
+            var instructorTests = _context.Tests.Include(x => x.TestSchedules).Where(x => x.InstructorId == instructor.Id && x.Course.CourseId == course.CourseId && x.Course.Department.DepartmentId == department.DepartmentId && x.Course.Sections.Where(s => s.SectionNumber == sectionNumber && s.CourseId == course.CourseId).Any()).ToList();
             var unscheduledTests = instructorTests.Except(instructorScheduledTests.Select(x => x.Test)).ToList();
             foreach (Test t in unscheduledTests)
             {
