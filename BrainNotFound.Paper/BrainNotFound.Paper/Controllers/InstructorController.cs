@@ -46,9 +46,18 @@ namespace BrainNotFound.Paper.Controllers
         {
             var instructor = await _userManager.GetUserAsync(HttpContext.User);
 
-            var gradingTests = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).Where(x => x.TestSchedule.Test.InstructorId == instructor.Id && x.ManualGradingRequired).Select(x => x.TestSchedule).Include(x => x.StudentTestAssignments).Distinct().ToList();
+            var gradingTests = _context.StudentTestAssignments
+                .Include(x => x.TestSchedule)
+                    .ThenInclude(x => x.Test)
+                        .ThenInclude(t => t.Course)
+                            .ThenInclude(c => c.Department)
+                .Where(x => x.TestSchedule.Test.InstructorId == instructor.Id && x.ManualGradingRequired)
+                .Select(x => x.TestSchedule).Include(x => x.StudentTestAssignments)
+                .Distinct()
+                .ToList();
 
-            var allTests = _context.Tests.Where(x => x.InstructorId == instructor.Id).ToList();
+            var allTests = _context.Tests.Include(t => t.Course)
+                            .ThenInclude(c => c.Department).Where(x => x.InstructorId == instructor.Id).ToList();
 
             var studentEssays = _context.StudentEssayAnswers.Include(x => x.TestSchedule).ThenInclude(x => x.Test).ThenInclude(x => x.Course).ThenInclude(x => x.Department).Where(x => x.PointsEarned == -1 && x.TestSchedule.Test.InstructorId == instructor.Id).Distinct().ToList();
 

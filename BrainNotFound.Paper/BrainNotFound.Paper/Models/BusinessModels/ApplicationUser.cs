@@ -61,7 +61,7 @@ namespace BrainNotFound.Paper.Models.BusinessModels
                 var userImagePath = "/images/profiles/" + UserName + ".png";
                 var imageExists = File.Exists("wwwroot" + userImagePath);
                 
-                return   imageExists ? userImagePath : defaultImagePath;
+                return  "~" + (imageExists ? userImagePath : defaultImagePath);
              
             }
         }

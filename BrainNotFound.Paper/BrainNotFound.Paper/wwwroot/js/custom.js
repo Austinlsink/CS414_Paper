@@ -5025,3 +5025,13 @@ $(document).ready(function () {
 });
 
 
+function getPath() {
+    var path = "";
+    var pathName = window.location.pathname;
+
+    if (pathName.startsWith("/CS414/Team02/")) {
+        path = "/CS414/Team02"
+    }
+    
+    return path;
+}
