@@ -117,7 +117,7 @@
                                                 {
                                                     if (s.CourseId == c.CourseId && c.DepartmentId == d.DepartmentId)
                                                     {
-                                                        <li> <a asp-controller="Student" asp-action="ViewSection" asp-route-code="@d.DepartmentCode@c.CourseCode" asp-route-sectionNumber="@s.SectionNumber">@d.DepartmentCode @c.CourseCode @c.Name - @s.SectionNumber </a></li>
+                                                        <li> <a asp-controller="Student" asp-action="ViewSection" asp-route-code="@d.DepartmentCode@c.CourseCode" asp-route-sectionNumber="@s.SectionNumber">@d.DepartmentCode @c.CourseCode - @s.SectionNumber @c.Name  </a></li>
                                                     }
                                                 }
                                             }
