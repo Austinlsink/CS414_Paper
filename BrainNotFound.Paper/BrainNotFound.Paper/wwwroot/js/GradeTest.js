@@ -450,4 +450,3 @@ $("#gradeQuestionCotainer").on("click", "#nextStudent", function () {
 
     render_grade_question_by_question(nextStudentId);
 })
-

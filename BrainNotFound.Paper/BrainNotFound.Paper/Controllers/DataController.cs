@@ -7,7 +7,6 @@ using BrainNotFound.Paper.Models.ViewModels;
 using BrainNotFound.Paper.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BrainNotFound.Paper.Controllers
 {

@@ -35,4 +35,3 @@ $("select")
 //$("#AddTestSection").click(function () {
 //    $("#SectionsAssignedTest").removeClass("show").addClass("hidden");
 //})
-
