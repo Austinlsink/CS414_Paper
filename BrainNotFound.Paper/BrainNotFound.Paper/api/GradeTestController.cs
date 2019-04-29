@@ -42,6 +42,8 @@ namespace BrainNotFound.Paper.api
             string comment = json.comment;
             int pointsEarned = json.pointsEarned;
 
+            var studentAnswer = _context.StudentAnswers.Where(x => x.AnswerId == answerId).FirstOrDefault();
+
             if(pointsEarned < 0)
             {
                 return Json(new { success = false, errorMessage = "Invalid point value" });
