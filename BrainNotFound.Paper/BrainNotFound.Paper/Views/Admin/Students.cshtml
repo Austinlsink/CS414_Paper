@@ -116,7 +116,6 @@
                             <input id="StudentLastNameInput" asp-for="LastName" type="text" class="form-control has-feedback-left" placeholder="Last Name">
                             <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                             <span id="StudentLastNameErrorMessage" class="text-danger"></span>
-
                         </div>
                     </div>
                     <!--Classifcation field-->
@@ -125,9 +124,13 @@
                             Classification 
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input id="StudentLastNameInput" asp-for="Classification" type="text" class="form-control has-feedback-left" placeholder="Classifcation">
-                            <span class="fa fa-dashcube form-control-feedback left" aria-hidden="true"></span>
-                            <span id="ClassificationErrorMessage" class="text-danger"></span>
+                            <select id="InstructorClassificationInput" asp-for="Classification" class="form-control has-feedback-left" tabindex="1">
+                                <option value="Freshman">Freshman</option>
+                                <option value="Sophomore">Sophomore</option>
+                                <option value="Junior">Junior</option>
+                                <option value="Senior">Senior</option>
+                            </select>
+                            <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                         </div>
                     </div>
                     <!--Email field-->

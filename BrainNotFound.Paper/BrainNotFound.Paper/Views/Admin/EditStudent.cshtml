@@ -70,7 +70,36 @@
                                 Classification
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input value="@ViewBag.student.Classification" asp-for="Classification" type="text" class="form-control has-feedback-left">
+                                <select id="InstructorClassificationInput" asp-for="Classification" class="form-control has-feedback-left" tabindex="1">
+                                    @if (ViewBag.student.Classification == "Senior")
+                                    {
+                                        <option value="Freshman">Freshman</option>
+                                        <option value="Sophomore">Sophomore</option>
+                                        <option value="Junior">Junior</option>
+                                        <option value="Senior" selected>Senior</option>
+                                    }
+                                    else if (ViewBag.student.Classification == "Junior")
+                                    {
+                                        <option value="Freshman">Freshman</option>
+                                        <option value="Sophomore">Sophomore</option>
+                                        <option value="Junior" selected>Junior</option>
+                                        <option value="Senior">Senior</option>
+                                    }
+                                    else if (ViewBag.student.Classification == "Sophomore")
+                                    {
+                                        <option value="Freshman">Freshman</option>
+                                        <option value="Sophomore" selected>Sophomore</option>
+                                        <option value="Junior">Junior</option>
+                                        <option value="Senior">Senior</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="Freshman" selected>Freshman</option>
+                                        <option value="Sophomore">Sophomore</option>
+                                        <option value="Junior">Junior</option>
+                                        <option value="Senior">Senior</option>
+                                    }
+                                </select>
                                 <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                             </div>
                         </div>
