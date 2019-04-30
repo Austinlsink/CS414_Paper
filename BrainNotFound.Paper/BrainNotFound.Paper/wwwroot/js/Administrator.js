@@ -6,7 +6,7 @@ var username;
 $("button#ViewAdmin").click(function () {
     var username = $(this).val();
     $.ajax({
-        url: "/Admin/Administrators/" + username,
+        url: getPath() + "/Admin/Administrators/" + username,
         success: function (result) {
             $("#ViewAdminPlaceholder").html(result);
         }
@@ -17,7 +17,7 @@ $("button#ViewAdmin").click(function () {
 $("button#EditAdmin").click(function () {
     var username = $(this).val();
     $.ajax({
-        url: "/Admin/Administrators/Edit/" + username,
+        url: getPath() + "/Admin/Administrators/Edit/" + username,
         success: function (result) {
             $("#EditAdminPlaceholder").html(result);
         }
@@ -35,7 +35,7 @@ $("button#EditSaveChanges").click(function () {
 
     // Creates, submits, and responds to Ajax Call
     $.ajax({
-        url: "/api/Admin/SaveChanges/",
+        url: getPath() + "/api/Admin/SaveChanges/",
         type: "POST",
         contentType: "application/json",
         // Data fetched from the form
@@ -78,7 +78,7 @@ $("button#CreateAdmin").click(function () {
 
     // Creates, submits, and responds to Ajax Call
     $.ajax({
-        url: "/api/Admin/New/",
+        url: getPath() + "/api/Admin/New/",
         type: "POST",
         contentType: "application/json",
         // Data fetched from the form
@@ -159,7 +159,7 @@ $("button#YesDelete").click(function () {
     $("#ConfirmModal").modal("hide");
 
     $.ajax({
-        url: "/api/Admin/Delete/",
+        url: getPath() + "/api/Admin/Delete/",
         type: "POST",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify(adminId),

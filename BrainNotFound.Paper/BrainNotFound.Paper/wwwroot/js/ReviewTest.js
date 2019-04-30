@@ -5,7 +5,7 @@
     var URLSafeName = $(this).attr("data-URLSafeName");
 
     $.ajax({
-        url: "/Instructor/Tests/ReviewStudentTest/" + DepartmentCode  + "/" + CourseCode + "/" + URLSafeName + "/" + StudentId,
+        url: getPath() + "/Instructor/Tests/ReviewStudentTest/" + DepartmentCode  + "/" + CourseCode + "/" + URLSafeName + "/" + StudentId,
         type: "GET",
         contentType: "application/json",
         // Data fetched from the form

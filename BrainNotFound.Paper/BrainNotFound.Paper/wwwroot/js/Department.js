@@ -4,7 +4,7 @@ var deleteDepartmentId;
 // Edit Department code and name
 function EditDepartmentCodeAndName(Id) {
     $.ajax({
-        url: "/Admin/Department/Edit/" + Id,
+        url: getPath() + "/Admin/Department/Edit/" + Id,
         success: function (result) {
             $("#departmentPlaceholder").html(result);
         }
@@ -35,7 +35,7 @@ $("button#YesDelete").click(function () {
     $("#ConfirmModal").modal("hide");
     
     $.ajax({
-        url: "/api/department/delete/",
+        url: getPath() + "/api/department/delete/",
         type: "POST",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify(deleteDepartmentId),
@@ -78,7 +78,7 @@ $("button#CreateDepartment").click(function () {
     
     // Creates, submits, and responds to Ajax Call
     $.ajax({
-        url: "/api/Department/New/",
+        url: getPath() + "/api/Department/New/",
         type: "POST",
         contentType: "application/json",
         // Data fetched from the form

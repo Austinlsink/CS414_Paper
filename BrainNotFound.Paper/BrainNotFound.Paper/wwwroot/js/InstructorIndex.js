@@ -25,7 +25,7 @@ $(".TestChartSelection").change(function () {
     var TestId = $(this).val();
     console.log(TestId);
     $.ajax({
-        url: "/Instructor/Chart/" + TestId,
+        url: getPath() + "/Instructor/Chart/" + TestId,
         success: function (result) {
             $("#graph").html(result);
         }

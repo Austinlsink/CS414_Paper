@@ -23,7 +23,7 @@ $("button#YesSectionDelete").click(function () {
     var JsonData = JSON.stringify({ DepartmentCode: departmentCode, CourseCode: courseCode, SectionNumber: sectionNumber, SectionId: sectionId });
     
     $.ajax({
-        url: "/api/Course/DeleteSection/",
+        url: getPath() + "/api/Course/DeleteSection/",
         type: "POST",
         contentType: 'application/json; charset=utf-8',
         data: JsonData,
@@ -69,7 +69,7 @@ $("button#EditCourse").click(function () {
     var courseId = $(this).val();
 
     $.ajax({
-        url: "/api/course/edit/" + courseId,
+        url: getPath() + "/api/course/edit/" + courseId,
         type: "POST",
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(courseId),
@@ -98,7 +98,7 @@ $("button#YesDelete").click(function () {
     $("#ConfirmModal").modal("hide");
 
     $.ajax({
-        url: "/api/Course/delete/",
+        url: getPath() + "/api/Course/delete/",
         type: "POST",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify(deleteCourseId),
@@ -140,7 +140,7 @@ $("#SaveCourseChanges").click(function () {
 
     // Creates, submits, and responds to Ajax Call
     $.ajax({
-        url: "/api/Course/Save/",
+        url: getPath() + "/api/Course/Save/",
         type: "POST",
         contentType: "application/json",
         // Data fetched from the form
@@ -204,7 +204,7 @@ $("button#CreateCourse").click(function () {
 
     // Creates, submits, and responds to Ajax Call
     $.ajax({
-        url: "/api/Course/New/",
+        url: getPath() + "/api/Course/New/",
         type: "POST",
         contentType: "application/json",
         // Data fetched from the form

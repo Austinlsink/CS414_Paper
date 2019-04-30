@@ -5,7 +5,7 @@ var instructorId;
 $("button#EditInstructor").click(function () {
     var username = $(this).val();
     $.ajax({
-        url: "/Admin/Instructors/Edit/" + username,
+        url: getPath() + "/Admin/Instructors/Edit/" + username,
         success: function (result) {
             $("#EditInstructorPlaceholder").html(result);
         }
@@ -25,7 +25,7 @@ $("button#EditSaveChanges").click(function () {
 
     // Creates, submits, and responds to Ajax Call
     $.ajax({
-        url: "/api/Instructor/SaveChanges/",
+        url: getPath() + "/api/Instructor/SaveChanges/",
         type: "POST",
         contentType: "application/json",
         // Data fetched from the form
@@ -70,7 +70,7 @@ $("button#CreateInstructor").click(function () {
 
     // Creates, submits, and responds to Ajax Call
     $.ajax({
-        url: "/api/Instructor/New/",
+        url: getPath() + "/api/Instructor/New/",
         type: "POST",
         contentType: "application/json",
         // Data fetched from the form
@@ -151,7 +151,7 @@ $("button#YesDelete").click(function () {
     $("#ConfirmModal").modal("hide");
 
     $.ajax({
-        url: "/api/Instructor/Delete/",
+        url: getPath() + "/api/Instructor/Delete/",
         type: "POST",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify(instructorId),

@@ -335,7 +335,7 @@ $("#gradeQuestionCotainer").on("click", "#submitGrade", function () {
         // Submits data to server and updates the view
         var JsonData = JSON.stringify({ answerId: answerId, comment: comment, pointsEarned: pointsEarned })
         $.ajax({
-            url: "/api/GradeTest/GradeQuestion",
+            url: getPath() + "/api/GradeTest/GradeQuestion",
             type: "POST",
             contentType: 'application/json; charset=utf-8',
             data: JsonData,

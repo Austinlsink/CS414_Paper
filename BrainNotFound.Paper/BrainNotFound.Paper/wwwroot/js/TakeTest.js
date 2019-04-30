@@ -10,7 +10,7 @@ $(".submitTestOnTimerOut").click(function () {
     // Error check the student signature
     if (nameInput.trim() === studentName.trim()) {
         $.ajax({
-            url: "/api/Tests/SubmitTest/",
+            url: getPath() + "/api/Tests/SubmitTest/",
             type: "POST",
             contentType: "application/json; charset=utf-8",
             // Data fetched from the form
@@ -37,7 +37,7 @@ $(".submitTest").click(function () {
     var JsonData = JSON.stringify({ TestScheduleId: TestScheduleId, Pledge: Pledge })
 
     $.ajax({
-        url: "/api/Tests/SubmitTest/",
+        url: getPath() + "/api/Tests/SubmitTest/",
         type: "POST",
         contentType: "application/json; charset=utf-8",
         // Data fetched from the form
@@ -68,7 +68,7 @@ $("button#submitTest").click(function () {
         var TestScheduleId = $("input#testScheduleId").val();
         var JsonData = JSON.stringify({ TestScheduleId: TestScheduleId })
         $.ajax({
-            url: "/api/Tests/ConfirmAllQuestionsAnswered/",
+            url: getPath() + "/api/Tests/ConfirmAllQuestionsAnswered/",
             type: "POST",
             contentType: "application/json",
             // Data fetched from the form
@@ -98,7 +98,7 @@ $(".MatchingAnswerOptions").change(function () {
     var JsonData = JSON.stringify({ TestScheduleId: TestScheduleId, MatchingAnswerSideId: MatchingAnswerSideId, MatchingQuestionSideId: MatchingQuestionSideId, QuestionId: QuestionId })
 
     $.ajax({
-        url: "/api/Tests/SaveMatchingChoiceAnswer/",
+        url: getPath() + "/api/Tests/SaveMatchingChoiceAnswer/",
         type: "POST",
         contentType: "application/json",
         // Data fetched from the form
@@ -138,7 +138,7 @@ $("a.multipleChoiceOption").click(function () {
     
 
     $.ajax({
-        url: "/api/Tests/SaveMultipleChoiceAnswer/",
+        url: getPath() + "/api/Tests/SaveMultipleChoiceAnswer/",
         type: "POST",
         contentType: "application/json",
         // Data fetched from the form
@@ -160,7 +160,7 @@ $("input[type='radio']").on("change", function () {
 
     var JsonData = JSON.stringify({ QuestionId: QuestionId, Answer: Answer, TestScheduleId: TestScheduleId })
     $.ajax({
-        url: "/api/Tests/SaveTrueFalseAnswer/",
+        url: getPath() + "/api/Tests/SaveTrueFalseAnswer/",
         type: "POST",
         contentType: "application/json",
         // Data fetched from the form
@@ -184,7 +184,7 @@ $("textarea.studentEssayQuestionAnswer").focusout(function () {
 
     var JsonData = JSON.stringify({ QuestionId: QuestionId, StudentEssayAnswer: StudentEssayAnswer, TestScheduleId: TestScheduleId })
     $.ajax({
-        url: "/api/Tests/SaveEssayAnswer/",
+        url: getPath() + "/api/Tests/SaveEssayAnswer/",
         type: "POST",
         contentType: "application/json",
         // Data fetched from the form

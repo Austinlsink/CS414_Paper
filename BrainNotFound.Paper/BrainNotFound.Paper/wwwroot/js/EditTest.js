@@ -20,7 +20,7 @@ var studentsInSelectedSection;
 function init_testSections() {
     var testId = $("#TestId").val();
     $.ajax({
-        url: "/api/CreateTest/GetTestSections/" + testId,
+        url: getPath() + "/api/CreateTest/GetTestSections/" + testId,
         type: "GET",
         success: function (result) {
             if (result.success) {
@@ -127,7 +127,7 @@ function Update_TestStatistics() {
     // Counts the total points
     var testId = $("#TestId").val();
     $.ajax({
-        url: "/api/CreateTest/GetTotalPoints/" + testId,
+        url: getPath() + "/api/CreateTest/GetTotalPoints/" + testId,
         type: "GET",
         success: function (result) {
             if (result.success) {
@@ -154,7 +154,7 @@ function Update_TestStatistics() {
 function Update_TestAssignmentTable() {
     var testId = $("#TestId").val();
     $.ajax({
-        url: "/api/CreateTest/GetTestSchedules/" + testId,
+        url: getPath() + "/api/CreateTest/GetTestSchedules/" + testId,
         type: "GET",
         success: function (result) {
             if (result.success) {
@@ -292,7 +292,7 @@ $("#TestSections").on("change", ".pointValue", function () {
     //console.log(JsonData);
     // send the information to the server
     $.ajax({
-        url: "/api/CreateTest/UpdateQuestionPointValue",
+        url: getPath() + "/api/CreateTest/UpdateQuestionPointValue",
         type: "POST",
         contentType: 'application/json; charset=utf-8',
         data: JsonData,
@@ -314,7 +314,7 @@ $('select#SelectSection').change(function () {
     var sectionId = $("#SelectSection").val();
 
     $.ajax({
-        url: "/api/CreateTest/GetStudentsInSection/" + sectionId,
+        url: getPath() + "/api/CreateTest/GetStudentsInSection/" + sectionId,
         type: "GET",
         success: function (students) {
             //Fetches the template and, iterates through students, and renders table rows
@@ -433,7 +433,7 @@ $("button#SaveNewTestSchedule").click(function () {
     });
 
     $.ajax({
-        url: "/api/CreateTest/NewTestSchedule",
+        url: getPath() + "/api/CreateTest/NewTestSchedule",
         type: "POST",
         contentType: 'application/json; charset=utf-8',
         data: JsonData,
@@ -506,7 +506,7 @@ $("#TestSections").on("click", "button#setQuestionType", function () {
     var JsonData = JSON.stringify({ "TestId": TestId, "QuestionType": QuestionType });
 
     $.ajax({
-        url: "/api/CreateTest/CreateTestSection",
+        url: getPath() + "/api/CreateTest/CreateTestSection",
         type: "POST",
         contentType: 'application/json; charset=utf-8',
         data: JsonData,
@@ -561,7 +561,7 @@ $("#TestSections").on("click", "button.saveEditedSectionInstruction", function (
     if (currentSectionInstructions != newSectionInstructios) {
         var JsonData = JSON.stringify({ TestSectionId: sectionId, SectionInstructions: newSectionInstructios });
         $.ajax({
-            url: "/api/CreateTest/UpdateSectionInstruction",
+            url: getPath() + "/api/CreateTest/UpdateSectionInstruction",
             type: "POST",
             contentType: 'application/json; charset=utf-8',
             data: JsonData,
@@ -641,7 +641,7 @@ $("#TestSections").on("click", "button.saveNewTrueFalseQuestion", function () {
         console.log("questionAnswer: " + questionAnswer);
         console.log("JasonData: " + JsonData);
         $.ajax({
-            url: "/api/CreateTest/NewTrueFalseQuestion",
+            url: getPath() + "/api/CreateTest/NewTrueFalseQuestion",
             type: "POST",
             contentType: 'application/json; charset=utf-8',
             data: JsonData,
@@ -735,7 +735,7 @@ $("#TestSections").on("click", ".saveNewMultipleChoiceQuestion", function () {
         });
 
         $.ajax({
-            url: "/api/CreateTest/NewMultipleChoiceQuestion",
+            url: getPath() + "/api/CreateTest/NewMultipleChoiceQuestion",
             type: "POST",
             contentType: 'application/json; charset=utf-8',
             data: JsonData,
@@ -786,7 +786,7 @@ $("#TestSections").on("click", "button.saveNewEssayQuestion", function () {
         var JsonData = JSON.stringify({ testSectionId: testSectionId, questionContent: questionContent, pointValue: pointValue, expectedAnswer: expectedAnswer });
         var newQuestionContainer = $(this).parents(".newQuestionContainer");
         $.ajax({
-            url: "/api/CreateTest/NewEssayQuestion",
+            url: getPath() + "/api/CreateTest/NewEssayQuestion",
             type: "POST",
             contentType: 'application/json; charset=utf-8',
             data: JsonData,
@@ -880,7 +880,7 @@ $("#confirmDeletion").click(function () {
         var JsonData = JSON.stringify({ sectionId: sectionId });
 
         $.ajax({
-            url: "/api/CreateTest/DeleteTestSection",
+            url: getPath() + "/api/CreateTest/DeleteTestSection",
             type: "POST",
             contentType: 'application/json; charset=utf-8',
             data: JsonData,
@@ -902,7 +902,7 @@ $("#confirmDeletion").click(function () {
         var questionId = $(this).data("questionId");
         var JsonData = JSON.stringify({ questionId: questionId });
         $.ajax({
-            url: "/api/CreateTest/DeleleQuestion",
+            url: getPath() + "/api/CreateTest/DeleleQuestion",
             type: "POST",
             contentType: 'application/json; charset=utf-8',
             data: JsonData,
@@ -1088,7 +1088,7 @@ $("#TestSections").on("click", ".saveEdittedMultipleChoiceQuestion", function ()
         var JsonData = JSON.stringify({ questionId: questionId, questionContent: questionContent, pointValue: pointValue, multipleChoiceAnswers: multipleChoiceAnswers });
 
         $.ajax({
-            url: "/api/CreateTest/UpdateMultipleChoiceQuestion",
+            url: getPath() + "/api/CreateTest/UpdateMultipleChoiceQuestion",
             type: "POST",
             contentType: 'application/json; charset=utf-8',
             data: JsonData,
@@ -1140,7 +1140,7 @@ $("#TestSections").on("click", ".saveEdittedTrueFalseQuestion", function () {
 
         console.log(JsonData);
         $.ajax({
-            url: "/api/CreateTest/UpdateTrueFalseQuestion",
+            url: getPath() + "/api/CreateTest/UpdateTrueFalseQuestion",
             type: "POST",
             contentType: 'application/json; charset=utf-8',
             data: JsonData,
@@ -1189,7 +1189,7 @@ $("#TestSections").on("click", ".saveEdittedEssayQuestion", function () {
 
         console.log(JsonData);
         $.ajax({
-            url: "/api/CreateTest/UpdateEssayQuestion",
+            url: getPath() + "/api/CreateTest/UpdateEssayQuestion",
             type: "POST",
             contentType: 'application/json; charset=utf-8',
             data: JsonData,
@@ -1244,7 +1244,7 @@ window.onpopstate = function () {
 $("table#TestAssignmentTable").on("click", ".DeleteSectionSchedule", function () {
     var sectionScheduleId = $(this).attr("data-testScheduleId");
     $.ajax({
-        url: "/api/CreateTest/DeleteSectionSchedule",
+        url: getPath() + "/api/CreateTest/DeleteSectionSchedule",
         type: "POST",
         contentType: "application/json; charset=utf-8",
         data: sectionScheduleId,
@@ -1371,7 +1371,7 @@ $("#TestSections").on("click", ".saveMatchingQuestion", function () {
         });
 
         $.ajax({
-            url: "/api/CreateTest/NewMatchingQuestion",
+            url: getPath() + "/api/CreateTest/NewMatchingQuestion",
             type: "POST",
             contentType: 'application/json; charset=utf-8',
             data: JsonData,
@@ -1491,7 +1491,7 @@ $("#TestSections").on("click", ".saveEdittedMatchingQuestion", function () {
         });
 
         $.ajax({
-            url: "/api/CreateTest/UpdateMatchingQuestion",
+            url: getPath() + "/api/CreateTest/UpdateMatchingQuestion",
             type: "POST",
             contentType: 'application/json; charset=utf-8',
             data: JsonData,
@@ -1561,137 +1561,137 @@ function compile_templates() {
 
     // Compile True False Templates
     // Compile new True/False question form
-    $.get("/handlebarsTemplates/newTrueFalseQuestion.html",
+    $.get(getPath() + "/handlebarsTemplates/newTrueFalseQuestion.html",
         function (template) {
             NewTrueFalseQuestionTemplate = Handlebars.compile(template);
         })
 
     // Compile diplay True/False question
-    $.get("/handlebarsTemplates/displayTrueFalseQuestion.html",
+    $.get(getPath() + "/handlebarsTemplates/displayTrueFalseQuestion.html",
         function (template) {
             DisplayTrueFalseQuestionsTemplate = Handlebars.compile(template);
         })
 
     // Compile diplay True/False question
-    $.get("/handlebarsTemplates/editTrueFalseQuestion.html",
+    $.get(getPath() + "/handlebarsTemplates/editTrueFalseQuestion.html",
         function (template) {
             EditTrueFalseQuestionTemplate = Handlebars.compile(template);
         })
 
     // Compile Multiple Choice Templates
     // Compile new Multiple Choice question form
-    $.get("/handlebarsTemplates/newMultipleChoiceQuestion.html",
+    $.get(getPath() + "/handlebarsTemplates/newMultipleChoiceQuestion.html",
         function (template) {
             NewMultipleChoiceQuestionTemplate = Handlebars.compile(template);
         })
 
     // Compile new Multiple Choice question option texbox
-    $.get("/handlebarsTemplates/newMultipleChoiceQuestionOption.html",
+    $.get(getPath() + "/handlebarsTemplates/newMultipleChoiceQuestionOption.html",
         function (template) {
             NewMultipleChoiceQuestionOptionTemplate = Handlebars.compile(template);
         })
 
     // Compile diplay Multiple Choice Template
-    $.get("/handlebarsTemplates/displayMultipleChoiceQuestion.html",
+    $.get(getPath() + "/handlebarsTemplates/displayMultipleChoiceQuestion.html",
         function (template) {
             DisplayMultipleChoiceQuestionTemplate = Handlebars.compile(template);
         })
 
     // Compile diplay Multiple Choice option Template
-    $.get("/handlebarsTemplates/displayMultipleChoiceQuestionOption.html",
+    $.get(getPath() + "/handlebarsTemplates/displayMultipleChoiceQuestionOption.html",
         function (template) {
             DisplayMultipleChoiceQuestionOptionTemplate = Handlebars.compile(template);
         })
 
     // Compile edit Multiple Choice Question
-    $.get("/handlebarsTemplates/editMultipleChoiceQuestion.html",
+    $.get(getPath() + "/handlebarsTemplates/editMultipleChoiceQuestion.html",
         function (template) {
             EditMultipleChoiceQuestionTemplate = Handlebars.compile(template);
         })
 
     // Compile edit Multiple Choice Question option
-    $.get("/handlebarsTemplates/editMultipleChoiceQuestionOption.html",
+    $.get(getPath() + "/handlebarsTemplates/editMultipleChoiceQuestionOption.html",
         function (template) {
             EditMultipleChoiceQuestionOptionTemplate = Handlebars.compile(template);
         })
 
     // Compile Essay Templates
     // Compile new Essay question form
-    $.get("/handlebarsTemplates/newEssayQuestion.html",
+    $.get(getPath() + "/handlebarsTemplates/newEssayQuestion.html",
         function (template) {
             NewEssayQuestionTemplate = Handlebars.compile(template);
         })
 
     // Compile diplay essay question
-    $.get("/handlebarsTemplates/displayEssayQuestion.html",
+    $.get(getPath() + "/handlebarsTemplates/displayEssayQuestion.html",
         function (template) {
             DisplayEssayQuestionTemplate = Handlebars.compile(template);
         })
 
     // Compile edit Essay question form
-    $.get("/handlebarsTemplates/editEssayQuestion.html",
+    $.get(getPath() + "/handlebarsTemplates/editEssayQuestion.html",
         function (template) {
             EditEssayQuestionTemplate = Handlebars.compile(template);
         })
 
     // Compile Matching Templates
     // Compile new Matching Template
-    $.get("/handlebarsTemplates/newMatchingQuestion.html",
+    $.get(getPath() + "/handlebarsTemplates/newMatchingQuestion.html",
         function (template) {
             NewMatchingQuestionTemplate = Handlebars.compile(template);
         })
 
     // Compile new Matching Group Template
-    $.get("/handlebarsTemplates/newMatchingGroup.html",
+    $.get(getPath() + "/handlebarsTemplates/newMatchingGroup.html",
         function (template) {
             NewMatchingQuestionGroupTemplate = Handlebars.compile(template);
         })
 
     // Compile new Matching Group match Template
-    $.get("/handlebarsTemplates/newMatchingGroupMatch.html",
+    $.get(getPath() + "/handlebarsTemplates/newMatchingGroupMatch.html",
         function (template) {
             NewMatchingQuestionGroupMatchTemplate = Handlebars.compile(template);
         })
 
     // Compile display Matching question Template
-    $.get("/handlebarsTemplates/displayMatchingQuestion.html",
+    $.get(getPath() + "/handlebarsTemplates/displayMatchingQuestion.html",
         function (template) {
             DisplayMatchingQuestionTemplate = Handlebars.compile(template);
         })
 
     // Compile display Matching question Template
-    $.get("/handlebarsTemplates/editMatchingQuestion.html",
+    $.get(getPath() + "/handlebarsTemplates/editMatchingQuestion.html",
         function (template) {
             EditMatchingQuestionTemplate = Handlebars.compile(template);
         })
 
     // Compile other templates
     // Compile display test section template
-    $.get("/handlebarsTemplates/displayTestSection.html",
+    $.get(getPath() + "/handlebarsTemplates/displayTestSection.html",
         function (template) {
             DisplayTestSectionTemplate = Handlebars.compile(template);
         })
 
     // Compile Generic Test Section form
-    $.get("/handlebarsTemplates/newTestSection.html",
+    $.get(getPath() + "/handlebarsTemplates/newTestSection.html",
         function (template) {
             NewTestSectionTemplate = Handlebars.compile(template);
         })
 
     // Compile section assigment table row template
-    $.get("/handlebarsTemplates/displaySectionAssigmentTableRow.html",
+    $.get(getPath() + "/handlebarsTemplates/displaySectionAssigmentTableRow.html",
         function (template) {
             DisplaySectionAssignmentTableRowTemplate = Handlebars.compile(template);
         })
 
     // Compile section assigment table row template
-    $.get("/handlebarsTemplates/displayStudentAssignmentTableRow.html",
+    $.get(getPath() + "/handlebarsTemplates/displayStudentAssignmentTableRow.html",
         function (template) {
             DisplayStudentAssignmnetTableRowTemplate = Handlebars.compile(template);
         })
 
     // Compile section assigment table row template
-    $.get("/handlebarsTemplates/displayScheduleTableRow.html",
+    $.get(getPath() + "/handlebarsTemplates/displayScheduleTableRow.html",
         function (template) {
             DisplayScheduleTableRowTemplate = Handlebars.compile(template);
         })
@@ -1703,13 +1703,13 @@ function compile_templates() {
 function register_partials() {
 
     // Register the Matching Group Partial
-    $.get("/handlebarsTemplates/newMatchingGroup.html",
+    $.get(getPath() + "/handlebarsTemplates/newMatchingGroup.html",
         function (template) {
             Handlebars.registerPartial("matchingGroup", template);
         })
 
     // Register the Matching Group Partial
-    $.get("/handlebarsTemplates/newMatchingGroupMatch.html",
+    $.get(getPath() + "/handlebarsTemplates/newMatchingGroupMatch.html",
         function (template) {
             Handlebars.registerPartial("matchingGroupMatch", template);
         })

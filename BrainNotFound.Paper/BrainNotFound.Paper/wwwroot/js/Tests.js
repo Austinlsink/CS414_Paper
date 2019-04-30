@@ -14,7 +14,7 @@ $("button#YesDelete").click(function () {
     $("#ConfirmModal").modal("hide");
 
     $.ajax({
-        url: "/api/Tests/DeleteTest/",
+        url: getPath() + "/api/Tests/DeleteTest/",
         type: "POST",
         contentType: 'application/json; charset=utf-8',
         data: testId,
@@ -83,7 +83,7 @@ $("#submitNewTest").click(function () {
 
         
         $.ajax({
-            url: "/api/CreateTest/NewTest/",
+            url: getPath() + "/api/CreateTest/NewTest/",
             type: "POST",
             contentType: "application/json",
             // Data fetched from the form
@@ -91,7 +91,7 @@ $("#submitNewTest").click(function () {
             success: function (result) {
                 if (result.success) {
                     console.log(result.test);
-                    window.location.href = window.location.origin + "/Instructor/Tests/Edit/" + result.test.course.department.departmentCode + "/" + result.test.course.courseCode + "/" + result.test.urlSafeName;
+                    window.location.href = window.location.origin + getPath() + "/Instructor/Tests/Edit/" + result.test.course.department.departmentCode + "/" + result.test.course.courseCode + "/" + result.test.urlSafeName;
                 }
                 console.log("Success");
             }
