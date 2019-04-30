@@ -338,7 +338,7 @@ namespace BrainNotFound.Paper.Controllers
             // Find the student information and his test assignments
             ApplicationUser student = await _userManager.FindByNameAsync(User.Identity.Name);
             ViewBag.Student = student;
-            var studentTestAssignment = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).ThenInclude(x => x.Course).ThenInclude(x => x.Department).Where(x => x.Submitted == true && x.TestScheduleId == testScheduleId).First();
+            var studentTestAssignment = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).ThenInclude(x => x.Course).ThenInclude(x => x.Department).Where(x => x.Submitted == true && x.TestScheduleId == testScheduleId).FirstOrDefault();
             ViewBag.StudentTestAssignment = studentTestAssignment;
 
             // Grab the test's information

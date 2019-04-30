@@ -35,6 +35,18 @@ namespace BrainNotFound.Paper.api
 
         #endregion Initialize Controllers
 
+        [HttpPost, Route("Submitted")]
+        public async Task<JsonResult> Submitted([FromBody] JObject jsonData)
+        {
+            dynamic json = jsonData;
+            long TestScheduleId = json.testScheduleId;
+            ApplicationUser student = await _userManager.FindByNameAsync(User.Identity.Name);
+            var studentTestAssignment = _context.StudentTestAssignments.Include(x => x.TestSchedule).ThenInclude(x => x.Test).ThenInclude(x => x.TestSections).Where(x => x.StudentId == student.Id && x.TestScheduleId == TestScheduleId).FirstOrDefault();
+            studentTestAssignment.Submitted = true;
+            _context.SaveChanges();
+            return Json(new { success = true });
+        }
+
         /// <summary>
         /// Allows a student to submit his test once he's finished
         /// </summary>

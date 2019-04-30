@@ -402,9 +402,13 @@
                 clearInterval(x);
                 document.getElementById("timerScroll").innerHTML = "EXPIRED";
                 document.getElementById("TimeLimitStats").innerHTML = "EXPIRED";
-
+                submitted();
                 $("#TimerOutModal").modal("toggle");
             }
         }, 1000);
+
+        
+
     </script>
+
 }
