@@ -76,25 +76,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (TestSchedule ts in test.TestSchedules)
+                        @foreach (var ts in ViewBag.testSchedules)
                         {
                             <tr>
                                 <th scope="row">@testScheduleCounter</th>
                                 <td>
-                                    <p><i class="fa fa-calendar"></i> @ts.GetAvailability()</p>
+                                    <p><i class="fa fa-calendar"></i> @ts.Availability</p>
                                 </td>
                                 <td>
-                                    @if (ts.IsTimeUnlimited)
-                                    {
-                                        <p>Unlimited</p>
-                                    }
-                                    else
-                                    {
-                                        <p>@ts.TimeLimit</p>
-                                    }
-
+                                    <p>@ts.TimeLimit</p>
                                 </td>
-                                <td>{{Assigmnet}}</td>
+                                <td>@ts.Assigmnet</td>
                             </tr>
                         }
                         <!-- TODO: Add table Rows-->

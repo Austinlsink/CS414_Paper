@@ -1237,7 +1237,7 @@ $(function () {
 
 // Re-assigns back browser button
 window.onpopstate = function () {
-    window.location.href = "/Instructor/Tests";
+    window.location.href = getPath()+ "/Instructor/Tests";
 }; history.pushState({}, '');
 
 // Deletes a section from the section assinment table

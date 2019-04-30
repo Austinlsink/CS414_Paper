@@ -621,6 +621,59 @@ namespace BrainNotFound.Paper.Controllers
                 .Where(mc => mc.TestSection.TestId == test.TestId)
                 .ToList();
 
+            // Test Assignment--------------------------------------------------------------
+
+
+            var testSchedules = _context.TestSchedules.Include(ts => ts.StudentTestAssignments).Where(ts => ts.TestId == test.TestId).ToList();
+            var sections = _context.Sections.Include(s => s.Enrollments).Where(s => s.InstructorId == Instructor.Id && s.CourseId == test.CourseId).ToList();
+
+            List<JObject> schedules = new List<JObject>();
+
+            // Create and return the sections and students that are assigned to the test, and elminate the students who are not
+            foreach (var testSchedule in testSchedules)
+            {
+                var StudentsAssignedIds = testSchedule.StudentTestAssignments.Select(sta => sta.StudentId).ToList();
+
+                dynamic testScheduleJObject = new JObject();
+                testScheduleJObject.Availability = testSchedule.GetAvailability();
+                testScheduleJObject.TimeLimit = testSchedule.IsTimeUnlimited ? "Unlimited" : testSchedule.TimeLimit.ToString() + " minutes";
+                testScheduleJObject.deletable = testSchedule.StartTime > DateTime.Now;
+
+                // Checks if all students from a section were assigned
+                List<int> entireSectionsAssigned = new List<int>();
+                foreach (Section section in sections)
+                {
+                    var sectionStudentsIds = section.Enrollments.Select(e => e.StudentId).ToList();
+
+                    if (StudentsAssignedIds.Intersect(sectionStudentsIds).Count() == sectionStudentsIds.Count())
+                    {
+                        entireSectionsAssigned.Add(section.SectionNumber);
+                        StudentsAssignedIds = StudentsAssignedIds.Except(sectionStudentsIds).ToList();
+                    }
+                }
+
+                if (StudentsAssignedIds.Any())
+                {
+                    if (entireSectionsAssigned.Any())
+                    {
+
+                        testScheduleJObject.Assigmnet += "Section(s) " + String.Join(", ", entireSectionsAssigned.ToArray());
+                        testScheduleJObject.Assigmnet += " & ";
+                    }
+                    testScheduleJObject.Assigmnet += StudentsAssignedIds.Count + " Student(s)";
+                }
+                else
+                {
+                    testScheduleJObject.Assigmnet += "Section(s) " + String.Join(", ", entireSectionsAssigned.ToArray());
+                }
+
+                // Sets TestScheduleId
+                testScheduleJObject.TestScheduleId = testSchedule.TestScheduleId;
+
+                schedules.Add(testScheduleJObject);
+            }
+
+            ViewBag.testSchedules = schedules;
             return View();
         }
 
