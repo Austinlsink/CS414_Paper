@@ -22,7 +22,6 @@
                     <table id="studentTable" class="table table-striped jambo_table bulk_action">
                         <thead>
                             <tr class="headings">
-                                <th class="column-title">Salutation </th>
                                 <th class="column-title">First Name </th>
                                 <th class="column-title">Last Name </th>
                                 <th class="column-title">Classification </th>
@@ -41,7 +40,6 @@
                             @foreach (ApplicationUser student in ViewBag.allStudents)
                             {
                                 <tr class="odd pointer">
-                                    <td class=" ">@student.Salutation</td>
                                     <td class=" ">@student.FirstName</td>
                                     <td class=" ">@student.LastName</td>
                                     <td class=" ">@student.Classification</td>
@@ -271,9 +269,9 @@
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
             $('#studentTable').DataTable({
-                "order": [1, 'asc'],
+                "order": [0, 'asc'],
                 "columnDefs": [
-                    { "orderable": false, "targets": [6] }
+                    { "orderable": false, "targets": [5] }
                 ]
             });
         });
