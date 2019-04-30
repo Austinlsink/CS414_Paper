@@ -195,7 +195,14 @@ namespace BrainNotFound.Paper.Controllers
             }
             else
             {
-                dateTime = studentTestAssignment.StartedTime.AddMinutes(studentTestAssignment.TestSchedule.TimeLimit);
+                if(DateTime.Now.AddMinutes(studentTestAssignment.TestSchedule.TimeLimit) > studentTestAssignment.TestSchedule.EndTime)
+                {
+                    dateTime = studentTestAssignment.TestSchedule.EndTime;
+                }
+                else
+                {
+                    dateTime = studentTestAssignment.StartedTime.AddMinutes(studentTestAssignment.TestSchedule.TimeLimit);
+                }
             }
 
             ViewBag.StopTimer = dateTime;
