@@ -1,14 +1,34 @@
-﻿// Submits the test on the TimerOut
+﻿function submitted() {
+    var testScheduleId = $("input#testScheduleId").val();
+    console.log(testScheduleId);
+    var JsonData = JSON.stringify({testScheduleId: testScheduleId})
+    $.ajax({
+        url: getPath() + "/api/Tests/Submitted/",
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        // Data fetched from the form
+        data: JsonData,
+        success: function (result) {
+        },
+        error: function (xhr, status, error) {
+        }
+    })
+}
+
+// Submits the test on the TimerOut
 $(".submitTestOnTimerOut").click(function () {
     var TestScheduleId = $("input#testScheduleId").val();
-    var Pledge = $("input#fullnameInput").val();
-    var nameInput = document.getElementById("TimerOutFullname").value;
+    var Pledge = $("input#TimerOutFullname").val();
     var studentName = $("span#TimerOutStudentName").attr("data-studentName");
 
-    var JsonData = JSON.stringify({ TestScheduleId: TestScheduleId, Pledge: Pledge })
 
+    console.log("Pledge: " + Pledge);
+    console.log("studentName: " + studentName);
+
+    var JsonData = JSON.stringify({ TestScheduleId: TestScheduleId, Pledge: Pledge })
+    
     // Error check the student signature
-    if (nameInput.trim() === studentName.trim()) {
+    if (Pledge.trim() === studentName.trim()) {
         $.ajax({
             url: getPath() + "/api/Tests/SubmitTest/",
             type: "POST",
@@ -17,7 +37,7 @@ $(".submitTestOnTimerOut").click(function () {
             data: JsonData,
             success: function (result) {
                 // Close the modal window
-                window.location.href = "/Student/Grades";
+                window.location.href = getPath() + "/Student/Grades";
                 $("TimerOutModal").modal("hide");
             },
             error: function (xhr, status, error) {
@@ -27,6 +47,7 @@ $(".submitTestOnTimerOut").click(function () {
     else {
         $("#TimeOutPledgeErrorMessage").removeClass("hidden");
     }
+    
 })
 
 // Submits the test
