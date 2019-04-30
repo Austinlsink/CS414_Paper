@@ -5028,9 +5028,10 @@ $(document).ready(function () {
 function getPath() {
     var path = "";
     var pathName = window.location.pathname;
+    pathName = pathName.toLowerCase();
 
-    if (pathName.startsWith("/CS414/Team02/")) {
-        path = "/CS414/Team02"
+    if (pathName.startsWith("/cs414/team02/")) {
+        path = "/cs414/team02"
     }
     
     return path;

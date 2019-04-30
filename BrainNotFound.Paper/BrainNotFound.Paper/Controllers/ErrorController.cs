@@ -15,6 +15,8 @@ namespace BrainNotFound.Paper.Controllers
 
             switch(statusCode.Value)
             {
+                case 403:
+                    return View("Error403");
                 case 404:
                     return View("Error404");
                 case 500:

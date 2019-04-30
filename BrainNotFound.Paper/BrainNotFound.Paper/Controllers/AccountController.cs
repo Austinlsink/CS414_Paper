@@ -24,6 +24,21 @@ namespace BrainNotFound.Paper.Controllers
 
         }
 
+        [HttpGet, Route("Account/Login")]
+        public IActionResult redirect()
+        {
+            
+            return RedirectToAction("login");
+
+        }
+
+        [HttpGet, Route("Account/AccessDenied")]
+        public IActionResult AccessDenied()
+        {
+
+            return View("Error403");
+
+        }
         [HttpPost, Route("/")]
         public async Task<ActionResult> Login(LoginViewModel model)
         {

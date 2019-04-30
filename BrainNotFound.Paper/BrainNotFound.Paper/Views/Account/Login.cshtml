@@ -36,7 +36,7 @@
             <div class="animate form login_form">
                 <section class="login_content">
                     <form asp-controller="Account" asp-action="Login" id="Log_in_Form">
-                        <img id="login-img" src="images/logo_png.png" alt="logo">
+                        <img id="login-img" src="~/images/logo_png.png" alt="logo">
                         <div>
                             <input type="text" asp-for="UserName" class="form-control" placeholder="Username" required="" />
                         </div>
@@ -53,12 +53,12 @@
                             <span class="text-danger">Invalid username or password</span>
                         }
                     </form>
-                    <ul>
+                    @*<ul>
                         <li><a asp-action="ForceAdminLogin" asp-controller="Account">Log in as Administrator</a></li>
                         <li><a asp-action="ForceInstructorLogin" asp-controller="Account">Log in as Instructor</a>               </li>
                         <li><a asp-action="ForceStudentLogin" asp-controller="Account">Log in as Student</a>                     </li>
 
-                    </ul>
+                    </ul>*@
 
                 </section>
             </div>
