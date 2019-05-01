@@ -213,9 +213,11 @@
                         int essayCount = 1;
                         foreach (Question q in ts.Questions)
                         {
+                            List<StudentEssayAnswer> essayComments = ViewBag.EssayComments;
+
                             <div class="col-md-12 col-sm-12 col-xs-12 questionRow" style="padding: 20px 0 10px 0">
                                 <div class="col-md-1 col-sm-1 col-xs-3 text-center">
-                                    <span id="pointValue-56789">(<span class="pointValue" id="pointValue">@q.PointValue</span> pts.)</span>
+                                    <span id="pointValue-56789">(<span class="pointValue" id="pointValue"> @(((StudentEssayAnswer) essayComments.Where(x => x.QuestionId == q.QuestionId && x.StudentId == ViewBag.Student.Id && x.TestScheduleId == ViewBag.TestSchedule.TestScheduleId).First()).PointsEarned)/@q.PointValue</span> pts.)</span>
                                 </div>
                                 <div class="col-md-11 col-sm-11 col-xs-11">
                                     <p><strong>@essayCount.</strong> @q.Content</p>
@@ -251,71 +253,66 @@
                                             <p>No comment</p>
                                         }
                                         <div class="col-md-1 col-sm-1 col-xs-12"></div>
-                                            <div class="col-md-11 col-sm-11 col-xs-12">
-                                                <label>Points Eraned: </label>@sea.PointsEarned/@q.PointValue
-                                            </div>
-
-
-                                            }
-                                            }
-                                        </div>
                                     }
-                                    break;
-                        case "Matching":
-                            int matchingCount = 1;
-                            foreach (Question q in ts.Questions)
-                            {
-                                <div class="x_panel">
-                                    <div class="x_content">
-                                        <div class="col-md-12 col-sm-12 col-xs-12 questionRow" style="padding: 20px 0 10px 0">
-                                            <div class="col-md-1 col-sm-1 col-xs-3 text-center">
-                                                <span id="pointValue-56789">(<span class="pointValue" id="pointValue">1</span> pts.)</span>
-                                            </div>
-                                            <div class="col-md-10 col-sm-11 col-xs-11">
-                                                <p><strong>@matchingCount.</strong> @q.Content</p>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                            <div class="ln_solid"></div>
-                                            <div class="col-md-11 col-sm-11 col-xs-12"></div>
-                                            @foreach (MatchingQuestionSide mqs in q.MatchingQuestionSides)
-                                            {
-                                                <div class="col-md-5 col-sm-5 col-xs-12">
-                                                    <p>@mqs.Content</p>
-                                                </div>
-                                                <div class=" col-md-5 col-sm-5 col-xs-12">
-                                                    <select data-matchingAnswerSideId="@mqs.MatchingAnswerSideId" data-mQuestionId="@q.QuestionId" data-matchingQuestionSideId="@mqs.MatchingQuestionSideId" class="form-control MatchingAnswerOptions" required="">
-                                                        @foreach (MatchingAnswerSide mas in q.MatchingAnswerSides)
-                                                        {
-                                                            if (q.studentMatchingAnswers.Where(x => x.MatchingQuestionSideId == mqs.MatchingQuestionSideId && x.MatchingAnswerSideId == mas.MatchingAnswerSideId).Any())
-                                                            {
-                                                                <option value="@mas.MatchingAnswerSideId">@mas.MatchingAnswer</option>
-                                                            }
-                                                        }
-                                                    </select>
-                                                </div>
-                                                @if (q.studentMatchingAnswers.Where(x => x.MatchingAnswerSideId == mqs.MatchingAnswerSideId && x.MatchingQuestionSideId == mqs.MatchingQuestionSideId).Any())
-                                                {
-                                                    <div class="form-group col-md-1 col-sm-1 col-xs-2">
-                                                        <span class="question-correct"><i class="fa fa-check"></i></span>
-                                                    </div>
-                                                }
-                                                else
-                                                {
-                                                    <div class="form-group col-md-1 col-sm-1 col-xs-2">
-                                                        <span class="question-wrong"><i class="fa fa-close"></i></span>
-                                                    </div>
-                                                }
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                            break;
-                        default:
-                            break;
-                    }
                                 }
                             </div>
+                        }
+                        break;
+                    case "Matching":
+                        int matchingCount = 1;
+                        foreach (Question q in ts.Questions)
+                        {
+                            <div class="x_panel">
+                                <div class="x_content">
+                                    <div class="col-md-12 col-sm-12 col-xs-12 questionRow" style="padding: 20px 0 10px 0">
+                                        <div class="col-md-1 col-sm-1 col-xs-3 text-center">
+                                            <span id="pointValue-56789">(<span class="pointValue" id="pointValue">1</span> pts.)</span>
+                                        </div>
+                                        <div class="col-md-10 col-sm-11 col-xs-11">
+                                            <p><strong>@matchingCount.</strong> @q.Content</p>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="ln_solid"></div>
+                                        <div class="col-md-11 col-sm-11 col-xs-12"></div>
+                                        @foreach (MatchingQuestionSide mqs in q.MatchingQuestionSides)
+                                        {
+                                            <div class="col-md-5 col-sm-5 col-xs-12">
+                                                <p>@mqs.Content</p>
+                                            </div>
+                                            <div class=" col-md-5 col-sm-5 col-xs-12">
+                                                <select data-matchingAnswerSideId="@mqs.MatchingAnswerSideId" data-mQuestionId="@q.QuestionId" data-matchingQuestionSideId="@mqs.MatchingQuestionSideId" class="form-control MatchingAnswerOptions" required="">
+                                                    @foreach (MatchingAnswerSide mas in q.MatchingAnswerSides)
+                                                    {
+                                                        if (q.studentMatchingAnswers.Where(x => x.MatchingQuestionSideId == mqs.MatchingQuestionSideId && x.MatchingAnswerSideId == mas.MatchingAnswerSideId).Any())
+                                                        {
+                                                            <option value="@mas.MatchingAnswerSideId">@mas.MatchingAnswer</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                            @if (q.studentMatchingAnswers.Where(x => x.MatchingAnswerSideId == mqs.MatchingAnswerSideId && x.MatchingQuestionSideId == mqs.MatchingQuestionSideId).Any())
+                                            {
+                                                <div class="form-group col-md-1 col-sm-1 col-xs-2">
+                                                    <span class="question-correct"><i class="fa fa-check"></i></span>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="form-group col-md-1 col-sm-1 col-xs-2">
+                                                    <span class="question-wrong"><i class="fa fa-close"></i></span>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        </div>
     </div>
 }
 
