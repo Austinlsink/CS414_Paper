@@ -280,7 +280,7 @@
                                                 <p>@mqs.Content</p>
                                             </div>
                                             <div class=" col-md-5 col-sm-5 col-xs-12">
-                                                <select data-matchingAnswerSideId="@mqs.MatchingAnswerSideId" data-mQuestionId="@q.QuestionId" data-matchingQuestionSideId="@mqs.MatchingQuestionSideId" class="form-control MatchingAnswerOptions" required="">
+                                                <select disabled data-matchingAnswerSideId="@mqs.MatchingAnswerSideId" data-mQuestionId="@q.QuestionId" data-matchingQuestionSideId="@mqs.MatchingQuestionSideId" class="form-control MatchingAnswerOptions" required="">
                                                     @foreach (MatchingAnswerSide mas in q.MatchingAnswerSides)
                                                     {
                                                         if (q.studentMatchingAnswers.Where(x => x.MatchingQuestionSideId == mqs.MatchingQuestionSideId && x.MatchingAnswerSideId == mas.MatchingAnswerSideId).Any())
